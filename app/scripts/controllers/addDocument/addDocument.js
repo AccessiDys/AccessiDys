@@ -33,10 +33,10 @@ angular
     .module('cnedApp')
     .controller(
         'AddDocumentCtrl',
-        function ($log, $scope, $rootScope, $routeParams, $timeout, $compile, tagsService, serviceCheck, $http,
+        function ($log, $scope, $rootScope, $routeParams, $timeout, tagsService, serviceCheck, $http,
                   $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService,
-                  removeStringsUppercaseSpaces, $uibModal, $interval,
-                  canvasToImage, gettextCatalog, UtilsService, LoaderService) {
+                  removeStringsUppercaseSpaces, $interval,
+                  canvasToImage, gettextCatalog, UtilsService, LoaderService, ToasterService, documentService) {
 
             $scope.idDocument = $routeParams.idDocument;
             $scope.docTitleTmp = $routeParams.title;
@@ -45,8 +45,6 @@ angular
             // Parameters to initialize
             $scope.pageTitre = 'Ajouter un document';
             $scope.files = [];
-            $scope.errorMsg = false;
-            $scope.alertNew = '#addDocumentModal';
             $scope.currentData = '';
             $scope.pageBreakElement = '<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div><div class="accessidys-break-page"></div>';
             $scope.resizeDocEditor = 'Agrandir';
@@ -79,10 +77,8 @@ angular
 
                 if ($scope.currentData === '') {
                     localStorage.setItem('lockOperationDropBox', false);
-                    $scope.alertNew = '#addDocumentModal';
                 } else {
                     localStorage.setItem('lockOperationDropBox', true);
-                    $scope.alertNew = '#save-new-modal';
                 }
                 if (!CKEDITOR.instances.editorAdd.checkDirty()) {
                     localStorage.setItem('lockOperationDropBox', false);
@@ -101,35 +97,56 @@ angular
                 });
             };
 
-            /**
-             * Return the modal when clicking on the button to open
-             * a document
-             *
-             * @method $scope.openDocument
-             */
+
             $scope.openDocument = function () {
-                $scope.errorMsg = false;
-                $scope.msgErrorModal = '';
-                $scope.clearUploadFile();
-                $scope.clearLien();
-                $($scope.alertNew).modal('show');
-            };
+                documentService.openDocument().then(function (document) {
 
-            $scope.openDocumentEditorWithData = function () {
-                $scope.alertNew = '#addDocumentModal';
-                $scope.openDocument();
-            };
+                    $log.debug('Open Document - ', document);
 
-            /**
-             * Generate an MD5 identifier from the provided html
-             * Use for signing the document in the title when recording
-             *
-             * @param {String}
-             *            html
-             * @method $scope.generateMD5
-             */
-            $scope.generateMD5 = function (html) {
-                return md5.createHash(html);
+                    $scope.pageTitre = 'Ajouter un document';
+                    $scope.docTitre = document.title;
+
+                    // Presence of a file with the browse button
+                    if (document.files.length > 0) {
+                        var file = document.files[0];
+
+                        if (document.type === 'pdf') {
+                            $scope.loadPdf(file);
+                        } else if (document.type === 'image') {
+                            $scope.loadImage(file);
+                        } else if (document.type === 'epub') {
+                            $scope.uploadFile(file);
+                        }
+
+                    } else if (document.uri) {
+
+                        if (document.uri.indexOf('.epub') > -1) {
+                            $scope.getEpubLink();
+                        } else if (document.uri.indexOf('.pdf') > -1) {
+                            $scope.loadPdfByLien(document.uri);
+                        } else {
+                            LoaderService.showLoader('document.message.info.treatment.inprogress', true);
+                            LoaderService.setLoaderProgress(10);
+
+                            // Retrieving the contents of the body of link by services.
+                            serviceCheck.htmlPreview(document.uri, $rootScope.currentUser.dropbox.accessToken)
+                                .then(function (resultHtml) {
+                                    var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
+                                    promiseClean.then(function (resultClean) {
+                                        // Insertion in the editor
+                                        CKEDITOR.instances.editorAdd.setData(resultClean);
+                                        LoaderService.hideLoader();
+                                    });
+                                }, function (err) {
+
+                                    LoaderService.hideLoader();
+                                    $scope.techError = err;
+                                    angular.element('#myModalWorkSpaceTechnical').modal('show');
+                                });
+                        }
+                    }
+
+                });
             };
 
             /**
@@ -141,8 +158,6 @@ angular
              */
             $scope.getText = function () {
                 localStorage.setItem('lockOperationDropBox', true);
-                $scope.alertNew = '#save-new-modal';
-
 
                 if ($scope.applyStyleInterval) {
                     $interval.cancel($scope.applyStyleInterval);
@@ -150,25 +165,7 @@ angular
                 $scope.applyStyleInterval = $interval($scope.applyStyles, 1000);
             };
 
-            /**
-             * Show the recording popup
-             *
-             * @method $scope.showSaveDialog
-             */
-            $scope.showSaveDialog = function () {
-                //if the title has not been informed 
-                //we display the recording popup
-                if (!$scope.docTitre) {
-                    $scope.errorMsg = false;
-                    $scope.msgErrorModal = '';
-                    $('#save-modal').modal('show');
-                } else {
-                    // otherwise , we directly record
-                    $scope.save();
-                }
-            };
-
-            /**
+            /** TODO inclure dans le save
              * Replace the internal lincks
              *
              * @method $scope.processLink
@@ -194,172 +191,19 @@ angular
              */
             $scope.save = function () {
 
-                $scope.errorMsg = false;
+                documentService.save({
+                    title: $scope.docTitre,
+                    data: $scope.currentData
+                }).then(function (data) {
+                    ToasterService.showToaster('#overview-success-toaster', 'document.message.save.ok');
+                    $scope.pageTitre = 'Editer le document'; // title of the page
+                    $scope.resetDirtyCKEditor();
+                    $scope.idDocument = $scope.docTitre;
+                    $scope.existingFile = data;
 
-                if (!$scope.docTitre || $scope.docTitre.length <= 0) {
-                    $scope.errorMsg = true;
-                    $('#save-modal').modal('show');
-                    $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.title.mandatory');
-                    return;
-                } else {
-                    if ($scope.docTitre.length > 201) {
-                        $scope.errorMsg = true;
-                        $('#save-modal').modal('show');
-                        $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.title.size');
-
-                        return;
-                    } else if (!serviceCheck.checkName($scope.docTitre)) {
-                        $scope.errorMsg = true;
-                        $('#save-modal').modal('show');
-                        $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.title.specialchar');
-                        return;
-                    }
-                }
-                if (!$scope.errorMsg) {
-                    $('#save-modal').modal('hide');
-                }
-
-                LoaderService.showLoader('document.message.info.save.inprogress', true);
-                LoaderService.setLoaderProgress(20);
-
-                localStorage.setItem('lockOperationDropBox', true);
-                if ($rootScope.currentUser.dropbox.accessToken) {
-                    var token = $rootScope.currentUser.dropbox.accessToken;
-                    var documentExist = false;
-                    fileStorageService.searchFiles($rootScope.isAppOnline, $scope.docTitre, token).then(function (filesFound) {
-                        for (var i = 0; i < filesFound.length; i++) {
-                            if (filesFound[i].filepath.indexOf('.html') > 0 && filesFound[i].filepath.toLowerCase().indexOf('_' + $scope.docTitre.toLowerCase() + '_') > 0) {
-                                documentExist = true;
-                                break;
-                            }
-                        }
-                        LoaderService.setLoaderProgress(25);
-
-                        if (documentExist && !$scope.existingFile) {
-                            localStorage.setItem('lockOperationDropBox', false);
-                            LoaderService.hideLoader();
-                            $scope.errorMsg = true;
-                            $('#save-modal').modal('show');
-                            $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.alreadyexist');
-                        } else {
-                            var ladate = new Date();
-                            var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
-
-                            $scope.filePreview = $scope.generateMD5($scope.currentData);
-                            var apercuName = tmpDate + '_' + encodeURIComponent($scope.docTitre) + '_' + $scope.filePreview + '.html';
-                            if ($scope.existingFile) {
-                                apercuName = $scope.existingFile.filepath;
-                            }
-                            LoaderService.setLoaderProgress(30);
-                            localStorage.setItem('lockOperationDropBox', true);
-                            LoaderService.setLoaderProgress(60);
-
-                            $scope.currentData = $scope.processLink($scope.currentData);
-
-                            fileStorageService.saveFile($rootScope.isAppOnline, ($scope.apercuName || apercuName), $scope.currentData, token).then(function (data) {
-                                // We switch to edit mode
-                                $scope.pageTitre = 'Editer le document'; // title of the page
-                                LoaderService.setLoaderProgress(70);
-                                localStorage.setItem('lockOperationDropBox', false);
-                                LoaderService.setLoaderProgress(75);
-                                $scope.existingFile = data;
-                                $scope.idDocument = $scope.docTitre;
-                                LoaderService.hideLoader();
-                                $scope.resetDirtyCKEditor();
-
-                                $scope.showToaster('#document-success-toaster', 'document.message.save.ok');
-                            });
-                        }
-                    });
-                } else {
-                    localStorage.setItem('lockOperationDropBox', false);
-                    LoaderService.hideLoader();
-                    $scope.errorMsg = true;
-                    $('#save-modal').modal('show');
-                    $scope.showToaster('#document-modal-error-toaster', 'document.message.save.ko.connexion');
-                }
-            };
-
-            /**
-             * Called when the user cancels the registration.
-             * Reset error messages.
-             *
-             * @method $scope.cancelSave
-             */
-            $scope.cancelSave = function () {
-                $scope.errorMsg = false;
-                $scope.msgErrorModal = '';
-            };
-
-
-            /**
-             * Test the truthfulness of a link (by checking the presence of the http protocol in String)
-             *
-             * @method $scope.verifyLink
-             * @param String
-             *            link
-             * @return Boolean
-             */
-            $scope.verifyLink = function (link) {
-                return link && ((link.toLowerCase().indexOf('https') > -1) || (link.toLowerCase().indexOf('http') > -1));
-            };
-
-
-            /**
-             * Check up the data of the opening popup of a document
-             * "error messages management" through
-             * $scope.errorMsg
-             *
-             * This methods adds a document
-             * @method $scope.ajouterDocument
-             */
-            $scope.ajouterDocument = function () {
-                if (!$rootScope.isAppOnline && $scope.lien) {
-                    UtilsService.showInformationModal('label.offline', 'document.message.info.importlink.offline');
-                } else {
-                    if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length <= 0) {
-                        $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.title.mandatory');
-                        $scope.errorMsg = true;
-                        return;
-                    }
-                    if (!$scope.doc || !$scope.doc.titre || $scope.doc.titre.length > 201) {
-                        $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.title.size');
-                        $scope.errorMsg = true;
-                        return;
-                    }
-                    if (!serviceCheck.checkName($scope.doc.titre)) {
-                        $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.title.specialchar');
-                        $scope.errorMsg = true;
-                        return;
-                    }
-                    var foundDoc = false;
-                    var searchApercu = fileStorageService.searchFiles($rootScope.isAppOnline, $scope.doc.titre, $rootScope.currentUser.dropbox.accessToken);
-                    searchApercu.then(function (result) {
-                        for (var i = 0; i < result.length; i++) {
-                            if (result[i].filepath.indexOf('.html') > 0 && result[i].filepath.indexOf('_' + $scope.doc.titre + '_') > 0) {
-                                foundDoc = true;
-                                break;
-                            }
-                        }
-                        if (foundDoc) {
-                            $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.alreadyexist');
-                            $scope.errorMsg = true;
-                        } else {
-                            if ((!$scope.lien && $scope.files.length <= 0) || (($scope.lien && /\S/.test($scope.lien)) && $scope.files.length > 0)) {
-                                $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.linkorlocalfile');
-                                $scope.errorMsg = true;
-                                return;
-                            }
-                            if ($scope.lien && !$scope.verifyLink($scope.lien)) {
-                                $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.link');
-                                $scope.errorMsg = true;
-                                return;
-                            }
-                            $('#addDocumentModal').modal('hide');
-                        }
-                    });
-                }
-
+                }, function () {
+                    ToasterService.showToaster('#overview-error-toaster', 'document.message.save.ko');
+                });
             };
 
             /**
@@ -381,8 +225,7 @@ angular
                     $scope.epubDataToEditor(epubContent);
                 }).error(function () {
 
-                    $scope.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
-                    $scope.errorMsg = true;
+                    ToasterService.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
                     LoaderService.hideLoader();
                 });
             };
@@ -410,8 +253,7 @@ angular
                                 tabHtml[i] = resultClean;
                                 makeHtml(i + 1, length);
                             }, function () {
-                                $scope.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
-                                $scope.errorMsg = true;
+                                ToasterService.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
                                 LoaderService.hideLoader();
                             });
                         } else {
@@ -438,83 +280,11 @@ angular
             };
 
             /**
-             * Open the document selected by the user.
-             */
-            $scope.validerAjoutDocument = function () {
-                // Presence of a file with the browse button
-                if ($scope.files.length > 0) {
-                    $scope.pageTitre = 'Ajouter un document';
-                    $scope.existingFile = null;
-                    if ($scope.doc && $scope.doc.titre) {
-                        $scope.docTitre = $scope.doc.titre;
-                    }
-
-                    $rootScope.uploadDoc = $scope.doc;
-                    $scope.doc = {};
-                    $rootScope.uploadDoc.uploadPdf = $scope.files;
-                    if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/pdf') {
-                        $scope.loadPdf();
-                    } else if ($rootScope.uploadDoc.uploadPdf[0].type === 'image/jpeg' || $rootScope.uploadDoc.uploadPdf[0].type === 'image/png' || $rootScope.uploadDoc.uploadPdf[0].type === 'image/jpg') {
-                        $scope.loadImage();
-                    } else if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/epub+zip' || ($rootScope.uploadDoc.uploadPdf[0].type === '' && $rootScope.uploadDoc.uploadPdf[0].name.indexOf('.epub'))) {
-                        $scope.uploadFile();
-                    } else {
-
-                        $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.file.type');
-                        $scope.errorMsg = true;
-                    }
-                }
-
-                // Link management
-                else if ($scope.lien) {
-                    $scope.pageTitre = 'Ajouter un document';
-                    $scope.existingFile = null;
-                    if ($scope.doc && $scope.doc.titre) {
-                        $scope.docTitre = $scope.doc.titre;
-                    }
-
-                    $rootScope.uploadDoc = $scope.doc;
-                    $scope.doc = {};
-                    if ($scope.lien.indexOf('.epub') > -1) {
-                        $scope.getEpubLink();
-                    } else if ($scope.lien.indexOf('.pdf') > -1) {
-                        $scope.loadPdfByLien($scope.lien);
-                    } else {
-                        LoaderService.showLoader('document.message.info.treatment.inprogress', true);
-                        LoaderService.setLoaderProgress(10);
-
-                        // Retrieving the contents of the body of link by services.
-                        var promiseHtml = serviceCheck.htmlPreview($scope.lien, $rootScope.currentUser.dropbox.accessToken);
-                        promiseHtml.then(function (resultHtml) {
-                            var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
-                            promiseClean.then(function (resultClean) {
-                                // Insertion in the editor
-                                CKEDITOR.instances.editorAdd.setData(resultClean);
-                                LoaderService.hideLoader();
-                            });
-                        }, function (err) {
-
-                            LoaderService.hideLoader();
-                            $scope.techError = err;
-                            angular.element('#myModalWorkSpaceTechnical').modal('show');
-                        });
-                    }
-                }
-            };
-
-            /**
-             * Activated when opening a document
-             */
-            $('#addDocumentModal').on('hidden.bs.modal', function () {
-                $scope.validerAjoutDocument();
-            });
-
-            /**
              * Load the image in the editor
              *
              * @method $scope.loadImage
              */
-            $scope.loadImage = function () {
+            $scope.loadImage = function (file) {
                 var reader = new FileReader();
                 // Read the image
                 reader.onload = function (e) {
@@ -523,8 +293,7 @@ angular
                 };
 
                 // Read in the image file as a data URL.
-                reader.readAsDataURL($rootScope.uploadDoc.uploadPdf[0]);
-                $scope.clearUploadFile();
+                reader.readAsDataURL(file);
             };
 
             /**
@@ -538,18 +307,19 @@ angular
                 LoaderService.setLoaderProgress(0);
 
                 var contains = (url.indexOf('https') > -1); // true
+                var service = '';
                 if (contains === false) {
-                    $scope.serviceNode = configuration.URL_REQUEST + '/sendPdf';
+                    service = configuration.URL_REQUEST + '/sendPdf';
                 } else {
-                    $scope.serviceNode = configuration.URL_REQUEST + '/sendPdfHTTPS';
+                    service = configuration.URL_REQUEST + '/sendPdfHTTPS';
                 }
-                $http.post($scope.serviceNode, {
+                $http.post(service, {
                     lien: url,
                     id: localStorage.getItem('compteId')
                 }).success(function (data) {
                     // Clear editor content
                     CKEDITOR.instances.editorAdd.setData('');
-                    var pdfbinary = $scope.base64ToUint8Array(data);
+                    var pdfbinary = UtilsService.base64ToUint8Array(data);
                     PDFJS.getDocument(pdfbinary).then(function (pdf) {
                         $scope.loadPdfPage(pdf, 1);
                     });
@@ -562,31 +332,12 @@ angular
             };
 
             /**
-             * Convert  base64 to Uint8Array
-             *
-             * @param base64
-             *        The binary to be converted.
-             * @method $scope.base64ToUint8Array
-             */
-            $scope.base64ToUint8Array = function (base64) {
-                var raw = atob(base64);
-                var uint8Array = new Uint8Array(new ArrayBuffer(raw.length));
-                for (var i = 0; i < raw.length; i++) {
-                    uint8Array[i] = raw.charCodeAt(i);
-                }
-                return uint8Array;
-            };
-
-            /**
              * Load the local pdf in the editor
              *
              * @method $scope.loadPdf
              */
-            $scope.loadPdf = function () {
+            $scope.loadPdf = function (file) {
                 LoaderService.showLoader('document.message.info.treatment.inprogress', true);
-
-                // Step 1: Get the file from the input element
-                var file = $rootScope.uploadDoc.uploadPdf[0];
 
                 // Step 2: Read the file using file reader
                 var fileReader = new FileReader();
@@ -622,8 +373,8 @@ angular
              */
             $scope.loadPdfPage = function (pdf, pageNumber) {
                 return pdf.getPage(pageNumber).then(function (page) {
-                    $('#canvas').remove();
-                    $('body').append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
+                    angular.element('#canvas').remove();
+                    angular.element('body').append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
                     var canvas = document.getElementById('canvas');
                     var context = canvas.getContext('2d');
                     var viewport = page.getViewport(canvas.width / page.getViewport(1.0).width); // page.getViewport(1.5);
@@ -670,24 +421,6 @@ angular
              */
             $scope.insertPageBreak = function () {
                 CKEDITOR.instances.editorAdd.insertHtml($scope.pageBreakElement);
-            };
-
-            /**
-             * Reset browse field
-             */
-            $scope.clearUploadFile = function () {
-                $scope.files = [];
-                $('#docUploadPdf').val('');
-                $('#filename_show').val('');
-            };
-
-            /**
-             * Reset the link field
-             *
-             * @method $scope.clearLien
-             */
-            $scope.clearLien = function () {
-                $scope.lien = '';
             };
 
             /**
@@ -796,56 +529,50 @@ angular
              *
              * @method $scope.uploadFile
              */
-            $scope.uploadFile = function () {
-                if ($scope.files.length > 0) {
-                    var fd = new FormData();
-                    for (var i in $scope.files) {
-                        fd.append('uploadedFile', $scope.files[i]);
-                        if ($scope.files[i].type === 'application/epub+zip') {
-                            $scope.serviceUpload = '/epubUpload';
+            $scope.uploadFile = function (file) {
+                var uploadService = '';
+                var fd = new FormData();
+                fd.append('uploadedFile', file);
+                if (file.type === 'application/epub+zip') {
+                    uploadService = '/epubUpload';
 
-                            LoaderService.showLoader('document.message.info.save.analyze', true);
-                            LoaderService.setLoaderProgress(10);
+                    LoaderService.showLoader('document.message.info.save.analyze', true);
 
-                        } else {
-                            if ($scope.files[i].type === '' && $scope.files[i].name.indexOf('.epub')) {
-
-                                $scope.serviceUpload = '/epubUpload';
-                                LoaderService.showLoader('document.message.info.save.analyze', true);
-
-
-                            } else if ($scope.files[i].type.indexOf('image/') > -1) {
-                                // call image conversion service
-                                // -> base64
-                                $scope.serviceUpload = '/fileupload';
-
-                                LoaderService.show('document.message.info.load.image', true);
-                            } else {
-                                //call pdf conversion service ->
-                                // base64
-                                $scope.serviceUpload = '/fileupload';
-                                LoaderService.show('document.message.info.load.pdf', true);
-                            }
-                        }
-
-                        LoaderService.setLoaderProgress(10);
-                    }
-                    if ($rootScope.isAppOnline) {
-                        var xhr = new XMLHttpRequest();
-                        xhr.addEventListener('load', $scope.uploadComplete, false);
-                        xhr.addEventListener('error', $scope.uploadFailed, false);
-                        xhr.open('POST', configuration.URL_REQUEST + $scope.serviceUpload + '?id=' + localStorage.getItem('compteId'));
-                        $scope.$apply();
-                        xhr.send(fd);
-                    } else {
-                        htmlEpubTool.convertToHtml($scope.files).then(function (data) {
-                            $scope.epubDataToEditor(data);
-                        });
-                    }
                 } else {
-                    $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.file.mandatory');
-                    $scope.errorMsg = true;
+                    if (file.type === '' && file.name.indexOf('.epub')) {
+
+                        uploadService = '/epubUpload';
+                        LoaderService.showLoader('document.message.info.save.analyze', true);
+
+
+                    } else if (file.type.indexOf('image/') > -1) {
+                        // call image conversion service
+                        // -> base64
+                        uploadService = '/fileupload';
+
+                        LoaderService.show('document.message.info.load.image', true);
+                    } else {
+                        //call pdf conversion service ->
+                        // base64
+                        uploadService = '/fileupload';
+                        LoaderService.show('document.message.info.load.pdf', true);
+                    }
                 }
+
+                LoaderService.setLoaderProgress(10);
+                if ($rootScope.isAppOnline) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.addEventListener('load', $scope.uploadComplete, false);
+                    xhr.addEventListener('error', $scope.uploadFailed, false);
+                    xhr.open('POST', configuration.URL_REQUEST + uploadService + '?id=' + localStorage.getItem('compteId'));
+                    $scope.$apply();
+                    xhr.send(fd);
+                } else {
+                    htmlEpubTool.convertToHtml([file]).then(function (data) {
+                        $scope.epubDataToEditor(data);
+                    });
+                }
+
 
             };
 
@@ -1025,13 +752,6 @@ angular
                 CKEDITOR.addCss('.cke_combo_text {width: auto}');
 
                 $scope.editor = CKEDITOR.inline('editorAdd', ckConfig);
-
-                // Adjustment of the size of the editor
-                // to the size of the window less the menus
-                $('#editorAdd').css('min-height', '500px');
-                // scroll in editor.
-                $('#editorAdd').css('max-height', '800px');
-                $('#editorAdd').css('overflow-y', 'auto');
             };
 
             /**
@@ -1090,24 +810,6 @@ angular
             $scope.updateFormats();
 
             $scope.initLoadExistingDocument();
-
-            $scope.toasterMsg = '';
-            $scope.forceToasterApdapt = false;
-            $scope.listTagsByProfilToaster = [];
-
-            /**
-             * Show success toaster
-             * @param msg
-             */
-            $scope.showToaster = function (id, msg) {
-                $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
-                $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-                $scope.forceToasterApdapt = true;
-                $timeout(function () {
-                    angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-                    $scope.forceToasterApdapt = false;
-                }, 100);
-            };
 
 
         });

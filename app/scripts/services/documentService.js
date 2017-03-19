@@ -110,7 +110,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
                         errors.push('document.message.save.ko.alreadyexist');
 
-                        methods.editDocumentTitle(document.title, errors)
+                        methods.editDocumentTitle(document.title, errors, 'save')
                             .then(function (params) {
                                 document.title = params.title;
                                 methods.save(document).then(function (data) {
@@ -149,7 +149,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                 });
 
             } else {
-                methods.editDocumentTitle(document.title, errors)
+                methods.editDocumentTitle(document.title, errors, 'save')
                     .then(function (params) {
                         document.title = params.title;
                         methods.save(document).then(function (data) {
@@ -169,14 +169,14 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
         /**
          * Edit the document title
          */
-        editDocumentTitle: function (title, errors) {
+        editDocumentTitle: function (title, errors, mode) {
 
             $log.debug('editDocumentTitle', title, errors);
 
             return $uibModal.open({
                 templateUrl: 'views/addDocument/edit-title.modal.html',
                 controller: 'editDocumentTitleCtrl',
-                size: 'lg',
+                size: 'md',
                 backdrop: true,
                 resolve: {
                     title: function () {
@@ -184,8 +184,22 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     },
                     errors: function () {
                         return errors;
+                    },
+                    mode: function () {
+                        return mode;
                     }
                 }
+            }).result;
+        },
+
+        /**
+         * Edit the document title
+         */
+        openDocument: function () {
+            return $uibModal.open({
+                templateUrl: 'views/addDocument/open-document.modal.html',
+                controller: 'OpenDocumentModalCtrl',
+                size: 'lg'
             }).result;
         }
     };

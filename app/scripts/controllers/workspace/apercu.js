@@ -83,16 +83,6 @@ angular.module('cnedApp')
          * ---------- Functions -----------
          */
 
-        /* end of the creation of the editor */
-        $scope.attachFacebook = function () {
-            $('.facebook-share .fb-share-button').remove();
-            $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.encodeURI) + '" data-layout="button"></div>');
-            try {
-                FB.XFBML.parse();
-            } catch (ex) {
-            }
-        };
-
         /**
          * Force the colorations of the application .
          */
@@ -103,23 +93,10 @@ angular.module('cnedApp')
             });
         };
 
-        $scope.attachGoogle = function () {
-            var options = {
-                contenturl: decodeURIComponent($scope.encodeURI),
-                contentdeeplinkid: '/pages',
-                clientid: '807929328516-g7k70elo10dpf4jt37uh705g70vhjsej.apps.googleusercontent.com',
-                cookiepolicy: 'single_host_origin',
-                prefilltext: '',
-                calltoactionlabel: 'LEARN_MORE',
-                calltoactionurl: decodeURIComponent($scope.encodeURI)
-            };
-
-            gapi.interactivepost.render('google-share', options);
-        };
-
         /*
          * Display the title of the document
          */
+
         $scope.showTitleDoc = function (title) {
             $log.debug('showTitleDoc - param.title', title);
             // extract document's title from URl, the tile is between '_'
@@ -178,147 +155,6 @@ angular.module('cnedApp')
 
         });
 
-        /*
-         * Show the entry box of the email
-         */
-        $scope.loadMail = function () {
-            $scope.showDestination = true;
-        };
-
-        /**
-         * Reset sharing settings of a document.
-         */
-        $scope.clearSocialShare = function () {
-            $scope.confirme = false;
-            $scope.showDestination = false;
-            $scope.destinataire = '';
-            $scope.addAnnotation = false;
-            if (localStorage.getItem('notes') !== null && $scope.idDocument) {
-                var noteList = JSON.parse(JSON.parse(localStorage.getItem('notes')));
-                $scope.annotationToShare = [];
-
-                if (noteList.hasOwnProperty($scope.idDocument)) {
-                    $scope.addAnnotation = true;
-                    $scope.annotationToShare = noteList[$scope.idDocument];
-                } else {
-                    $scope.addAnnotation = false;
-                }
-            } else {
-                $scope.addAnnotation = false;
-            }
-        };
-
-        /**
-         * Document Sharing
-         */
-        $scope.docPartage = function () {
-            if (!$rootScope.isAppOnline) {
-
-                UtilsService.showInformationModal('label.offline', 'document.message.info.share.offline');
-
-            } else {
-                $('#shareModal').modal('show');
-                localStorage.setItem('lockOperationDropBox', true);
-                fileStorageService.searchFiles($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filesFound) {
-                    if (filesFound && filesFound.length !== 0) {
-                        $scope.docApartager = filesFound[0];
-                        $scope.docFullName = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec(encodeURIComponent($scope.docApartager.filepath.replace('/', '')))[0]);
-                        fileStorageService.shareFile($scope.docApartager.filepath, $rootScope.currentUser.dropbox.accessToken).then(function (shareLink) {
-                            $scope.docApartager.lienApercu = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
-                            $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
-                            $scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
-                            localStorage.setItem('lockOperationDropBox', false);
-                        });
-                    }
-                });
-            }
-        };
-
-        /**
-         * Sharing of the notes for the sharing of the document
-         */
-        $scope.processAnnotation = function () {
-            localStorage.setItem('lockOperationDropBox', true);
-            if ($scope.annotationOk && $scope.docFullName.length > 0 && $scope.annotationToShare !== null) {
-                var tmp2 = dropbox.upload($scope.docFullName + '.json', $scope.annotationToShare, $rootScope.currentUser.dropbox.accessToken);
-                tmp2.then(function () {
-                    var shareAnnotations = dropbox.shareLink($scope.docFullName + '.json', $rootScope.currentUser.dropbox.accessToken);
-                    shareAnnotations.then(function (result) {
-                        $scope.docApartager.lienApercu += '&annotation=' + result.url;
-                        $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
-                        $scope.confirme = true;
-                        $scope.attachFacebook();
-                        $scope.attachGoogle();
-                        localStorage.setItem('lockOperationDropBox', false);
-
-                    });
-                });
-            } else {
-                localStorage.setItem('lockOperationDropBox', false);
-                $scope.confirme = true;
-                $scope.encodeURI = encodeURIComponent($scope.docApartager.lienApercu);
-                $scope.attachFacebook();
-                $scope.attachGoogle();
-            }
-        };
-
-        /*
-         * Cancel the sending of an email.
-         */
-        $scope.dismissConfirm = function () {
-            $scope.destinataire = '';
-        };
-
-        /*
-         * Send the email to the addressee.
-         */
-        $scope.sendMail = function () {
-            $('#confirmModal').modal('hide');
-            var docApartager = $scope.encodeURI;
-            $scope.loader = true;
-            if ($rootScope.currentUser.dropbox.accessToken && docApartager) {
-                $scope.sharedDoc = $scope.docApartager.filename;
-                $scope.encodeURI = decodeURIComponent($scope.encodeURI);
-                $scope.sendVar = {
-                    to: $scope.destinataire,
-                    content: ' a utilisé Accessidys pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
-                    encoded: '<span> vient d\'utiliser Accessidys pour partager ce fichier avec vous :   <a href=' + $scope.docApartager.lienApercu + '>' + $scope.docApartager.filename + '</a> </span>',
-                    prenom: $rootScope.currentUser.local.prenom,
-                    fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-                    doc: $scope.sharedDoc
-                };
-                $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar).then(function () {
-                    $('#okEmail').fadeIn('fast').delay(5000).fadeOut('fast');
-                    $scope.envoiMailOk = true;
-                    $scope.destinataire = '';
-                    $scope.loader = false;
-                    $scope.showDestination = false;
-                }, function () {
-                    $scope.envoiMailOk = false;
-                    $scope.loader = false;
-                });
-            }
-        };
-
-        /*
-         * share a document
-         */
-        $scope.socialShare = function () {
-            $scope.emailMsgSuccess = '';
-            $scope.emailMsgError = '';
-
-            if (!$scope.destinataire || $scope.destinataire.length <= 0) {
-                $scope.emailMsgError = 'L\'Email est obligatoire!';
-                return;
-            }
-            if (!verifyEmail($scope.destinataire)) {
-                $scope.emailMsgError = 'L\'Email est invalide!';
-                return;
-            }
-            $('#confirmModal').modal('show');
-            $('#shareModal').modal('hide');
-
-        };
 
         /**
          * ---------- Process Annotation -----------
@@ -1359,11 +1195,7 @@ angular.module('cnedApp')
         };
 
         $scope.fermerApercu = function () {
-            if (!$scope.tmp) {
-                $location.path('/');
-            } else {
-                UtilsService.showInformationModal('label.close', 'document-overview.message.info.close');
-            }
+            UtilsService.showInformationModal('label.close', 'document-overview.message.info.close');
         };
 
         /**

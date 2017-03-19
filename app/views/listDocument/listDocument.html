@@ -37,11 +37,10 @@
         <div class="head_section">
             <input type="text" class="serach_field pull-left" data-ng-model="query"
                    placeholder="Recherche un document ..." data-ng-change="specificFilter()"/>
-            <a href="#/addDocument" style="text-decoration: none; color: white;" role="button" id="add_documentbtn"
-               data-ng-show="onlineStatus" type="button" class="grey_btn pull-right add_document" data-ng-click=""
+            <a href="#/addDocument" style="text-decoration: none; color: white;" role="button" id="add_documentbtn" type="button" class="grey_btn pull-right add_document"
                title="Ajouter un document">Ajouter un document</a>
         </div>
-        <table data-ng-show="showList" id="listDocumentPage">
+        <table id="listDocumentPage">
             <thead>
             <tr>
                 <th>
@@ -74,9 +73,9 @@
                 </td>
                 <td class="profil_desc centering">{{ document.dateModification | date: configuration.DATE_PATTERN}}</td>
                 <td class="action_area centering" uib-dropdown>
-                    <button id="document-actions" type="button" class="action_btn" uib-dropdown-toggle
-                            data-show="{{document.filenameEncoded}}"
-                            data-shown="false" name="document_action_btn">&nbsp;</button>
+                    <button id="document-actions" type="button" class="action_btn" uib-dropdown-toggle name="document_action_btn">
+                        &nbsp;
+                    </button>
                     <ul class="action_list" uib-dropdown-menu aria-labelledby="document-actions">
                         <li class="show_item">
                             <a ng-href="#/apercu?idDocument={{document.filename}}&mode=page" id="show_document"
@@ -84,28 +83,28 @@
                                 Afficher
                             </a>
                         </li>
-                        <li data-ng-show="onlineStatus" class="setting_documentTitle">
+                        <li class="setting_documentTitle">
                             <a id="edit_document"
                                data-toggle="modal"
                                data-target="#EditTitreModal"
-                               data-ng-click="openModifieTitre(document)"
+                               data-ng-click="renameDocumentTitle(document)"
                                title="Modifier le titre">
                                 Modifier le titre
                             </a>
                         </li>
-                        <li data-ng-show="onlineStatus" class="restructer_item">
+                        <li class="restructer_item">
                             <a ng-href="#/addDocument?idDocument={{document.filename}}" id="restructurer_document"
                                title="Modifier">
                                 Modifier
                             </a>
                         </li>
-                        <li data-ng-show="onlineStatus" class="share_item">
+                        <li class="share_item">
                             <a id="share_document" title="Partager le document"
                                data-ng-click="shareDocument(document)">
                                 Partager
                             </a>
                         </li>
-                        <li data-ng-show="onlineStatus" class="removing_item">
+                        <li class="removing_item">
                             <a id="delete_document"
                                data-ng-click="deleteDocument(document)" title="Supprimer">
                                 Supprimer
@@ -116,46 +115,6 @@
             </tr>
             </tbody>
         </table>
-    </div>
-
-    <div class="modal fade" id="EditTitreModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" id="modalContent">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" id="myModalLabel">ENTRER LE NOUVEAU TITRE</h3>
-                </div>
-                <div class="modal-body">
-                    <form class="globalFieldStyle" role="form">
-                        <fieldset>
-                            <p class="control_group clearfix">
-                            <div data-ng-show="afficheErreurModifier" class="alert alert-danger animated fadeInRight">Ce
-                                nom existe déjà dans votre DropBox.
-                            </div>
-                            <div data-ng-show="videModifier" class="alert alert-danger animated fadeInRight">Ce champ et
-                                obligatoire. Veuillez le remplir.
-                            </div>
-                            <div data-ng-show="specialCaracterModifier" class="alert alert-danger animated fadeInRight">
-                                Veuillez ne pas utiliser les caractères spéciaux.
-                            </div>
-                            <label for="inputEmail3" class="control-label without_icn">Nouveau Titre : </label>
-                            <input type="text" type="text" max-length="200" data-ng-model="nouveauTitre"
-                                   id="inputEmail3" placeholder="Entrer un nouveau titre">
-                            </p>
-                        </fieldset>
-                        <div class="centering" id="ProfileButtons">
-                            <button id="reset_titleediting" type="button" class="reset_btn" data-dismiss="modal"
-                                    title="Annuler">Annuler
-                            </button>
-                            <button id="save_editedTitle" type="button" class="btn_simple light_blue"
-                                    data-ng-click="modifieTitre()" title="Renommer">Renommer
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

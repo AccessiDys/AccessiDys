@@ -1,0 +1,75 @@
+<!-- 
+ File: delegate-profile.modal.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+<div class="modal-header">
+    <button data-ng-click="dismissModal()" type="button" class="close"
+            aria-hidden="true">&times;</button>
+    <h3 class="modal-title">
+        Déléguer un profil
+    </h3>
+
+</div>
+
+<div class="alert-block alert-danger alert-dismissable" id="profile-delegate-success-toaster">
+    <i class="fa fa-times" aria-hidden="true"></i>
+
+    <strong regle-style="toasterMsg"
+            apply-rules="forceToasterApdapt"
+            tags="listTagsByProfilToaster">
+    </strong>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-content">
+                <div class="tab-pane active" id="document">
+                    <form class="form-horizontal" role="form" id="delegate" name="delegate">
+                        <fieldset class="padding_large" data-ng-show="!successMsg">
+                            <p class="controls_zone">
+                                <label for="delegateEmail" class="simple_label">
+                                    <span>Email :</span>
+                                    <span class="required"> *</span>
+                                </label>
+                                <input type="text" id="delegateEmail"
+                                       placeholder="Entrer l'email du destinataire"
+                                       data-ng-model="form.email" required>
+                            </p>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="reset_btn" title="Annuler" data-ng-click="dismissModal()">
+        Annuler
+    </button>
+    <button type="button" class="btn_simple light_blue"
+            data-ng-click="delegateProfile()" title="Envoyer">
+        Envoyer
+    </button>
+
+</div>
+<!-- /.modal-content -->

@@ -632,10 +632,11 @@ table tr td:last-child {
 
 div.modal-footer {
     text-align: center;
+    border-top: 1px solid #3d3d3d;
 }
 
 div.modal-body {
-    padding: 20px 0;
+    padding: 0 0 20px 0
 }
 
 .modal-title {
@@ -681,7 +682,7 @@ div.modal-body {
 .modal-body fieldset {
     padding-top: 7px;
     padding-bottom: 4px;
-    border-bottom: 1px solid #3d3d3d;
+
     overflow: hidden;
     margin-bottom: 10px;
 }
@@ -720,6 +721,7 @@ div.modal-body {
     padding-top: 10px;
     min-width: 175px;
     float: left;
+    font-weight: 300;
 }
 
 .modal-body label.simple_label {

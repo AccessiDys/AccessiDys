@@ -26,63 +26,139 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $uibModalInstance, documentService, $log, gettextCatalog, $timeout) {
-    $scope.document = {
-        title: title
+angular.module('cnedApp').controller('OpenDocumentModalCtrl', function ($rootScope, $scope, $uibModalInstance, UtilsService, ToasterService, serviceCheck, documentService) {
+
+    $scope.form = {
+        title: '',
+        uri: '',
+        files: [],
+        type: ''
     };
-    $scope.errors = errors;
 
-
-    /**
-     * This function closes a modal.
-     */
-    $scope.saveTitle = function () {
-
-        $scope.errors = [];
-
-        $log.debug('Title', $scope.document.title);
-
-        $scope.errors = documentService.checkFields({
-            title: $scope.document.title
-        });
-
-        if ($scope.errors.length < 1) {
-            $uibModalInstance.close({
-                title: $scope.document.title
-            });
-        } else {
-            $scope.showToaster('#edit-title-error-toaster', $scope.errors[0]);
-        }
-    };
 
     $scope.dismissModal = function () {
         $uibModalInstance.dismiss();
     };
 
-    $scope.toasterMsg = '';
-    $scope.forceToasterApdapt = false;
-    $scope.listTagsByProfilToaster = [];
 
-    /**
-     * Show success toaster
-     * @param msg
-     */
-    $scope.showToaster = function (id, msg) {
-        $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
-        $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-        $scope.forceToasterApdapt = true;
-        $timeout(function () {
-            angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-            $scope.forceToasterApdapt = false;
-        }, 0);
-    };
+    $scope.open = function () {
+        if (!$rootScope.isAppOnline && $scope.form.uri) {
+            UtilsService.showInformationModal('label.offline', 'document.message.info.importlink.offline');
+        } else {
 
-    $uibModalInstance.opened.then(function () {
+            var doc = $scope.form;
 
-        if ($scope.errors.length > 0) {
-            $scope.showToaster('#edit-title-error-toaster', $scope.errors[0]);
+            var errors = documentService.checkFields(doc);
+
+            if ((!$scope.form.uri && $scope.form.files.length <= 0) || (($scope.form.uri && /\S/.test($scope.form.uri)) && $scope.form.files.length > 0)) {
+                errors.push('document.message.save.ko.linkorlocalfile');
+            }
+            if ($scope.form.uri && !UtilsService.verifyLink($scope.form.uri)) {
+                errors.push('document.message.save.ko.link');
+            }
+
+            if (doc.files.length > 0) {
+                if (doc.files[0].type === 'application/pdf') {
+                    doc.type = 'pdf';
+
+                } else if (doc.files[0].type === 'image/jpeg'
+                    || doc.files[0].type === 'image/png'
+                    || doc.files[0].type === 'image/jpg') {
+
+                    doc.type = 'image';
+
+                } else if (doc.files[0].type === 'application/epub+zip'
+                    || (doc.files[0].type === '' && doc.files[0].name.indexOf('.epub'))) {
+
+                    doc.type = 'epub';
+
+                } else {
+                    errors.push('document.message.save.ko.file.type');
+                }
+            }
+
+
+            if (errors.length > 0) {
+                ToasterService.showToaster('#open-document-modal-error-toaster', errors[0]);
+            } else {
+                documentService.isDocumentAlreadyExist(doc)
+                    .then(function (isDocumentExist) {
+
+                        if (isDocumentExist) {
+                            ToasterService.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.alreadyexist');
+                        } else {
+                            $uibModalInstance.close(doc);
+                        }
+                    });
+
+            }
         }
 
-    });
+    };
+
+    /**
+     * Open the document selected by the user.
+     */
+    $scope.validerAjoutDocument = function () {
+        // Presence of a file with the browse button
+        if ($scope.files.length > 0) {
+            $scope.pageTitre = 'Ajouter un document';
+            $scope.existingFile = null;
+            if ($scope.doc && $scope.doc.titre) {
+                $scope.docTitre = $scope.doc.titre;
+            }
+
+            $rootScope.uploadDoc = $scope.doc;
+            $scope.doc = {};
+            $rootScope.uploadDoc.uploadPdf = $scope.files;
+            if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/pdf') {
+                $scope.loadPdf();
+            } else if ($rootScope.uploadDoc.uploadPdf[0].type === 'image/jpeg' || $rootScope.uploadDoc.uploadPdf[0].type === 'image/png' || $rootScope.uploadDoc.uploadPdf[0].type === 'image/jpg') {
+                $scope.loadImage();
+            } else if ($rootScope.uploadDoc.uploadPdf[0].type === 'application/epub+zip' || ($rootScope.uploadDoc.uploadPdf[0].type === '' && $rootScope.uploadDoc.uploadPdf[0].name.indexOf('.epub'))) {
+                $scope.uploadFile();
+            } else {
+
+                $scope.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.file.type');
+                $scope.errorMsg = true;
+            }
+        }
+
+        // Link management
+        else if ($scope.lien) {
+            $scope.pageTitre = 'Ajouter un document';
+            $scope.existingFile = null;
+            if ($scope.doc && $scope.doc.titre) {
+                $scope.docTitre = $scope.doc.titre;
+            }
+
+            $rootScope.uploadDoc = $scope.doc;
+            $scope.doc = {};
+            if ($scope.lien.indexOf('.epub') > -1) {
+                $scope.getEpubLink();
+            } else if ($scope.lien.indexOf('.pdf') > -1) {
+                $scope.loadPdfByLien($scope.lien);
+            } else {
+                LoaderService.showLoader('document.message.info.treatment.inprogress', true);
+                LoaderService.setLoaderProgress(10);
+
+                // Retrieving the contents of the body of link by services.
+                var promiseHtml = serviceCheck.htmlPreview($scope.lien, $rootScope.currentUser.dropbox.accessToken);
+                promiseHtml.then(function (resultHtml) {
+                    var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
+                    promiseClean.then(function (resultClean) {
+                        // Insertion in the editor
+                        CKEDITOR.instances.editorAdd.setData(resultClean);
+                        LoaderService.hideLoader();
+                    });
+                }, function (err) {
+
+                    LoaderService.hideLoader();
+                    $scope.techError = err;
+                    angular.element('#myModalWorkSpaceTechnical').modal('show');
+                });
+            }
+        }
+    };
 
 });

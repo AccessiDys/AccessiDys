@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <button type="button" class="close" data-ng-click="clearUploadFile();clearLien();" aria-hidden="true">
+    <button type="button" class="close" data-ng-click="dismissModal()" aria-hidden="true">
         ×
     </button>
     <h3 class="modal-title">Ouvrir un document</h3>
@@ -12,9 +12,9 @@
     </strong>
 </div>
 
-<div class="modal-body adjust-modal-body">
-    <div class="row-fluid span6">
-        <div class="tab-content">
+<div class="modal-body">
+    <div class="row">
+        <div class="tab-content col-md-12">
             <div class="tab-pane active" id="document">
                 <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
                     <fieldset>
@@ -23,15 +23,17 @@
                                 <span>Titre</span> <span class="required">*</span>
                             </label>
                             <input type="text" max-length="200" id="docTitre"
-                                   placeholder="Entrez le titre du document" data-ng-model="doc.titre" required/>
+                                   placeholder="Entrez le titre du document"
+                                   data-ng-model="form.title" required/>
                         </p>
 
                         <p class="controls_zone">
                             <label for="lien">
                                 <span>Lien web : </span>
                             </label>
-                            <input type="text" class="" id="lien" placeholder="Entrez le lien de votre fichier"
-                                   data-ng-model="lien" required>
+                            <input type="text" class="" id="lien"
+                                   placeholder="Entrez le lien de votre fichier"
+                                   data-ng-model="form.uri" required>
                         </p>
 
                         <p class="controls_zone">
@@ -48,19 +50,21 @@
                             <button type="button" class="clear_upoadpdf" data-ng-click="clearUploadFile()"> </button>
                         </p>
                     </fieldset>
-                    <div class="centering">
-                        <button type="button" class="reset_btn"
-                                ng-click="clearUploadFile();clearLien();" data-dismiss="modal"
-                                title="{{'Annuler' | translate}}" name="reset">
-                            Annuler
-                        </button>
-                        <button type="button" class="btn_simple light_blue" data-ng-click="ajouterDocument()"
-                                title="{{'Ouvrir' | translate}}" name="add_Document">
-                            Ouvrir
-                        </button>
-                    </div>
+
                 </form>
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="reset_btn"
+            data-ng-click="dismissModal()"
+            title="{{'Annuler' | translate}}" name="reset">
+        Annuler
+    </button>
+    <button type="button" class="btn_simple light_blue" data-ng-click="open()"
+            title="{{'Ouvrir' | translate}}" name="add_Document">
+        Ouvrir
+    </button>
 </div>

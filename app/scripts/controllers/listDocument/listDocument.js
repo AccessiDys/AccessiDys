@@ -29,28 +29,13 @@ var FB = FB;
 var gapi = gapi;
 
 angular.module('cnedApp')
-    .controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http, $location, dropbox, $window,
-                                              configuration, fileStorageService, $uibModal, tagsService, Analytics,
-                                              gettextCatalog, $timeout, UtilsService, LoaderService, $log) {
+    .controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http,
+                                              configuration, fileStorageService, tagsService, Analytics,
+                                              gettextCatalog, $timeout, UtilsService, LoaderService, $log, documentService) {
 
-        $scope.showList = false;
         $scope.configuration = configuration;
-        $scope.onlineStatus = true;
-        $scope.files = [];
-        $scope.afficheErreurModifier = false;
-        $scope.videModifier = false;
-        $scope.specialCaracterModifier = false;
         $scope.testEnv = false;
-        $scope.flagModifieDucoment = false;
-        $scope.flagListDocument = false;
-        $scope.modifyCompleteFlag = false;
-        $rootScope.restructedBlocks = null;
-        $rootScope.uploadDoc = null;
         $scope.requestToSend = {};
-        // If notes must be shared with the document
-        $scope.initLock = false;
-        $scope.lockrestoreAllDocuments = false;
-
         $scope.sortType = 'dateModification';
         $scope.sortReverse = true;
 
@@ -105,89 +90,33 @@ angular.module('cnedApp')
             Analytics.trackPage('/document/delete.html');
         };
 
-        $scope.openModifieTitre = function (document) {
-            $scope.selectedItem = document.filepath;
-            $scope.oldTitre = document.filename.replace('/', '').replace('.html', '');
-            $scope.selectedItemLink = document.lienApercu;
-            $scope.afficheErreurModifier = false;
-            $scope.videModifier = false;
-            $scope.specialCaracterModifier = false;
-            $scope.nouveauTitre = '';
-            $scope.oldName = document.nomAffichage;
-            $scope.nouveauTitre = document.nomAffichage;
-            if (!$scope.$$phase) {
-                $scope.$digest();
-            } // jshint ignore:line
+        /**
+         * Rename a document title
+         * @param document The document to be renamed
+         */
+        $scope.renameDocumentTitle = function(document){
+
+            documentService.editDocumentTitle(document.filename, [], 'edit')
+                .then(function (params) {
+                    localStorage.setItem('lockOperationDropBox', true);
+                    LoaderService.showLoader('document.message.info.rename.inprogress', true);
+                    LoaderService.setLoaderProgress(10);
+
+                    var signature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent(document.filepath))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(document.filepath))[0], '');
+                    var ladate = new Date();
+                    var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
+                    var newTitle = tmpDate + '_' + encodeURIComponent(params.title) + '_' + signature;
+                    fileStorageService.renameFile($rootScope.isAppOnline, document.filepath, '/' + newTitle + '.html', $rootScope.currentUser.dropbox.accessToken)
+                        .then(function () {
+                            LoaderService.setLoaderProgress(80);
+                            localStorage.setItem('lockOperationDropBox', false);
+                            $scope.updateNote('EDIT');
+                            $scope.getListDocument();
+                        });
+                });
 
             // angular-google-analytics tracking pages
             Analytics.trackPage('/document/edit-title.html');
-        };
-        /* jshint ignore:start */
-
-        // change the title
-        $scope.modifieTitre = function () {
-            if ($scope.nouveauTitre !== '') {
-                if ($scope.nouveauTitre == $scope.oldName) { // jshint
-                    // ignore:line
-                    $('#EditTitreModal').modal('hide');
-                } else {
-                    if (!serviceCheck.checkName($scope.nouveauTitre) || $scope.nouveauTitre.length > 201) {
-                        $scope.specialCaracterModifier = true;
-
-                        /* Hide other error messages*/
-                        $scope.videModifier = false;
-                        $scope.afficheErreurModifier = false;
-
-                        return;
-                    }
-                    $scope.videModifier = false;
-                    var documentExist = false;
-                    for (var i = 0; i < $scope.listDocument.length; i++) {
-                        if ($scope.listDocument[i].filepath.toLowerCase().indexOf('_' + $scope.nouveauTitre.toLowerCase() + '_') > -1) {
-                            documentExist = true;
-                            break;
-                        }
-                    }
-                    if (documentExist) {
-                        $scope.afficheErreurModifier = true;
-                        $scope.loader = false;
-
-                        /* Hide other messages */
-                        $scope.videModifier = false;
-                        $scope.specialCaracterModifier = false;
-                    } else {
-                        $('#EditTitreModal').modal('hide');
-                        $scope.flagModifieDucoment = true;
-                        $scope.modifieTitreConfirme();
-                    }
-                }
-            } else {
-                $scope.videModifier = true;
-                /* Hide other messages */
-                $scope.afficheErreurModifier = false;
-                $scope.specialCaracterModifier = false;
-            }
-        };
-        /* jshint ignore:end */
-
-        // rename the confirmed title of the document
-        $scope.modifieTitreConfirme = function () {
-            localStorage.setItem('lockOperationDropBox', true);
-            LoaderService.showLoader('document.message.info.rename.inprogress', true);
-            LoaderService.setLoaderProgress(10);
-
-            var signature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent($scope.selectedItem))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent($scope.selectedItem))[0], '');
-            var ladate = new Date();
-            var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
-            $scope.nouveauTitre = tmpDate + '_' + encodeURIComponent($scope.nouveauTitre) + '_' + signature;
-            fileStorageService.renameFile($rootScope.isAppOnline, $scope.selectedItem, '/' + $scope.nouveauTitre + '.html', $rootScope.currentUser.dropbox.accessToken)
-                .then(function () {
-                    LoaderService.setLoaderProgress(80);
-                    localStorage.setItem('lockOperationDropBox', false);
-                    $scope.modifyCompleteFlag = true;
-                    $scope.updateNote('EDIT');
-                    $scope.getListDocument();
-                });
         };
 
         /**
@@ -198,9 +127,7 @@ angular.module('cnedApp')
             $log.debug('Share document', document);
 
             if (!$rootScope.isAppOnline) {
-
                 UtilsService.showInformationModal('label.offline', 'document.message.info.share.offline');
-
             } else {
 
                 var itemToShare = {
@@ -236,69 +163,6 @@ angular.module('cnedApp')
                 Analytics.trackPage('/document/share.html');
             }
 
-        };
-
-
-        // TODO To be delete
-        $scope.attachFacebook = function () {
-            console.log(decodeURIComponent($scope.encodeURI));
-            $('.facebook-share .fb-share-button').remove();
-            $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.encodeURI) + '" data-layout="button"></div>');
-            try {
-                FB.XFBML.parse();
-            } catch (ex) {
-                console.log('gotchaa ... ');
-                console.log(ex);
-            }
-
-        };
-
-        $scope.googleShareStatus = 0;
-
-        $scope.reloadPage = function () {
-            $window.location.reload();
-        };
-
-        // TODO To be delete
-        $scope.attachGoogle = function () {
-            console.log('IN ==> ');
-            var options = {
-                contenturl: decodeURIComponent($scope.encodeURI),
-                contentdeeplinkid: '/pages',
-                clientid: '807929328516-g7k70elo10dpf4jt37uh705g70vhjsej.apps.googleusercontent.com',
-                cookiepolicy: 'single_host_origin',
-                prefilltext: '',
-                calltoactionlabel: 'LEARN_MORE',
-                calltoactionurl: decodeURIComponent($scope.encodeURI),
-                callback: function (result) {
-                    console.log(result);
-                    console.log('this is the callback');
-                },
-                onshare: function (response) {
-                    if (response.status === 'started') {
-                        $scope.googleShareStatus++;
-                        if ($scope.googleShareStatus > 1) {
-                            $('#googleShareboxIframeDiv').remove();
-                            // alert('some error in sharing');
-                            $('#shareModal').modal('hide');
-                            $('#informationModal').modal('show');
-                            localStorage.setItem('googleShareLink', $scope.encodeURI);
-                        }
-                    } else {
-                        // localStorage.removeItem('googleShareLink');
-                        $scope.googleShareStatus = 0;
-                        $('#shareModal').modal('hide');
-                    }
-                    // These are the objects returned by the platform
-                    // When the sharing starts...
-                    // Object {status: "started"}
-                    // When sharing ends...
-                    // Object {action: "shared", post_id: "xxx", status:
-                    // "completed"}
-                }
-            };
-
-            gapi.interactivepost.render('google-share', options);
         };
 
         // verifies the existence of listTags and listTagByProfil and fulfilled if found
@@ -357,7 +221,6 @@ angular.module('cnedApp')
                     LoaderService.hideLoader();
                     $scope.listDocument = listDocument;
                     $scope.initialiseShowDocs();
-                    $scope.showList = true;
                 }, function () {
                     LoaderService.hideLoader();
                 });

@@ -170,7 +170,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     $scope.step1 = 'btn btn-default btn-circle';
                     $('#myModal').modal('show');
                 });
-                // localStorage.setItem('compteId', data.local.token);
             }).error(function() {
                 $scope.erreur.erreurSigninEmail = false;
                 $scope.erreur.erreurSigninEmailNonDisponible = true;

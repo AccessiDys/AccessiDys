@@ -43,7 +43,7 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
         email: ''
     };
 
-    $uibModalInstance.then(function () {
+    $uibModalInstance.opened.then(function () {
         $scope.itemToShare = itemToShare;
         $scope.mode = mode;
     });
@@ -126,6 +126,64 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
         } else {
             // TODO show errors
         }
-    }
+    };
+
+    // TODO To be delete
+    $scope.attachFacebook = function () {
+        console.log(decodeURIComponent($scope.encodeURI));
+        $('.facebook-share .fb-share-button').remove();
+        $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.encodeURI) + '" data-layout="button"></div>');
+        try {
+            FB.XFBML.parse();
+        } catch (ex) {
+            console.log('gotchaa ... ');
+            console.log(ex);
+        }
+
+    };
+
+    $scope.googleShareStatus = 0;
+
+    // TODO To be delete
+    $scope.attachGoogle = function () {
+        console.log('IN ==> ');
+        var options = {
+            contenturl: decodeURIComponent($scope.encodeURI),
+            contentdeeplinkid: '/pages',
+            clientid: '807929328516-g7k70elo10dpf4jt37uh705g70vhjsej.apps.googleusercontent.com',
+            cookiepolicy: 'single_host_origin',
+            prefilltext: '',
+            calltoactionlabel: 'LEARN_MORE',
+            calltoactionurl: decodeURIComponent($scope.encodeURI),
+            callback: function (result) {
+                console.log(result);
+                console.log('this is the callback');
+            },
+            onshare: function (response) {
+                if (response.status === 'started') {
+                    $scope.googleShareStatus++;
+                    if ($scope.googleShareStatus > 1) {
+                        $('#googleShareboxIframeDiv').remove();
+                        // alert('some error in sharing');
+                        $('#shareModal').modal('hide');
+                        $('#informationModal').modal('show');
+                        localStorage.setItem('googleShareLink', $scope.encodeURI);
+                    }
+                } else {
+                    // localStorage.removeItem('googleShareLink');
+                    $scope.googleShareStatus = 0;
+                    $('#shareModal').modal('hide');
+                }
+                // These are the objects returned by the platform
+                // When the sharing starts...
+                // Object {status: "started"}
+                // When sharing ends...
+                // Object {action: "shared", post_id: "xxx", status:
+                // "completed"}
+            }
+        };
+
+        gapi.interactivepost.render('google-share', options);
+    };
 
 });

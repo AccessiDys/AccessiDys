@@ -380,64 +380,8 @@ describe(
                 expect($scope.videModifier).toEqual(false);
             }));
 
-            it('listDocumentCtrl:loadMail function', function() {
-                expect($scope.loadMail).toBeDefined();
-                expect($scope.displayDestination).toBeFalsy();
-            });
 
-            it('listDocumentCtrl:verifyEmail function', inject(function() {
-                expect($scope.verifyEmail).toBeDefined();
-                expect($scope.verifyEmail('test@test.com')).toBeTruthy();
-            }));
 
-            it('listDocumentCtrl:docPartage function', inject(function($rootScope) {
-                $rootScope.currentUser.dropbox.accessToken = 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn';
-                $scope.docApartager = {
-                    filepath : 'http://dropbox.com/#'
-                };
-                $scope.docPartage($scope.docApartager);
-                expect(fileStorageService.shareFile).toHaveBeenCalledWith('http://dropbox.com/#', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn');
-
-                $rootScope.isAppOnline = false;
-                spyOn(modal, 'open').andCallThrough();
-                $scope.docPartage($scope.docApartager);
-                expect(modal.open).toHaveBeenCalled();
-                expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-                var modalContent = modalParameters.resolve.content();
-                expect(modalContent).toEqual('La fonctionnalité de partage de document nécessite un accès à internet');
-
-            }));
-
-            it('listDocumentCtrl:sendMail function', inject(function($httpBackend, $rootScope, configuration) {
-                configuration.URL_REQUEST = 'https://localhost:3000';
-                configuration.DROPBOX_TYPE = 'sandbox';
-
-                $scope.destination = 'test@test.com';
-                $scope.docApartager = {
-                    filepath : '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef.html'
-                };
-                $scope.sendMail();
-                $httpBackend.flush();
-
-                expect($scope.verifyEmail($scope.destination)).toBeTruthy();
-                expect($scope.docApartager).not.toBe(null);
-                expect($rootScope.myUser.dropbox.accessToken).not.toBe(null);
-                expect($rootScope.currentUser).not.toBe(null);
-                expect($scope.docApartager).not.toBe(null);
-                expect($scope.docApartager.path).not.toBe(null);
-
-                $scope.sendVar = {
-                    to : $scope.destinataire,
-                    content : ' a utilisé Accessidys pour partager un fichier avec vous !  ' + $scope.docApartager.lienApercu,
-                    encoded : '<span> vient d\'utiliser Accessidys pour partager un fichier avec vous !   <a href=' + $scope.docApartager.lienApercu + '>Document CnedAdapt</a> </span>',
-                    prenom : $rootScope.currentUser.local.prenom,
-                    fullName : $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-                    doc : $scope.sharedDoc
-                };
-
-                expect($scope.envoiMailOk).toBeTruthy();
-
-            }));
 
             it('listDocumentCtrl:modifieTitreConfirme function', inject(function($rootScope, configuration) {
                 $scope.selectedItem = '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef';
@@ -461,47 +405,12 @@ describe(
                 expect($scope.flagLocalSettinglistTagsByProfil).toEqual(true);
             }));
 
-            it('listDocumentCtrl:changed', inject(function() {
-                $scope.changed(true);
-            }));
 
             it('listDocumentCtrl:dismissConfirm', inject(function() {
                 $scope.dismissConfirm();
             }));
 
-            it('listDocumentCtrl:clearSocialShare', inject(function() {
-                var test = {
-                    'revision' : 1795,
-                    'rev' : '70321729c92',
-                    'thumb_exists' : false,
-                    'bytes' : 89109,
-                    'modified' : 'Tue, 08 Apr 2014 11:13:49 +0000',
-                    'client_mtime' : 'Thu, 03 Apr 2014 10:47:30 +0000',
-                    'path' : '/goool.html',
-                    'is_dir' : false,
-                    'icon' : 'page_white_code',
-                    'nomAffichage' : 'goool',
-                    'root' : 'app_folder',
-                    'mime_type' : 'text/html',
-                    'size' : '87 KB',
-                    'lienApercu' : 'https://dl.dropboxusercontent.com/s/61hyatcaze1aes4/goool.html#/apercu'
-                };
-                $scope.clearSocialShare(test);
-            }));
 
-            it(
-                    'listDocumentCtrl:processAnnotation',
-                    inject(function($httpBackend) {
-                        $scope.annotationOk = true;
-                        $scope.docFullName = 'test';
-                        $scope.annotationToShare = '{"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60":[{"idNote":"1415956758007694","idInPage":1,"idDoc":"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60","idPage":1,"texte":"Note 1","x":750,"y":93,"xLink":509,"yLink":86,"styleNote":"<p data-font=\'Arial\' data-size=\'1.18\' data-lineheight=\'1.466\' data-weight=\'Gras\' data-coloration=\'Surligner les lignes RVBJ\' data-word-spacing=\'0.36\' data-letter-spacing=\'0.12\'> Note 1 </p>"},{"idNote":"1415956761511425","idInPage":2,"idDoc":"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60","idPage":1,"texte":"Note 2","x":750,"y":161,"xLink":647,"yLink":161,"styleNote":"<p data-font=\'Arial\' data-size=\'1.18\' data-lineheight=\'1.466\' data-weight=\'Gras\' data-coloration=\'Surligner les lignes RVBJ\' data-word-spacing=\'0.36\' data-letter-spacing=\'0.12\'> Note 2 </p>"},{"idNote":"1415956763846869","idInPage":3,"idDoc":"2014-11-13_energy mofied 2_81ff5f8070b3a0afb878a781575b9f60","idPage":1,"texte":"Note 3","x":750,"y":305,"xLink":634,"yLink":305,"styleNote":"<p data-font=\'Arial\' data-size=\'1.18\' data-lineheight=\'1.466\' data-weight=\'Gras\' data-coloration=\'Surligner les lignes RVBJ\' data-word-spacing=\'0.36\' data-letter-spacing=\'0.12\'> Note 3 </p>"}]}';
-                        $scope.processAnnotation();
-                        $httpBackend.flush();
-                    }));
-
-            it('listDocumentCtrl:loadMail', inject(function() {
-                $scope.loadMail();
-            }));
 
             it('listDocumentCtrl:specificFilter', inject(function() {
                 $scope.query = 'plz';

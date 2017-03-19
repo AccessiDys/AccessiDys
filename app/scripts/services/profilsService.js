@@ -26,7 +26,8 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('profilsService', function($http, configuration, fileStorageService, $localForage, synchronisationStoreService,$rootScope) {
+cnedApp.service('profilsService', function ($http, configuration, fileStorageService,
+                                            $localForage, synchronisationStoreService, $rootScope, $uibModal) {
 
     var self = this;
 
@@ -34,52 +35,52 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
      * Gets the css URL for the current profile.
      * @method getUrl
      */
-    this.getUrl = function() {
+    this.getUrl = function () {
         var token = localStorage.getItem('compteId');
         var id = JSON.parse(localStorage.getItem('profilActuel'))._id.toString();
         var url = configuration.URL_REQUEST + '/cssProfil/' + id + '?id=' + token;
 
         return $http({
-            url : url,
-            method : 'GET',
-            responseType : 'blob'
-        }).then(function(response) {
+            url: url,
+            method: 'GET',
+            responseType: 'blob'
+        }).then(function (response) {
             url = URL.createObjectURL(response.data);
             return fileStorageService.saveCSSInStorage(url, id);
-        }, function() {
+        }, function () {
             return fileStorageService.getCSSInStorage(id);
-        }).then(function() {
+        }).then(function () {
             return fileStorageService.getCSSInStorage(id);
         });
     };
 
     /**
      * Updates the given profile.
-     * 
+     *
      * @param profil :
-     *            The profile to be updated.
+        *            The profile to be updated.
      */
-    this.updateProfil = function(online, profil) {
+    this.updateProfil = function (online, profil) {
         var data = {
-            id : localStorage.getItem('compteId'),
-            updateProfile : profil
+            id: localStorage.getItem('compteId'),
+            updateProfile: profil
         };
 
         if (online) {
             data.updateProfile.updated = new Date();
-            return $http.post(configuration.URL_REQUEST + '/updateProfil', data).then(function(result) {
-                return $localForage.setItem('profil.' + result.data._id, result.data).then(function() {
+            return $http.post(configuration.URL_REQUEST + '/updateProfil', data).then(function (result) {
+                return $localForage.setItem('profil.' + result.data._id, result.data).then(function () {
                     return result.data;
                 });
             });
         } else {
             profil.updated = new Date();
             return synchronisationStoreService.storeProfilToSynchronize({
-                owner: $rootScope.currentUser.local.email ,
-                action : 'update',
-                profil : profil,
-                profilTags : null
-            }).then(function() {
+                owner: $rootScope.currentUser.local.email,
+                action: 'update',
+                profil: profil,
+                profilTags: null
+            }).then(function () {
                 return self.updateListProfilInCache(profil);
             });
         }
@@ -89,45 +90,45 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     /**
      * Add the given profile.
      * @param profile :
-     *            The profile to be updated.
+        *            The profile to be updated.
      */
-    this.addProfil = function(online, profile, profilTags) {
+    this.addProfil = function (online, profile, profilTags) {
         var profil = profile;
         if (!profil.updated) {
             profil.updated = new Date();
         }
         var data = {
-            id : localStorage.getItem('compteId'),
-            newProfile : profil
+            id: localStorage.getItem('compteId'),
+            newProfile: profil
         };
         if (online) {
-                return $http.post(configuration.URL_REQUEST + '/ajouterProfils', data).then(function(result) {
-                    return self.updateProfilTags(online, result.data, profilTags).then(function() {
-                        return self.addProfilInCache(result.data).then(function() {
-                            return result.data;
-                        });
-
+            return $http.post(configuration.URL_REQUEST + '/ajouterProfils', data).then(function (result) {
+                return self.updateProfilTags(online, result.data, profilTags).then(function () {
+                    return self.addProfilInCache(result.data).then(function () {
+                        return result.data;
                     });
+
                 });
+            });
         } else {
             // adding a temporary identifier
             profil._id = profil.nom;
             profil.updated = new Date();
             // add type for display
             profil.type = 'profile';
-            angular.forEach(profilTags, function(tags) {
+            angular.forEach(profilTags, function (tags) {
                 tags._id = tags.id_tag;
                 tags.tag = tags.id_tag;
             }, []);
 
             return synchronisationStoreService.storeProfilToSynchronize({
                 owner: $rootScope.currentUser.local.email,
-                action : 'create',
-                profil : profil,
-                profilTags : profilTags
-            }).then(function() {
-                return self.addProfilInCache(profil).then(function() {
-                    return self.updateProfilTagsInCache(profil._id, profilTags).then(function() {
+                action: 'create',
+                profil: profil,
+                profilTags: profilTags
+            }).then(function () {
+                return self.addProfilInCache(profil).then(function () {
+                    return self.updateProfilTagsInCache(profil._id, profilTags).then(function () {
                         return profil;
                     });
                 });
@@ -136,8 +137,8 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
 
     };
 
-    this.addProfilInCache = function(profil) {
-        return $localForage.getItem('listProfils').then(function(data) {
+    this.addProfilInCache = function (profil) {
+        return $localForage.getItem('listProfils').then(function (data) {
             var listProfil = data;
             if (!listProfil) {
                 listProfil = [];
@@ -150,41 +151,41 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
 
     /**
      * Delete the given profile.
-     * 
+     *
      * @param ownerId :
-     *            The owner of the profile.
+        *            The owner of the profile.
      * @param profilId :
-     *            The profile to be updated.
+        *            The profile to be updated.
      */
-    this.deleteProfil = function(online, ownerId, profilId) {
+    this.deleteProfil = function (online, ownerId, profilId) {
         var data = {
-            id : localStorage.getItem('compteId'),
-            removeProfile : {
-                profilID : profilId,
-                userID : ownerId
+            id: localStorage.getItem('compteId'),
+            removeProfile: {
+                profilID: profilId,
+                userID: ownerId
             }
         };
         if (online) {
-            return $http.post(configuration.URL_REQUEST + '/deleteProfil', data).then(function(result) {
-                return $localForage.removeItem('profil.' + profilId).then(function() {
+            return $http.post(configuration.URL_REQUEST + '/deleteProfil', data).then(function (result) {
+                return $localForage.removeItem('profil.' + profilId).then(function () {
                     return result.data;
-                }).then(function() {
+                }).then(function () {
                     return $localForage.removeItem('profilTags.' + profilId);
                 });
             });
         } else {
             return synchronisationStoreService.storeProfilToSynchronize({
-                owner: $rootScope.currentUser.local.email ,
-                action : 'delete',
-                profil : {
-                    _id : profilId
+                owner: $rootScope.currentUser.local.email,
+                action: 'delete',
+                profil: {
+                    _id: profilId
                 },
-                profilTags : null
-            }).then(function() {
-                return $localForage.removeItem('profil.' + profilId).then(function() {
+                profilTags: null
+            }).then(function () {
+                return $localForage.removeItem('profil.' + profilId).then(function () {
                     return '200'; // Code returned in case of success of the removal.
-                }).then(function() {
-                    return $localForage.getItem('listProfils').then(function(data) {
+                }).then(function () {
+                    return $localForage.getItem('listProfils').then(function (data) {
                         var listProfil = data;
                         if (!listProfil) {
                             listProfil = [];
@@ -217,26 +218,26 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     /**
      * modify Styles in a profile.
      * @param profil :
-     *            the profile
+        *            the profile
      * @param profilTags :
-     *            The styles associated to the profile
+        *            The styles associated to the profile
      */
-    this.updateProfilTags = function(online, profil, profilTags) {
+    this.updateProfilTags = function (online, profil, profilTags) {
         if (online) {
             return $http.post(configuration.URL_REQUEST + '/setProfilTags', {
-                id : localStorage.getItem('compteId'),
-                profilID : profil._id,
-                profilTags : profilTags
-            }).then(function() {
+                id: localStorage.getItem('compteId'),
+                profilID: profil._id,
+                profilTags: profilTags
+            }).then(function () {
                 return self.updateProfilTagsInCache(profil._id, profilTags);
             });
         } else {
             return synchronisationStoreService.storeTagToSynchronize({
-                owner: $rootScope.currentUser.local.email ,
-                action : 'update',
-                profil : profil,
-                profilTags : profilTags
-            }).then(function() {
+                owner: $rootScope.currentUser.local.email,
+                action: 'update',
+                profil: profil,
+                profilTags: profilTags
+            }).then(function () {
                 return self.updateProfilTagsInCache(profil._id, profilTags);
             });
         }
@@ -245,14 +246,14 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     /**
      * Change styles to a profile in the cache.
      * @param profilId :
-     *            The profile
+        *            The profile
      * @param profilTags :
-     *            The styles associated to the profile
+        *            The styles associated to the profile
      */
-    this.updateProfilTagsInCache = function(profilId, profilTags) {
-        return $localForage.getItem('listProfils').then(function(data) {
+    this.updateProfilTagsInCache = function (profilId, profilTags) {
+        return $localForage.getItem('listProfils').then(function (data) {
             // build a data format which can be shown in disconnected mode.
-            angular.forEach(profilTags, function(tags) {
+            angular.forEach(profilTags, function (tags) {
                 tags._id = tags.id_tag;
                 tags.tag = tags.id_tag;
             }, []);
@@ -269,15 +270,15 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
             }
             if (keyToRemove !== undefined) {
                 listProfil[keyToRemove] = {
-                    idProfil : profilId,
-                    tags : profilTags,
-                    type : 'tags'
+                    idProfil: profilId,
+                    tags: profilTags,
+                    type: 'tags'
                 };
             } else {
                 listProfil.push({
-                    idProfil : profilId,
-                    tags : profilTags,
-                    type : 'tags'
+                    idProfil: profilId,
+                    tags: profilTags,
+                    type: 'tags'
                 });
             }
             $localForage.setItem('listProfils', listProfil);
@@ -288,13 +289,13 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
     /**
      * Get the list of the given user profiles.
      */
-    this.getProfilsByUser = function(online) {
-        if(online){
+    this.getProfilsByUser = function (online) {
+        if (online) {
             return $http.get(configuration.URL_REQUEST + '/listeProfils', {
-                params : {
-                    id : localStorage.getItem('compteId')
+                params: {
+                    id: localStorage.getItem('compteId')
                 }
-            }).then(function(result) {
+            }).then(function (result) {
                 for (var i = 0; i < result.data.length; i++) {
                     var profilItem = result.data[i];
                     if (profilItem.type === 'profile') {
@@ -303,33 +304,33 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
                         $localForage.setItem('profilTags.' + profilItem.idProfil, profilItem.tags);
                     }
                 }
-                return $localForage.setItem('listProfils', result.data).then(function() {
+                return $localForage.setItem('listProfils', result.data).then(function () {
                     return result.data;
                 });
-            }, function() {
+            }, function () {
                 return $localForage.getItem('listProfils');
             });
         } else {
             return $localForage.getItem('listProfils');
         }
-        
+
     };
 
     /**
      * Get the list of tags of a profile
-     * 
+     *
      * @param profilId :
-     *            The ID of the profile
+        *            The ID of the profile
      */
-    this.getProfilTags = function(profilId) {
+    this.getProfilTags = function (profilId) {
         return $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-            idProfil : profilId
-        }).then(function(result) {
-            return $localForage.setItem('profilTags.' + profilId, result.data).then(function() {
+            idProfil: profilId
+        }).then(function (result) {
+            return $localForage.setItem('profilTags.' + profilId, result.data).then(function () {
                 return result.data;
             });
-        }, function() {
-            return $localForage.getItem('profilTags.' + profilId).then(function(data){
+        }, function () {
+            return $localForage.getItem('profilTags.' + profilId).then(function (data) {
                 return data;
             });
         });
@@ -339,38 +340,38 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
      * Get the users information bound to a profile
      * (delegation, owner, favorites, etc.)
      * @param profilId :
-     *            The ID of the profile
+        *            The ID of the profile
      */
-    this.getUserProfil = function(profilId) {
+    this.getUserProfil = function (profilId) {
         var params = {
-            searchedProfile : profilId,
-            id : localStorage.getItem('compteId')
+            searchedProfile: profilId,
+            id: localStorage.getItem('compteId')
         };
-        return $http.post(configuration.URL_REQUEST + '/getProfilAndUserProfil', params).then(function(result) {
-            return $localForage.setItem('userProfil.' + profilId, result.data).then(function() {
+        return $http.post(configuration.URL_REQUEST + '/getProfilAndUserProfil', params).then(function (result) {
+            return $localForage.setItem('userProfil.' + profilId, result.data).then(function () {
                 return result.data;
             });
-        }, function() {
-            return $localForage.getItem('userProfil.' + profilId).then(function(data){
+        }, function () {
+            return $localForage.getItem('userProfil.' + profilId).then(function (data) {
                 return data;
             });
         });
     };
-    
-    
+
+
     /**
      * Look for a profile of the same name.
-     * 
+     *
      * @param profil
      *            le profil
      */
-    this.lookForExistingProfile = function(online, profil) {
-        if(online){
-            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function(res) {
+    this.lookForExistingProfile = function (online, profil) {
+        if (online) {
+            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function (res) {
                 return res.data;
             });
         } else {
-            return $localForage.getItem('listProfils').then(function(data) {
+            return $localForage.getItem('listProfils').then(function (data) {
                 var listProfil = data;
                 var profileFound;
                 if (listProfil && listProfil.length > 0) {
@@ -386,16 +387,16 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
         }
 
     };
-    
-    
+
+
     /**
      * Updates a profile in the cache
-     * 
+     *
      * @param profil
      *            The profile
      */
-    this.updateListProfilInCache = function(profil){
-        return $localForage.getItem('listProfils').then(function(data) {
+    this.updateListProfilInCache = function (profil) {
+        return $localForage.getItem('listProfils').then(function (data) {
             var listProfil = data;
             if (!listProfil) {
                 listProfil = [];
@@ -407,10 +408,29 @@ cnedApp.service('profilsService', function($http, configuration, fileStorageServ
                     break;
                 }
             }
-            return $localForage.setItem('profil.' + profil._id, profil).then(function() {
+            return $localForage.setItem('profil.' + profil._id, profil).then(function () {
                 return profil;
             });
         });
+    };
+
+    this.delegateProfile = function (params) {
+        return $http.post(configuration.URL_REQUEST + '/delegateProfil', params);
+    };
+
+    this.openDelegateProfileModal = function(profile){
+
+        return $uibModal.open({
+            templateUrl: 'views/profiles/delegate-profile.modal.html',
+            controller: 'DelegateProfileModalCtrl',
+            size: 'md',
+            resolve: {
+                profile: function () {
+                    return profile;
+                }
+            }
+        }).result;
+
     };
 
 });

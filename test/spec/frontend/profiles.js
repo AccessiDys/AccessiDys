@@ -782,31 +782,7 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.profDelegue).toBeUndefined();
     }));
 
-    it('ProfilesCtrl:deleguerProfil()', inject(function ($httpBackend) {
 
-        $scope.delegateEmail = null;
-        $scope.deleguerProfil();
-
-        $scope.delegateEmail = 'null';
-        $scope.deleguerProfil();
-
-        expect($scope.deleguerProfil).toBeDefined();
-        $scope.delegateEmail = 'utilisateur@gmail.com';
-        $scope.profDelegue = profil;
-        $scope.deleguerProfil();
-        $httpBackend.flush();
-
-
-    }));
-
-    it('ProfilesCtrl:preRetirerDeleguerProfil()', inject(function ($rootScope) {
-        expect($scope.preRetirerDeleguerProfil).toBeDefined();
-        $scope.preRetirerDeleguerProfil(profil);
-        expect($scope.profRetirDelegue).toBe(profil);
-        $rootScope.isAppOnline = false;
-        $scope.profRetirDelegue = undefined;
-        expect($scope.profRetirDelegue).toBeUndefined();
-    }));
 
     it('ProfilesCtrl:retireDeleguerProfil()', inject(function ($httpBackend) {
         $scope.profRetirDelegue = profil;

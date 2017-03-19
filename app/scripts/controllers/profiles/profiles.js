@@ -32,28 +32,18 @@ var gapi = gapi;
 angular.module('cnedApp')
     .controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces,
                                           configuration, $location, serviceCheck, verifyEmail, $window,
-                                          profilsService, $uibModal, $timeout, $interval, tagsService, $log, _, Analytics, gettextCatalog, UtilsService) {
+                                          profilsService, $uibModal, $timeout, tagsService, $log, _, Analytics,
+                                          gettextCatalog, UtilsService, LoaderService, EmailService, ToasterService) {
 
         /* Initializations */
-        $scope.successMod = 'Profil Modifie avec succes !';
-        $scope.successAdd = 'Profil Ajoute avec succes !';
-        $scope.successDefault = 'defaultProfileSelection';
-        $scope.displayText = '<p>AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.</p>';
         $scope.displayTextSimple = 'AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.';
-        $scope.flag = false;
         $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
         $scope.weightLists = ['Gras', 'Normal'];
         $scope.listTag = {};
-        $scope.editTag = null;
-        $scope.colorList = null;
         $scope.admin = $rootScope.admin;
-        $scope.displayDestination = false;
         $scope.testEnv = false;
-        $scope.loader = false;
-        $scope.loaderMsg = '';
         $scope.applyRules = false;
         $scope.forceApplyRules = true;
-        $scope.demoBaseText = 'AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.';
         $scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman', 'LDFComicSans',
             'HKGrotesk-Regular', 'SignikaNegative-Regular', 'Century Gothic', 'OpenSans-CondensedLight', 'CodeNewRoman',
             'FiraSansCondensed', 'AnonymousPro-Bold', 'AndikaNewBasic', 'TiresiasInfofontItalic'
@@ -279,9 +269,9 @@ angular.module('cnedApp')
                 if (params.operation && params.operation === 'save') {
                     $scope.initProfil();
                     if (params.template === 'update') {
-                        $scope.showToaster('#profile-success-toaster', 'profile.message.edit.ok');
+                        ToasterService.showToaster('#profile-success-toaster', 'profile.message.edit.ok');
                     } else {
-                        $scope.showToaster('#profile-success-toaster', 'profile.message.save.ok');
+                        ToasterService.showToaster('#profile-success-toaster', 'profile.message.save.ok');
                     }
                 }
             });
@@ -389,40 +379,175 @@ angular.module('cnedApp')
             }
         };
 
-        // Delete the profile
-        $scope.supprimerProfil = function () {
-            $scope.loader = true;
-            $scope.loaderMsg = 'Suppression du profil en cours ...';
-            profilsService.deleteProfil($rootScope.isAppOnline, $rootScope.currentUser._id, $scope.sup._id).then(function (data) {
-                $scope.profilFlag = data;
-                $('#deleteModal').modal('hide');
-                $scope.loader = false;
-                $scope.loaderMsg = '';
+        $scope.cancelDelegateByOwner = function (profile) {
+            if (!$rootScope.isAppOnline) {
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
+            } else {
+                UtilsService.openConfirmModal('Annuler la délégation', 'Voulez-vous annuler votre délégation?', true)
+                    .then(function () {
 
-                $scope.removeUserProfileFlag = data;
-                if ($scope.sup.nom === $('#headerSelect + .customSelect .customSelectInner').text()) {
-                    $scope.token.defaultProfile = $scope.removeVar;
-                    $http.post(configuration.URL_REQUEST + '/setProfilParDefautActuel', $scope.token)
-                        .success(function () {
-                            localStorage.removeItem('profilActuel');
-                            localStorage.remoremoveItemveItem('listTags');
-                            localStorage.removeItem('listTagsByProfil');
-                            $window.location.reload();
-                        });
-                } else {
-                    $rootScope.updateListProfile = !$rootScope.updateListProfile;
-                    $scope.initProfil();
-                }
-            });
+                        LoaderService.showLoader('profile.message.info.canceldelegateByOwner.inprogress', false);
+
+                        var sendParam = {
+                            id: $rootScope.currentUser.local.token,
+                            sendedVars: {
+                                idProfil: profile._id,
+                                idUser: $rootScope.currentUser._id
+                            }
+                        };
+
+                        $http.post(configuration.URL_REQUEST + '/annulerDelegateUserProfil', sendParam)
+                            .success(function (data) {
+                                if (data) {
+                                    $http.post(configuration.URL_REQUEST + '/findUserById', {
+                                        idUser: profile.preDelegated
+                                    })
+                                        .success(function (data) {
+                                            if (data) {
+                                                var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+                                                var emailParams = {
+                                                    emailTo: data.local.email,
+                                                    content: '<span> ' + fullName + ' vient d\'annuler la demande de délégation de son profil : ' + profile.nom + '. </span>',
+                                                    subject: 'Annuler la délégation'
+                                                };
+
+                                                EmailService.sendEMail(emailParams).then(function () {
+                                                    ToasterService.showToaster('#profile-success-toaster', 'mail.send.ok');
+                                                    LoaderService.hideLoader();
+                                                    $scope.initProfil();
+                                                }, function () {
+                                                    ToasterService.showToaster('#profile-error-toaster', 'mail.send.ko');
+                                                    LoaderService.hideLoader();
+                                                    $scope.initProfil();
+                                                });
+                                            }
+                                        });
+                                }
+                            });
+
+                    });
+            }
         };
 
-        // Pre-deleting profile
-        $scope.preSupprimerProfil = function (profil) {
-            $scope.sup = profil;
-            $scope.profilName = profil.nom;
+        /**
+         * Cancel the profile delegation by owner
+         * @param profil
+         */
+        $scope.cancelDelegateByUser = function (profil) {
+            if (!$rootScope.isAppOnline) {
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
+            } else {
+
+                UtilsService.openConfirmModal('Retirer la délégation', 'Voulez-vous retirer votre délégation?', true)
+                    .then(function () {
+
+                        var sendParam = {
+                            id: $rootScope.currentUser.local.token,
+                            sendedVars: {
+                                idProfil: profil._id,
+                                idUser: $rootScope.currentUser._id
+                            }
+                        };
+
+                        LoaderService.showLoader('profile.message.info.canceldelegateByUser.inprogress', false);
+
+                        $http.post(configuration.URL_REQUEST + '/retirerDelegateUserProfil', sendParam)
+                            .success(function (data) {
+                                if (data) {
+                                    $http.post(configuration.URL_REQUEST + '/findUserById', {
+                                        idUser: data.delegatedID
+                                    })
+                                        .success(function (data) {
+                                            if (data) {
+                                                var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+                                                var emailParams = {
+                                                    emailTo: data.local.email,
+                                                    content: '<span> ' + fullName + ' vient de vous retirer la délégation de son profil : ' + profil.nom + '. </span>',
+                                                    subject: 'Retirer la délégation'
+                                                };
+                                                EmailService.sendEMail(emailParams).then(function () {
+                                                    ToasterService.showToaster('#profile-success-toaster', 'mail.send.ok');
+                                                    LoaderService.hideLoader();
+                                                    $scope.initProfil();
+                                                }, function () {
+                                                    ToasterService.showToaster('#profile-error-toaster', 'mail.send.ko');
+                                                    LoaderService.hideLoader();
+                                                    $scope.initProfil();
+                                                });
+                                            }
+                                        });
+                                }
+                            });
+
+                    });
+
+            }
+        };
+
+        /**
+         * Delete a profile
+         * @param profile The profile to be deleted
+         */
+        $scope.deleteProfile = function (profile) {
+
+            UtilsService.openConfirmModal('profile.label.delete.title',
+                gettextCatalog.getString('profile.label.delete.anwser').replace('profile.name', profile.nom), true)
+                .then(function () {
+                    localStorage.setItem('lockOperationDropBox', true);
+                    LoaderService.showLoader('profile.message.info.delete.inprogress', true);
+                    LoaderService.setLoaderProgress(30);
+
+                    profilsService.deleteProfil($rootScope.isAppOnline, $rootScope.currentUser._id, profile._id)
+                        .then(function () {
+                            LoaderService.setLoaderProgress(100);
+                            LoaderService.hideLoader();
+                            $scope.initProfil();
+                        });
+                });
 
             // angular-google-analytics tracking pages
-            Analytics.trackPage('/profile/delete.html');
+            Analytics.trackPage('/document/delete.html');
+        };
+
+
+        /**
+         * Share a profile
+         * @param document The profile to share
+         */
+        $scope.shareProfile = function (profile) {
+            $log.debug('Share profile', profile);
+
+            if (!$rootScope.isAppOnline) {
+
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.share.offline');
+
+            } else {
+
+                var itemToShare = {
+                    linkToShare: '',
+                    name: profile.nom
+                };
+
+                if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
+                    itemToShare.linkToShare = decodeURI($location.absUrl());
+                } else {
+                    itemToShare.linkToShare = decodeURI($location.absUrl().replace('profiles', 'detailProfil?idProfil=' + profile._id));
+                }
+
+
+                UtilsService.openSocialShareModal('profile', itemToShare)
+                    .then(function () {
+                        // Modal close
+                        ToasterService.showToaster('#profile-success-toaster', 'mail.send.ok');
+                    }, function () {
+                        // Modal dismiss
+                    });
+
+
+                // angular-google-analytics tracking pages
+                Analytics.trackPage('/profile/share.html');
+            }
+
         };
 
         $scope.forceRulesApply = function () {
@@ -471,12 +596,8 @@ angular.module('cnedApp')
             $http.post(configuration.URL_REQUEST + '/setDefaultProfile', $scope.token)
                 .success(function (data) {
                     $scope.defaultVarFlag = data;
-                    $scope.showToaster('#profile-success-toaster', 'profile.message.default.ok');
-                    $('.action_btn').attr('data-shown', 'false');
-                    $('.action_list').attr('style', 'display:none');
-                    if ($scope.testEnv === false) {
-                        $scope.getProfiles();
-                    }
+                    ToasterService.showToaster('#profile-success-toaster', 'profile.message.default.ok');
+                    $scope.getProfiles();
                 });
         };
 
@@ -496,12 +617,8 @@ angular.module('cnedApp')
 
             $http.post(configuration.URL_REQUEST + '/cancelDefaultProfile', $scope.token)
                 .success(function (data) {
-                    $scope.showToaster('#profile-success-toaster', 'profile.message.default.ok');
-                    $('.action_btn').attr('data-shown', 'false');
-                    $('.action_list').attr('style', 'display:none');
-                    if ($scope.testEnv === false) {
-                        $scope.getProfiles();
-                    }
+                    ToasterService.showToaster('#profile-success-toaster', 'profile.message.default.ok');
+                    $scope.getProfiles();
                 });
         };
 
@@ -576,34 +693,29 @@ angular.module('cnedApp')
             return false;
         };
 
-        $scope.preRemoveFavourite = function (param) {
-            $scope.profilId = param._id;
-        };
 
-        $scope.removeFavourite = function () {
-            $scope.sendVar = {
-                profilID: $scope.profilId,
-                userID: $rootScope.currentUser._id,
-                favoris: true
-            };
+        $scope.removeFavourite = function (profile) {
 
-            if ($scope.token && $scope.token.id) {
-                $scope.token.favProfile = $scope.sendVar;
-            } else {
-                $scope.token.id = localStorage.getItem('compteId');
-                $scope.token.favProfile = $scope.sendVar;
-            }
-            $http.post(configuration.URL_REQUEST + '/removeUserProfileFavoris', $scope.token)
-                .success(function (data) {
-                    localStorage.removeItem('profilActuel');
-                    localStorage.removeItem('listTagsByProfil');
-                    $rootScope.$broadcast('initProfil');
-                    if ($scope.testEnv === false) {
-                        $scope.getProfiles();
+            UtilsService.openConfirmModal('deleteFavoris', 'messageSuppression', false)
+                .then(function () {
+
+                    var params = {
+                        profilID: profile._id,
+                        userID: $rootScope.currentUser._id,
+                        favoris: true
+                    };
+
+                    if ($scope.token && $scope.token.id) {
+                        $scope.token.favProfile = params;
+                    } else {
+                        $scope.token.id = localStorage.getItem('compteId');
+                        $scope.token.favProfile = params;
                     }
-
+                    $http.post(configuration.URL_REQUEST + '/removeUserProfileFavoris', $scope.token)
+                        .success(function (data) {
+                            $scope.getProfiles();
+                        });
                 });
-
         };
 
         /* sending email when duplicating. */
@@ -629,345 +741,21 @@ angular.module('cnedApp')
         };
 
 
-        $scope.preDeleguerProfil = function (profil) {
+        $scope.delegateProfile = function (profile) {
             if (!$rootScope.isAppOnline) {
                 UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
             } else {
-                $('#delegateModal').modal('show');
-                $scope.profDelegue = profil;
-                $scope.errorMsg = '';
-                $scope.successMsg = '';
-                $scope.delegateEmail = '';
+                profilsService.openDelegateProfileModal(profile)
+                    .then(function (result) {
+                        if (result && result.message) {
+                            ToasterService.showToaster('#profile-success-toaster', result.message);
+                        }
+
+                        $scope.initProfil();
+                    });
 
                 // angular-google-analytics tracking pages
                 Analytics.trackPage('/profile/delegate.html');
-            }
-        };
-
-        $scope.deleguerProfil = function () {
-            $scope.errorMsg = '';
-            $scope.successMsg = '';
-            if (!$scope.delegateEmail || $scope.delegateEmail.length <= 0) {
-                $scope.errorMsg = 'L\'email est obligatoire !';
-                return;
-            }
-            if (!verifyEmail($scope.delegateEmail)) {
-                $scope.errorMsg = 'L\'email est invalide !';
-                return;
-            }
-            $http.post(configuration.URL_REQUEST + '/findUserByEmail', {
-                email: $scope.delegateEmail
-            })
-                .success(function (data) {
-                    if (data) {
-                        $scope.findUserByEmailFlag = data;
-                        var emailTo = data.local.email;
-
-                        if (emailTo === $rootScope.currentUser.local.email) {
-                            $scope.errorMsg = 'Vous ne pouvez pas déléguer votre profil à vous même !';
-                            return;
-                        }
-
-                        $('#delegateModal').modal('hide');
-
-                        var sendParam = {
-                            idProfil: $scope.profDelegue._id,
-                            idDelegue: data._id
-                        };
-                        $scope.loader = true;
-                        $scope.loaderMsg = 'Délégation du profil en cours...';
-                        $http.post(configuration.URL_REQUEST + '/delegateProfil', sendParam)
-                            .success(function () {
-                                var profilLink = $location.absUrl();
-                                profilLink = profilLink.replace('#/profiles', '#/detailProfil?idProfil=' + $scope.profDelegue._id);
-                                var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
-                                $scope.sendVar = {
-                                    emailTo: emailTo,
-                                    content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour vous déléguer son profil : <a href=' + profilLink + '>' + $scope.profDelegue.nom + '</a>. </span>',
-                                    subject: 'Profil délégué'
-                                };
-                                $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
-                                    timeout: 60000
-                                }).success(function () {
-                                    $scope.showToaster('#profile-success-toaster', 'mail.send.ok');
-                                    $scope.errorMsg = '';
-                                    $scope.delegateEmail = '';
-                                    $scope.loader = false;
-                                    $scope.initProfil();
-                                }).error(function () {
-                                    $scope.showToaster('#profile-error-toaster', 'mail.send.ko');
-                                    $scope.loader = false;
-                                    $scope.initProfil();
-                                });
-                            });
-                    } else {
-                        $scope.errorMsg = 'L\'Email n\'est pas identifié dans Accessidys!';
-                    }
-                });
-        };
-
-        $scope.preRetirerDeleguerProfil = function (profil) {
-            if (!$rootScope.isAppOnline) {
-                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
-            } else {
-                $('#retirerDelegateModal').modal('show');
-                $scope.profRetirDelegue = profil;
-            }
-        };
-
-        $scope.retireDeleguerProfil = function () {
-            var sendParam = {
-                id: $rootScope.currentUser.local.token,
-                sendedVars: {
-                    idProfil: $scope.profRetirDelegue._id,
-                    idUser: $rootScope.currentUser._id
-                }
-            };
-            $scope.loader = true;
-            $scope.loaderMsg = 'Retrait de la délégation du profil en cours...';
-            $http.post(configuration.URL_REQUEST + '/retirerDelegateUserProfil', sendParam)
-                .success(function (data) {
-                    if (data) {
-                        $http.post(configuration.URL_REQUEST + '/findUserById', {
-                            idUser: data.delegatedID
-                        })
-                            .success(function (data) {
-                                if (data) {
-                                    var emailTo = data.local.email;
-                                    var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
-                                    $scope.sendVar = {
-                                        emailTo: emailTo,
-                                        content: '<span> ' + fullName + ' vient de vous retirer la délégation de son profil : ' + $scope.profRetirDelegue.nom + '. </span>',
-                                        subject: 'Retirer la délégation'
-                                    };
-                                    $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
-                                        timeout: 60000
-                                    }).success(function () {
-                                        $scope.showToaster('#profile-success-toaster', 'mail.send.ok');
-                                        $scope.errorMsg = '';
-                                        $scope.loader = false;
-                                        $scope.initProfil();
-                                    }).error(function () {
-                                        $scope.showToaster('#profile-error-toaster', 'mail.send.ko');
-                                        $scope.loader = false;
-                                        $scope.initProfil();
-                                    });
-                                }
-                            });
-                    }
-                });
-        };
-
-        $scope.preAnnulerDeleguerProfil = function (profil) {
-            if (!$rootScope.isAppOnline) {
-                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
-            } else {
-                $('#annulerDelegateModal').modal('show');
-                $scope.profAnnuleDelegue = profil;
-            }
-        };
-
-        $scope.annuleDeleguerProfil = function () {
-            var sendParam = {
-                id: $rootScope.currentUser.local.token,
-                sendedVars: {
-                    idProfil: $scope.profAnnuleDelegue._id,
-                    idUser: $rootScope.currentUser._id
-                }
-            };
-            $scope.loader = true;
-            $scope.loaderMsg = 'Annulation de la délégation du profil en cours...';
-            $http.post(configuration.URL_REQUEST + '/annulerDelegateUserProfil', sendParam)
-                .success(function (data) {
-                    // $rootScope.updateListProfile = !$rootScope.updateListProfile;
-                    if (data) {
-                        $scope.annulerDelegateUserProfilFlag = data;
-                        $http.post(configuration.URL_REQUEST + '/findUserById', {
-                            idUser: $scope.profAnnuleDelegue.preDelegated
-                        })
-                            .success(function (data) {
-                                if (data) {
-                                    var emailTo = data.local.email;
-                                    var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
-                                    $scope.sendVar = {
-                                        emailTo: emailTo,
-                                        content: '<span> ' + fullName + ' vient d\'annuler la demande de délégation de son profil : ' + $scope.profAnnuleDelegue.nom + '. </span>',
-                                        subject: 'Annuler la délégation'
-                                    };
-                                    $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar, {
-                                        timeout: 60000
-                                    }).success(function () {
-                                        $scope.showToaster('#profile-success-toaster', 'mail.send.ok');
-                                        $scope.errorMsg = '';
-                                        $scope.loader = false;
-                                        $scope.initProfil();
-                                    }).error(function () {
-                                        $scope.showToaster('#profile-error-toaster', 'mail.send.ko');
-                                        $scope.loader = false;
-                                        $scope.initProfil();
-                                    });
-                                }
-                            });
-                    }
-                });
-        };
-
-
-        $scope.profilApartager = function (param) {
-            if (!$rootScope.isAppOnline) {
-                UtilsService.showInformationModal('label.offline', 'profile.message.info.share.offline');
-            } else {
-                $('#shareModal').modal('show');
-                $scope.profilPartage = param;
-                $scope.currentUrl = $location.absUrl();
-                $scope.socialShare();
-
-                // angular-google-analytics tracking pages
-                Analytics.trackPage('/profile/share.html');
-            }
-        };
-
-        /* load email form */
-        $scope.loadMail = function () {
-            $scope.displayDestination = true;
-        };
-
-        $scope.clearSocialShare = function () {
-            $scope.displayDestination = false;
-            $scope.destinataire = '';
-        };
-
-        $scope.attachFacebook = function () {
-            $('.facebook-share .fb-share-button').remove();
-            $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.envoiUrl) + '" data-layout="button"></div>');
-            try {
-                FB.XFBML.parse();
-            } catch (ex) {
-                console.log('gotchaa ... ');
-                console.log(ex);
-            }
-        };
-
-        $scope.attachGoogle = function () {
-            console.log('IN ==> ');
-            var options = {
-                contenturl: decodeURIComponent($scope.envoiUrl),
-                contentdeeplinkid: '/pages',
-                clientid: '807929328516-g7k70elo10dpf4jt37uh705g70vhjsej.apps.googleusercontent.com',
-                cookiepolicy: 'single_host_origin',
-                prefilltext: '',
-                calltoactionlabel: 'LEARN_MORE',
-                calltoactionurl: decodeURIComponent($scope.envoiUrl),
-                callback: function (result) {
-                    console.log(result);
-                    console.log('this is the callback');
-                },
-                onshare: function (response) {
-                    console.log(response);
-                    if (response.status === 'started') {
-                        $scope.googleShareStatus++;
-                        if ($scope.googleShareStatus > 1) {
-                            $('#googleShareboxIframeDiv').remove();
-                            // alert('some error in sharing');
-                            $('#shareModal').modal('hide');
-                            $('#informationModal').modal('show');
-                            localStorage.setItem('googleShareLink', $scope.envoiUrl);
-                        }
-                    } else {
-                        localStorage.removeItem('googleShareLink');
-                        $scope.googleShareStatus = 0;
-                        $('#shareModal').modal('hide');
-                    }
-
-                    // These are the objects returned by the platform
-                    // When the sharing starts...
-                    // Object {status: "started"}
-                    // When sharing ends...
-                    // Object {action: "shared", post_id: "xxx", status:
-                    // "completed"}
-                }
-            };
-
-            gapi.interactivepost.render('google-share', options);
-        };
-
-        $scope.socialShare = function () {
-            $scope.shareMailInvalid = false;
-            $scope.destination = $scope.destinataire;
-            $scope.encodeURI = encodeURIComponent($location.absUrl());
-            $scope.currentUrl = $location.absUrl();
-            if ($scope.currentUrl.lastIndexOf('detailProfil') > -1) {
-                $scope.envoiUrl = encodeURIComponent($scope.currentUrl);
-                $scope.attachFacebook();
-                $scope.attachGoogle();
-            } else {
-                $scope.envoiUrl = encodeURIComponent($scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id));
-                $scope.attachFacebook();
-                $scope.attachGoogle();
-            }
-            if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
-                $('#confirmModal').modal('show');
-                $('#shareModal').modal('hide');
-            } else if ($scope.destination && $scope.destination.length > 0) {
-                $scope.shareMailInvalid = true;
-            }
-        };
-
-        /* regex email */
-        $scope.verifyEmail = function (email) {
-            var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if (reg.test(email)) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        /* Sending of the email to the addressee. */
-        $scope.sendMail = function () {
-            $('#confirmModal').modal('hide');
-            $scope.loaderMsg = 'Partage du profil en cours. Veuillez patienter ..';
-            $scope.currentUrl = $location.absUrl();
-            if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
-                $scope.envoiUrl = decodeURI($scope.currentUrl);
-            } else {
-                $scope.envoiUrl = decodeURI($scope.currentUrl.replace('profiles', 'detailProfil?idProfil=' + $scope.profilPartage._id));
-            }
-            $scope.destination = $scope.destinataire;
-            $scope.loader = true;
-            if ($scope.verifyEmail($scope.destination) && $scope.destination.length > 0) {
-                if ($location.absUrl()) {
-                    if ($rootScope.currentUser.dropbox.accessToken) {
-                        if ($rootScope.currentUser) {
-
-                            $log.debug('$scope.envoiUrl', $scope.envoiUrl);
-                            $scope.sendVar = {
-                                to: $scope.destinataire,
-                                content: ' vient de partager avec vous un profil sur l\'application Accessidys.  ' + $scope.envoiUrl,
-                                encoded: '<span> vient de partager avec vous un profil sur l\'application Accessidys.   <a href=' + $scope.envoiUrl + '>Lien de ce profil</a> </span>',
-                                prenom: $rootScope.currentUser.local.prenom,
-                                fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-                                doc: $scope.envoiUrl
-                            };
-                            $http.post(configuration.URL_REQUEST + '/sendMail', $scope.sendVar)
-                                .success(function (data) {
-                                    $scope.showToaster('#profile-success-toaster', 'mail.send.ok');
-                                    $scope.sent = data;
-                                    $scope.envoiMailOk = true;
-                                    $scope.destinataire = '';
-                                    $scope.loader = false;
-                                    $scope.displayDestination = false;
-                                    $scope.loaderMsg = '';
-                                }).error(function () {
-                                $scope.loader = false;
-                                $scope.loaderMsg = '';
-                            });
-                        }
-                    }
-                }
-            } else {
-                $('.sendingMail').removeAttr('data-dismiss', 'modal');
-                $('#erreurEmail').fadeIn('fast').delay(5000).fadeOut('fast');
             }
         };
 
@@ -992,15 +780,6 @@ angular.module('cnedApp')
          * Initialize the detail of the profile..
          */
         $scope.initDetailProfil = function () {
-
-            if (localStorage.getItem('googleShareLink')) {
-                $scope.envoiUrl = localStorage.getItem('googleShareLink');
-                $scope.attachFacebook();
-                $scope.attachGoogle();
-                $('#shareModal').modal('show');
-                localStorage.removeItem('googleShareLink');
-            }
-
             var dataProfile = {};
             if (localStorage.getItem('compteId')) {
                 dataProfile = {
@@ -1033,7 +812,7 @@ angular.module('cnedApp')
 
 
                                     if (typeof item.tagDetail === 'object') {
-                                        item.texte = '<' + item.tagDetail.balise + ' class="'+ removeStringsUppercaseSpaces(item.tagDetail.libelle) +'">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
+                                        item.texte = '<' + item.tagDetail.balise + ' class="' + removeStringsUppercaseSpaces(item.tagDetail.libelle) + '">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
                                     }
 
                                     // Avoid mapping with backend
@@ -1068,8 +847,8 @@ angular.module('cnedApp')
                 };
                 $http.post(configuration.URL_REQUEST + '/addUserProfilFavoris', token).success(function (data) {
                     $scope.showFavouri = false;
-                    $scope.showToaster('#profile-success-toaster', 'profile.message.favorite.ok');
-                    $rootScope.$broadcast('initCommon');
+                    ToasterService.showToaster('#profile-success-toaster', 'profile.message.favorite.ok');
+                    $rootScope.$broadcast('initCommon'); // TODO revoir
                 });
             }
         };
@@ -1118,16 +897,6 @@ angular.module('cnedApp')
                             }
                         });
                 });
-        };
-
-        // Details of the profile to be shared
-        $scope.detailsProfilApartager = function () {
-            if (!$rootScope.isAppOnline) {
-                UtilsService.showInformationModal('label.offline', 'profile.message.info.share.offline');
-            } else {
-                $('#shareModal').modal('show');
-                $scope.socialShare();
-            }
         };
 
         /**
@@ -1185,7 +954,7 @@ angular.module('cnedApp')
 
 
                                             if (typeof item.tagDetail === 'object') {
-                                                item.texte = '<' + item.tagDetail.balise + ' class="'+ removeStringsUppercaseSpaces(item.tagDetail.libelle) +'">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
+                                                item.texte = '<' + item.tagDetail.balise + ' class="' + removeStringsUppercaseSpaces(item.tagDetail.libelle) + '">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
                                             }
 
                                             // Avoid mapping with backend
@@ -1260,30 +1029,6 @@ angular.module('cnedApp')
             // angular-google-analytics tracking pages
             Analytics.trackPage('/profile/duplicate.html');
         };
-
-        $scope.showSuccessToaster = function (id) {
-            $(id).fadeIn('fast').delay(5000).fadeOut('fast');
-        };
-
-
-        $scope.toasterMsg = '';
-        $scope.forceToasterApdapt = false;
-        $scope.listTagsByProfilToaster = [];
-
-        /**
-         * Show success toaster
-         * @param msg
-         */
-        $scope.showToaster = function (id, msg) {
-            $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
-            $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-            $scope.forceToasterApdapt = true;
-            $timeout(function () {
-                angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-                $scope.forceToasterApdapt = false;
-            }, 0);
-        };
-
 
         /** **** end of the profile detail ***** */
     });

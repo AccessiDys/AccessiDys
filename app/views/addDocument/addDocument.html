@@ -50,17 +50,29 @@
             <input style="margin-top: 15px" type="text" class="input_simple pull-left" placeholder="Entrez le titre du document" data-ng-model="docTitre" data-ng-disabled="existingFile" required>
 
             <a href="#/listDocument" style="text-decoration: none; color: white;" role="button" type="button" class="grey_btn pull-right btn_annuler" data-ng-click="" title="{{'Fermer' | translate}}">Fermer</a>
-            <button id="save_document" data-ng-click="showSaveDialog()" type="button" class="grey_btn pull-right btn_annuler" title="{{'Enregistrer' | translate}}">Enregistrer</button>
-            <button type="button" class="grey_btn pull-right btn_annuler" data-ng-click="openApercu()" title="{{'Apercu' | translate}}">Aperçu
+            <button id="save_document"
+                    data-ng-click="save()"
+                    type="button"
+                    class="grey_btn pull-right btn_annuler"
+                    title="{{'Enregistrer' | translate}}">
+                Enregistrer
             </button>
-            <button id="resizeDocEditorBtn" type="button" class="grey_btn pull-right resize_doc_editorBtn" style="margin-top: 5px; margin-right: 5px;" data-toggle="modal" data-ng-click="resizeEditor()" title="{{'agrandir / réduire' | translate}}">&nbsp;</button>
-            <button id="add_documentbtn" type="button" class="grey_btn pull-right add_document" style="margin-top: 5px; margin-right: 5px;" data-toggle="modal" data-ng-click="openDocument()" title="{{'Ouvrir un document' | translate}}">Ouvrir un Document</button>
+            <button type="button" class="grey_btn pull-right btn_annuler" data-ng-click="openApercu()" title="{{'Apercu' | translate}}">
+                Aperçu
+            </button>
+            <button id="resizeDocEditorBtn" type="button" class="grey_btn pull-right resize_doc_editorBtn" style="margin-top: 5px; margin-right: 5px;" data-ng-click="resizeEditor()" title="{{'agrandir / réduire' | translate}}">&nbsp;</button>
+            <button id="add_documentbtn" type="button"
+                    class="grey_btn pull-right add_document"
+                    style="margin-top: 5px; margin-right: 5px;"
+                    data-ng-click="openDocument()" title="{{'Ouvrir un document' | translate}}">
+                Ouvrir un Document
+            </button>
 
         </div>
 
         <div id="editorContainer" style="border: 1px solid rgb(203, 203, 203)">
             <div id="editorToolbar"></div>
-            <div id="editorAdd" class="resetAll" contenteditable="true" style="overflow-x: scroll;"
+            <div id="editorAdd" class="resetAll" contenteditable="true" style="overflow-x: scroll; min-height: 500px; max-height: 800px; overflow-y: auto;"
                  apply-rules="applyRules" regle-style="currentData" data-editor-content="true" tags="listTagsByProfil"
                  data-show-loader="showAdaptationLoader()" data-hide-loader="hideLoader()"></div>
             <div id="editorBottom"></div>
@@ -143,72 +155,6 @@
         </div>
 
 
-        <div class="modal fade" id="addDocumentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" id="modalContent">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" ng-click="errorMsg = false; clearUploadFile();clearLien();" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 class="modal-title" id="myModalLabel">Ouvrir un document</h3>
-                    </div>
-                    <div data-ng-show="errorMsg" class="alert-block alert-danger">{{msgErrorModal}}</div>
-
-                    <div class="alert-block alert-danger alert-dismissable" id="open-document-modal-error-toaster">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-
-                        <strong regle-style="toasterMsg"
-                                apply-rules="forceToasterApdapt"
-                                tags="listTagsByProfilToaster">
-                        </strong>
-                    </div>
-
-                    <div class="modal-body adjust-modal-body">
-                        <div class="row-fluid span6">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="document" data-ng-form="AjoutformValidation">
-                                    <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
-                                        <fieldset>
-                                            <p class="controls_zone">
-                                                <label for="docTitre" class=""><span>Titre</span> <span class="required">*</span></label>
-                                                <input type="text" max-length="200" class="" id="docTitre" placeholder="Entrez le titre du document" data-ng-model="doc.titre" required> <span class="simple_txt">Veuillez ne pas utiliser les
-													caractères spéciaux.</span>
-                                            </p>
-
-                                            <p class="controls_zone">
-                                                <label for="lien" class=""><span>Lien web : </span>
-                                                </label>
-                                                <input type="text" class="" id="lien" placeholder="Entrez le lien de votre fichier" data-ng-model="lien" required>
-                                            </p>
-
-                                            <p class="controls_zone">
-                                                <span class="simple_txt">OU</span>
-                                                <br />
-                                                <label for="docUploadPdf" class="upload_msg">Chargez un fichier depuis votre poste local (PDF/epub/png/jpg) : </label> <span class="file_mask"> <label class="parcourir_label">Parcourir</label>
-													<input type="file"  id="docUploadPdf" upload-file
-                                                           class="btn
-                                               btn-default" />
-													<input type="text" id="filename_show" name="" readonly>
-												</span>
-                                                <button type="button" class="clear_upoadpdf" data-ng-click="clearUploadFile()"> </button>
-                                            </p>
-                                        </fieldset>
-                                        <div class="centering" id="ProfileButtons">
-                                            <button type="button" class="reset_btn" ng-click="errorMsg = false; clearUploadFile();clearLien();" data-dismiss="modal" title="{{'Annuler' | translate}}" name="reset">Annuler</button>
-                                            <button type="button" class="btn_simple light_blue" data-ng-click="ajouterDocument()" title="{{'Ouvrir' | translate}}" name="add_Document">
-                                                Ouvrir</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-        </div>
-
-
         <div class="modal fade in" id="myModalWorkSpaceBig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog bigger">
                 <div class="modal-content">
@@ -286,4 +232,3 @@
     </div>
 </div>
 
-<img style="visibility:hidden;display:none;" src="https://ga-beacon.appspot.com/UA-69091614-1/addDocument?pixel" />

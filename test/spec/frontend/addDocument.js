@@ -538,22 +538,6 @@ describe(
 
         }));
 
-        it('AddDocumentCtrl:generateMD5', inject(function () {
-            expect($scope.generateMD5('test')).toEqual('098f6bcd4621d373cade4e832627b4f6');
-        }));
-
-        it('AddDocumentCtrl:showSaveDialog', inject(function () {
-            $scope.docTitre = '';
-            $scope.showSaveDialog();
-            expect($scope.msgErrorModal).toEqual('');
-            expect($scope.errorMsg).toEqual(false);
-
-            $scope.docTitre = 'titre';
-            $scope.showSaveDialog();
-            expect($scope.msgErrorModal).toEqual('');
-            expect($scope.errorMsg).toEqual(false);
-        }));
-
         it('AddDocumentCtrl:processLink', inject(function () {
             $scope.lien = 'http://www.wikipedia.org/';
             var result = $scope.processLink('<a href="/test">test</a>');

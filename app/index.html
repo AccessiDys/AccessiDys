@@ -214,6 +214,10 @@
 <script src="scripts/services/email.service.js"></script>
 <script src="scripts/controllers/social-share/social-share.modal.js"></script>
 <script src="scripts/controllers/common/confirm.modal.js"></script>
+<script src="scripts/services/toaster.service.js"></script>
+<script src="scripts/controllers/profiles/delegate-profile.modal.js"></script>
+<script src="scripts/services/user.service.js"></script>
+<script src="scripts/controllers/addDocument/open-document.modal.js"></script>
 <!-- endbuild -->
 
 <script type="text/javascript">
@@ -400,10 +404,8 @@
     }
 
     angularModule = angular.module('cnedApp');
-    console.log('angularModule ==> ');
-    console.log(angularModule);
     if (typeof PDFJS !== 'undefined') {
-        PDFJS.workerSrc = 'bower_components/pdfjs/pdf.worker.min.js';
+        PDFJS.workerSrc = 'bower_components/pdfjs-dist/build/pdf.worker.min.js';
     }
     if (typeof String.prototype.endsWith != 'function') {
         String.prototype.endsWith = function (str) {

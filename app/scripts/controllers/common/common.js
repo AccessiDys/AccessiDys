@@ -240,9 +240,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     //'User is defined as logged on rootScope
 
                     if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
-
                         //'Looking for detailProfil
-
                         $scope.listDocumentDropBox = '#/';
                         $scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
                         $scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));

@@ -26,11 +26,12 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $uibModalInstance, documentService, $log, gettextCatalog, $timeout, title, errors) {
+angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $uibModalInstance, documentService, $log, gettextCatalog, $timeout, title, errors, mode) {
     $scope.document = {
         title: title
     };
     $scope.errors = errors;
+    $scope.mode = mode;
 
 
     /**

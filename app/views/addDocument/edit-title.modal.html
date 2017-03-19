@@ -24,7 +24,8 @@
 
 <div class="modal-header">
     <button type="button" class="close" aria-hidden="true" data-ng-click="dismissModal()">×</button>
-    <h4 class="modal-title">Enregistrer le document</h4>
+    <h4 class="modal-title" data-ng-if="mode === 'save'">Enregistrer le document</h4>
+    <h4 class="modal-title" data-ng-if="mode === 'edit'">ENTRER LE NOUVEAU TITRE</h4>
 </div>
 
 <div class="alert-block alert-danger alert-dismissable" id="edit-title-error-toaster">
@@ -56,9 +57,14 @@
                             title="{{'Annuler' | translate}}">
                         {{'Annuler' | translate}}
                     </button>
-                    <button type="button" class="btn_simple light_blue"
+                    <button type="button" class="btn_simple light_blue" data-ng-if="mode === 'save'"
                             data-ng-click="saveTitle()" title="{{'Enregistrer' | translate}}">
                         {{'Enregistrer' | translate}}
+                    </button>
+
+                    <button type="button" class="btn_simple light_blue" data-ng-if="mode === 'edit'"
+                            data-ng-click="saveTitle()" title="{{'label.rename' | translate}}">
+                        {{'label.rename' | translate}}
                     </button>
                 </div>
             </form>

@@ -59,7 +59,7 @@ cnedApp.service('UtilsService', function ($uibModal) {
          * @param mode (document | profile )
          * @param itemToShare
          */
-        openSocialShareModal: function(mode, itemToShare){
+        openSocialShareModal: function (mode, itemToShare) {
             return $uibModal.open({
                 templateUrl: 'views/social-share/social-share.modal.html',
                 controller: 'SocialShareModalCtrl',
@@ -97,6 +97,34 @@ cnedApp.service('UtilsService', function ($uibModal) {
                     }
                 }
             }).result;
+        },
+
+
+        /**
+         * Test the truthfulness of a link (by checking the presence of the http protocol in String)
+         *
+         * @method verifyLink
+         * @param String link
+         * @return Boolean
+         */
+        verifyLink: function (link) {
+            return link && ((link.toLowerCase().indexOf('https') > -1) || (link.toLowerCase().indexOf('http') > -1));
+        },
+
+        /**
+         * Convert  base64 to Uint8Array
+         *
+         * @param base64
+         *        The binary to be converted.
+         * @method $scope.base64ToUint8Array
+         */
+        base64ToUint8Array: function (base64) {
+            var raw = atob(base64);
+            var uint8Array = new Uint8Array(new ArrayBuffer(raw.length));
+            for (var i = 0; i < raw.length; i++) {
+                uint8Array[i] = raw.charCodeAt(i);
+            }
+            return uint8Array;
         }
 
     };

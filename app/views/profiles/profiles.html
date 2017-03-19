@@ -104,12 +104,11 @@
                         <i class="fa fa-times"></i>
                     </div>
                 </td>
-                <td class="action_area centering">
-                    <button type="button" class="action_btn" action-profil=""
-                            data-show="{{profile._id | md5Filter}}" data-shown="false" name="profile_action_btn">
+                <td class="action_area centering" uib-dropdown>
+                    <button type="button" class="action_btn" name="profile_action_btn" uib-dropdown-toggle>
                         &nbsp;
                     </button>
-                    <ul class="action_list" data-show="{{profile._id | md5Filter}}">
+                    <ul class="action_list" uib-dropdown-menu>
                         <li class="setting_item"
                             data-ng-hide="profile.state === 'favoris' || isOwnerDelagate(profile) || profile.state == 'default'">
                             <a href="" title="{{'Modifier' | translate}}"
@@ -134,24 +133,24 @@
                             </a>
                         </li>
                         <li class="delegate" data-ng-show="isDelegatedOption(profile)">
-                            <a href title="{{'Delegate' | translate}}" data-ng-click="preDeleguerProfil(profile)">
-                                Déléguer
+                            <a href title="{{'Delegate' | translate}}" data-ng-click="delegateProfile(profile)">
+                                {{'Delegate' | translate}}
                             </a>
                         </li>
                         <li class="withdraw_delegate" data-ng-show="isAnnuleDelagate(profile)">
                             <a href title="{{'CancelDeleguation' | translate}}"
-                               data-ng-click="preAnnulerDeleguerProfil(profile)">
+                               data-ng-click="cancelDelegateByOwner(profile)">
                                 Annuler la délégation
                             </a>
                         </li>
                         <li class="withdraw_delegate" data-ng-show="isOwnerDelagate(profile)">
                             <a href title="{{'RemoveDeleguation' | translate}}"
-                               data-ng-click="preRetirerDeleguerProfil(profile)">
+                               data-ng-click="cancelDelegateByUser(profile)">
                                 Retirer la délégation
                             </a>
                         </li>
                         <li class="share_item">
-                            <a href data-ng-click="profilApartager(profile)" title="{{'Partager' | translate}}">
+                            <a href data-ng-click="shareProfile(profile)" title="{{'Partager' | translate}}">
                                 Partager
                             </a>
                         </li>
@@ -159,7 +158,7 @@
                             <a href data-toggle="modal"
                                data-target="#deleteModal"
                                data-dismiss="modal"
-                               data-ng-click="preSupprimerProfil(profile)"
+                               data-ng-click="deleteProfile(profile)"
                                title="{{'Supprimer' | translate}}"
                                name="delete_profile">
                                 Supprimer
@@ -194,308 +193,6 @@
             </tr>
             </tbody>
         </table>
-
-
-        <!-- Delete modal declaration !-->
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="myModalLabel">
-                            Supprimer le profil
-                        </h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <div class="info_txt">
-                            <p class="text_left ajustPadding_bottom">
-                                Voulez-vous supprimer le profil " <b>{{profilName}}</b> " ?
-                            </p>
-                        </div>
-                        <p class="centering">
-                            <button type="button" class="reset_btn data-ng-scope" data-dismiss="modal"
-                                    title="Annuler">Non
-                            </button>
-                            <button type="button" class="btn_simple light_blue editionProfil data-ng-scope"
-                                    data-ng-click="supprimerProfil()" data-dismiss="modal" title="Supprimer"
-                                    name="delete_profile_btn">Oui
-                            </button>
-                        </p>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-
-        <!-- Begin Delegate Modal declaration !-->
-        <div class="modal fade" id="delegateModal" tabindex="-1" role="dialog" aria-labelledby="delegateModalLabel"
-             aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" id="modalContent">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close"
-                                data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="delegateModalLabel">Déléguer un
-                            profil</h3>
-                    </div>
-                    <div data-ng-show="errorMsg" class="alert-block alert-danger">{{errorMsg}}</div>
-                    <div class="modal-body adjust-modal-body">
-                        <div class="row-fluid span6">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="document" data-ng-form="delegateformValidation">
-                                    <form class="form-horizontal" role="form" id="delegate" name="delegate">
-                                        <fieldset class="padding_large" data-ng-show="!successMsg">
-                                            <p class="controls_zone">
-                                                <label for="delegateEmail" class="simple_label"><span>Email
-														:</span> <span class="required"> *</span></label>
-                                                <input type="text" class="" id="delegateEmail"
-                                                       placeholder="Entrer l'email du destinataire"
-                                                       data-ng-model="delegateEmail" required>
-                                            </p>
-                                        </fieldset>
-                                        <div class="centering" id="ProfileButtons">
-                                            <button type="button" class="reset_btn" data-dismiss="modal"
-                                                    title="Annuler">Annuler
-                                            </button>
-                                            <button type="button" class="btn_simple light_blue"
-                                                    data-ng-click="deleguerProfil()" title="Envoyer">Envoyer
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-        </div>
-        <!-- End Delegate Modal declaration !-->
-        <!-- Begin Remove Delegate Modal declaration !-->
-        <div class="modal fade" id="retirerDelegateModal" tabindex="-1" role="dialog"
-             aria-labelledby="delegateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" id="modalContent">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="retireDelegateModalLabel">Retirer
-                            la délégation</h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <div class="row-fluid span6">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="document" data-ng-form="delegateformValidation">
-                                    <form class="form-horizontal" role="form" id="retireDelegate" name="retireDelegate">
-                                        <p>Voulez-vous retirer votre délégation?</p>
-                                        <div class="centering" id="ProfileButtons">
-                                            <button type="button" class="reset_btn" data-dismiss="modal"
-                                                    title="Annuler">Annuler
-                                            </button>
-                                            <button type="button" class="btn_simple light_blue" data-dismiss="modal"
-                                                    data-ng-click="retireDeleguerProfil()" title="Oui">Oui
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-        </div>
-        <!-- End Remove Delegate Modal declaration !-->
-        <!-- Begin Cancel Delegate Modal declaration !-->
-        <div class="modal fade" id="annulerDelegateModal" tabindex="-1" role="dialog"
-             aria-labelledby="delegateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" id="modalContent">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="annuleDelegateModalLabel">Annuler
-                            la délégation</h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <div class="row-fluid span6">
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="document" data-ng-form="annuleformValidation">
-                                    <form class="form-horizontal" role="form" id="annuleDelegate" name="retireDelegate">
-                                        <p>Voulez-vous annuler votre délégation?</p>
-                                        <div class="centering" id="ProfileButtons">
-                                            <button type="button" class="reset_btn" data-dismiss="modal"
-                                                    title="Annuler">Annuler
-                                            </button>
-                                            <button type="button" class="btn_simple light_blue" data-dismiss="modal"
-                                                    data-ng-click="annuleDeleguerProfil()" title="Oui">Oui
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-        </div>
-        <!-- End Cancel Delegate Modal declaration !-->
-
-        <div class="modal fade" id="deleteFavouriteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="myModalLabel">deleteFavoris</h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <p translate>messageSuppression</p>
-                        <p class="centering">
-                            <button type="button" class="reset_btn data-ng-scope" data-dismiss="modal"
-                                    translate title="Annuler">Annuler
-                            </button>
-                            <button type="button" class="btn_simple light_blue editionProfil data-ng-scope"
-                                    data-ng-click="removeFavourite()" data-dismiss="modal" translate title="Supprimer">
-                                Supprimer
-                            </button>
-                        </p>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-
-
-        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-ng-click="clearSocialShare()" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Partager ce profil</h4>
-                    </div>
-                    <div class="modal-body">
-                        <h2>
-                            <span>Sélectionner un moyen pour partager ce profil</span>
-                        </h2>
-                        <div class="msg_error" id="erreurEmail" data-ng-show="shareMailInvalid">
-                            Email incorrect !
-                        </div>
-                        <!-- sending Url -->
-                        <div class="share_btn_container">
-                            <ul>
-                                <li>
-                                    <a href="" class="share_btn mail_share" data-ng-click="loadMail()" title="Email"
-                                       id="document_share"></a><span class="share-text">Par Email</span></li>
-                                <li class="facebook-share"><span class="share-text">Sur
-								Facebook</span></li>
-                                <li>
-                                    <a class="share_link share_btn twitter_share"
-                                       href="https://twitter.com/share?url={{envoiUrl}}&via=Accessidys&text=Un élément a été partagé via l'outil Accessidys"
-                                       onclick="window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-                                       target="_blank" title="Partager sur Twitter"> </a><span class="share-text">Sur Twitter</span>
-                                </li>
-                                <li class="google-share">
-                                    <button id="google-share" class="share_link share_btn gplus_share"
-                                            title="Partager sur Google+"></button>
-                                    <span class="share-text">Sur
-								Google+</span></li>
-                            </ul>
-                        </div>
-                        <div class="control_group" data-ng-show="displayDestination">
-                            <h2>
-                                adresse email <br> <span>Saisissez l’adresse email du
-							destinataire</span>
-                            </h2>
-                            <p class="mail_area">
-                                <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
-                                <input type="text" class="" data-ng-model="destinataire" id="destinataire"
-                                       placeholder=""/>
-                            </p>
-                        </div>
-                        <div class="centering" id="ProfileButtons">
-                            <button id="reset_shareProfile" type="button" class="reset_btn"
-                                    data-ng-click="clearSocialShare()" data-dismiss="modal"
-                                    title="{{'Annuler' | translate}}">Annuler
-                            </button>
-                            <button id="shareProfile" type="button" class="btn_simple light_blue"
-                                    data-ng-show="displayDestination" data-ng-click="socialShare()"
-                                    title="{{'Partager' | translate}}">Partager
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="modal fade in" id="informationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog moyen">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <p class="modal_content-text">Désolé, vous avez été déconnecté de votre compte Google+
-                            (probablement dans une autre fenêtre). veuillez vous reconnecter après rafraichissement de
-                            la page.</p>
-                    </div>
-                    <div class="centering">
-                        <button type="button" class="btn_simple light_blue much_padding" data-ng-click="reloadPage()">
-                            ok
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" id="modalContent">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-ng-click="" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="myModalLabel">Confirmation d'envoi</h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <div class="info_txt">
-                            <p class="text_left ajustPadding_bottom">Voulez vous envoyer cet email ?</p>
-                        </div>
-                    </div>
-                    <div class="centering" id="confirmationButtons">
-                        <button id="restSend_mail_btn" type="button" data-ng-click="clearSocialShare()"
-                                class="reset_btn" data-dismiss="modal" title="Annuler">Annuler
-                        </button>
-                        <button id="send_mail_btn" type="button" class="btn_simple light_blue"
-                                data-ng-click="sendMail()" title="Envoyer">Envoyer
-                        </button>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-        </div>
-
-        <div class="fixed_loader" data-ng-show="loader">
-            <div class="loadre_container">
-                <p class="loader_txt">{{loaderMsg}}</p>
-            </div>
-        </div>
     </div>
 </div>
 
