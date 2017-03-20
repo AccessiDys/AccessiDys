@@ -24,9 +24,11 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('InformationModalCtrl', function($scope, $rootScope, $uibModalInstance, $location, title, content, redirection) {
+angular.module('cnedApp').controller('InformationModalCtrl', function($scope, $rootScope, $uibModalInstance,
+                                                                      $location, title, content, redirection, isTranslate) {
     $scope.title = title;
     $scope.content = content;
+    $scope.isTranslate = isTranslate;
 
     $scope.closeModal = function() {
         $uibModalInstance.close();

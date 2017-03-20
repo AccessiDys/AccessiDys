@@ -41,13 +41,15 @@
                    data-ng-change="specificFilter()" data-ng-model="query">
             <div class="active_users">
                 <span class="active_user_lbl"> Activer pour tous les utilisateurs</span>
-                <div class="users_dropdow"><a class="user_lbl" ng-click="showOptions($event)">Océrisation<b></b></a>
+                <div class="users_dropdow">
+                    <a class="user_lbl" data-ng-click="isOcrDropdownOpen = !isOcrDropdownOpen" data-ng-class="{'active': isOcrDropdownOpen}">Océrisation<b></b></a>
                     <ul>
                         <li><a href="" ng-click="updateAll('ocr',true)">Activer</a></li>
                         <li><a href="" ng-click="updateAll('ocr',false)">Désactiver</a></li>
                     </ul>
                 </div>
-                <div class="users_dropdow"><a class="user_lbl" ng-click="showOptions($event)">Synthèse vocale<b></b></a>
+                <div class="users_dropdow">
+                    <a class="user_lbl" data-ng-click="isVoiceDropdownOpen = !isVoiceDropdownOpen" data-ng-class="{'active': isVoiceDropdownOpen}">Synthèse vocale<b></b></a>
                     <ul>
                         <li><a href="" ng-click="updateAll('audio',true)">Activer</a></li>
                         <li><a href="" ng-click="updateAll('audio',false)">Désactiver</a></li>

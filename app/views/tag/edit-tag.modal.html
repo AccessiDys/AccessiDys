@@ -1,0 +1,128 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"
+            aria-hidden="true" data-ng-click="dismissModal()">&times;</button>
+    <h3 class="modal-title" data-ng-if="mode === 'create'">Ajouter un style</h3>
+    <h3 class="modal-title" data-ng-if="mode === 'edit'">Editer le style : {{tag.libelle}}</h3>
+</div>
+
+
+<div class="alert-block alert-danger alert-dismissable" id="edit-tag-error-toaster">
+    <i class="fa fa-times" aria-hidden="true"></i>
+
+    <strong regle-style="toasterMsg"
+            apply-rules="forceToasterApdapt"
+            tags="listTagsByProfilToaster">
+    </strong>
+</div>
+
+
+<div class="modal-body adjust-modal-body">
+    <div class="row-fluid span6">
+        <div class="tab-content">
+            <div class="tab-pane active" data-ng-form="tagAddForm">
+                <form class="form-horizontal" role="form" id="tagAddForm"
+                      name="tagAddForm">
+                    <fieldset>
+                        <p class="controls_zone">
+                            <label for="tagLibelle">
+                                <span>Libelle</span>
+                                <span class="required">*</span>
+                            </label>
+                            <input type="text"
+                                   id="tagLibelle" name="libelle"
+                                   ng-disabled="isDisabled"
+                                   placeholder="Entrez le libelle de la règle"
+                                   data-ng-model="tag.libelle" required>
+                        </p>
+                        <p class="controls_zone">
+                            <label for="tagLibelle">
+                                <span>Position</span>
+                                <span class="required">*</span>
+                            </label>
+                            <input type="number" min="1"
+                                   data-ng-model="tag.position" name="position" required/>
+                        </p>
+                        <p class="controls_zone">
+                            <label for="tagLibelle"><span>Html</span>
+                                <span class="required">*</span></label>
+                            <select class="ng-pristine hasCustomSelect ng-invalid ng-invalid-required"
+                                    style="-webkit-appearance: menulist-button; width: 260px; position: absolute; opacity: 0; height: 33px; font-size: 18px;"
+                                    name="html" ng-model="tag.balise" type="text" required>
+                                <option class="customSelectInner"
+                                        ng-repeat="option in html" value="{{option.balise}}">{{option.balise}}
+                                </option>
+                            </select>
+                            <span class="customSelect ng-pristine"
+                                  style="display: inline-block;">
+                                <span class="customSelectInner" style="width: 203px; display: inline-block;">{{tag.balise}}</span>
+                            </span>
+                        </p>
+                        <p class="controls_zone checkbox_zone">
+                            <label for="default_niveau">
+                                <span>Niveau</span>
+                                <span class="required">*</span>
+                            </label>
+                            <input type="checkbox"
+                                   class="hidden" name="default_niveau"
+                                   id="default_niveau"
+                                   data-ng-model="showNiveauTag"
+                                   data-ng-click="showDefaultNiveau(tag)"/>
+                            <label class="mask" for="default_niveau">&nbsp;</label>
+                            <label for="default_niveau">Par défaut</label> <input
+                                data-ng-hide="showNiveauTag" type="number"
+                                min="{{minNiveau}}" max="{{maxNiveau}}"
+                                data-ng-model="tag.niveau" name="niveau" required/>
+                        </p>
+                        <p class="controls_zone" data-ng-if="mode === 'create'">
+                            <label for="docUploadPdf" class="upload_msg">
+                                Icône
+                            </label>
+                            <span class="file_mask">
+                                <label class="parcourir_label">Parcourir</label>
+                                <input type="text" class="filename_show" data-ng-model="form.files[0].name"/>
+                                <input type="file" id="docUploadPdf" upload-file
+                                       class="btn btn-default"/>
+                            </span>
+                            <button type="button" class="clear_upoadpdf"
+                                    data-ng-click="resetImportFile()">&nbsp;</button>
+                        </p>
+
+                        <p class="controls_zone" data-ng-if="mode === 'edit'">
+                            <label for="docUploadPdf" class="upload_msg">
+                                Icône
+                            </label>
+                            <span class="file_mask">
+                                <img
+                                        data-ng-show="tag.picto" class="visu_picto"
+                                        data-ng-src="{{tag.picto}}"/>
+                                <label class="parcourir_label">Parcourir</label>
+                                <input type="text" class="filename_show" data-ng-model="form.files[0].name">
+                                <input type="file" id="docUploadPdf" upload-file
+                                       class="btn btn-default"/>
+                            </span>
+                            <button type="button" class="clear_upoadpdf"
+                                    data-ng-click="resetImportFile()">&nbsp;</button>
+                        </p>
+
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="reset_btn"
+            data-ng-click="dismissModal()"
+            title="Annuler">Annuler
+    </button>
+    <button type="button" class="btn_simple light_blue"
+            data-ng-click="saveTag()" title="Ajouter" data-ng-if="mode === 'create'">
+        Ajouter
+    </button>
+
+    <button type="button" class="btn_simple light_blue"
+            data-ng-click="saveTag()" title="Modifier" data-ng-if="mode === 'edit'">
+        Modifier
+    </button>
+</div>

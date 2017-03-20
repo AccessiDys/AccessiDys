@@ -230,20 +230,25 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
         }
     };
 
+    $rootScope.isLoginScreen = false;
+
     $rootScope.$on('$routeChangeStart', function (event, next) {
 
         var data = {
             id: false
         };
 
-        // TODO ajouter la classe avec angular
-        if (next.templateUrl) {
-            if (next.templateUrl === 'views/index/main.html' || next.templateUrl === 'views/passport/inscriptionContinue.html' || next.templateUrl === 'views/passwordRestore/passwordRestore.html' || next.templateUrl === 'views/common/errorPage.html' || next.templateUrl === 'views/needUpdate/needUpdate.html' || next.templateUrl === 'views/signup/signup.html') {
+        if (next.templateUrl && next.templateUrl === 'views/index/main.html'
+            || next.templateUrl === 'views/passport/inscriptionContinue.html'
+            || next.templateUrl === 'views/passwordRestore/passwordRestore.html'
+            || next.templateUrl === 'views/common/errorPage.html'
+            || next.templateUrl === 'views/needUpdate/needUpdate.html'
+            || next.templateUrl === 'views/signup/signup.html') {
 
-                $('body').addClass('page_authentification');
-            } else {
-                $('body').removeClass('page_authentification');
-            }
+            $rootScope.isLoginScreen = true;
+        } else {
+            $rootScope.isLoginScreen = false;
+
         }
 
         if (window.location.href.indexOf('key=') > -1) {

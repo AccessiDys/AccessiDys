@@ -299,7 +299,6 @@ table th:last-child {
 .file_mask {
     display: inline-block;
     float: left;
-    margin-left: 10px;
     position: relative;
     margin-right: 5px;
 }
@@ -307,7 +306,7 @@ table th:last-child {
 .visu_picto {
     float: left;
     height: 38px;
-    width: 20px;
+    width: 38px;
     border: 1px solid #000;
     margin-right: 5px;
     -webkit-border-radius: 2px;

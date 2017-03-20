@@ -59,7 +59,7 @@
 
 
 </head>
-<body key-trap class="body-home" data-ng-app="cnedApp" history-browser="" data-ng-class="{'pt-105': isFullsize}">
+<body key-trap class="body-home" data-ng-app="cnedApp" history-browser="" data-ng-class="{'pt-105': isFullsize, 'page_authentification': isLoginScreen}">
 
 <div id="fb-root"></div>
 <script>
@@ -104,7 +104,7 @@
 <div data-ng-include="'views/common/footer.html'"></div>
 <!-- End Footer -->
 <div class="no-show">A</div>
-<div data-ng-show='indexLoader' class="loader_cover">
+<!--<div data-ng-show='indexLoader' class="loader_cover">
     <div id="loader_container">
         <div class="loader_bar">
             <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
@@ -122,7 +122,7 @@
         >Une version plus récente de l'application a été détectée. Mise à jour de votre document en
             cours . Veuillez patienter .<img src="styles/images/loader_points.gif" alt="loader"/></p>
     </div>
-</div>
+</div>-->
 
 
 
@@ -158,6 +158,7 @@
 <!-- endbower -->
 
 <script src="external_components/ckeditor/ckeditor.js"></script>
+<script src="external_components/sselect/jquery.customSelect.min.js"></script>
 
 <script type="text/javascript">
     var memoryInitializer = "external_components/tesseractJS/TesseractJS.mem";
@@ -218,6 +219,7 @@
 <script src="scripts/controllers/profiles/delegate-profile.modal.js"></script>
 <script src="scripts/services/user.service.js"></script>
 <script src="scripts/controllers/addDocument/open-document.modal.js"></script>
+<script src="scripts/controllers/tag/edit-tag.modal.js"></script>
 <!-- endbuild -->
 
 <script type="text/javascript">

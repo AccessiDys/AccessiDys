@@ -79,52 +79,6 @@
         </div>
 
 
-        <!-- the beginning of modal Add.-->
-        <div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" style="width: 900px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" ng-click="errorMsg = false" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Enregistrer le document</h4>
-                    </div>
-
-                    <div class="alert-block alert-danger alert-dismissable" id="document-modal-error-toaster">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-
-                        <strong regle-style="toasterMsg"
-                                apply-rules="forceToasterApdapt"
-                                tags="listTagsByProfilToaster">
-                        </strong>
-                    </div>
-
-
-                    <div class="modal-body adjust-modal-body">
-
-                        <div class="row-fluid span6">
-                            <div class="tab-content">
-                                <form id="show_document" name="show_document" class="" role="form" style="overflow: hidden;">
-                                    <fieldset>
-                                        <p class="controls_zone">
-                                            <label for="docTitre" class="simple_label"><span>Titre
-											</span> <span class="required">*</span></label>
-                                            <input type="text" max-length="32" ng-disabled="existingFile" class="" id="docTitre" placeholder="Entrez le titre du document" ng-model="docTitre" required>
-                                        </p>
-                                    </fieldset>
-                                    <div class="centering" id="ProfileButtons">
-                                        <button type="button" class="reset_btn" data-dismiss="modal" ng-click="cancelSave()" title="{{'Annuler' | translate}}">Annuler
-                                        </button>
-                                        <button type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" ng-click="save()" title="{{'Enregistrer' | translate}}">Enregistrer
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
         <!-- the beginning of modal Save. ? -->
         <div class="modal fade" id="save-new-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" style="width: 900px;">
@@ -149,81 +103,6 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="modal fade in" id="myModalWorkSpaceBig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog bigger">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <p class="modal_content-text">L'application ne pourra pas traiter votre document de façon optimale en raison du poids du fichier et/ou de son contenu. Aussi, nous vous invitons à réessayer avec une autre version de votre document.</p>
-                    </div>
-                    <div class="centering">
-                        <button type="button" class="btn_simple light_blue much_padding" data-ng-click="modalError('myModalWorkSpaceBig')">OK</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade in" id="myModalWorkSpaceTooMany" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog bigger">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title light_bluehead" id="myModalLabel">information</h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <p class="modal_content-text">La taille de l'ePub est supérieur à la taille limite supportée par l'application.</p>
-                    </div>
-                    <div class="centering">
-                        <button type="button" class="btn_simple light_blue much_padding" data-ng-click="modalError('myModalWorkSpaceTooMany')">OK
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- modal on error -->
-        <div class="modal fade in" id="myModalWorkSpace" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog bigger">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title light_bluehead" id="myModalLabel">lien
-                            non valide</h4>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <p class="modal_content-text">L'import du document a échoué.
-                        </p>
-                    </div>
-                    <div class="centering">
-                        <button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">OK</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- modal in case of technical error-->
-        <div class="modal fade in" id="myModalWorkSpaceTechnical" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog bigger">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title light_bluehead" id="myModalLabel">Erreur technique</h4>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <p class="modal_content-text">L'import du document a échoué. Une erreur technique est survenue.</p>
-                        <p class="modal_content-text" style="background-color:#F2DEDE; padding: 1em; border-radius: 0.5em;">
-                            Veuillez réessayer ultérieurement.
-                        </p>
-                    </div>
-                    <div class="centering">
-                        <button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>

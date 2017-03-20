@@ -33,6 +33,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
 
     $rootScope.isFullsize = true;
+    $rootScope.indexLoader = false;
     $scope.logout = $rootScope.loged;
     $scope.admin = $rootScope.admin;
     $scope.missingDropbox = $rootScope.dropboxWarning;
@@ -144,7 +145,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         if ($rootScope.actu && $scope.dataActuelFlag) {
             if ($rootScope.actu.owner === $scope.dataActuelFlag.userID && $scope.dataActuelFlag.actuel === true) {
                 $scope.currentUserFunction();
-                angular.element($('#headerSelect option').each(function () {
+                $($('#headerSelect option').each(function () {
                     $('#headerSelect + .customSelect .customSelectInner').text($scope.actu.nom);
                     $(this).prop('selected', true);
                 }));

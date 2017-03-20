@@ -23,20 +23,20 @@
  -->
 <div class="modal-header">
 	<button type="button" class="close" aria-hidden="true" data-ng-click="closeModal()">×</button>
-	<h3 class="modal-title">{{title | translate}}</h3>
+	<h3 class="modal-title" data-ng-if="!isTranslate">{{title | translate}}</h3>
+	<h3 class="modal-title" data-ng-if="isTranslate">{{title}}</h3>
 </div>
 <div class="modal-body">
 
 	<div class="row">
 		<div class="col-md-12">
-			<p>{{content | translate}}</p>
+			<p data-ng-if="!isTranslate">{{content | translate}}</p>
+			<p data-ng-if="isTranslate" ng-bind-html="content"></p>
 		</div>
 	</div>
+</div>
 
-	<div class="row-fluid">
-		<div class="col-md-12 text-center">
-			<button ng-hide="forceClose" class="hide_information_dialog_btn btn_simple light_blue"
-					ng-click="closeModal()">OK</button>
-		</div>
-	</div>
+<div class="modal-footer">
+	<button class="btn_simple light_blue"
+	ng-click="closeModal()">OK</button>
 </div>

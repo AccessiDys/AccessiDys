@@ -56,7 +56,7 @@ function($q, generateUniqueId) {
                 tag : [ 'objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header' ]
             };
             var removeElements = function(text, selector) {
-                var wrapped = $('<div>' + text + '</div>');
+                var wrapped = angular.element('<div>' + text + '</div>');
                 wrapped.find(selector).remove();
                 return wrapped.html();
             };

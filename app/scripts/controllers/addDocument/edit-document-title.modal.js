@@ -26,7 +26,7 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $uibModalInstance, documentService, $log, gettextCatalog, $timeout, title, errors, mode) {
+angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $uibModalInstance, documentService, $log, ToasterService, title, errors, mode) {
     $scope.document = {
         title: title
     };
@@ -52,7 +52,7 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
                 title: $scope.document.title
             });
         } else {
-            $scope.showToaster('#edit-title-error-toaster', $scope.errors[0]);
+            ToasterService.showToaster('#edit-title-error-toaster', $scope.errors[0]);
         }
     };
 
@@ -60,28 +60,10 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
         $uibModalInstance.dismiss();
     };
 
-    $scope.toasterMsg = '';
-    $scope.forceToasterApdapt = false;
-    $scope.listTagsByProfilToaster = [];
-
-    /**
-     * Show success toaster
-     * @param msg
-     */
-    $scope.showToaster = function (id, msg) {
-        $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
-        $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-        $scope.forceToasterApdapt = true;
-        $timeout(function () {
-            angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-            $scope.forceToasterApdapt = false;
-        }, 0);
-    };
-
     $uibModalInstance.opened.then(function () {
 
         if ($scope.errors.length > 0) {
-            $scope.showToaster('#edit-title-error-toaster', $scope.errors[0]);
+            ToasterService.showToaster('#edit-title-error-toaster', $scope.errors[0]);
         }
 
     });

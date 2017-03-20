@@ -119,6 +119,13 @@ angular.module('cnedApp')
         /**
          * Show loading popup.
          */
+        $scope.hideAdaptationLoader = function () {
+            LoaderService.hideLoader();
+        };
+
+        /**
+         * Show loading popup.
+         */
         $scope.showAdaptationLoaderFromLoop = function (indexLoop) {
             if (indexLoop <= 0) {
                 $scope.showAdaptationLoader();

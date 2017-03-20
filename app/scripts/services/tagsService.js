@@ -26,7 +26,7 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('tagsService', function($http, configuration, $localForage) {
+cnedApp.service('tagsService', function($http, configuration, $localForage, $uibModal) {
     this.getTags = function() {
         return $http.get(configuration.URL_REQUEST + '/readTags').then(function(result) {
             return $localForage.setItem('listTags', result.data).then(function() {
@@ -35,5 +35,21 @@ cnedApp.service('tagsService', function($http, configuration, $localForage) {
         }, function() {
             return $localForage.getItem('listTags');
         });
+    };
+
+    this.openEditModal = function(mode , tag){
+        return $uibModal.open({
+            templateUrl: 'views/tag/edit-tag.modal.html',
+            controller: 'EditTagModalCtrl',
+            size: 'lg',
+            resolve: {
+                mode: function () {
+                    return mode;
+                },
+                tag: function () {
+                    return tag;
+                }
+            }
+        }).result;
     };
 });

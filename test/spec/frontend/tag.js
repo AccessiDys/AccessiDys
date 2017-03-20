@@ -178,21 +178,6 @@ describe('Controller:TagCtrl', function () {
         //expect($scope.xhrObj.addEventListener.calls.length).toBe(2);
     });
 
-    it('TagCtrl:supprimerTag', inject(function ($httpBackend) {
-        expect($scope.preSupprimerTag).toBeDefined();
-        expect($scope.supprimerTag).toBeDefined();
-        $scope.requestToSend.deleteTag = tag;
-        $scope.supprimerTag();
-        $scope.preSupprimerTag(tag);
-
-        tag.libelle = 'Titre 1';
-        $scope.preSupprimerTag(tag);
-
-
-        $httpBackend.flush();
-        expect(tag).toEqual($scope.tagFlag);
-    }));
-
     it('TagCtrl:modifierTag', function () {
         expect($scope.preModifierTag).toBeDefined();
         $scope.preModifierTag(tag1);

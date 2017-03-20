@@ -168,7 +168,8 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     $scope.inscriptionStep2 = true;
                     $scope.step2 = 'btn btn-primary btn-circle';
                     $scope.step1 = 'btn btn-default btn-circle';
-                    $('#myModal').modal('show');
+                    UtilsService.showInformationModal('Informations',
+                        'Votre compte Accessidys a bien été créé. Vous pouvez désormais l\'utiliser pour accéder à l\'application Accessidys. Cependant vous ne pourrez le faire qu\'après avoir associé ce compte à votre compte DropBox. Nous vous proposons d’en créer un si nécessaire dans l\'étape suivante.', null, true);
                 });
             }).error(function() {
                 $scope.erreur.erreurSigninEmail = false;

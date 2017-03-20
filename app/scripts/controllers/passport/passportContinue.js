@@ -64,7 +64,8 @@ angular.module('cnedApp').controller('passportContinueCtrl', function($scope, $h
                     $scope.missingDropbox = false;
                     $rootScope.loged = true;
                     $rootScope.admin = result.admin;
-                    $('#myModal').modal('show');
+                    UtilsService.showInformationModal('Informations',
+                        'Votre compte Accessidys a bien été créé. Vous pouvez désormais l\'utiliser pour accéder à l\'application Accessidys. Cependant vous ne pourrez le faire qu\'après avoir associé ce compte à votre compte DropBox. Nous vous proposons d’en créer un si nécessaire dans l\'étape suivante.', null, true);
                     $rootScope.apply; // jshint ignore:line
                     if ($location.path() !== '/inscriptionContinue') {
                         $location.path('/inscriptionContinue');

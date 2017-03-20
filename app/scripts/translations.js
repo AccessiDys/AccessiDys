@@ -240,7 +240,10 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'style.message.save.ok': 'Style ajouté avec succès.',
         'style.message.delete.ok': 'Style supprimé avec succès.',
         'style.message.edit.ok': 'Style modifié avec succès.',
+        'style.message.save.ko.title.mandatory': 'Le titre est obligatoire.',
+        'style.message.save.ko': 'Erreur lors de l\'enregistrement de votre style : erreur technique.',
         'style.message.save.ko.position.mandatory': 'La position est obligatoire et doit être numérique et supérieure strictement à 0.',
+        'style.message.save.ko.html.mandatory': 'L\'équivalence html est obligatoire.',
         'style.message.save.ko.level.mandatory': 'Le niveau est obligatoire et doit être numérique.',
         'style.message.save.ko.file.type': 'Le type de fichier n\'est pas supporté. Merci de ne rattacher que des images.',
         'document.message.save.ko.connexion': 'Veuillez-vous connecter pour pouvoir enregistrer votre document.',
@@ -289,7 +292,9 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'profile.message.info.share.offline': 'La fonctionnalité de partage de profil nécessite un accès à internet.',
         'profile.message.info.display.offline': 'L\'affichage de ce profil nécessite au moins un affichage préalable via internet.',
         'profile.message.info.delegate.offline': 'La fonctionnalité de délégation de profil nécessite un accès à internet.',
-        'webadapt.message.info.offline': 'La navigation adaptée n\'est pas disponible sans accès internet.'
+        'webadapt.message.info.offline': 'La navigation adaptée n\'est pas disponible sans accès internet.',
+        'style.label.delete.anwser': 'Voulez-vous supprimer le style " <b>style.label</b> " ?',
+        'style.label.delete.title': 'Supprimer le style'
     });
 
 } ]);

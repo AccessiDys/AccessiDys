@@ -137,11 +137,12 @@ angular
                                         CKEDITOR.instances.editorAdd.setData(resultClean);
                                         LoaderService.hideLoader();
                                     });
-                                }, function (err) {
+                                }, function () {
 
                                     LoaderService.hideLoader();
-                                    $scope.techError = err;
-                                    angular.element('#myModalWorkSpaceTechnical').modal('show');
+
+                                    UtilsService.showInformationModal('information',
+                                        'L\'import du document a échoué. Une erreur technique est survenue.<br><br>Veuillez réessayer ultérieurement.', null, true);
                                 });
                         }
                     }
@@ -325,10 +326,8 @@ angular
                     });
                 }).error(function () {
                     LoaderService.hideLoader();
-                    $('#myModalWorkSpace').modal('show');
-                    $scope.pdferrLien = true;
+                    UtilsService.showInformationModal('lien non valide', 'L\'import du document a échoué.', null, true);
                 });
-                $scope.clearUploadFile();
             };
 
             /**
@@ -441,15 +440,15 @@ angular
                     $scope.files = [];
 
                     if (serverResp.tooManyHtml) {
-                        $('#myModalWorkSpaceTooMany').modal('show');
+                        UtilsService.showInformationModal('information', 'La taille de l\'ePub est supérieur à la taille limite supportée par l\'application.', null, true);
                     } else if (serverResp.oversized || serverResp.oversizedIMG) {
-                        $('#myModalWorkSpaceBig').modal('show');
+                        UtilsService.showInformationModal('information', 'L\'application ne pourra pas traiter votre document de façon optimale en raison du poids du fichier et/ou de son contenu. Aussi, nous vous invitons à réessayer avec une autre version de votre document.', null, true);
                     } else {
                         var fileChunck = evt.target.responseText.substring(0, 50000).replace('"', '');
                         var tmp = serviceCheck.getSign(fileChunck);
                         tmp.then(function (loacalSign) {
                             if (loacalSign.erreurIntern) {
-                                $('#myModalWorkSpace').modal('show');
+                                UtilsService.showInformationModal('lien non valide', 'L\'import du document a échoué.', null, true);
                             } else {
                                 $scope.filePreview = loacalSign.sign;
                                 if ($scope.serviceUpload !== '/fileupload') {
@@ -502,7 +501,7 @@ angular
                         });
                     }
                 } else {
-                    $('#myModalWorkSpace').modal('show');
+                    UtilsService.showInformationModal('lien non valide', 'L\'import du document a échoué.', null, true);
                 }
 
             };
@@ -790,16 +789,10 @@ angular
 
                 if ($scope.resizeDocEditor === 'Agrandir') {
                     $scope.resizeDocEditor = 'Réduire';
-
                     $rootScope.isFullsize = false;
-                    $('.navbar-fixed-top').slideUp(200, function () {
-                    });
-
                 } else {
                     $scope.resizeDocEditor = 'Agrandir';
                     $rootScope.isFullsize = true;
-                    $('.navbar-fixed-top').slideDown(200, function () {
-                    });
                 }
             };
 
