@@ -51,7 +51,6 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, md5
 			$scope.flagInit = true;
 			$http.post(configuration.URL_REQUEST + '/checkPasswordToken', data)
 				.success(function() {
-					console.log('this token is valid');
 					$scope.passwordResoreErr = false;
 				}).error(function() {
 					$scope.errorCheck();

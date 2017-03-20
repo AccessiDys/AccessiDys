@@ -30,8 +30,7 @@
             <div class="divider-white"></div>
 
             <div class="navbar-header">
-                <a href="{{logoRedirection}}" class="navbar-brand" title="Retour à l'accueil"
-                   data-ng-click="checkLocation($event)">
+                <a href="{{logoRedirection}}" class="navbar-brand" title="Retour à l'accueil">
                     <img width="180px" src="/styles/images/header_logoCned.png" alt="AccessiDys">
                 </a>
             </div>
@@ -116,46 +115,6 @@
 
     </nav>
 
-
-    <div class="modal fade animated fadeIn" id="bookmarkletGenerator"
-         tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" id="bookmarkletGenerator2">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-ng-click=""
-                            data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" id="myModalLabel">WEB ADAPTE</h3>
-                </div>
-                <div class="modal-body adjust-modal-body">
-                    <div class="box">
-                        <div>
-                            <div class="info_txt">
-                                <p class="text_left">
-                                    Glissez le bouton Accessidys sur la barre de favoris de votre navigateur (située en haut de l’écran). Il vous permettra l’affichage adapté de vos documents web
-                                </p>
-                                <div class="drag_btn">
-                                    <div class="bookmarklet_contaioner">
-                                        <p class="bookmarklet_btn">
-                                            <a
-                                                    href="javascript:(function(){window.location.href={{userDropBoxLink}}})();"
-                                                    class="grey_btn normal_padding normal_case">Accessidys</a>
-                                        </p>
-                                        <p>
-                                            <img src="/styles/images/bookmarklet_howto.png" alt=""/>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
-    </div>
 
     <div class="modal fade" id="openUpgradeModal" tabindex="-1"
          role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

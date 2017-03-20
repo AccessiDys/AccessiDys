@@ -490,10 +490,8 @@ angular
                                             }
                                             CKEDITOR.instances.editorAdd.setData(resultClean);
                                         }, function () {
-                                            $scope.msgErrorModal = 'Erreur lors du téléchargement de votre epub.';
-                                            $scope.errorMsg = true;
+                                           ToasterService.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
                                             LoaderService.hideLoader();
-                                            angular.element('#myModalWorkSpace').modal('show');
                                         });
                                     }
                                 }

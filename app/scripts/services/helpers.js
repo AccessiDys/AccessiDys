@@ -265,8 +265,6 @@ cnedApp.factory('serviceCheck',
                                 statusInformation.dropboxWarning = true;
                                 deferred.resolve(statusInformation);
                                 if ($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem('deconnexion')) {
-                                    $('.modal').modal('hide');
-
                                     UtilsService.showInformationModal('label.session.expired', 'label.session.re-login', '/');
 
                                 }
@@ -370,7 +368,6 @@ cnedApp.factory('serviceCheck',
                                 statusInformation.loged = false;
                                 statusInformation.dropboxWarning = true;
                                 deferred.resolve(statusInformation);
-                                $('.modal').modal('hide');
                                 if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/signup') {
                                     $location.path('/');
                                 }
@@ -391,7 +388,6 @@ cnedApp.factory('serviceCheck',
                     //when the user is not authenticated
                     //and attempts to access features,
                     // redirect to the login page.
-                    $('.modal').modal('hide');
                     if ($location.path() === '/apercu' || $location.path() === '/print') {
 
                         //Show of shared document

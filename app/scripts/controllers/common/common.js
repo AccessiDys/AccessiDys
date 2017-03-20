@@ -52,18 +52,11 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     });
 
     $scope.bookmarkletPopin = function () {
-        var tmp = serviceCheck.getData();
-        tmp.then(function (result) { // this is only run after $http completes
-            if (result.loged) {
-                $scope.userDropBoxLink = '\'' + configuration.URL_REQUEST + '/#/apercu?title=\'+document.title+\'&url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
-                $('#bookmarkletGenerator').modal('show');
-            } else {
-                if (!$scope.testEnv) {
-                    window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-                }
-
-            }
-        });
+        return $uibModal.open({
+            templateUrl: 'views/common/bookmarklet.modal.html',
+            controller: 'BookMarkletModalCtrl',
+            size: 'md'
+        }).result;
 
     };
 
@@ -88,7 +81,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
             if ($routeParams.deconnexion) {
                 $rootScope.loged = false;
-                //delete $routeParams.deconnexion;
             }
             // if a session verification interval exists, 
             // cancel for reassignment.
