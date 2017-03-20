@@ -31,7 +31,7 @@ var gapi = gapi;
 angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http,
                                               configuration, fileStorageService, tagsService, Analytics,
-                                              gettextCatalog, $timeout, UtilsService, LoaderService, $log, documentService) {
+                                              gettextCatalog, $timeout, UtilsService, LoaderService, $log, documentService, ToasterService) {
 
         $scope.configuration = configuration;
         $scope.testEnv = false;
@@ -216,7 +216,7 @@ angular.module('cnedApp')
                     dropboxToken = data.user.dropbox.accessToken;
                 }
                 LoaderService.setLoaderProgress(20);
-                fileStorageService.searchAllFiles($rootScope.isAppOnline, dropboxToken).then(function (listDocument) {
+                fileStorageService.searchAllFiles($rootScope.isAppOnline, $rootScope.currentUser.dropbox.accessToken).then(function (listDocument) {
                     LoaderService.setLoaderProgress(100);
                     LoaderService.hideLoader();
                     $scope.listDocument = listDocument;
@@ -228,26 +228,5 @@ angular.module('cnedApp')
                 LoaderService.hideLoader();
             });
         };
-
-        $scope.toasterMsg = '';
-        $scope.forceToasterApdapt = false;
-        $scope.listTagsByProfilToaster = [];
-
-        /**
-         * Show success toaster
-         * @param msg
-         */
-        $scope.showToaster = function (id, msg) {
-            $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
-            $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-            $scope.forceToasterApdapt = true;
-            $timeout(function () {
-                angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-                $scope.forceToasterApdapt = false;
-            }, 0);
-        };
-
-        LoaderService.hideLoader();
-        $scope.getListDocument();
 
     });

@@ -33,82 +33,61 @@
 /* jshint undef: true, unused: true */
 /*global $:false */
 
-angular.module('cnedApp').controller('passwordRestoreCtrl', function($scope, md5, $rootScope, $http, $location, configuration) {
+angular.module('cnedApp').controller('passwordRestoreCtrl', function ($scope, md5, $rootScope, $http, $location, configuration) {
 
-	$scope.password = '';
-	$scope.passwordConfirmation = '';
-	$scope.erreurMessage = '';
-	$scope.failRestore = false;
-	$scope.passwordResoreErr = true;
-	$scope.testEnv = false;
-	$scope.locationUrl = $location.absUrl();
-	$scope.init = function() {
-		if ($scope.locationUrl.indexOf('secret=') > -1) {
-			$scope.secret = $location.absUrl().substring($location.absUrl().indexOf('secret=') + 7, $location.absUrl().length);
-			var data = {
-				secret: $scope.secret
-			};
-			$scope.flagInit = true;
-			$http.post(configuration.URL_REQUEST + '/checkPasswordToken', data)
-				.success(function() {
-					$scope.passwordResoreErr = false;
-				}).error(function() {
-					$scope.errorCheck();
-				});
-		}
-	};
+    $scope.password = '';
+    $scope.passwordConfirmation = '';
+    $scope.erreurMessage = '';
+    $scope.failRestore = false;
+    $scope.testEnv = false;
+    $scope.locationUrl = $location.absUrl();
 
-	$scope.errorCheck = function() {
-		console.log('this password is not');
-		$scope.passwordResoreErrMessage = 'Cette clé de réinitialisation a expiré ou n\'est pas valide.';
-		$('#myModalPasswordRestore').modal('show');
-		$scope.passwordResoreErr = true;
-	};
-	$scope.restorePassword = function() {
-		if ($scope.verifyPassword($scope.password) && $scope.verifyPassword($scope.passwordConfirmation) && $scope.password === $scope.passwordConfirmation) {
-			var data = {
-				password: md5.createHash($scope.password),
-				secret: $scope.secret
-			};
-			$http.post(configuration.URL_REQUEST + '/saveNewPassword', data)
-				.success(function(dataRecue) {
-					$('#myModal').modal('show');
-					$scope.flagRestoreSucces = true;
-					localStorage.setItem('redirectionEmail', dataRecue.local.email);
-					localStorage.setItem('redirectionPassword', $scope.password);
-				});
-		} else {
-			if ($scope.password !== $scope.passwordConfirmation) {
-				$scope.erreurMessage = 'Ces mots de passe ne correspondent pas.';
-			} else {
-				$scope.erreurMessage = 'le mot de passe et sa confirmation sont requis.';
-			}
-			$scope.failRestore = true;
-		}
-	};
+    $scope.init = function () {
+        if ($scope.locationUrl.indexOf('secret=') > -1) {
+            $scope.secret = $location.absUrl().substring($location.absUrl().indexOf('secret=') + 7, $location.absUrl().length);
+            var data = {
+                secret: $scope.secret
+            };
+            $scope.flagInit = true;
+            $http.post(configuration.URL_REQUEST + '/checkPasswordToken', data)
+                .success(function () {
+                    //
+                })
+                .error(function () {
+                    UtilsService.showInformationModal('Informations', 'Cette clé de réinitialisation a expiré ou n\'est pas valide.', '/', true);
+                });
+        }
+    };
 
-	$scope.verifyPassword = function(password) {
-		var ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,20}$/;
+    $scope.restorePassword = function () {
+        if ($scope.verifyPassword($scope.password) && $scope.verifyPassword($scope.passwordConfirmation) && $scope.password === $scope.passwordConfirmation) {
+            var data = {
+                password: md5.createHash($scope.password),
+                secret: $scope.secret
+            };
+            $http.post(configuration.URL_REQUEST + '/saveNewPassword', data)
+                .success(function (dataRecue) {
+                    UtilsService.showInformationModal('Informations', 'Votre nouveau mot de passe a été enregistré. Vous allez être redirigé vers la page d\'accueil.', '/?Acces=true', true);
+                    localStorage.setItem('redirectionEmail', dataRecue.local.email);
+                    localStorage.setItem('redirectionPassword', $scope.password);
+                });
+        } else {
+            if ($scope.password !== $scope.passwordConfirmation) {
+                $scope.erreurMessage = 'Ces mots de passe ne correspondent pas.';
+            } else {
+                $scope.erreurMessage = 'le mot de passe et sa confirmation sont requis.';
+            }
+            $scope.failRestore = true;
+        }
+    };
 
-		if (!ck_password.test(password)) {
-			return false;
-		}
-		return true;
-	};
+    $scope.verifyPassword = function (password) {
+        var ck_password = /^[A-Za-z0-9!@#$%^&*()_]{6,20}$/;
 
-	$scope.redirectModal = function(url) {
-		if ($scope.testEnv === false) {
-			window.location.href = url;
-		}
-	};
-
-	$('#myModal').on('hidden.bs.modal', function() {
-		$scope.redirectModal('/?Acces=true');
-	});
-	$('#myModalPasswordRestore').on('hidden.bs.modal', function() {
-		$scope.redirectModal('/');
-	});
-
-
+        if (!ck_password.test(password)) {
+            return false;
+        }
+        return true;
+    };
 
 });

@@ -39,33 +39,31 @@ angular.module('cnedApp').controller('UserAccountCtrl', function ($scope, $http,
 
     $scope.initial = function () {
         $scope.passwordIstheSame = null;
-        var tmp2 = serviceCheck.getData();
-        tmp2.then(function (result) {
-            if (result.loged) {
-                if (result.dropboxWarning === false) {
-                    $rootScope.dropboxWarning = false;
-                    $scope.missingDropbox = false;
-                    $rootScope.loged = true;
-                    $rootScope.admin = result.admin;
-                    $rootScope.apply; // jshint ignore:line
-                    if ($location.path() !== '/inscriptionContinue') {
-                        $location.path('/inscriptionContinue');
+        serviceCheck.getData()
+            .then(function (result) {
+                if (result.loged) {
+                    if (result.dropboxWarning === false) {
+                        $rootScope.dropboxWarning = false;
+                        $scope.missingDropbox = false;
+                        $rootScope.loged = true;
+                        $rootScope.admin = result.admin;
+                        if ($location.path() !== '/inscriptionContinue') {
+                            $location.path('/inscriptionContinue');
+                        }
+                    } else {
+                        $rootScope.loged = true;
+                        $rootScope.admin = result.admin;
+                        $scope.objet = result;
+                        $scope.compte.email = result.user.local.email;
+                        $scope.compte.nom = result.user.local.nom;
+                        $scope.compte.password = result.user.local.password;
+                        $scope.compte.prenom = result.user.local.prenom;
+                        $scope.token = {
+                            id: result.user.local.token
+                        };
                     }
-                } else {
-                    $rootScope.loged = true;
-                    $rootScope.admin = result.admin;
-                    $rootScope.apply; // jshint ignore:line
-                    $scope.objet = result;
-                    $scope.compte.email = result.user.local.email;
-                    $scope.compte.nom = result.user.local.nom;
-                    $scope.compte.password = result.user.local.password;
-                    $scope.compte.prenom = result.user.local.prenom;
-                    $scope.token = {
-                        id: result.user.local.token
-                    };
                 }
-            }
-        });
+            });
     };
 
     // this function updates the account

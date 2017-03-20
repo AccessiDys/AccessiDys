@@ -41,12 +41,18 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="current_profile" data-ng-if="!isGuest">
                         <label>Profil actuel</label>
-                        <select sselect id="headerSelect"
-                                data-ng-model="profilActuel" data-ng-change="changeProfilActuel()" required>
-                            <option bindonce data-ng-repeat="profil in listeProfilsParUser"
-                                    ng-if="profil.type == 'profile'" bo-value="profil">{{profil.nom}}
+                        <select id="headerSelect"
+                                style="-webkit-appearance: menulist-button; width: 215px; position: absolute; opacity: 0; height: 43px; font-size: 18px;"
+                                data-ng-model="form.currentProfile" ng-change="onChangeCurrentProfile()">
+                            <option data-ng-repeat="profil in listeProfilsParUser"
+                                    data-ng-if="profil.type == 'profile'" data-ng-value="profil.nom">
+                                {{profil.nom}}
                             </option>
                         </select>
+
+                        <span class="customSelect ng-pristine ng-untouched ng-valid" style="display: inline-block;">
+                            <span class="customSelectInner" style="width: 24px; display: inline-block;">{{profilActuel}}</span>
+                        </span>
                     </li>
                     <li class="dropdown" data-ng-if="!isGuest" uib-dropdown>
                         <a class="dropdown-toggle"
@@ -193,7 +199,7 @@
                 <div class="progress_bar" data-ng-style="loaderProgressStyle"> </div>
             </div>
             <p class="loader_txt">
-                {{loaderMessage | translate}} <img src="/styles/images/loader_points.gif" alt="loader" />
+                {{loaderMessage | translate}} <img src="/styles/images/loader_points.gif" alt="loader"/>
             </p>
         </div>
         <div data-ng-if="!showLoaderProgress">

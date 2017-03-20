@@ -315,7 +315,7 @@ angular.module('cnedApp')
                 templateUrl: 'views/profiles/renameProfilModal.html',
                 controller: 'profilesRenommageModalCtrl',
                 scope: $scope,
-                backdrop: true,
+                size: 'md',
                 resolve: {
                     profile: function () {
                         return profile;
@@ -928,7 +928,7 @@ angular.module('cnedApp')
 
                         _.each(data, function (profile) {
 
-                            if (profile.type === 'profile') {
+                            if (profile && profile.type === 'profile') {
 
                                 if ($rootScope.currentUser.local.role === 'admin' && profile.state === 'mine') {
                                     // Avoid duplicate profiles when the user is administrator

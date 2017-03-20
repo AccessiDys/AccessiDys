@@ -199,17 +199,17 @@ cnedApp.factory('verifyEmail', function () {
 
 
 cnedApp.factory('serviceCheck',
-    function ($http, $q, $location, configuration, dropbox, protocolToLowerCase, $rootScope, $localForage, UtilsService) {
+    function ($http, $q, $location, configuration, dropbox, protocolToLowerCase, $rootScope, $localForage, UtilsService, $timeout) {
 
         var statusInformation = {};
         return {
             getData: function () {
+                var deferred = $q.defer();
                 if (localStorage.getItem('guest')) {
                     localStorage.removeItem('guest');
                     localStorage.removeItem('compteId');
                 }
                 statusInformation = {};
-                var deferred = $q.defer();
                 var isAppOnlineNotReady;
                 var data = {
                     id: false
@@ -218,10 +218,12 @@ cnedApp.factory('serviceCheck',
                     data = {
                         id: localStorage.getItem('compteId')
                     };
-                    if ($rootScope.isAppOnline === undefined)
+
+                    if ($rootScope.isAppOnline === undefined) {
                         isAppOnlineNotReady = true;
-                    else
+                    } else {
                         isAppOnlineNotReady = false;
+                    }
 
                     if ($rootScope.isAppOnline || ($rootScope.isAppOnline === undefined && navigator.onLine === true)) {
                         $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id)
@@ -238,98 +240,88 @@ cnedApp.factory('serviceCheck',
                                     if (data.local.role === 'admin') {
                                         $rootScope.admin = true;
                                         statusInformation.admin = true;
-                                        deferred.resolve(statusInformation);
                                     } else {
                                         $rootScope.admin = false;
                                         statusInformation.admin = false;
-                                        deferred.resolve(statusInformation);
                                     }
                                 } else {
                                     if ($location.path() !== '/inscriptionContinue') {
                                         statusInformation.redirected = 'ok';
                                         statusInformation.path = '/inscriptionContinue';
                                         statusInformation.dropboxWarning = false;
-                                        deferred.resolve(statusInformation);
-
                                     } else {
                                         statusInformation.dropboxWarning = false;
-                                        deferred.resolve(statusInformation);
                                     }
                                 }
-                                return deferred.promise;
-                            }).error(function (data, status, headers, config) {
-                            if (data.code === 2) {
-                                // The session of to user has expired.
-                                statusInformation.inactif = true;
-                                statusInformation.loged = false;
-                                statusInformation.dropboxWarning = true;
-                                deferred.resolve(statusInformation);
-                                if ($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem('deconnexion')) {
-                                    UtilsService.showInformationModal('label.session.expired', 'label.session.re-login', '/');
 
-                                }
-                                $rootScope.loged = false;
-                                $rootScope.dropboxWarning = true;
-                                $rootScope.$apply();
-                                return deferred.promise;
-                            } else if (data.code === 1) {
-                                // the token of the user is not found. Delete all data stored locally.
-                                localStorage.clear();
-                                $localForage.clear().then(function () {
-                                    $rootScope.loged = false;
-                                    $rootScope.dropboxWarning = false;
-                                    $rootScope.admin = null;
-                                    $rootScope.currentUser = {};
-                                    $rootScope.listDocumentDropBox = '';
-                                    $rootScope.uploadDoc = {};
-                                    if (!$rootScope.$$phase) {
-                                        $rootScope.$digest();
-                                    }
-                                    setTimeout(function () {
-                                        window.location.href = configuration.URL_REQUEST;
-                                    }, 1000);
-                                    statusInformation.deleted = true;
+                                deferred.resolve(statusInformation);
+                            })
+                            .error(function (data, status, headers, config) {
+                                if (data.code === 2) {
+                                    // The session of to user has expired.
+                                    statusInformation.inactif = true;
                                     statusInformation.loged = false;
                                     statusInformation.dropboxWarning = true;
                                     deferred.resolve(statusInformation);
-                                    return deferred.promise;
-                                });
-                            } else if (isAppOnlineNotReady) {
-                                // retrieve informations from the disconnected mode and continue
-                                $localForage.getItem('compteOffline').then(function (result) {
-                                    data = result;
-                                    $rootScope.currentUser = data;
-                                    statusInformation.loged = true;
-                                    $rootScope.loged = true;
-                                    if (data.dropbox) {
-                                        statusInformation.dropboxWarning = true;
-                                        statusInformation.user = data;
-                                        if (data.local.role === 'admin') {
-                                            $rootScope.admin = true;
-                                            statusInformation.admin = true;
-                                            deferred.resolve(statusInformation);
-                                        } else {
-                                            $rootScope.admin = false;
-                                            statusInformation.admin = false;
-                                            deferred.resolve(statusInformation);
-                                        }
-                                    } else {
-                                        if ($location.path() !== '/inscriptionContinue') {
-                                            statusInformation.redirected = 'ok';
-                                            statusInformation.path = '/inscriptionContinue';
-                                            statusInformation.dropboxWarning = false;
-                                            deferred.resolve(statusInformation);
+                                    if ($rootScope.loged || $rootScope.loged === undefined && !localStorage.getItem('deconnexion')) {
+                                        UtilsService.showInformationModal('label.session.expired', 'label.session.re-login', '/');
 
-                                        } else {
-                                            statusInformation.dropboxWarning = false;
-                                            deferred.resolve(statusInformation);
-                                        }
                                     }
-                                    return deferred.promise;
-                                });
-                            }
+                                    $rootScope.loged = false;
+                                    $rootScope.dropboxWarning = true;
 
-                        });
+                                } else if (data.code === 1) {
+                                    // the token of the user is not found. Delete all data stored locally.
+                                    localStorage.clear();
+                                    $localForage.clear().then(function () {
+                                        $rootScope.loged = false;
+                                        $rootScope.dropboxWarning = false;
+                                        $rootScope.admin = null;
+                                        $rootScope.currentUser = {};
+                                        $rootScope.listDocumentDropBox = '';
+                                        $rootScope.uploadDoc = {};
+                                        $timeout(function () {
+                                            window.location.href = configuration.URL_REQUEST;
+                                        }, 1000);
+                                        statusInformation.deleted = true;
+                                        statusInformation.loged = false;
+                                        statusInformation.dropboxWarning = true;
+
+                                        deferred.resolve(statusInformation);
+                                    });
+                                } else if (isAppOnlineNotReady) {
+                                    // retrieve informations from the disconnected mode and continue
+                                    $localForage.getItem('compteOffline').then(function (result) {
+                                        data = result;
+                                        $rootScope.currentUser = data;
+                                        statusInformation.loged = true;
+                                        $rootScope.loged = true;
+                                        if (data.dropbox) {
+                                            statusInformation.dropboxWarning = true;
+                                            statusInformation.user = data;
+                                            if (data.local.role === 'admin') {
+                                                $rootScope.admin = true;
+                                                statusInformation.admin = true;
+                                            } else {
+                                                $rootScope.admin = false;
+                                                statusInformation.admin = false;
+
+                                            }
+                                        } else {
+                                            if ($location.path() !== '/inscriptionContinue') {
+                                                statusInformation.redirected = 'ok';
+                                                statusInformation.path = '/inscriptionContinue';
+                                                statusInformation.dropboxWarning = false;
+                                            } else {
+                                                statusInformation.dropboxWarning = false;
+                                            }
+
+                                        }
+                                        deferred.resolve(statusInformation);
+                                    });
+                                }
+
+                            });
 
                     } else {
                         // retrieve information from the disconnected mode and continue
@@ -345,23 +337,20 @@ cnedApp.factory('serviceCheck',
                                     if (data.local.role === 'admin') {
                                         $rootScope.admin = true;
                                         statusInformation.admin = true;
-                                        deferred.resolve(statusInformation);
                                     } else {
                                         $rootScope.admin = false;
                                         statusInformation.admin = false;
-                                        deferred.resolve(statusInformation);
                                     }
+                                    deferred.resolve(statusInformation);
                                 } else {
                                     if ($location.path() !== '/inscriptionContinue') {
                                         statusInformation.redirected = 'ok';
                                         statusInformation.path = '/inscriptionContinue';
                                         statusInformation.dropboxWarning = false;
-                                        deferred.resolve(statusInformation);
-
                                     } else {
                                         statusInformation.dropboxWarning = false;
-                                        deferred.resolve(statusInformation);
                                     }
+                                    deferred.resolve(statusInformation);
                                 }
                             } else {
                                 $rootScope.loged = false;
@@ -372,7 +361,6 @@ cnedApp.factory('serviceCheck',
                                     $location.path('/');
                                 }
                             }
-                            return deferred.promise;
                         });
                     }
 
@@ -394,7 +382,16 @@ cnedApp.factory('serviceCheck',
 
                         $rootScope.isGuest = true;
                         localStorage.setItem('guest', true);
-                    } else if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/contribuer' && $location.path() !== '/a-propos' && $location.path() !== '/signup' && $location.path() !== '/apercu' && $location.path() !== '/print') {
+                    } else if ($location.path() !== '/'
+                        && $location.path() !== '/passwordHelp'
+                        && $location.path() !== '/detailProfil'
+                        && $location.path() !== '/needUpdate'
+                        && $location.path() !== '/mentions'
+                        && $location.path() !== '/contribuer'
+                        && $location.path() !== '/a-propos'
+                        && $location.path() !== '/signup'
+                        && $location.path() !== '/apercu'
+                        && $location.path() !== '/print') {
                         $location.path('/');
                     }
                 }

@@ -156,8 +156,6 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
             calltoactionlabel: 'LEARN_MORE',
             calltoactionurl: decodeURIComponent($scope.encodeURI),
             callback: function (result) {
-                console.log(result);
-                console.log('this is the callback');
             },
             onshare: function (response) {
                 if (response.status === 'started') {

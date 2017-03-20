@@ -28,6 +28,17 @@
   },
   "resolutions": {
     "angular": "1.5.9"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/css/bootstrap.min.css",
+        "dist/fonts/bootstrap/glyphicons-halflings-regular.eot",
+        "dist/fonts/bootstrap/glyphicons-halflings-regular.svg",
+        "dist/fonts/bootstrap/glyphicons-halflings-regular.ttf",
+        "dist/fonts/bootstrap/glyphicons-halflings-regular.woff",
+        "dist/fonts/bootstrap/glyphicons-halflings-regular.woff2"
+      ]
+    }
   }
-
 }

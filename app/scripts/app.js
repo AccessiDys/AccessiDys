@@ -200,7 +200,7 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
                 }
             }
         });
-        //$interval($rootScope.checkIsOnline, 5000);
+        //$interval($rootScope.checkIsOnline, 5000); TODO réactiver
     } else {
         $rootScope.isAppOnline = true;
     }

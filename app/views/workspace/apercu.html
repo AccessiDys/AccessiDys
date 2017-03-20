@@ -177,158 +177,7 @@
 
 <div class="content">
     <div class="doc-apercu">
-        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true" data-backdrop="static">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-ng-click="clearSocialShare()" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="myModalLabel">Partager ce
-                            document</h3>
-                    </div>
-                    <div class="modal-body" data-ng-hide="confirme">
-                        <h2>Avez-vous le droit de partager ce document ?</h2>
-                        <p class="info_txt shareConfirme">Les droits des auteurs doivent être protégés. Ainsi, en France
-                            comme dans de nombreux pays, la loi interdit généralement de partager un document sans la
-                            permission de ses auteurs. C’est pourquoi les auteurs qui désirent autoriser voire
-                            encourager le partage le signalent généralement dans leur œuvre en précisant que celle-ci
-                            est distribuée sous une licence libre ‘Creative Commons’. Sans ces permissions ou ce type de
-                            licence, le partage est strictement interdit. C’est pourquoi nous vous demandons de vérifier
-                            précisément vos droits au partage et de renoncer à cette liberté tant que les auteurs et la
-                            loi vous en privent. Par ailleurs, les droits des personnes handicapées doivent également
-                            être protégés. Ainsi, en France comme dans de nombreux pays, la loi oblige la collectivité
-                            nationale à être solidaire avec les personnes handicapées. En particulier, la loi autorise à
-                            partager tout document avec une personne lourdement handicapée, même sans la permission des
-                            auteurs, à condition de disposer d’un agrément ministériel spécifique. Avant de partager un
-                            document, il vous faut donc vérifier minutieusement que vous avez bien le droit de le
-                            partager. Est-ce bien le cas ?</p>
-                        <div data-ng-show="addAnnotation" class="controls_zone checkbox_zone share_annotation">
-                            <input type="checkbox" class="hidden ng-valid ng-dirty" name="partager_annotation"
-                                   id="partager_annotation" data-ng-model="annotationOk">
-                            <label class="mask" for="partager_annotation">&nbsp;</label>
-                            <label for="partager_annotation">Partager les annotations .</label>
-                        </div>
-                        <div class="centering with_border" id="ProfileButtons">
-                            <button type="button" class="reset_btn" data-dismiss="modal"
-                                    style="padding: 8px 5px 4px; width: auto;"
-                                    title="Non, je n’ai pas le droit de partager">Non, je n’ai pas le droit de partager
-                            </button>
-                            <button type="button" class="btn_simple light_blue" data-ng-click="processAnnotation()"
-                                    title="Oui, j’ai le droit de partager">Oui, j’ai le droit de partager
-                            </button>
-                        </div>
-                    </div>
-                    <div class="modal-body" data-ng-hide="!confirme">
-                        <h2>
-                            <span>Sélectionner un moyen pour partager ce document</span>
-                        </h2>
-                        <form class="form-horizontal" role="form" id="socialShare1" name="socialShare1">
-                            <div class="share_btn_container">
-                                <ul>
-                                    <li>
-                                        <a href="" class="share_btn mail_share" data-ng-click="loadMail()" title="Email"
-                                           id="document_share"></a><span class="share-text">Par Email</span></li>
-                                    <li class="facebook-share"><span class="share-text">Sur
-											Facebook</span></li>
-                                    <li>
-                                        <a class="share_link share_btn twitter_share"
-                                           href="https://twitter.com/share?url={{encodeURI}}&via=Accessidys&text=Un élément a été partagé via l'outil Accessidys"
-                                           onclick="window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
-                                           target="_blank" title="Partager sur Twitter"> </a><span class="share-text">Sur Twitter</span>
-                                    </li>
-                                    <li class="google-share">
-                                        <button id="google-share" class="share_link share_btn gplus_share"
-                                                title="Partager sur Google+"></button>
-                                        <span class="share-text">Sur Google+</span></li>
-                                </ul>
-                            </div>
-                            <div class="control_group" data-ng-show="showDestination">
-                                <div class="alert alert-success" data-ng-if="emailMsgSuccess">{{emailMsgSuccess}}</div>
-                                <div class="alert-block alert-danger" data-ng-show="emailMsgError">{{emailMsgError}}
-                                </div>
-                                <h2>
-                                    adresse email <br> <span>Saisissez l’adresse email
-										du destinataire</span>
-                                </h2>
-                                <p class="mail_area">
-                                    <label for="destinataire" class="email" id="label_email_etap-one">Email</label>
-                                    <input type="text" class="" data-ng-model="destinataire" id="destinataire"/>
-                                </p>
-                            </div>
 
-                            <div class="centering" id="ProfileButtons">
-                                <button type="button" class="reset_btn" data-ng-click="clearSocialShare()"
-                                        data-dismiss="modal" title="Annuler">Annuler
-                                </button>
-                                <button type="button" class="btn_simple light_blue" data-ng-click="socialShare()"
-                                        data-ng-if="showDestination" title="Partager">Partager
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="AnnotationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" id="modalContent">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-ng-click="" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="myModalLabel">Annotation partagée</h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <div class="info_txt">
-                            <p class="text_left ajustPadding_bottom">ce document a été partagé avec les annotations du
-                                propriétaire voulez-vous les appliquer ?</p>
-                        </div>
-                    </div>
-                    <div class="centering">
-                        <button type="button" class="reset_btn" data-ng-click="" data-dismiss="modal" title="Annuler">Ne
-                            pas appliquer
-                        </button>
-                        <button type="button" class="btn_simple light_blue" data-ng-click="applySharedAnnotation()"
-                                title="Envoyer">Accepter
-                        </button>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-        </div>
-        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" id="modalContent">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-ng-click="" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
-                        <h3 class="modal-title" id="myModalLabel">Confirmation
-                            d'envoi</h3>
-                    </div>
-                    <div class="modal-body adjust-modal-body">
-                        <div class="info_txt">
-                            <p class="text_left ajustPadding_bottom">Voulez-vous envoyer cet email ?</p>
-                        </div>
-                    </div>
-                    <div class="centering" id="confirmationButtons">
-                        <button type="button" data-ng-click="dismissConfirm()" class="reset_btn" data-ng-click=""
-                                data-dismiss="modal" title="Annuler">Annuler
-                        </button>
-                        <button type="button" class="btn_simple light_blue" data-ng-click="sendMail()" title="Envoyer">
-                            Envoyer
-                        </button>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-        </div>
         <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true" data-backdrop="static">
             <div class="modal-dialog">
@@ -397,10 +246,6 @@
             </div>
         </div>
         <div>
-            <div class="alert-block alert-success" id="okEmail" data-ng-if="envoiMailOk">
-                Email envoyé avec succès !
-            </div>
-
 
             <carousel id="carouselid" interval="myInterval" class="slider">
                 <div id="virtualEditor" data-ng-show="false" style="display: none;" contenteditable="true"
@@ -630,26 +475,6 @@
                     </div>
                 </div>
             </carousel>
-        </div>
-    </div>
-</div>
-
-<!-- Modal in case of technical error-->
-<div class="modal fade in" id="technicalErrorModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog bigger">
-        <div class="modal-content">
-            <div class="modal-header">
-                <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
-                <h4 class="modal-title light_bluehead" id="myModalLabel">Erreur
-                    technique</h4>
-            </div>
-            <div class="modal-body adjust-modal-body">
-                <p class="modal_content-text">L'import du document a échoué. Une erreur technique est survenue.</p>
-            </div>
-            <div class="centering">
-                <button type="button" class="btn_simple light_blue much_padding" data-dismiss="modal">OK</button>
-            </div>
         </div>
     </div>
 </div>

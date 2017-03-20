@@ -25,28 +25,24 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MainCtrl', function ($scope, $rootScope, serviceCheck, $location, $routeParams, tagsService, $log) {
+angular.module('cnedApp').controller('MainCtrl', function ($scope, $rootScope, serviceCheck, $location, $routeParams, tagsService) {
     $scope.initMain = function () {
-        var tmp = serviceCheck.getData();
-        tmp.then(function (result) { // this is only run after $http completes
+        serviceCheck.getData()
+            .then(function (result) { // this is only run after $http completes
 
             //Initialization of the main controller : getData result=' + result.loged);
-
-
             if (result.loged) {
                 if (result.dropboxWarning === false) {
                     $rootScope.dropboxWarning = false;
                     $scope.missingDropbox = false;
                     $rootScope.loged = true;
                     $rootScope.admin = result.admin;
-                    $rootScope.apply; // jshint ignore:line
                     if ($location.path() !== '/inscriptionContinue') {
                         $location.path('/inscriptionContinue');
                     }
                 } else {
                     $rootScope.loged = true;
                     $rootScope.admin = result.admin;
-                    $rootScope.apply; // jshint ignore:line
                 }
             }
             if (!$routeParams.deconnexion && result.loged) {

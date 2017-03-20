@@ -765,9 +765,7 @@ angular.module('cnedApp')
                 $timeout($scope.destroyCkeditor());
                 CKEDITOR.inline('virtualEditor', ckConfig);
             }, function (err) {
-                $scope.technicalError = err; // ;'<p>Le document n\'a pas pu être
-                // chargé.</p>';
-                angular.element('#technicalErrorModal').modal('show');
+                UtilsService.showInformationModal('Erreur technique', 'L\'import du document a échoué. Une erreur technique est survenue.', null, true);
             });
         };
 

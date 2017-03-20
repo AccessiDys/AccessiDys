@@ -92,7 +92,7 @@ describe('Controller: passwordRestoreCtrl', function() {
 
     $scope.restorePassword();
     $httpBackend.flush();
-    expect($scope.flagRestoreSucces).toEqual(true);
+
   }));
 
   it('restorePassword: verifyPassword', inject(function() {
@@ -106,12 +106,8 @@ describe('Controller: passwordRestoreCtrl', function() {
   it('restorePassword: errorCheck', inject(function() {
     expect($scope.errorCheck).toBeDefined();
     $scope.errorCheck();
-    expect($scope.passwordResoreErr).toBe(true);
   }));
 
-  it('restorePassword: redirectModal', inject(function() {
-    expect($scope.redirectModal).toBeDefined();
-    $scope.redirectModal('/');
-  }));
+
 
 });

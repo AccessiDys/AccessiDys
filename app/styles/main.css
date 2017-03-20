@@ -325,9 +325,9 @@ ul, li {
 
 .navbar-default .container .border-purple {
     position: absolute;
-    width: 36%;
+    width: 40%;
     bottom: -5px;
-    right: 127px;
+    right: 112px;
     border-right: 2px solid white;
     height: 5px;
     background-color: #872651;
@@ -337,7 +337,7 @@ ul, li {
 
 .navbar-default .container .border-orange {
     position: absolute;
-    width: 37%;
+    width: 40%;
     border-right: 2px solid white;
     height: 5px;
     background-color: #dc4405;
@@ -352,7 +352,7 @@ ul, li {
     bottom: -5px;
     width: 2px;
     background-color: white;
-    right: -2px;
+    right: -17px;
 }
 
 .navbar-default .navbar-brand {
@@ -1419,3 +1419,21 @@ table tbody a:hover {
     cursor: pointer;
 }
 
+
+.resetAll h1,
+.resetAll h2,
+.resetAll h3,
+.resetAll h4,
+.resetAll h5,
+.resetAll h6,
+.resetAll p,
+.resetAll ol,
+.resetAll ul,
+.resetAll sub,
+.resetAll sup,
+.resetAll p,
+.resetAll div {
+    margin: 0;
+    padding: 0;
+    color: black;
+}

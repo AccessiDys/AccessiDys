@@ -119,14 +119,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                         $scope.missingDropbox = false;
                         $rootScope.loged = true;
                         $rootScope.admin = result.admin;
-                        $rootScope.apply; // jshint ignore:line
                         if ($location.path() !== '/inscriptionContinue') {
                             $location.path('/inscriptionContinue');
                         }
                     } else {
                         $rootScope.loged = true;
                         $rootScope.admin = result.admin;
-                        $rootScope.apply; // jshint ignore:line
 
                         if ($scope.testEnv === false) {
                             $location.path('/listDocument').search({
@@ -274,7 +272,6 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     $rootScope.loged = true;
                     $rootScope.currentUser = dataRecue;
                     $rootScope.updateListProfile = true;
-                    $rootScope.apply; // jshint ignore:line
 
                 });
                 synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken, dataRecue.local.email).then(function(synchronizedItems) {
