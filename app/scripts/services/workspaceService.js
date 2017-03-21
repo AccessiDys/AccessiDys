@@ -160,7 +160,6 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
 
         for (var page = 0; page < pages.length; page++) {
             var block = 0;
-            console.log('pages[page] ' + pages[page]);
             var element = angular.element(pages[page]);
             var tags = JSON.parse(localStorage.getItem('listTags'));
             element.each(function (index, element) {

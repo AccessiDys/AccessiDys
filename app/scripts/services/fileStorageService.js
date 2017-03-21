@@ -136,6 +136,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         }
     };
 
+
+
     /**
      * Renames the file on Dropbox and if possible in the cache.
      * @param online

@@ -1437,3 +1437,11 @@ table tbody a:hover {
     padding: 0;
     color: black;
 }
+
+a.navbar-brand{
+    height: 82px;
+}
+
+.modal-upgrade {
+ width: 670px;
+}

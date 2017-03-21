@@ -1,0 +1,68 @@
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="dismissModal()"
+            aria-hidden="true">&times;</button>
+    <h3 class="modal-title">{{'modifierVersionApplication' | translate}}</h3>
+</div>
+<div class="modal-body" id="openUpgradeModal">
+    <div class="form_container">
+        <form id="restorePasswordForm"role="form">
+            <div data-ng-show="failupgrade"
+                 class="alert alert-danger animated fadeInDown">
+                {{failupgradeMessage}}
+            </div>
+            <div class="alert-block alert-success alert-dismissable" id="upgrade-success-toaster">
+                <i class="fa fa-check" aria-hidden="true"></i>
+
+                <strong regle-style="toasterMsg"
+                        apply-rules="forceToasterApdapt"
+                        tags="listTagsByProfilToaster">
+                </strong>
+            </div>
+            <fieldset class="globalFieldStyle" submit-scope>
+                <p class="control_group">
+                    <label for="versionActu" class="two_lignes">Version
+                        Actuelle</label> <input type="text" maxlength="32" class=""
+                                                id="versionActu" data-ng-model="oldVersion.valeur"
+                                                disabled>
+                </p>
+                <p class="control_group">
+                    <label for="versionDate" class="two_lignes">Date de la
+                        Version :</label> <input type="text" id="versionDate"
+                                                 data-ng-model="oldVersion.date" disabled>
+                </p>
+                <p class="control_group">
+                    <label for="newVersion" class="two_lignes">Nouvelle
+                        Version :</label> <input type="text" id="newVersion"
+                                                 data-ng-model="oldVersion.newvaleur" disabled>
+                </p>
+                <p class="controls_zone">
+                    <input ng-checked="true" type="radio" id="upgrade_soft"
+                           name="select_pages" class="hidden ng-pristine ng-valid"
+                           data-ng-model="upgradeMode" value="false"><label
+                        class="mask" for="upgrade_soft">&nbsp;</label><label
+                        for="upgrade_soft">Mise à jour partielle</label>
+                </p>
+                <p class="controls_zone">
+                    <input type="radio" id="upgrade_hard" name="select_pages"
+                           class="hidden ng-pristine ng-valid"
+                           data-ng-model="upgradeMode" value="true"><label
+                        class="mask" for="upgrade_hard">&nbsp;</label><label
+                        for="upgrade_hard">
+                    Mise à jour complète</label>
+                </p>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="reset_btn data-ng-scope"
+            data-ng-click="dismissModal()" title="Annuler">Annuler
+    </button>
+    <button type="button"
+            class="btn_simple light_blue editionProfil data-ng-scope"
+            data-ng-click="updateVersion()"
+            title="Confirmer la modification de la version">Confirmer
+        la modification de la version
+    </button>
+</div>

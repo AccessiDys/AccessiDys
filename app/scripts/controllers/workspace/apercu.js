@@ -38,7 +38,7 @@ angular.module('cnedApp')
                                         verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
-                                        gettextCatalog, $localForage, UtilsService, LoaderService) {
+                                        gettextCatalog, $localForage, UtilsService, LoaderService,Analytics, ToasterService) {
 
         $scope.idDocument = $routeParams.idDocument;
         $scope.tmp = $routeParams.tmp;
@@ -525,70 +525,25 @@ angular.module('cnedApp')
          * ---------- Process Print -----------
          */
 
-        /*
-         * Initialize the start and end pages when printing.
-         */
-        $scope.selectionnerMultiPage = function () {
-            $scope.pageA = 1;
-            $scope.pageDe = 1;
-            $('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text('1');
-            $('select[data-ng-model="pageA"]').val(1);
-            $('select[data-ng-model="pageDe"] + .customSelect .customSelectInner').text('1');
-            $('select[data-ng-model="pageDe"]').val(1);
-        };
-
-        /*
-         * Select the start page for printing
-         */
-        $scope.selectionnerPageDe = function () {
-
-            $scope.pageDe = parseInt($('select[data-ng-model="pageDe"]').val());
-            $scope.pageA = parseInt($('select[data-ng-model="pageA"]').val());
-
-            if ($scope.pageDe > $scope.pageA) {
-                $scope.pageA = $scope.pageDe;
-                $('select[data-ng-model="pageA"] + .customSelect .customSelectInner').text($scope.pageA);
-                $('select[data-ng-model="pageA"]').val($scope.pageA);
-            }
-
-            var pageDe = parseInt($scope.pageDe);
-            $('select[data-ng-model="pageA"] option').prop('disabled', false);
-
-            for (var i = 0; i <= pageDe - 1; i++) {
-                $('select[data-ng-model="pageA"] option').eq(i).prop('disabled', true);
-            }
-        };
-
-        var PRINTMODE = {
-            EVERY_PAGES: 0,
-            CURRENT_PAGE: 1,
-            MULTIPAGE: 2
-        };
-
-        /*
-         * Print the document according to the chosen mode.
-         */
-        $scope.printByMode = function () {
-
-            var win = $window.open(); // Keep window reference which is not accessible in promise
-
-            fileStorageService.saveTempFileForPrint($scope.content).then(function (data) {
-
-                workspaceService.saveTempNotesForPrint($scope.notes);
-
-                var printPlan = $scope.printPlan ? 1 : 0;
-
-                var printURL = '#/print?documentId=' + $scope.docSignature + '&plan=' + printPlan + '&mode=' + $scope.printMode;
-                if ($scope.printMode === PRINTMODE.CURRENT_PAGE) {
-                    printURL += ('&page=' + $scope.currentPage);
-                } else if ($scope.printMode === PRINTMODE.MULTIPAGE) {
-                    printURL += ('&pageDe=' + $scope.pageDe + '&pageA=' + $scope.pageA);
+        $scope.openPrintModal = function(){
+            $uibModal.open({
+                templateUrl: 'views/workspace/print.modal.html',
+                controller: 'PrintModalCtrl',
+                size: 'md',
+                resolve: {
+                    content: function () {
+                        return $scope.content;
+                    },
+                    docSignature: function () {
+                        return $scope.docSignature;
+                    },
+                    notes: function () {
+                        return $scope.notes;
+                    }
                 }
-                win.location = printURL;
-            }, function (err) {
-                throw (err);
             });
         };
+
 
         /**
          * ---------- Process of generation of the document -----------
@@ -917,7 +872,7 @@ angular.module('cnedApp')
                 var contentGet = $scope.getDocContent($scope.idDocument);
                 contentGet.then(function (data) {
 
-                    $log.debug('get content ', data);
+                    $log.debug('get content data', data);
 
                     $scope.content = data;
                     $scope.showTitleDoc($scope.idDocument);
@@ -1244,6 +1199,75 @@ angular.module('cnedApp')
             });
 
         };
+
+        /**
+         * Share a document
+         * @param document The document to share
+         */
+        $scope.shareDocument = function () {
+            if (!$rootScope.isAppOnline) {
+                UtilsService.showInformationModal('label.offline', 'document.message.info.share.offline');
+            } else {
+
+                fileStorageService.searchFilesInDropbox('_' + $scope.idDocument + '_', $rootScope.currentUser.dropbox.accessToken).then(function (files) {
+                    var file = null;
+
+                    if (files && files.matches.length > 0) {
+
+                        for (var i = 0; i < files.matches.length; i++) {
+                            if (files.matches[i].metadata.name.indexOf('_' + $scope.idDocument + '_') > -1) {
+                                file = files.matches[i].metadata
+                            }
+                        }
+
+                    }
+
+                    if(file){
+                        var document = fileStorageService.transformDropboxFileToStorageFile(file);
+
+                        var itemToShare = {
+                            linkToShare: '',
+                            name: document.filename,
+                            annotationsToShare: []
+                        };
+
+                        if (localStorage.getItem('notes') !== null) {
+                            var noteList = JSON.parse(localStorage.getItem('notes'));
+
+                            if (noteList.hasOwnProperty(document.filename)) {
+                                itemToShare.annotationsToShare = noteList[document.filename];
+                            }
+                        }
+
+                        fileStorageService.shareFile(document.filepath, $rootScope.currentUser.dropbox.accessToken)
+                            .then(function (shareLink) {
+                                itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(shareLink);
+
+                                //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
+                                UtilsService.openSocialShareModal('document', itemToShare)
+                                    .then(function () {
+                                        // Modal close
+                                        ToasterService.showToaster('#overview-success-toaster', 'mail.send.ok');
+                                    }, function () {
+                                        // Modal dismiss
+                                    });
+
+                            });
+
+                        // angular-google-analytics tracking pages
+                        Analytics.trackPage('/document/share.html');
+
+                    }
+
+
+                });
+
+
+            }
+
+        };
+
+
 
         $scope.toasterMsg = '';
         $scope.forceToasterApdapt = false;

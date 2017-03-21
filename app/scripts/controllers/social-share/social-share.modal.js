@@ -26,10 +26,11 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScope, $scope, $uibModalInstance, dropbox, EmailService, ToasterService, LoaderService, $log, mode, itemToShare) {
+angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScope, $scope, $uibModalInstance, dropbox, EmailService, ToasterService, LoaderService, $log, $timeout, mode, itemToShare) {
 
 
     $scope.hasRightToShare = false;
+    $scope.facebookLink = '';
     $scope.mode = '';
     $scope.shareAnnotation = false;
     $scope.hasAnnotation = false;
@@ -143,56 +144,18 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
 
     $scope.attachFacebook = function () {
         console.log(decodeURIComponent($scope.itemToShare.linkToShare));
-        $('#facebook-button').append('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.itemToShare.linkToShare) + '" data-layout="button"></div>');
-        try {
-            FB.XFBML.parse();
-        } catch (ex) {
-            console.log('gotchaa ... ');
-            console.log(ex);
-        }
 
-    };
+        $scope.facebookLink = decodeURIComponent($scope.itemToShare.linkToShare);
 
-    $scope.googleShareStatus = 0;
-
-    // TODO To be delete
-    $scope.attachGoogle = function () {
-        console.log('IN ==> ');
-        var options = {
-            contenturl: decodeURIComponent($scope.encodeURI),
-            contentdeeplinkid: '/pages',
-            clientid: '807929328516-g7k70elo10dpf4jt37uh705g70vhjsej.apps.googleusercontent.com',
-            cookiepolicy: 'single_host_origin',
-            prefilltext: '',
-            calltoactionlabel: 'LEARN_MORE',
-            calltoactionurl: decodeURIComponent($scope.encodeURI),
-            callback: function (result) {
-            },
-            onshare: function (response) {
-                if (response.status === 'started') {
-                    $scope.googleShareStatus++;
-                    if ($scope.googleShareStatus > 1) {
-                        $('#googleShareboxIframeDiv').remove();
-                        // alert('some error in sharing');
-                        $('#shareModal').modal('hide');
-                        $('#informationModal').modal('show');
-                        localStorage.setItem('googleShareLink', $scope.encodeURI);
-                    }
-                } else {
-                    // localStorage.removeItem('googleShareLink');
-                    $scope.googleShareStatus = 0;
-                    $('#shareModal').modal('hide');
-                }
-                // These are the objects returned by the platform
-                // When the sharing starts...
-                // Object {status: "started"}
-                // When sharing ends...
-                // Object {action: "shared", post_id: "xxx", status:
-                // "completed"}
+        $timeout(function(){
+            try {
+                FB.XFBML.parse();
+            } catch (ex) {
+                console.log('gotchaa ... ');
+                console.log(ex);
             }
-        };
+        }, 300);
 
-        gapi.interactivepost.render('google-share', options);
+
     };
-
 });
