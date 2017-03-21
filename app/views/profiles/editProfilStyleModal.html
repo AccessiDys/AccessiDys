@@ -51,112 +51,129 @@
                                             <span translate>Police</span>
                                             <span class="required"> *</span>
                                         </label>
-                                        <select id="add_font"
-                                                sselect
-                                                class=""
-                                                data-ng-model="style.police"
-                                                data-ng-change="editStyleChange('police', style.police)"
-                                                required name="font">
-                                            <option data-ng-repeat="police in policeLists"
-                                                    data-ng-selected="(police == style.police)"
-                                                    value="{{police}}"
-                                                    sselect-hover>
-                                                {{police}}
-                                            </option>
-                                        </select>
+
+                                        <span class="select-wrapper">
+                                            <select id="add_font"
+                                                    sselect
+                                                    data-ng-model="style.police"
+                                                    data-ng-change="editStyleChange('police', style.police)"
+                                                    required name="font">
+                                                <option data-ng-repeat="police in policeLists"
+                                                        data-ng-selected="(police == style.police)"
+                                                        value="{{police}}"
+                                                        sselect-hover>
+                                                    {{police}}
+                                                </option>
+                                            </select>
+                                        </span>
                                     </p>
                                     <p class="controls_zone">
                                         <label for="add_size" class="">
                                             <span translate>Taille</span>
                                             <span class="required"> *</span>
                                         </label>
-                                        <select id="add_size" sselect
-                                                data-ng-model="style.taille"
-                                                data-ng-change="editStyleChange('taille', style.taille)"
-                                                required name="size">
-                                            <option data-ng-repeat="taille in tailleLists"
-                                                    data-ng-selected="taille.number == style.taille"
-                                                    value="{{taille.number}}">{{taille.number}}
-                                            </option>
-                                        </select>
+                                        <span class="select-wrapper">
+                                            <select id="add_size" sselect
+                                                    data-ng-model="style.taille"
+                                                    data-ng-change="editStyleChange('taille', style.taille)"
+                                                    required name="size">
+                                                <option data-ng-repeat="taille in tailleLists"
+                                                        data-ng-selected="taille.number == style.taille"
+                                                        value="{{taille.number}}">{{taille.number}}
+                                                </option>
+                                            </select>
+                                        </span>
                                     </p>
                                     <p class="controls_zone">
                                         <label for="add_line_height" class="">
                                             <span translate>Interligne </span>
                                             <span class="required"> *</span>
                                         </label>
-                                        <select id="add_line_height" sselect
-                                                data-ng-model="style.interligne"
-                                                data-ng-change="editStyleChange('interligne', style.interligne)"
-                                                required
-                                                name="line_height">
-                                            <option data-ng-repeat="interligne in interligneLists"
-                                                    data-ng-selected="interligne.number == style.interligne"
-                                                    value="{{interligne.number}}">{{interligne.number}}
-                                            </option>
-                                        </select>
+                                        <span class="select-wrapper">
+                                            <select id="add_line_height" sselect
+                                                    data-ng-model="style.interligne"
+                                                    data-ng-change="editStyleChange('interligne', style.interligne)"
+                                                    required
+                                                    name="line_height">
+                                                <option data-ng-repeat="interligne in interligneLists"
+                                                        data-ng-selected="interligne.number == style.interligne"
+                                                        value="{{interligne.number}}">{{interligne.number}}
+                                                </option>
+                                            </select>
+                                        </span>
                                     </p>
                                     <p class="controls_zone">
                                         <label for="add_color" class="">
                                             <span translate>Coloration</span>
-                                            <span class="required"> *</span></label>
-                                        <select id="add_color"
-                                                sselect
-                                                class="color-select"
-                                                data-ng-model="style.coloration"
-                                                data-ng-change="editStyleChange('coloration',style.coloration)"
-                                                required name="color">
-                                            <option data-ng-repeat="color in colorLists"
-                                                    data-ng-selected="color == style.coloration" value="{{color}}">{{color}}
-                                            </option>
-                                        </select>
+                                            <span class="required"> *</span>
+                                        </label>
+                                        <span class="select-wrapper">
+                                            <select id="add_color"
+                                                    sselect
+                                                    class="color-select"
+                                                    data-ng-model="style.coloration"
+                                                    data-ng-change="editStyleChange('coloration',style.coloration)"
+                                                    required name="color">
+                                                <option data-ng-repeat="color in colorLists"
+                                                        data-ng-selected="color == style.coloration" value="{{color}}">
+                                                    {{color}}
+                                                </option>
+                                            </select>
+                                        </span>
+
                                     </p>
                                     <p class="controls_zone">
                                         <label for="weigth">
                                             <span>Graisse </span>
                                             <span class="required"> *</span>
                                         </label>
-                                        <select id="weigth" sselect
-                                                data-ng-model="style.styleValue"
-                                                data-ng-change="editStyleChange('style',style.styleValue)"
-                                                required
-                                                name="style">
-                                            <option data-ng-repeat="weight in weightLists"
-                                                    data-ng-selected="weight == style.styleValue" value="{{weight}}">
-                                                {{weight}}
-                                            </option>
-                                        </select>
+                                        <span class="select-wrapper">
+                                            <select id="weigth" sselect
+                                                    data-ng-model="style.styleValue"
+                                                    data-ng-change="editStyleChange('style',style.styleValue)"
+                                                    required
+                                                    name="style">
+                                                <option data-ng-repeat="weight in weightLists"
+                                                        data-ng-selected="weight == style.styleValue" value="{{weight}}">
+                                                    {{weight}}
+                                                </option>
+                                            </select>
+                                        </span>
                                     </p>
                                     <p class="controls_zone">
                                         <label for="add_space" class="">
                                             <span>Espace entre les mots </span>
                                             <span class="required"> *</span>
                                         </label>
-                                        <select
-                                                id="add_space" sselect
-                                                data-ng-model="style.space"
-                                                data-ng-change="editStyleChange('space', style.space)"
-                                                required name="space">
-                                            <option data-ng-repeat="space in spaceLists"
-                                                    data-ng-selected="space.number == style.space"
-                                                    value="{{space.number}}">{{space.number}}
-                                            </option>
-                                        </select>
+                                        <span class="select-wrapper">
+                                            <select
+                                                    id="add_space" sselect
+                                                    data-ng-model="style.space"
+                                                    data-ng-change="editStyleChange('space', style.space)"
+                                                    required name="space">
+                                                <option data-ng-repeat="space in spaceLists"
+                                                        data-ng-selected="space.number == style.space"
+                                                        value="{{space.number}}">{{space.number}}
+                                                </option>
+                                            </select>
+                                        </span>
                                     </p>
                                     <p class="controls_zone">
-                                        <label for="add_spaceChar" class="">
+                                        <label for="add_spaceChar">
                                             <span>Espace entre les caractères </span>
-                                            <span class="required"> *</span></label>
-                                        <select
-                                                id="add_spaceChar" sselect class=""
-                                                data-ng-model="style.spaceChar"
-                                                data-ng-change="editStyleChange('spaceChar', style.spaceChar)"
-                                                required name="space">
-                                            <option data-ng-repeat="spaceChar in spaceCharLists"
-                                                    data-ng-selected="spaceChar.number == style.spaceChar"
-                                                    value="{{spaceChar.number}}">{{spaceChar.number}}
-                                            </option>
-                                        </select>
+                                            <span class="required"> *</span>
+                                        </label>
+                                        <span class="select-wrapper">
+                                            <select id="add_spaceChar" sselect
+                                                    data-ng-model="style.spaceChar"
+                                                    data-ng-change="editStyleChange('spaceChar', style.spaceChar)"
+                                                    required name="space">
+                                                <option data-ng-repeat="spaceChar in spaceCharLists"
+                                                        data-ng-selected="spaceChar.number == style.spaceChar"
+                                                        value="{{spaceChar.number}}">{{spaceChar.number}}
+                                                </option>
+                                            </select>
+                                        </span>
                                     </p>
                                 </div>
                                 <div class="col-md-5">

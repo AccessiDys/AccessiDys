@@ -1445,3 +1445,11 @@ a.navbar-brand{
 .modal-upgrade {
  width: 670px;
 }
+
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper select {
+    top:0;
+}

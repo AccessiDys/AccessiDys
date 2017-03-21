@@ -178,6 +178,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
         serviceCheck.getData()
             .then(function (result) { // this is only run after $http completes
+                $log.log('result ' + result);
+
                 if (result.loged) {
                     $scope.logoRedirection = configuration.HOMEPAGE_PATH;
 
@@ -221,7 +223,9 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                         //'User is defined as logged on rootScope
 
-                        if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
+                        if ($location.path() === '/detailProfil'
+                            && lien.indexOf('#/detailProfil') > -1
+                            && $rootScope.loged !== true) {
                             //'Looking for detailProfil
                             $scope.listDocumentDropBox = '#/';
                             $scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
@@ -310,7 +314,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             });
     };
 
-    $scope.onChangeCurrentProfile = function(){
+    $scope.onChangeCurrentProfile = function () {
         $scope.profilActuel = angular.copy($scope.form.currentProfile);
 
         $scope.changeProfilActuel();
@@ -385,7 +389,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $scope.updgradeService = function () {
         UtilsService.openUpgradeModal();
     };
-
 
 
     /**

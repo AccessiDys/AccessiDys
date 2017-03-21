@@ -25,7 +25,7 @@
 'use strict';
 
 
-cnedApp.service('UserService', function ($http) {
+cnedApp.service('UserService', function ($http, configuration) {
 
     var methods = {
 

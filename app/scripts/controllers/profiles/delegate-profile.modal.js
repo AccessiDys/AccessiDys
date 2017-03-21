@@ -29,7 +29,7 @@
 angular.module('cnedApp')
     .controller('DelegateProfileModalCtrl', function ($rootScope, $scope, $uibModalInstance,
                                                       EmailService, UserService, LoaderService, ToasterService,
-                                                      profilsService, profile) {
+                                                      profilsService, $location, profile) {
 
         $scope.form = {
             email: ''
@@ -67,7 +67,7 @@ angular.module('cnedApp')
                                         subject: 'Profil délégué'
                                     };
 
-                                    EmailService.sendEmail(emailParams).then(function () {
+                                    EmailService.sendEMail(emailParams).then(function () {
                                         LoaderService.hideLoader();
 
                                         $uibModalInstance.close({
@@ -89,7 +89,7 @@ angular.module('cnedApp')
                                     });
                                 });
                         } else {
-                            $scope.errorMsg = 'L\'Email n\'est pas identifié dans Accessidys!';
+                            ToasterService.showToaster('#profile-delegate-success-toaster', 'profile.message.save.ko.email.unknown');
                             LoaderService.hideLoader();
                         }
                     });

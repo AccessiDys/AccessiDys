@@ -763,7 +763,7 @@ angular.module('cnedApp')
             // loop of Profiles
             for (var i = 0; i < $scope.profiles.length; i++) {
                 if ($scope.profiles[i].type === 'profile') {
-                    if ($scope.profiles[i].nom.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1 || $scope.profiles[i].descriptif.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1) {
+                    if ($scope.profiles[i].nom && $scope.profiles[i].nom.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1 || $scope.profiles[i].descriptif && $scope.profiles[i].descriptif.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1) {
                         // Query Found
                         $scope.profiles[i].showed = true;
                     } else {
@@ -792,6 +792,8 @@ angular.module('cnedApp')
             serviceCheck.getData().then(function (data) {
 
                 $rootScope.currentUser = data;
+                $scope.currentUserData = data.user;
+                $rootScope.currentUser = data.user;
 
                 profilsService.getUserProfil(profileId)
                     .then(function (data) {

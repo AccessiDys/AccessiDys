@@ -205,7 +205,7 @@ angular
                 var mode = '';
                 var filePath = '';
 
-                if($scope.idDocument){
+                if ($scope.idDocument) {
                     mode = 'edit';
                     filePath = $scope.existingFile.filepath
                 } else {
@@ -218,17 +218,20 @@ angular
                     title: $scope.docTitre,
                     data: $scope.processLink($scope.currentData),
                     filePath: filePath
-                }, mode).then(function (data) {
-                    $log.debug('Save - data', data);
-                    ToasterService.showToaster('#document-success-toaster', 'document.message.save.ok');
-                    $scope.pageTitre = 'Editer le document'; // title of the page
-                    $scope.resetDirtyCKEditor();
-                    $scope.idDocument = $scope.docTitre;
-                    $scope.existingFile = data;
+                }, mode)
+                    .then(function (data) {
+                        $log.debug('Save - data', data);
+                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.ok');
+                        $scope.pageTitre = 'Editer le document'; // title of the page
+                        $scope.resetDirtyCKEditor();
+                        $scope.docTitre = data.filename;
+                        $scope.idDocument = $scope.docTitre;
+                        $scope.existingFile = data;
 
-                }, function () {
-                    ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
-                });
+                    }, function () {
+                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
+                        LoaderService.hideLoader();
+                    });
             };
 
             /**
@@ -411,8 +414,6 @@ angular
                     page.render(renderContext).then(function (error) {
                         if (error) {
                             LoaderService.hideLoader();
-                            $scope.$apply();
-                            console.log(error);
                         } else {
                             new Promise(function (resolve) {
                                 var dataURL = canvasToImage(canvas, context, '#FFFFFF');
@@ -429,7 +430,6 @@ angular
                                         LoaderService.hideLoader();
                                     }
                                     resolve();
-                                    $scope.$apply();
                                 }
                             });
                         }
@@ -514,7 +514,7 @@ angular
                                             }
                                             CKEDITOR.instances.editorAdd.setData(resultClean);
                                         }, function () {
-                                           ToasterService.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
+                                            ToasterService.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
                                             LoaderService.hideLoader();
                                         });
                                     }
@@ -586,7 +586,6 @@ angular
                     xhr.addEventListener('load', $scope.uploadComplete, false);
                     xhr.addEventListener('error', $scope.uploadFailed, false);
                     xhr.open('POST', configuration.URL_REQUEST + uploadService + '?id=' + localStorage.getItem('compteId'));
-                    $scope.$apply();
                     xhr.send(fd);
                 } else {
                     htmlEpubTool.convertToHtml([file]).then(function (data) {
@@ -812,9 +811,13 @@ angular
                 if ($scope.resizeDocEditor === 'Agrandir') {
                     $scope.resizeDocEditor = 'Réduire';
                     $rootScope.isFullsize = false;
+                    $('.navbar-fixed-top').slideUp(200, function () {
+                    });
                 } else {
                     $scope.resizeDocEditor = 'Agrandir';
                     $rootScope.isFullsize = true;
+                    $('.navbar-fixed-top').slideDown(200, function () {
+                    });
                 }
             };
 
