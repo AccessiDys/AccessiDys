@@ -678,11 +678,15 @@ angular.module('cnedApp')
             // accents
             return serviceCheck.htmlPreview(encodeURI(url)).then(function (htmlFile) {
 
+                $log.debug('htmlFile + ' + htmlFile);
+
                 if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf("<title>") > -1) {
                     $scope.urlTitle = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf("<title>") + 7, htmlFile.documentHtml.indexOf("</title>"));
                 } else {
                     $scope.urlTitle = url;
                 }
+
+                $log.debug('url + ' + url);
 
                 return htmlEpubTool.cleanHTML(htmlFile);
 
@@ -720,6 +724,7 @@ angular.module('cnedApp')
                 $timeout($scope.destroyCkeditor());
                 CKEDITOR.inline('virtualEditor', ckConfig);
             }, function (err) {
+                $log.error('err transform html' , err);
                 UtilsService.showInformationModal('Erreur technique', 'L\'import du document a échoué. Une erreur technique est survenue.', null, true);
             });
         };
@@ -850,12 +855,17 @@ angular.module('cnedApp')
                     $scope.urlPort = 80;
                 }
                 $scope.url = decodeURIComponent($scope.url);
+
+                $log.debug('$scope.url', $scope.url);
+
                 // In the case of an url of access to a pdf.
                 if ($scope.url.indexOf('.pdf') > 0) {
                     $scope.loadPdfByLien($scope.url);
                 } else if ($scope.url.indexOf('.png') > 0 || $scope.url.indexOf('.jpg') > 0 || $scope.url.indexOf('.jpeg') > 0) {
                     $scope.loadPictureByLink($scope.url);
                 } else {
+                    $log.debug('get Html content', $scope.url);
+
                     $scope.getHTMLContent($scope.url).then(function () {
                         LoaderService.hideLoader();
                         $scope.showTitleDoc($scope.urlTitle);

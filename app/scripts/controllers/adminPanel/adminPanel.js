@@ -26,7 +26,7 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, $location, configuration, $rootScope, serviceCheck) {
+angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, $location, configuration, $rootScope, serviceCheck, LoaderService, UtilsService) {
     /* global $:false */
 
     $scope.headers = ['Nom', 'Prenom', 'Email', 'Autorisation', 'Action'];
@@ -161,21 +161,24 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
 
     };
 
-    $scope.deleteAccount = function () {
-        $scope.loader = true;
-        $http.post(configuration.URL_REQUEST + '/deleteAccounts', {
-            id: $rootScope.currentUser.local.token,
-            compte: $scope.compteAsupprimer
-        }).success(function (data) {
-            $scope.deleted = data;
-            $scope.listAccounts();
-            $scope.loader = false;
+    $scope.deleteAccount = function (account) {
+        UtilsService.openConfirmModal('Supprimer l\'utilisateur',
+            'Voulez-vous supprimer l\'utilisateur " <b>' + account.local.nom + ' ' + account.local.prenom + '</b> "', true)
+            .then(function () {
 
-        });
-    };
+                LoaderService.showLoader('account.message.info.delete.inprogress', false);
+                $http.post(configuration.URL_REQUEST + '/deleteAccounts', {
+                    id: $rootScope.currentUser.local.token,
+                    compte: account
+                }).success(function (data) {
+                    $scope.deleted = data;
+                    LoaderService.hideLoader();
+                    $scope.listAccounts();
 
-    $scope.preSupprimer = function (account) {
-        $scope.compteAsupprimer = account;
+
+                });
+            });
+
     };
 
     $scope.specificFilter = function () {
@@ -190,9 +193,9 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
 
     $scope.accentFolding = function (text) {
         var map = [
-        // ['\\s', ''],
-        ['[àáâãäå]', 'a'], ['æ', 'ae'], ['ç', 'c'], ['[èéêë]', 'e'], ['[ìíîï]', 'i'], ['ñ', 'n'], ['[òóôõö]', 'o'], ['œ', 'oe'], ['[ùúûü]', 'u'], ['[ýÿ]', 'y']
-        // ['\\W', '']
+            // ['\\s', ''],
+            ['[àáâãäå]', 'a'], ['æ', 'ae'], ['ç', 'c'], ['[èéêë]', 'e'], ['[ìíîï]', 'i'], ['ñ', 'n'], ['[òóôõö]', 'o'], ['œ', 'oe'], ['[ùúûü]', 'u'], ['[ýÿ]', 'y']
+            // ['\\W', '']
         ];
         for (var i = 0; i < map.length; ++i) {
             text = text.replace(new RegExp(map[i][0], 'gi'), function (match) {

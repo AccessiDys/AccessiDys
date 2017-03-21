@@ -275,6 +275,7 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'document.message.info.treatment.inprogress': 'Traitement de votre document en cours.',
         'document.message.info.rename.inprogress': 'Renommage de votre document en cours. Veuillez patienter.',
         'document.message.info.delete.inprogress': 'Supression du document en cours. Veuillez patienter.',
+        'account.message.info.delete.inprogress': 'Supression de l\'utilisateur en cours. Veuillez patienter.',
         'document.message.info.load.image': 'Chargement de votre/vos image(s) en cours. Veuillez patienter.',
         'document.message.info.load.pdf': 'Chargement de votre document PDF en cours. Veuillez patienter.',
         'document.message.info.load': 'Chargement de votre document en cours. Veuillez patienter.',

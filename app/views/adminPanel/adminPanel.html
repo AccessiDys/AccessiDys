@@ -42,14 +42,16 @@
             <div class="active_users">
                 <span class="active_user_lbl"> Activer pour tous les utilisateurs</span>
                 <div class="users_dropdow">
-                    <a class="user_lbl" data-ng-click="isOcrDropdownOpen = !isOcrDropdownOpen" data-ng-class="{'active': isOcrDropdownOpen}">Océrisation<b></b></a>
+                    <a class="user_lbl" data-ng-click="isOcrDropdownOpen = !isOcrDropdownOpen"
+                       data-ng-class="{'active': isOcrDropdownOpen}">Océrisation<b></b></a>
                     <ul>
                         <li><a href="" ng-click="updateAll('ocr',true)">Activer</a></li>
                         <li><a href="" ng-click="updateAll('ocr',false)">Désactiver</a></li>
                     </ul>
                 </div>
                 <div class="users_dropdow">
-                    <a class="user_lbl" data-ng-click="isVoiceDropdownOpen = !isVoiceDropdownOpen" data-ng-class="{'active': isVoiceDropdownOpen}">Synthèse vocale<b></b></a>
+                    <a class="user_lbl" data-ng-click="isVoiceDropdownOpen = !isVoiceDropdownOpen"
+                       data-ng-class="{'active': isVoiceDropdownOpen}">Synthèse vocale<b></b></a>
                     <ul>
                         <li><a href="" ng-click="updateAll('audio',true)">Activer</a></li>
                         <li><a href="" ng-click="updateAll('audio',false)">Désactiver</a></li>
@@ -85,15 +87,17 @@
                                 for="{{compte._id}}audio">Synthese Vocale .</label>
                         </div>
                     </td>
-                    <td class="action_area centering">
+                    <td class="action_area centering" uib-dropdown>
                         <button type="button"
                                 class="action_btn" action-profil="" data-show="{{compte._id}}"
-                                data-shown="false"></button>
-                        <ul class="action_list" data-show="{{compte._id}}"
+                                data-shown="false" uib-dropdown-toggle ></button>
+                        <ul class="action_list" uib-dropdown-menu data-show="{{compte._id}}"
                             data-shown="false">
-                            <li class="removing_item"><a href="" data-toggle="modal"
-                                                         data-target="#myModal" data-ng-click="preSupprimer(compte)"
-                                                         title="Supprimer" name="supprimer-utilisateur">Supprimer</a>
+                            <li class="removing_item">
+                                <a href="" data-toggle="modal" data-ng-click="deleteAccount(compte)"
+                                   title="Supprimer" name="supprimer-utilisateur">
+                                    Supprimer
+                                </a>
                             </li>
                         </ul>
                     </td>
