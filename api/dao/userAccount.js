@@ -34,7 +34,7 @@ var mongoose = require('mongoose'),
 var jwt = require('jwt-simple');
 var secret = 'nownownow';
 
-var config = require('../../env/config.json');
+var config = require('../../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
 var helpers = require('../helpers/helpers.js');

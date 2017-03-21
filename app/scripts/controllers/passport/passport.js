@@ -139,7 +139,11 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
     $scope.signin = function() {
         $scope.erreurSigninEmailNonDisponible = false;
-        if ($scope.verifyEmail($scope.obj.emailSign) && $scope.verifyPassword($scope.obj.passwordSign) && $scope.verifyString($scope.obj.nomSign) && $scope.verifyString($scope.obj.prenomSign) && $scope.obj.passwordConfirmationSign === $scope.obj.passwordSign) {
+        if ($scope.verifyEmail($scope.obj.emailSign)
+            && $scope.verifyPassword($scope.obj.passwordSign)
+            && $scope.verifyString($scope.obj.nomSign)
+            && $scope.verifyString($scope.obj.prenomSign)
+            && $scope.obj.passwordConfirmationSign === $scope.obj.passwordSign) {
 			$scope.obj.emailSign = $scope.obj.emailSign.toLowerCase();
             var data = {
                 email : $scope.obj.emailSign,

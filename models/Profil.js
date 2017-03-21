@@ -35,8 +35,7 @@ var profilSchema = mongoose.Schema({
 		required: true
 	},
 	descriptif: {  // the description
-		type: String,
-		required: true
+		type: String
 	},
 	owner: {
 		type: String,

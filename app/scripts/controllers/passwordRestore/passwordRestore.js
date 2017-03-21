@@ -33,7 +33,7 @@
 /* jshint undef: true, unused: true */
 /*global $:false */
 
-angular.module('cnedApp').controller('passwordRestoreCtrl', function ($scope, md5, $rootScope, $http, $location, configuration) {
+angular.module('cnedApp').controller('passwordRestoreCtrl', function ($scope, md5, $rootScope, $http, $location, configuration, UtilsService) {
 
     $scope.password = '';
     $scope.passwordConfirmation = '';
@@ -67,7 +67,7 @@ angular.module('cnedApp').controller('passwordRestoreCtrl', function ($scope, md
             };
             $http.post(configuration.URL_REQUEST + '/saveNewPassword', data)
                 .success(function (dataRecue) {
-                    UtilsService.showInformationModal('Informations', 'Votre nouveau mot de passe a été enregistré. Vous allez être redirigé vers la page d\'accueil.', '/?Acces=true', true);
+                    UtilsService.showInformationModal('Informations', 'Votre nouveau mot de passe a été enregistré. Vous allez être redirigé vers la page d\'accueil.', '/', true);
                     localStorage.setItem('redirectionEmail', dataRecue.local.email);
                     localStorage.setItem('redirectionPassword', $scope.password);
                 });

@@ -31,6 +31,7 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
 
     $scope.hasRightToShare = false;
     $scope.facebookLink = '';
+    $scope.twitterLink = '';
     $scope.mode = '';
     $scope.shareAnnotation = false;
     $scope.hasAnnotation = false;
@@ -50,6 +51,7 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
 
         if (mode === 'profile') {
             $scope.attachFacebook();
+            $scope.twitterLink = encodeURIComponent($scope.itemToShare.linkToShare);
         }
     });
 

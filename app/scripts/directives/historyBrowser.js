@@ -45,7 +45,6 @@ cnedApp.directive('historyBrowser', function ($rootScope, configuration, UtilsSe
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
                 var goTo = next.substring(next.lastIndexOf('/'), next.length);
 
-                $log.debug('historyBrowser - goto', goTo);
 
                 if (localStorage.getItem('lockOperationDropBox') === 'true') {
                     event.preventDefault();

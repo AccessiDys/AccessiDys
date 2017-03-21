@@ -25,7 +25,7 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $uibModalInstance, profile) {
+angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $uibModalInstance, ToasterService, profile) {
     $scope.profile = profile;
     $scope.profileName = profile.nom;
 
@@ -33,9 +33,16 @@ angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($sc
      * This function closes a modal.
      */
     $scope.closeModal = function () {
-        $uibModalInstance.close({
-            profile: $scope.profile
-        });
+
+        if(!$scope.profile.nom || $scope.profile.nom.length < 1) {
+
+            ToasterService.showToaster('#rename-profile-success-toaster', 'profile.message.save.ko.name.mandatory');
+
+        } else {
+            $uibModalInstance.close({
+                profile: $scope.profile
+            });
+        }
     };
 
     $scope.dismissModal = function () {

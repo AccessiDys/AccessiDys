@@ -789,45 +789,53 @@ angular.module('cnedApp')
 
             var profileId = $location.search().idProfil;
 
-            // Get back the profile and the current userProfil
-            profilsService.getUserProfil(profileId)
-                .then(function (data) {
-                    if (data === null || !data) {
-                        UtilsService.showInformationModal('label.offline', 'profile.message.info.display.offline', '/profiles');
-                    } else {
-                        var profile = data;
+            serviceCheck.getData().then(function (data) {
 
-                        tagsService.getTags().then(function (tags) {
+                $rootScope.currentUser = data;
 
-                            profilsService.getProfilTags(profile.profilID).then(function (data) {
+                profilsService.getUserProfil(profileId)
+                    .then(function (data) {
+                        if (data === null || !data) {
+                            UtilsService.showInformationModal('label.offline', 'profile.message.info.display.offline', '/profiles');
+                        } else {
+                            var profile = data;
 
-                                profile.profileTags = {};
-                                profile.profileTags.idProfil = profile._id;
-                                profile.profileTags.tags = data;
+                            tagsService.getTags().then(function (tags) {
 
-                                _.each(profile.profileTags.tags, function (item) {
-                                    item.tagDetail = _.find(tags, function (tag) {
-                                        return item.tag === tag._id;
+                                profilsService.getProfilTags(profile.profilID).then(function (data) {
+
+                                    profile.profileTags = {};
+                                    profile.profileTags.idProfil = profile._id;
+                                    profile.profileTags.tags = data;
+
+                                    _.each(profile.profileTags.tags, function (item) {
+                                        item.tagDetail = _.find(tags, function (tag) {
+                                            return item.tag === tag._id;
+                                        });
+
+
+                                        if (typeof item.tagDetail === 'object') {
+                                            item.texte = '<' + item.tagDetail.balise + ' class="' + removeStringsUppercaseSpaces(item.tagDetail.libelle) + '">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
+                                        }
+
+                                        // Avoid mapping with backend
+                                        item.id_tag = item.tag;
+                                        item.style = item.texte;
                                     });
 
-
-                                    if (typeof item.tagDetail === 'object') {
-                                        item.texte = '<' + item.tagDetail.balise + ' class="' + removeStringsUppercaseSpaces(item.tagDetail.libelle) + '">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
-                                    }
-
-                                    // Avoid mapping with backend
-                                    item.id_tag = item.tag;
-                                    item.style = item.texte;
+                                    $scope.detailProfil = profile;
+                                    $log.debug('$scope.detailProfil', $scope.detailProfil);
                                 });
 
-                                $scope.detailProfil = profile;
-                                $log.debug('$scope.detailProfil', $scope.detailProfil);
                             });
+                        }
 
-                        });
-                    }
+                    });
 
-                });
+            });
+
+            // Get back the profile and the current userProfil
+
         };
 
         /*
