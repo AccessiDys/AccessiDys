@@ -30,7 +30,7 @@
 <!--[if IE 8]>
 <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js" lang="fr" manifest="index.appcache"> <!--<![endif]-->
+<html class="no-js" lang="fr"> <!--<![endif]-->
 <head>
     <meta name="utf8beacon" content="éçñøåá—"/>
     <meta charset="utf-8">
@@ -157,13 +157,13 @@
 <script src="bower_components/pdfjs-dist/build/pdf.worker.js"></script>
 <!-- endbower -->
 
-<script src="external_components/ckeditor/ckeditor.js"></script>
+<script src="bower_components/ckeditor/ckeditor.js"></script>
 <script src="external_components/sselect/jquery.customSelect.min.js"></script>
 
 <script type="text/javascript">
-    var memoryInitializer = "external_components/tesseractJS/TesseractJS.mem";
+    var memoryInitializer = "bower_components/tesseractJS/TesseractJS.mem";
 </script>
-<script async src="external_components/tesseractJS/TesseractJS.js"></script>
+<script async src="bower_components/tesseractJS/TesseractJS.js"></script>
 
 
 <script src="scripts/services/config.js"></script>
@@ -221,6 +221,7 @@
 <script src="scripts/controllers/addDocument/open-document.modal.js"></script>
 <script src="scripts/controllers/tag/edit-tag.modal.js"></script>
 <script src="scripts/controllers/common/bookmarklet.modal.js"></script>
+<script src="scripts/directives/historyBrowser.js"></script>
 <!-- endbuild -->
 
 <script type="text/javascript">

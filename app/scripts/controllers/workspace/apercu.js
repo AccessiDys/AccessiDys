@@ -146,8 +146,8 @@ angular.module('cnedApp')
          */
         $(window).scroll(function () {
             var dif_scroll = 0;
-            if ($('.carousel-inner').offset()) {
-                if ($(window).scrollTop() >= $('.carousel-inner').offset().top) {
+            if (angular.element('#page-content').offset()) {
+                if ($(window).scrollTop() >= angular.element('#page-content').offset().top) {
                     if (!$scope.modeImpression) {
                         dif_scroll = $(window).scrollTop() - 120;
                     } else {
@@ -1157,21 +1157,7 @@ angular.module('cnedApp')
             $uibModal.open({
                 templateUrl: 'views/listDocument/listDocumentModal.html',
                 controller: 'listDocumentModalCtrl',
-                size: 'md',
-                resolve: {
-                    title: function () {
-                        return 'Pas d\'accès internet';
-                    },
-                    content: function () {
-                        return 'L\'affichage de ce document nécessite au moins un affichage préalable via internet.';
-                    },
-                    reason: function () {
-                        return '/listDocument';
-                    },
-                    forceClose: function () {
-                        return null;
-                    }
-                }
+                size: 'lg'
             });
         };
 
@@ -1200,7 +1186,11 @@ angular.module('cnedApp')
         };
 
         $scope.fermerApercu = function () {
-            UtilsService.showInformationModal('label.close', 'document-overview.message.info.close');
+            if (!$scope.tmp) {
+                $location.path('/listDocument');
+            } else {
+                UtilsService.showInformationModal('label.close', 'document-overview.message.info.close');
+            }
         };
 
         /**
@@ -1241,7 +1231,7 @@ angular.module('cnedApp')
             documentService.save({
                 title: $rootScope.titreDoc,
                 data: doc
-            }).then(function (data) {
+            }, 'create').then(function (data) {
                 $rootScope.titreDoc = data.filename;
                 $scope.idDocument = data.filename;
                 $scope.showSave = false;

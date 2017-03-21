@@ -41,7 +41,10 @@ var cnedApp = angular.module('cnedApp', [
     'angular-google-analytics'
 ]);
 
-cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, configuration) {
+cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
+
+    // Log enable / disable
+    $logProvider.debugEnabled((configuration.ENV === 'dev'));
 
     // Google analytics account settings
     AnalyticsProvider.setAccount(configuration.GOOGLE_ANALYTICS_ID);

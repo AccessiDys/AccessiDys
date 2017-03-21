@@ -89,7 +89,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
          *
          * @param document
          */
-        save: function (document) {
+        save: function (document, mode) {
             var deferred = $q.defer();
 
             $log.debug('Save document', document);
@@ -104,7 +104,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     title: document.title
                 }).then(function (isDocumentAlreadyExist) {
 
-                    if (isDocumentAlreadyExist) {
+                    if (isDocumentAlreadyExist && mode === 'create') {
 
                         LoaderService.hideLoader();
 
@@ -126,10 +126,16 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     } else {
                         LoaderService.setLoaderProgress(20);
 
-                        var now = new Date();
-                        var tmpDate = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-                        var hash = md5.createHash(document.data);
-                        var documentName = tmpDate + '_' + encodeURIComponent(document.title) + '_' + hash + '.html';
+                        var documentName = '';
+
+                        if(mode === 'edit'){
+                            documentName = document.filePath;
+                        } else {
+                            var now = new Date();
+                            var tmpDate = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+                            var hash = md5.createHash(document.data);
+                            documentName = tmpDate + '_' + encodeURIComponent(document.title) + '_' + hash + '.html';
+                        }
 
                         LoaderService.setLoaderProgress(40);
 

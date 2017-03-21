@@ -294,7 +294,8 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'profile.message.info.delegate.offline': 'La fonctionnalité de délégation de profil nécessite un accès à internet.',
         'webadapt.message.info.offline': 'La navigation adaptée n\'est pas disponible sans accès internet.',
         'style.label.delete.anwser': 'Voulez-vous supprimer le style " <b>style.label</b> " ?',
-        'style.label.delete.title': 'Supprimer le style'
+        'style.label.delete.title': 'Supprimer le style',
+        'label.share.inprogress': 'Partage en cours. Veuillez patienter.'
     });
 
 } ]);

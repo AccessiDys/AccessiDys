@@ -37,6 +37,7 @@ angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, 
         $scope: $scope
     });
 
+
     /**
      * closes a modal instance
      */

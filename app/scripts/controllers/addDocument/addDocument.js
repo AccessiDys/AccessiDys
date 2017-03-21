@@ -34,9 +34,9 @@ angular
     .controller(
         'AddDocumentCtrl',
         function ($log, $scope, $rootScope, $routeParams, $timeout, tagsService, serviceCheck, $http,
-                  $location, dropbox, $window, configuration, htmlEpubTool, md5, fileStorageService,
+                  $location, dropbox, $window, configuration, htmlEpubTool, fileStorageService,
                   removeStringsUppercaseSpaces, $interval,
-                  canvasToImage, gettextCatalog, UtilsService, LoaderService, ToasterService, documentService) {
+                  canvasToImage, UtilsService, LoaderService, ToasterService, documentService) {
 
             $scope.idDocument = $routeParams.idDocument;
             $scope.docTitleTmp = $routeParams.title;
@@ -52,6 +52,7 @@ angular
             // (to activate the alert pop-up if output of the page ) 
             // in false
             localStorage.setItem('lockOperationDropBox', false);
+            $scope.lien = '';
 
 
             $scope.caret = {
@@ -73,7 +74,13 @@ angular
 
                 //define of close alert
                 $scope.currentData = CKEDITOR.instances.editorAdd.getData();
+
+
+                $scope.currentData = $scope.currentData.replace(/<div class="accessidys-break-page"><\/div>/g, '');
+                $scope.currentData = $scope.currentData.replace(/<div class="accessidys-break-page ng-scope">&nbsp;<\/div>/g, '');
                 $scope.currentData = $scope.currentData.replace(/<div style="page-break-after: always"><span style="display: none;">&nbsp;<\/span><\/div>/g, $scope.pageBreakElement);
+                $scope.currentData = $scope.currentData.replace(/<div class="ng-scope" style="page-break-after: always"><span style="display: none;">&nbsp;<\/span><\/div>/g, $scope.pageBreakElement);
+
 
                 if ($scope.currentData === '') {
                     localStorage.setItem('lockOperationDropBox', false);
@@ -119,6 +126,8 @@ angular
                         }
 
                     } else if (document.uri) {
+
+                        $scope.lien = document.uri;
 
                         if (document.uri.indexOf('.epub') > -1) {
                             $scope.getEpubLink();
@@ -166,12 +175,14 @@ angular
                 $scope.applyStyleInterval = $interval($scope.applyStyles, 1000);
             };
 
-            /** TODO inclure dans le save
+            /**
              * Replace the internal lincks
              *
              * @method $scope.processLink
              */
             $scope.processLink = function (data) {
+
+                $log.debug('processLink', $scope.lien);
                 if ($scope.lien) {
                     var parser = document.createElement('a');
                     parser.href = $scope.lien;
@@ -191,19 +202,32 @@ angular
              * @method $scope.save
              */
             $scope.save = function () {
+                var mode = '';
+                var filePath = '';
+
+                if($scope.idDocument){
+                    mode = 'edit';
+                    filePath = $scope.existingFile.filepath
+                } else {
+                    mode = 'create';
+                }
+
+                $log.debug('$scope.existingFile', $scope.existingFile);
 
                 documentService.save({
                     title: $scope.docTitre,
-                    data: $scope.currentData
-                }).then(function (data) {
-                    ToasterService.showToaster('#overview-success-toaster', 'document.message.save.ok');
+                    data: $scope.processLink($scope.currentData),
+                    filePath: filePath
+                }, mode).then(function (data) {
+                    $log.debug('Save - data', data);
+                    ToasterService.showToaster('#document-success-toaster', 'document.message.save.ok');
                     $scope.pageTitre = 'Editer le document'; // title of the page
                     $scope.resetDirtyCKEditor();
                     $scope.idDocument = $scope.docTitre;
                     $scope.existingFile = data;
 
                 }, function () {
-                    ToasterService.showToaster('#overview-error-toaster', 'document.message.save.ko');
+                    ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
                 });
             };
 
@@ -792,6 +816,20 @@ angular
                     $scope.resizeDocEditor = 'Agrandir';
                     $rootScope.isFullsize = true;
                 }
+            };
+
+            /**
+             * Show loading popup.
+             */
+            $scope.showAdaptationLoader = function () {
+                LoaderService.showLoader('document.message.info.adapt.inprogress', false);
+            };
+
+            /**
+             * Show loading popup.
+             */
+            $scope.hideAdaptationLoader = function () {
+                LoaderService.hideLoader();
             };
 
             // Disable automatic creation of inline editors

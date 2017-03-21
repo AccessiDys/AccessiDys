@@ -146,13 +146,13 @@ angular.module('cnedApp')
 
                 fileStorageService.shareFile(document.filepath, $rootScope.currentUser.dropbox.accessToken)
                     .then(function (shareLink) {
-                        itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?url=' + shareLink;
+                        itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(shareLink);
 
                         //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
                         UtilsService.openSocialShareModal('document', itemToShare)
                             .then(function () {
                                 // Modal close
-                                $scope.showToaster('#list-document-success-toaster', 'mail.send.ok');
+                                ToasterService.showToaster('#list-document-success-toaster', 'mail.send.ok');
                             }, function () {
                                 // Modal dismiss
                             });
@@ -228,5 +228,7 @@ angular.module('cnedApp')
                 LoaderService.hideLoader();
             });
         };
+
+        $scope.getListDocument();
 
     });

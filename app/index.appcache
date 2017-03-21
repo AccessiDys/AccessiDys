@@ -69,9 +69,9 @@ bower_components/bindonce-master/bindonce.min.js
 bower_components/angular-audio/app/angular.audio.js
 bower_components/localforage/dist/localforage.min.js
 bower_components/angular-localforage/dist/angular-localForage.min.js
-bower_components/tesseractJS/TesseractJS.js
-bower_components/tesseractJS/TesseractJS.mem
-bower_components/tesseractJS/tesseract-ocr/tessdata/fra.traineddata
+external_components/tesseractJS/TesseractJS.js
+external_components/tesseractJS/TesseractJS.mem
+external_components/tesseractJS/tesseract-ocr/tessdata/fra.traineddata
 bower_components/pdfjs/pdf.combined.js
 bower_components/rangy/rangy-core.js
 bower_components/rangy/rangy-textrange.js

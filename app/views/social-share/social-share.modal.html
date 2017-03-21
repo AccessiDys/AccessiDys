@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <button type="button" class="close" aria-hidden="true">&times;</button>
+    <button type="button" class="close" aria-hidden="true" data-ng-click="dismissModal()">&times;</button>
     <h3 class="modal-title" data-ng-if="mode === 'document'">Partager ce document</h3>
     <h3 class="modal-title" data-ng-if="mode === 'profile'">Partager ce profil</h3>
 </div>
@@ -55,8 +55,13 @@
         <h2 data-ng-if="mode === 'document'"><span>Sélectionner un moyen pour partager ce document</span></h2>
         <h2 data-ng-if="mode === 'profile'"><span>Sélectionner un moyen pour partager ce profil</span></h2>
 
-        <div class="alert-block alert-danger" id="erreurEmail" data-ng-show="shareMailInvalid">
-            Email incorrect !
+        <div class="alert-block alert-danger alert-dismissable" id="social-share-error-toaster">
+            <i class="fa fa-times" aria-hidden="true"></i>
+
+            <strong regle-style="toasterMsg"
+                    apply-rules="forceToasterApdapt"
+                    tags="listTagsByProfilToaster">
+            </strong>
         </div>
 
 
@@ -67,12 +72,12 @@
                        id="document_share"></a>
                     <span class="share-text"> Par Email</span>
                 </li>
-                <li class="facebook-share">
+                <li class="facebook-share" id="facebook-button">
                     <span class="share-text">Sur Facebook</span>
                 </li>
                 <li>
                     <a class="share_link share_btn twitter_share"
-                       href="https://twitter.com/share?url={{encodeURI}}&via=Accessidys&text=Un élément a été partagé via l'outil Accessidys"
+                       href="https://twitter.com/share?url={{itemToShare.linkToShare}}&via=Accessidys&text=Un élément a été partagé via l'outil Accessidys"
                        onclick="window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;"
                        target="_blank" title="Partager sur Twitter">
                     </a>
@@ -95,7 +100,7 @@
             </p>
         </div>
         <div class="centering">
-            <button type="button" class="reset_btn" data-dismiss="modal" title="Annuler">Annuler</button>
+            <button type="button" class="reset_btn" title="Annuler" data-ng-click="dismissModal()">Annuler</button>
             <button type="button" class="btn_simple light_blue" data-ng-click="shareByEmail()"
                     data-ng-if="shareMethod === 'email'" title="Partager">
                 Partager

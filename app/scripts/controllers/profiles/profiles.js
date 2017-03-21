@@ -834,6 +834,8 @@ angular.module('cnedApp')
          * Add a profile to his favorites.
          */
         $scope.ajouterAmesFavoris = function () {
+
+            $log.debug('$scope.detailProfil', $scope.detailProfil);
             if ($rootScope.currentUser && $scope.detailProfil) {
                 var token = {
                     id: $rootScope.currentUser.local.token,

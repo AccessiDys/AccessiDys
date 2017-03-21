@@ -8,5 +8,6 @@ angular.module('services.config', [])
 		HOMEPAGE_PATH: '#/listDocument',
 		DEFAULT_PATH: '#/',
 		DATE_PATTERN: 'dd/MM/yyyy',
-		GOOGLE_ANALYTICS_ID: 'UA-69091614-112'
+		GOOGLE_ANALYTICS_ID: 'UA-69091614-112',
+		ENV: 'dev'
 	});

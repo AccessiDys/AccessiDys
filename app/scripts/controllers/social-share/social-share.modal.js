@@ -26,7 +26,7 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScope, $scope, $uibModalInstance, dropbox, EmailService, mode, itemToShare) {
+angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScope, $scope, $uibModalInstance, dropbox, EmailService, ToasterService, LoaderService, $log, mode, itemToShare) {
 
 
     $scope.hasRightToShare = false;
@@ -46,6 +46,10 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
     $uibModalInstance.opened.then(function () {
         $scope.itemToShare = itemToShare;
         $scope.mode = mode;
+
+        if (mode === 'profile') {
+            $scope.attachFacebook();
+        }
     });
 
 
@@ -53,7 +57,7 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
         $uibModalInstance.dismiss();
     };
 
-    // TODO Refaire le bouton checbox
+    // TODO To be review
     $scope.changed = function (shareAnnotation) {
         $scope.shareAnnotation = shareAnnotation;
     };
@@ -73,22 +77,29 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
                     dropbox.shareLink(fileName, $rootScope.currentUser.dropbox.accessToken)
                         .then(function (result) {
                             $scope.itemToShare.linkToShare += '&annotation=' + result.url;
-                            $scope.itemToShare.linkToShare = encodeURIComponent($scope.itemToShare.linkToShare);
+                            $scope.itemToShare.linkToShare = $scope.itemToShare.linkToShare;
                             $scope.hasRightToShare = true;
                             localStorage.setItem('lockOperationDropBox', false);
+                            $scope.attachFacebook();
                         });
                 });
         } else {
             localStorage.setItem('lockOperationDropBox', false);
 
-            $scope.itemToShare.linkToShare = encodeURIComponent($scope.itemToShare.linkToShare);
+            $scope.itemToShare.linkToShare = $scope.itemToShare.linkToShare;
             $scope.hasRightToShare = true;
+            $scope.attachFacebook();
         }
     };
 
     $scope.shareByEmail = function () {
 
+        $log.debug('$scope.itemToShare.linkToShare', $scope.itemToShare.linkToShare);
+
+
         if (EmailService.verifyEmail($scope.form.email)) {
+
+            LoaderService.showLoader('label.share.inprogress', false);
 
             var emailParams = {
                 to: $scope.form.email,
@@ -114,25 +125,25 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
 
             EmailService.sendMail(emailParams)
                 .then(function () {
+                    LoaderService.hideLoader();
                     $uibModalInstance.close({
                         status: 'OK'
                     });
                 }, function () {
+                    LoaderService.hideLoader();
                     $uibModalInstance.close({
                         status: 'KO'
                     });
                 });
 
         } else {
-            // TODO show errors
+            ToasterService.showToaster('#social-share-error-toaster', 'profile.message.save.ko.email.notvalid');
         }
     };
 
-    // TODO To be delete
     $scope.attachFacebook = function () {
-        console.log(decodeURIComponent($scope.encodeURI));
-        $('.facebook-share .fb-share-button').remove();
-        $('.facebook-share span').before('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.encodeURI) + '" data-layout="button"></div>');
+        console.log(decodeURIComponent($scope.itemToShare.linkToShare));
+        $('#facebook-button').append('<div class="fb-share-button" data-href="' + decodeURIComponent($scope.itemToShare.linkToShare) + '" data-layout="button"></div>');
         try {
             FB.XFBML.parse();
         } catch (ex) {
