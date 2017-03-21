@@ -84,6 +84,7 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
                             $scope.hasRightToShare = true;
                             localStorage.setItem('lockOperationDropBox', false);
                             $scope.attachFacebook();
+                            $scope.twitterLink = encodeURIComponent($scope.itemToShare.linkToShare);
                         });
                 });
         } else {
@@ -92,6 +93,7 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
             $scope.itemToShare.linkToShare = $scope.itemToShare.linkToShare;
             $scope.hasRightToShare = true;
             $scope.attachFacebook();
+            $scope.twitterLink = encodeURIComponent($scope.itemToShare.linkToShare);
         }
     };
 
