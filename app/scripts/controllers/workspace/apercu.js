@@ -814,6 +814,7 @@ angular.module('cnedApp')
          */
         $scope.init = function () {
             LoaderService.showLoader('document.message.info.load', false);
+            localStorage.setItem('lockOperationDropBox', false);
 
             $scope.originalHtml = '';
             $scope.isSummaryActive = false;

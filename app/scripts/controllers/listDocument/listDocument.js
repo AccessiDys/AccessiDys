@@ -209,6 +209,7 @@ angular.module('cnedApp')
         };
 
         $scope.getListDocument = function () {
+            localStorage.setItem('lockOperationDropBox', false);
             LoaderService.showLoader('document.message.info.load', false);
             return serviceCheck.getData().then(function (data) {
                 var dropboxToken = '';

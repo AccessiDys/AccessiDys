@@ -88,6 +88,7 @@ angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, 
     $rootScope.area = 'ADMIN ';
     $scope.upgradeMode = false;
     $scope.listAccounts = function () {
+        localStorage.setItem('lockOperationDropBox', false);
         $http.get(configuration.URL_REQUEST + '/allAccounts', {
             params: {
                 id: $rootScope.currentUser.local.token

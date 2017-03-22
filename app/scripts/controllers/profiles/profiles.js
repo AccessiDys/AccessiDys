@@ -201,6 +201,7 @@ angular.module('cnedApp')
         });
 
         $scope.initProfil = function () {
+            localStorage.setItem('lockOperationDropBox', false);
             if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
                 $log.debug('Init detail profile');
 
@@ -499,6 +500,7 @@ angular.module('cnedApp')
 
                     profilsService.deleteProfil($rootScope.isAppOnline, $rootScope.currentUser._id, profile._id)
                         .then(function () {
+                            localStorage.setItem('lockOperationDropBox', false);
                             LoaderService.setLoaderProgress(100);
                             LoaderService.hideLoader();
                             $scope.initProfil();
