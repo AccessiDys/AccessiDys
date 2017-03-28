@@ -68,7 +68,7 @@
         if (d.getElementById(id)) return;
         js = d.createElement(s);
         js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=657960714228766&version=v2.0";
+        js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&appId=657960714228766&version=v2.0";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
@@ -77,17 +77,6 @@
             xfbml: false  // Will stop the fb like button from rendering automatically
         });
     };
-</script>
-
-<script type="text/javascript">
-    (function () {
-        var po = document.createElement('script');
-        po.type = 'text/javascript';
-        po.async = true;
-        po.src = 'https://apis.google.com/js/client:plusone.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(po, s);
-    })();
 </script>
 
 <!--[if lt IE 7]>
@@ -152,7 +141,6 @@
 <script src="bower_components/angular-localforage/dist/angular-localForage.js"></script>
 <script src="bower_components/angular-md5/angular-md5.js"></script>
 <script src="bower_components/Hyphenator/Hyphenator.js"></script>
-<script src="bower_components/Hyphenator/patterns/fr.js"></script>
 <script src="bower_components/jszip/dist/jszip.js"></script>
 <script src="bower_components/pdfjs-dist/build/pdf.js"></script>
 <script src="bower_components/pdfjs-dist/build/pdf.worker.js"></script>
