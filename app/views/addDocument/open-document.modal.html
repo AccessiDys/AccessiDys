@@ -19,27 +19,8 @@
                 <form class="form-horizontal" role="form" id="addDocument" name="addDocument">
                     <fieldset>
                         <p class="controls_zone">
-                            <label for="docTitre">
-                                <span>Titre</span> <span class="required">*</span>
-                            </label>
-                            <input type="text" max-length="200" id="docTitre"
-                                   placeholder="Entrez le titre du document"
-                                   data-ng-model="form.title" required/>
-                        </p>
 
-                        <p class="controls_zone">
-                            <label for="lien">
-                                <span>Lien web : </span>
-                            </label>
-                            <input type="text" class="" id="lien"
-                                   placeholder="Entrez le lien de votre fichier"
-                                   data-ng-model="form.uri" required>
-                        </p>
-
-                        <p class="controls_zone">
-                            <span class="simple_txt">OU</span>
-                            <br/>
-                            <label for="docUploadPdf" class="upload_msg">
+                            <label for="docUploadPdf" class="upload_msg mr-15">
                                 Chargez un fichier depuis votre poste local (PDF/epub/png/jpg) :
                             </label>
                             <span class="file_mask">
@@ -48,6 +29,18 @@
                                 <input type="text" id="filename_show" name="" readonly>
                             </span>
                             <button type="button" class="clear_upoadpdf" data-ng-click="clearUploadFile()"> </button>
+                        </p>
+                        <p class="controls_zone">
+                            <br/>
+                            <span class="simple_txt">OU</span>
+                            <br/>
+                            <br/>
+                            <label for="lien">
+                                <span>Lien web : </span>
+                            </label>
+                            <input type="text" class="" id="lien"
+                                   placeholder="Entrez le lien de votre fichier"
+                                   data-ng-model="form.uri" required>
                         </p>
                     </fieldset>
 

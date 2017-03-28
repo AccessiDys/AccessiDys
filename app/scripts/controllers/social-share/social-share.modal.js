@@ -49,6 +49,10 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
         $scope.itemToShare = itemToShare;
         $scope.mode = mode;
 
+        if($scope.itemToShare.annotationsToShare && $scope.itemToShare.annotationsToShare.length > 0){
+            $scope.hasAnnotation = true;
+        }
+
         if (mode === 'profile') {
             $scope.attachFacebook();
             $scope.twitterLink = encodeURIComponent($scope.itemToShare.linkToShare);
@@ -71,13 +75,13 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
     $scope.processAnnotation = function () {
         localStorage.setItem('lockOperationDropBox', true);
 
-        if ($scope.shareAnnotation && $scope.itemToShare.docFullName && $scope.itemToShare.annotationsToShare) {
+        if ($scope.shareAnnotation && $scope.itemToShare.name && $scope.itemToShare.annotationsToShare) {
 
-            var fileName = $scope.itemToShare.docFullName + '.json';
+            var fileName = $scope.itemToShare.name + '.json';
 
-            dropbox.upload(fileName, $scope.itemToShare.annotationToShare, $rootScope.currentUser.dropbox.accessToken, true)
-                .then(function () {
-                    dropbox.shareLink(fileName, $rootScope.currentUser.dropbox.accessToken)
+            dropbox.upload(fileName, $scope.itemToShare.annotationsToShare, $rootScope.currentUser.dropbox.accessToken, true)
+                .then(function (data) {
+                    dropbox.shareLink(data.path_display, $rootScope.currentUser.dropbox.accessToken)
                         .then(function (result) {
                             $scope.itemToShare.linkToShare += '&annotation=' + result.url;
                             $scope.itemToShare.linkToShare = $scope.itemToShare.linkToShare;

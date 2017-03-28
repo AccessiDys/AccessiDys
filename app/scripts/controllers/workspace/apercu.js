@@ -121,6 +121,7 @@ angular.module('cnedApp')
          */
         $scope.hideAdaptationLoader = function () {
             LoaderService.hideLoader();
+            $rootScope.$emit('redrawLines');
         };
 
         /**
@@ -138,6 +139,7 @@ angular.module('cnedApp')
         $scope.hideAdaptationLoaderFromLoop = function (indexLoop, max) {
             if (indexLoop >= (max - 1)) {
                 LoaderService.hideLoader();
+                $rootScope.$emit('redrawLines');
             }
         };
 
@@ -171,42 +173,19 @@ angular.module('cnedApp')
             if ($scope.annotationURL) {
                 $http.get($scope.annotationURL).success(function (data) {
                     var noteList = {};
-                    var annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($scope.annotationURL)[9]);
-                    $scope.docSignature = annotationKey;
+                    $scope.docSignature = $scope.urlTitle;
                     if (localStorage.getItem('notes') !== null) {
                         noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-                        noteList[annotationKey] = data;
+                        noteList[$scope.urlTitle] = data;
                         localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
                     } else {
                         noteList = {};
-                        noteList[annotationKey] = data;
+                        noteList[$scope.urlTitle] = data;
                         localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
                     }
                     $scope.restoreNotesStorage();
                 });
 
-            }
-        };
-
-        $scope.applySharedAnnotation = function () {
-            if ($scope.annotationURL) {
-                $http.get($scope.annotationURL).success(function (data) {
-                    var annotationKey = $scope.annotationDummy;
-                    var noteList = {};
-
-                    annotationKey = decodeURIComponent(/(((\d+)(-)(\d+)(-)(\d+))(_+)([A-Za-z0-9_%]*)(_)([A-Za-z0-9_%]*))/i.exec($scope.annotationURL)[0]);
-                    if (localStorage.getItem('notes') !== null) {
-                        noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-                        noteList[annotationKey] = data;
-                        localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-                    } else {
-                        noteList = {};
-                        noteList[annotationKey] = data;
-                        localStorage.setItem('notes', JSON.stringify(angular.toJson(noteList)));
-                    }
-                    $('#AnnotationModal').modal('hide');
-
-                });
             }
         };
 
@@ -218,6 +197,7 @@ angular.module('cnedApp')
          * and show them in the overview.
          */
         $scope.restoreNotesStorage = function (/* idx */) {
+            $log.debug('$scope.docSignature',$scope.docSignature);
             $scope.notes = workspaceService.restoreNotesStorage($scope.docSignature);
         };
 
@@ -678,15 +658,11 @@ angular.module('cnedApp')
             // accents
             return serviceCheck.htmlPreview(encodeURI(url)).then(function (htmlFile) {
 
-                $log.debug('htmlFile + ' + htmlFile);
-
                 if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf("<title>") > -1) {
-                    $scope.urlTitle = htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf("<title>") + 7, htmlFile.documentHtml.indexOf("</title>"));
-                } else {
-                    $scope.urlTitle = url;
+                    $scope.urlTitle = UtilsService.cleanUpSpecialChars(htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf("<title>") + 7, htmlFile.documentHtml.indexOf("</title>")));
+                } else if(!$scope.urlTitle) {
+                    $scope.urlTitle = UtilsService.cleanUpSpecialChars(url);
                 }
-
-                $log.debug('url + ' + url);
 
                 return htmlEpubTool.cleanHTML(htmlFile);
 
@@ -818,6 +794,10 @@ angular.module('cnedApp')
 
             $scope.originalHtml = '';
             $scope.isSummaryActive = false;
+
+            if($scope.urlTitle){
+                $scope.urlTitle = UtilsService.cleanUpSpecialChars($scope.urlTitle);
+            }
 
             // Recovery of the display choice of the installation trick
             // of the voices in offline mode
@@ -1203,10 +1183,10 @@ angular.module('cnedApp')
                 $scope.showSave = false;
                 $scope.showEditer = true;
 
-                $scope.showToaster('#overview-success-toaster', 'document.message.save.ok');
+                ToasterService.showToaster('#overview-success-toaster', 'document.message.save.ok');
 
             }, function () {
-                $scope.showToaster('#overview-error-toaster', 'document.message.save.ko');
+                ToasterService.showToaster('#overview-error-toaster', 'document.message.save.ko');
             });
 
         };
@@ -1243,7 +1223,10 @@ angular.module('cnedApp')
                         };
 
                         if (localStorage.getItem('notes') !== null) {
-                            var noteList = JSON.parse(localStorage.getItem('notes'));
+                            var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+
+                            $log.debug('has notes ' , noteList.hasOwnProperty(document.filename));
+                            $log.debug('noteList ' , noteList);
 
                             if (noteList.hasOwnProperty(document.filename)) {
                                 itemToShare.annotationsToShare = noteList[document.filename];
@@ -1252,7 +1235,7 @@ angular.module('cnedApp')
 
                         fileStorageService.shareFile(document.filepath, $rootScope.currentUser.dropbox.accessToken)
                             .then(function (shareLink) {
-                                itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(shareLink);
+                                itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?title=' + encodeURIComponent(document.filename) +'&url=' + encodeURIComponent(shareLink);
 
                                 //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
                                 UtilsService.openSocialShareModal('document', itemToShare)
@@ -1276,26 +1259,6 @@ angular.module('cnedApp')
 
             }
 
-        };
-
-
-
-        $scope.toasterMsg = '';
-        $scope.forceToasterApdapt = false;
-        $scope.listTagsByProfilToaster = [];
-
-        /**
-         * Show success toaster
-         * @param msg
-         */
-        $scope.showToaster = function (id, msg) {
-            $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
-            $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-            $scope.forceToasterApdapt = true;
-            $timeout(function () {
-                angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-                $scope.forceToasterApdapt = false;
-            }, 0);
         };
 
         $scope.getUserAndInitApercu();

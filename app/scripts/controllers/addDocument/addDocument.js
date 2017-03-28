@@ -111,7 +111,9 @@ angular
                     $log.debug('Open Document - ', document);
 
                     $scope.pageTitre = 'Ajouter un document';
-                    $scope.docTitre = document.title;
+                    if (document.title) {
+                        $scope.docTitre = UtilsService.cleanUpSpecialChars(document.title);
+                    }
 
                     // Presence of a file with the browse button
                     if (document.files.length > 0) {

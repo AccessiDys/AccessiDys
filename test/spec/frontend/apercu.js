@@ -773,21 +773,7 @@ describe('Controller:ApercuCtrl', function () {
         //expect(scope.notes.length).toEqual(0);
     });
 
-    it('ApercuCtrl:applySharedAnnotation', inject(function ($httpBackend) {
-        // $httpBackend.flush();
-        scope.annotationURL = 'https://dl.dropboxusercontent.com/s/gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8.json';
-        scope.annotationDummy = 'gk6ueltm1ckrq9u/2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
 
-        scope.applySharedAnnotation();
-
-        localStorage.removeItem('notes');
-        scope.applySharedAnnotation();
-
-        $httpBackend.flush();
-
-        scope.annotationURL = undefined;
-        scope.applySharedAnnotation();
-    }));
 
     it('ApercuCtrl:setPasteNote', inject(function () {
         // $httpBackend.flush();

@@ -137,7 +137,7 @@ angular.module('cnedApp')
                 };
 
                 if (localStorage.getItem('notes') !== null) {
-                    var noteList = JSON.parse(localStorage.getItem('notes'));
+                    var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
 
                     if (noteList.hasOwnProperty(document.filename)) {
                         itemToShare.annotationsToShare = noteList[document.filename];
@@ -146,7 +146,7 @@ angular.module('cnedApp')
 
                 fileStorageService.shareFile(document.filepath, $rootScope.currentUser.dropbox.accessToken)
                     .then(function (shareLink) {
-                        itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(shareLink);
+                        itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?title=' + encodeURIComponent(document.filename) +'&url=' + encodeURIComponent(shareLink);
 
                         //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
                         UtilsService.openSocialShareModal('document', itemToShare)

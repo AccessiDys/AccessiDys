@@ -33,7 +33,7 @@
 
 cnedApp.directive('draggableNote',
 
-    function ($document, $timeout, $log) {
+    function ($document, $timeout, $log, $rootScope) {
         return {
             restrict: 'A',
             link: function (scope, elm, attrs) {
@@ -166,8 +166,6 @@ cnedApp.directive('draggableNote',
                     lineCanvas = angular.element('#line-canvas-' + scope.note.idNote);
                     if (type === 'content') {
                         // set the line canvas to the width and height of the carousel
-
-
                         var carousel = angular.element('#carouselid');
 
                         lineCanvas.css({
@@ -188,6 +186,7 @@ cnedApp.directive('draggableNote',
                     x = contentElm.offset().left - container.offset().left + 40;
                     yLink = linkElm.offset().top - container.offset().top + 25;
                     y = contentElm.offset().top - container.offset().top + 20;
+
                     // déssiner
                     lineCanvas.line(xLink, yLink, x, y, {
                         color: '#747474',
@@ -198,7 +197,8 @@ cnedApp.directive('draggableNote',
 
                 }
 
-                scope.$on('redrawLines', function () {
+                $rootScope.$on('redrawLines', function () {
+                    $log.debug('redrawLines');
                     drawLine();
                 });
             }

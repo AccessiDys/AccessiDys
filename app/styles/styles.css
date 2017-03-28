@@ -342,6 +342,7 @@ table th:last-child {
     padding-left: 47px;
     padding-top: 6px !important;
     padding-right: 19px;
+    cursor: pointer;
 }
 
 #filename_show, .filename_show {

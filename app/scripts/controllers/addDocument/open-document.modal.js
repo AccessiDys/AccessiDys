@@ -48,7 +48,7 @@ angular.module('cnedApp').controller('OpenDocumentModalCtrl', function ($rootSco
 
             var doc = $scope.form;
 
-            var errors = documentService.checkFields(doc);
+            var errors = [];
 
             if ((!$scope.form.uri && $scope.form.files.length <= 0) || (($scope.form.uri && /\S/.test($scope.form.uri)) && $scope.form.files.length > 0)) {
                 errors.push('document.message.save.ko.linkorlocalfile');

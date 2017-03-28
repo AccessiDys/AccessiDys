@@ -172,6 +172,30 @@ cnedApp.service('UtilsService', function ($uibModal) {
                 return false;
             }
             return true;
+        },
+
+        /**
+         * Clean all special chars
+         * @param str String to clean
+         * @returns {string}
+         */
+        cleanUpSpecialChars: function (str) {
+            str = str.replace(/[ÀÁÂÃÄÅÆ]/g, "A");
+            str = str.replace(/[àáâãäåæ]/g, "a");
+            str = str.replace(/[Ç]/g, "C");
+            str = str.replace(/[ç]/g, "c");
+            str = str.replace(/[éèêë]/g, "e");
+            str = str.replace(/[ÈÉÊË]/g, "E");
+            str = str.replace(/[îï]/g, "i");
+            str = str.replace(/[ÎÏ]/g, "I");
+            str = str.replace(/[ôœ]/g, "o");
+            str = str.replace(/[ÔŒ]/g, "O");
+            str = str.replace(/[ùûü]/g, "u");
+            str = str.replace(/[ÙÛÜ]/g, "U");
+            str = str.replace(/[ÿ]/g, "y");
+            str = str.replace(/[Ÿ]/g, "y");
+
+            return str.replace(/[^a-z0-9]/gi, ' ');
         }
 
     };
