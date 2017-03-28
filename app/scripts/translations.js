@@ -251,6 +251,7 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'profile.message.edit.ok' : 'Profil modifié avec succès.',
         'profile.message.save.ok' : 'Profil ajouté avec succès.',
         'profile.message.favorite.ok' : 'Profil ajouté aux profils favoris.',
+        'profile.message.favorite.delete' : 'Profil supprimé de vos profils favoris.',
         'profile.message.default.ok' : 'Profil par défaut selectionné avec succès.',
         'profile.message.save.ko.name.alreadyexist' : 'Un profil ayant le même nom existe déjà.',
         'profile.message.save.ko.name.mandatory' : 'Le champ <strong> Nom </strong> est invalide.',

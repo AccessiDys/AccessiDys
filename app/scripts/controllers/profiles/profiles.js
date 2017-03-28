@@ -668,7 +668,7 @@ angular.module('cnedApp')
         };
 
         $scope.isOwnerDelagate = function (param) {
-            if (param && param.state == 'delegated' && param.owner === $rootScope.currentUser._id) {
+            if (param && param.delegated && param.owner === $rootScope.currentUser._id) {
                 return true;
             }
             return false;
@@ -715,6 +715,7 @@ angular.module('cnedApp')
                     }
                     $http.post(configuration.URL_REQUEST + '/removeUserProfileFavoris', $scope.token)
                         .success(function (data) {
+                            ToasterService.showToaster('#profile-success-toaster', 'profile.message.favorite.delete');
                             $scope.getProfiles();
                         });
                 });
