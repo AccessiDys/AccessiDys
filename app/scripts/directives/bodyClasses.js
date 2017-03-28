@@ -181,20 +181,20 @@ cnedApp.directive('draggableNote',
                     var contentElm = angular.element('#zone-id-' + scope.note.idNote);
                     var linkElm = angular.element('#link-id-' + scope.note.idNote);
 
-                    // invariant whatever the method of consultation.
-                    xLink = linkElm.offset().left - container.offset().left + 60;
-                    x = contentElm.offset().left - container.offset().left + 40;
-                    yLink = linkElm.offset().top - container.offset().top + 25;
-                    y = contentElm.offset().top - container.offset().top + 20;
+                    if(linkElm.length > 0 && contentElm.length > 0){
+                        // invariant whatever the method of consultation.
+                        xLink = linkElm.offset().left - container.offset().left + 60;
+                        x = contentElm.offset().left - container.offset().left + 40;
+                        yLink = linkElm.offset().top - container.offset().top + 25;
+                        y = contentElm.offset().top - container.offset().top + 20;
 
-                    // déssiner
-                    lineCanvas.line(xLink, yLink, x, y, {
-                        color: '#747474',
-                        stroke: 1,
-                        zindex: 9
-                    });
-
-
+                        // déssiner
+                        lineCanvas.line(xLink, yLink, x, y, {
+                            color: '#747474',
+                            stroke: 1,
+                            zindex: 9
+                        });
+                    }
                 }
 
                 $rootScope.$on('redrawLines', function () {

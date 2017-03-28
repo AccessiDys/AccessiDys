@@ -799,6 +799,12 @@ angular.module('cnedApp')
                 $scope.urlTitle = UtilsService.cleanUpSpecialChars($scope.urlTitle);
             }
 
+            if($rootScope.isFullsize) {
+                $scope.resizeDocApercu = 'Agrandir';
+            } else {
+                $scope.resizeDocApercu = 'Réduire';
+            }
+
             // Recovery of the display choice of the installation trick
             // of the voices in offline mode
             $scope.neverShowOfflineSynthesisTips = localStorage.getItem('neverShowOfflineSynthesisTips') === 'true';
