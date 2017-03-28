@@ -25,7 +25,7 @@
 'use strict';
 
 
-cnedApp.service('UserService', function ($http, configuration) {
+cnedApp.service('UserService', function ($http, configuration, $uibModal) {
 
     var methods = {
 
@@ -33,6 +33,26 @@ cnedApp.service('UserService', function ($http, configuration) {
             return $http.post(configuration.URL_REQUEST + '/findUserByEmail', {
                 email: email
             });
+        },
+
+
+        /**
+         * Open edit password modal
+         */
+        openEditPasswordModal: function(userId, token){
+            return $uibModal.open({
+                templateUrl: 'views/userAccount/edit-password.modal.html',
+                controller: 'editPasswordCtrl',
+                size: 'upgrade',
+                resolve: {
+                    userId: function () {
+                        return userId;
+                    },
+                    token: function () {
+                        return token;
+                    }
+                }
+            }).result;
         }
 
     };

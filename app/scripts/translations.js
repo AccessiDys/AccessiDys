@@ -297,7 +297,15 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'style.label.delete.anwser': 'Voulez-vous supprimer le style " <b>style.label</b> " ?',
         'style.label.delete.title': 'Supprimer le style',
         'label.share.inprogress': 'Partage en cours. Veuillez patienter.',
-        'label.upgrade.ok': 'Version mise à jour avec succès'
+        'label.upgrade.ok': 'Version mise à jour avec succès',
+        'useraccount.message.save.ko.password.length': 'L\'ancien mot de passe doit contenir de 6 à 20 caractères.',
+        'useraccount.message.save.ko.password.mandatory': 'Le champs Ancien mot de passe est vide.',
+        'useraccount.message.save.ko.password.spacialchar': 'Le champs ancien mot de passe contient des caractères spéciaux.',
+        'useraccount.message.save.ko.password.notvalid': 'Ancien mot de passe erroné.',
+        'useraccount.message.save.ko.newpassword.length': 'Le nouveau mot de passe doit contenir de 6 à 20 caractères.',
+        'useraccount.message.save.ko.newpassword.mandatory': 'Le champs Nouveau mot de passe est vide.',
+        'useraccount.message.save.ko.newpassword.spacialchar': 'Le champs Nouveau mot de passe contient des caractères spéciaux.',
+        'useraccount.message.save.ko.newpassword.confirm': 'Le nouveau mot de passe et sa confirmation ne sont pas les mêmes.'
     });
 
 } ]);

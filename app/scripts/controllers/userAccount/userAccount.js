@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('UserAccountCtrl', function ($scope, $http, md5, configuration, $location, $rootScope, serviceCheck, gettextCatalog, $timeout) {
+angular.module('cnedApp').controller('UserAccountCtrl', function ($scope, $http, md5, configuration, $location, $rootScope, serviceCheck, ToasterService, UserService) {
 
 
     /*global $:false */
@@ -101,13 +101,14 @@ angular.module('cnedApp').controller('UserAccountCtrl', function ($scope, $http,
                     prenom: $scope.compte.prenom
                 }
             };
+
             $http.post(configuration.URL_REQUEST + '/modifierInfosCompte', {
                 id: localStorage.getItem('compteId'),
                 userAccount: $scope.userAccount
             })
                 .success(function (data) {
                     $scope.monObjet = data;
-                    $scope.showToaster('#account-success-toaster', 'account.message.edit.ok');
+                    ToasterService.showToaster('#account-success-toaster', 'account.message.edit.ok');
 
                 });
         }
@@ -116,7 +117,6 @@ angular.module('cnedApp').controller('UserAccountCtrl', function ($scope, $http,
     };
 
     $scope.verifyString = function (chaine) {
-        //var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç_\.\-\+' ]{1,100}$/;
         var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç\-' ]{1,100}$/;
         if (chaine === null) {
             return false;
@@ -137,95 +137,12 @@ angular.module('cnedApp').controller('UserAccountCtrl', function ($scope, $http,
         return true;
     };
 
-    // this function updates a password
-    $scope.modifierPassword = function () {
-        $scope.passwordErrorField = [];
-        $scope.erreur = false;
-        //old password
-        if ($scope.compte && (!$scope.compte.oldPassword || typeof $scope.compte.oldPassword == 'undefined')) { // jshint ignore:line
-            $scope.passwordErrorField.push('Le champs Ancien mot de passe est vide.');
-            $scope.modifierPasswordDisplay = true;
-            $scope.erreur = true;
-        } else {
-            if (!$scope.verifyPassword($scope.compte.oldPassword)) {
-                if ($scope.compte.oldPassword.length < 6 || $scope.compte.oldPassword.length > 20) {
-                    $scope.passwordErrorField.push('L\'ancien mot de passe doit contenir de 6 à 20 caractères.');
-                } else {
-                    $scope.passwordErrorField.push('Le champs ancien mot de passe contient des caractères spéciaux.');
-                }
-                $scope.modifierPasswordDisplay = true;
-                $scope.erreur = true;
-            }
-        }
-        //new password
-        if ($scope.compte && (!$scope.compte.newPassword || typeof $scope.compte.newPassword == 'undefined')) { // jshint ignore:line
-            $scope.passwordErrorField.push('Le champs nouveau mot de passe est vide.');
-            $scope.modifierPasswordDisplay = true;
-            $scope.erreur = true;
-        } else {
-            if (!$scope.verifyPassword($scope.compte.newPassword)) {
-                if ($scope.compte.newPassword.length < 6 || $scope.compte.newPassword.length > 20) {
-                    $scope.passwordErrorField.push('Le nouveau mot de passe doit contenir de 6 à 20 caractères.');
-                } else {
-                    $scope.passwordErrorField.push('Le champs nouveau mot de passe contient des caractères spéciaux.');
-                }
-                $scope.modifierPasswordDisplay = true;
-                $scope.erreur = true;
-            }
-        }
-
-        if ($scope.compte.newPassword != $scope.compte.reNewPassword) { // jshint ignore:line
-            $scope.passwordErrorField.push('le nouveau mot de passe et sa confirmation ne sont pas les mêmes.');
-            $scope.modifierPasswordDisplay = true;
-            $scope.erreur = true;
-        }
-
-        if (!$scope.erreur) {
-            $scope.userPassword = {
-                _id: $scope.objet.user._id,
-                local: {
-                    password: md5.createHash($scope.compte.oldPassword),
-                    newPassword: md5.createHash($scope.compte.newPassword)
-                }
-            };
-            $http.post(configuration.URL_REQUEST + '/modifierPassword', {
-                id: $scope.token.id,
-                userPassword: $scope.userPassword
-            }).success(function (data) {
-                if (data === true) {
-                    $scope.compte.oldPassword = '';
-                    $scope.compte.newPassword = '';
-                    $scope.compte.reNewPassword = '';
-                    $scope.showToaster('#account-success-toaster', 'account.message.edit.ok');
-                    $('#confirmation_pw').modal('hide');
-                    $scope.modifierPasswordDisplay = false;
-                } else {
-                    $('#errorPassword').fadeIn('fast').delay(5000).fadeOut('fast');
-                }
-            });
-        }
+    $scope.editPassword = function(){
+        UserService.openEditPasswordModal($scope.objet.user._id, $scope.token.id).then(function(){
+            ToasterService.showToaster('#account-success-toaster', 'account.message.edit.ok');
+        });
     };
 
-    $scope.cancelModification = function () {
-        $scope.modifierPasswordDisplay = false;
-    };
 
-    $scope.toasterMsg = '';
-    $scope.forceToasterApdapt = false;
-    $scope.listTagsByProfilToaster = [];
-
-    /**
-     * Show success toaster
-     * @param msg
-     */
-    $scope.showToaster = function (id, msg) {
-        $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
-        $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-        $scope.forceToasterApdapt = true;
-        $timeout(function () {
-            angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-            $scope.forceToasterApdapt = false;
-        }, 0);
-    };
 
 });

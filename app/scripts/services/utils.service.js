@@ -106,7 +106,7 @@ cnedApp.service('UtilsService', function ($uibModal) {
         /**
          * Open upgrade modal
          */
-        openUpgradeModal: function(){
+        openUpgradeModal: function () {
 
             return $uibModal.open({
                 templateUrl: 'views/common/upgrade.modal.html',
@@ -142,6 +142,36 @@ cnedApp.service('UtilsService', function ($uibModal) {
                 uint8Array[i] = raw.charCodeAt(i);
             }
             return uint8Array;
+        },
+
+        /**
+         * Verify if a string is valid
+         * @param chaine
+         * @returns {boolean}
+         */
+        verifyString: function (chaine) {
+            var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç\-' ]{1,100}$/;
+            if (chaine === null) {
+                return false;
+            }
+            if (!ck_nomPrenom.test(chaine)) {
+                return false;
+            }
+            return true;
+        },
+
+        /**
+         * Verify a password
+         * @param password
+         * @returns {boolean}
+         */
+        verifyPassword: function (password) {
+            var ck_password = /^[A-Za-z0-9éèàâîôç!@#$%^&*()_]{6,20}$/;
+
+            if (!ck_password.test(password)) {
+                return false;
+            }
+            return true;
         }
 
     };
