@@ -597,18 +597,6 @@ angular
             };
 
             /**
-             * Opening of the overview
-             *
-             * @method $scope.openApercu
-             */
-            $scope.openApercu = function () {
-                var win = $window.open(); // Keep window reference which is not accessible in promise
-                fileStorageService.saveTempFile($scope.currentData).then(function () {
-                    win.location = '#/apercu?tmp=true';
-                });
-            };
-
-            /**
              * Updates the available formats in the editor
              *
              * @method $scope.updateFormats
