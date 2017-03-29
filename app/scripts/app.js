@@ -38,7 +38,8 @@ var cnedApp = angular.module('cnedApp', [
     'services.config',
     'ngAudio',
     'LocalForageModule',
-    'angular-google-analytics'
+    'angular-google-analytics',
+    '720kb.socialshare'
 ]);
 
 cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
