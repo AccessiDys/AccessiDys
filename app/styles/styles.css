@@ -2360,7 +2360,7 @@ div[id^="noPlanPrint"] .image_type {
 
 .zoneID {
     z-index: 9;
-    width: 330px;
+    width: 45%;
     border: 0;
 }
 
@@ -2378,8 +2378,7 @@ div[id^="noPlanPrint"] .image_type {
     padding: 0;
     position: relative;
     resize: vertical;
-    /*    text-transform: uppercase;*/
-    width: 290px;
+    width: 100%;
 
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;

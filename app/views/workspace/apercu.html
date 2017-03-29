@@ -133,46 +133,46 @@
 <!-- Pagination -->
 <nav class="navbar navbar-default container-fluid navbar-pagination navbar-pagination-top"
      data-ng-show="!modeImpression">
-    <div>
-        <form class="navbar-form navbar-center " role="search">
-            <div class="form-group col-md-4 col-md-offset-2">
-                <div class="input-group">
-                    <div class="input-group-addon">Aller à la page:</div>
-                    <input id='numeroPage' type="number" min="0" max="{{content.length}}" class="form-control"
-                           placeholder="Numéro.." data-ng-model="numeroPageRechercher" required=""> <span
-                        class="input-group-btn">
-						<button class="btn btn-default" type="button" title="Ouvrir la page"
-                                data-ng-click="setPage(numeroPageRechercher)">OK</button>
-					</span>
-                </div>
-            </div>
-        </form>
-        <ul class="pagination pagination-md col-md-2">
-            <li data-ng-class="{'disabled': currentPage <= 1}">
-                <a data-ng-click="premier()" title="Premier">
-                    <i class="fa fa-fast-backward" aria-hidden="true"></i>
-                </a>
-            </li>
-            <li data-ng-class="{'disabled': currentPage <= 1}">
-                <a data-ng-click="precedent()" title="Précedent">
-                    <i class="fa fa-step-backward" aria-hidden="true"></i>
-                </a>
-            </li>
-            <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
-                <a data-ng-click="suivant()" title="Suivant">
-                    <i class="fa fa-step-forward" aria-hidden="true"></i>
-                </a>
-            </li>
-            <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
-                <a data-ng-click="dernier()" title="Dernier">
-                    <i class="fa fa-fast-forward" aria-hidden="true"></i>
-                </a>
-            </li>
-        </ul>
-
-        <p data-ng-if="content.length > 0" class="pagination-number col-md-2"> {{currentPage}} / {{(content.length -
-            1)}}</p>
+    <div class="form-group col-md-4 col-md-offset-2">
+        <div class="input-group">
+            <div class="input-group-addon">Aller à la page:</div>
+            <input id='numeroPage' type="number" min="0" max="{{content.length}}" class="form-control"
+                   placeholder="Numéro.." data-ng-model="numeroPageRechercher" required="">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" title="Ouvrir la page"
+                        data-ng-click="setPage(numeroPageRechercher)">
+                    OK
+                </button>
+            </span>
+        </div>
     </div>
+    <ul class="pagination pagination-md col-lg-2">
+        <li data-ng-class="{'disabled': currentPage <= 1}">
+            <a data-ng-click="premier()" title="Premier">
+                <i class="fa fa-fast-backward" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li data-ng-class="{'disabled': currentPage <= 1}">
+            <a data-ng-click="precedent()" title="Précedent">
+                <i class="fa fa-step-backward" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
+            <a data-ng-click="suivant()" title="Suivant">
+                <i class="fa fa-step-forward" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
+            <a data-ng-click="dernier()" title="Dernier">
+                <i class="fa fa-fast-forward" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+
+    <p data-ng-if="content.length > 0" class="pagination-number col-lg-2">
+        {{currentPage}} / {{(content.length - 1)}}
+    </p>
+
 </nav>
 
 <div class="content" style="position: relative;" id="page-content">
@@ -269,7 +269,8 @@
                         <div data-ng-repeat="note in notes" data-ng-if="notes.length > 0">
 
                             <!-- the note on the right side -->
-                            <table class="zoneID" id="zone-id-{{note.idNote}}" draggable-note visible="pageIndex == note.idPage && (pageIndex != 0 || ( pageIndex == 0 && isSummaryActive))"
+                            <table class="zoneID" id="zone-id-{{note.idNote}}" draggable-note
+                                   visible="pageIndex == note.idPage && (pageIndex != 0 || ( pageIndex == 0 && isSummaryActive))"
                                    container="{{'adapt-content-' + pageIndex }}" type="content" style="z-index: 9"
                                    ng-if="pageIndex == note.idPage && (pageIndex != 0 || ( pageIndex == 0 && isSummaryActive))">
                                 <tr>
@@ -415,45 +416,42 @@
 <!-- Pagination -->
 <nav class="navbar navbar-default container-fluid navbar-pagination navbar-pagination-bottom"
      data-ng-show="!modeImpression">
-    <div>
-        <form class="navbar-form navbar-center" role="search">
-            <div class="form-group col-md-4 col-md-offset-2">
-                <div class="input-group">
-                    <div class="input-group-addon">Aller à la page:</div>
-                    <input id='numeroPage' type="number" min="0" max="{{content.length}}" class="form-control"
-                           placeholder="Numéro.." data-ng-model="numeroPageRechercher" required=""> <span
-                        class="input-group-btn">
+    <div class="form-group col-md-4 col-md-offset-2">
+        <div class="input-group">
+            <div class="input-group-addon">Aller à la page:</div>
+            <input id='numeroPage' type="number" min="0" max="{{content.length}}" class="form-control"
+                   placeholder="Numéro.." data-ng-model="numeroPageRechercher" required=""> <span
+                class="input-group-btn">
 						<button class="btn btn-default" type="button" title="Ouvrir la page"
                                 data-ng-click="setPage(numeroPageRechercher)">OK</button>
 					</span>
-                </div>
-            </div>
-        </form>
-        <ul class="pagination pagination-md col-md-2">
-            <li data-ng-class="{'disabled': currentPage <= 1}">
-                <a data-ng-click="premier()" title="Premier">
-                    <i class="fa fa-fast-backward" aria-hidden="true"></i>
-                </a>
-            </li>
-            <li data-ng-class="{'disabled': currentPage <= 1}">
-                <a data-ng-click="precedent()" title="Précedent">
-                    <i class="fa fa-step-backward" aria-hidden="true"></i>
-                </a>
-            </li>
-            <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
-                <a data-ng-click="suivant()" title="Suivant">
-                    <i class="fa fa-step-forward" aria-hidden="true"></i>
-                </a>
-            </li>
-            <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
-                <a data-ng-click="dernier()" title="Dernier">
-                    <i class="fa fa-fast-forward" aria-hidden="true"></i>
-                </a>
-            </li>
-        </ul>
-
-        <p data-ng-if="content.length > 0" class="pagination-number col-md-2"> {{currentPage}} / {{(content.length -
-            1)}}</p>
+        </div>
     </div>
+    <ul class="pagination pagination-md col-lg-2">
+        <li data-ng-class="{'disabled': currentPage <= 1}">
+            <a data-ng-click="premier()" title="Premier">
+                <i class="fa fa-fast-backward" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li data-ng-class="{'disabled': currentPage <= 1}">
+            <a data-ng-click="precedent()" title="Précedent">
+                <i class="fa fa-step-backward" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
+            <a data-ng-click="suivant()" title="Suivant">
+                <i class="fa fa-step-forward" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li data-ng-class="{'disabled': currentPage >= (content.length - 1)}">
+            <a data-ng-click="dernier()" title="Dernier">
+                <i class="fa fa-fast-forward" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+
+    <p data-ng-if="content.length > 0" class="pagination-number col-lg-2">
+        {{currentPage}} / {{(content.length - 1)}}
+    </p>
 </nav>
 
