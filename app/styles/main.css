@@ -1011,6 +1011,10 @@ ul, li {
     margin-top: -48px;
 }
 
+.doc-apercu img {
+    max-width: 100%;
+}
+
 textarea.desc-zone {
     height: 80px;
 }
