@@ -901,11 +901,15 @@ angular.module('cnedApp')
          * @method $scope.speak
          */
         $scope.speak = function () {
+            $log.debug('$scope.speak');
             speechService.stopSpeech();
             $timeout(function () {
                 var text = $scope.getSelectedText();
+                $log.debug('$scope.getSelectedText()', text);
                 if (text && !/^\s*$/.test(text)) {
                     $scope.checkAudioRights().then(function (audioRights) {
+                        $log.debug('$scope.checkAudioRights()', audioRights);
+
                         if (audioRights && $scope.checkBrowserSupported()) {
                             serviceCheck.isOnline().then(function () {
                                 $scope.displayOfflineSynthesisTips = false;
@@ -950,6 +954,8 @@ angular.module('cnedApp')
             } else {
                 $scope.displayBrowserNotSupported = false;
             }
+
+            $log.debug('$scope.checkBrowserSupported()', browserSupported);
             return browserSupported;
         };
 
