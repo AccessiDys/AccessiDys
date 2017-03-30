@@ -196,9 +196,7 @@
                         <div id="canvas-container-{{currentPage}}" class="canvas-container" style="z-index: 0;"></div>
                         <!-- Text -->
                         <div id="{{'adapt-content-' + currentPage }}"
-                             tabindex="0" ng-mouseup="speak();"
-                             ng-dblclick="speak();"
-                             ng-keyup="speakOnKeyboard($event)"
+                             tabindex="0" vocal-synthesis
                              regle-style="currentContent"
                              tags="listTagsByProfil"
                              apply-rules="forceApplyRules"
@@ -254,7 +252,7 @@
                         <div id="canvas-container-{{$index}}" class="canvas-container" style="z-index: 0;"></div>
 
                         <div id="{{'adapt-content-' + $index }}" tabindex="0"
-                             ng-mouseup="speak();" ng-dblclick="speak();" ng-keyup="speakOnKeyboard($event)"
+                             vocal-synthesis
                              regle-style="page" tags="listTagsByProfil" apply-rules="forceApplyRules"
                              class="resetAll doc-apercu"
                              style="outline: none !important; z-index: 1; position: relative;"
