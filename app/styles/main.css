@@ -1011,6 +1011,10 @@ ul, li {
     margin-top: -48px;
 }
 
+.doc-apercu img {
+    max-width: 100%;
+}
+
 textarea.desc-zone {
     height: 80px;
 }
@@ -1378,6 +1382,7 @@ table tbody a:hover {
 
 .navbar-pagination {
     z-index: 1;
+    padding-top: 15px;
 }
 
 .navbar-pagination form{
@@ -1393,9 +1398,15 @@ table tbody a:hover {
     border-top: none;
 }
 
+.navbar-pagination .input-group {
+    width: 300px;
+}
+
+
+
 .pagination {
     margin-top: 0;
-    margin-left: 20px;
+    margin-left: 15px;
     margin-bottom: 0;
 }
 

@@ -33,7 +33,7 @@
 
 cnedApp.directive('draggableNote',
 
-    function ($document, $timeout, $log, $rootScope) {
+    function ($document, $timeout, $log, $rootScope, $window) {
         return {
             restrict: 'A',
             link: function (scope, elm, attrs) {
@@ -199,6 +199,10 @@ cnedApp.directive('draggableNote',
 
                 $rootScope.$on('redrawLines', function () {
                     $log.debug('redrawLines');
+                    drawLine();
+                });
+
+                angular.element($window).bind('resize', function() {
                     drawLine();
                 });
             }

@@ -151,8 +151,6 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
     };
 
     $scope.attachFacebook = function () {
-        console.log(decodeURIComponent($scope.itemToShare.linkToShare));
-
         $scope.facebookLink = decodeURIComponent($scope.itemToShare.linkToShare);
 
         $timeout(function(){
