@@ -23,7 +23,7 @@
  *
  */
 
-/*global cnedApp, $:false */
+/*global cnedApp */
 'use strict';
 
 cnedApp.directive('sselect', function () {

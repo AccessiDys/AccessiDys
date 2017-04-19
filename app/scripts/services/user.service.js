@@ -24,7 +24,7 @@
  */
 'use strict';
 
-
+/*global cnedApp */
 cnedApp.service('UserService', function ($http, configuration, $uibModal) {
 
     var methods = {

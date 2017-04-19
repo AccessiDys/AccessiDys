@@ -382,16 +382,7 @@ cnedApp.factory('serviceCheck',
 
                         $rootScope.isGuest = true;
                         localStorage.setItem('guest', true);
-                    } else if ($location.path() !== '/'
-                        && $location.path() !== '/passwordHelp'
-                        && $location.path() !== '/detailProfil'
-                        && $location.path() !== '/needUpdate'
-                        && $location.path() !== '/mentions'
-                        && $location.path() !== '/contribuer'
-                        && $location.path() !== '/a-propos'
-                        && $location.path() !== '/signup'
-                        && $location.path() !== '/apercu'
-                        && $location.path() !== '/print') {
+                    } else if ($location.path() !== '/' && $location.path() !== '/passwordHelp' && $location.path() !== '/detailProfil' && $location.path() !== '/needUpdate' && $location.path() !== '/mentions' && $location.path() !== '/contribuer' && $location.path() !== '/a-propos' && $location.path() !== '/signup' && $location.path() !== '/apercu' && $location.path() !== '/print') {
                         $location.path('/');
                     }
                 }
@@ -820,6 +811,66 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configurat
             });
             return deferred.promise;
         };
+        var listShareLinkService = function (path, access_token) {
+            if (typeof $rootScope.socket !== 'undefined') {
+                $rootScope.socket.emit('dropBoxEvent', {
+                    message: '[DropBox Operation Begin] : List ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                });
+            }
+            var deferred = $q.defer();
+            $http({
+                method: 'POST',
+                url: 'https://api.dropboxapi.com/2/sharing/list_shared_links',
+                data: {
+                    path: path
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
+            }).success(function (data, status) {
+                if (typeof $rootScope.socket !== 'undefined') {
+                    $rootScope.socket.emit('dropBoxEvent', {
+                        message: '[DropBox Operation End-Success] : List ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                    });
+                }
+                retryCount = 0;
+
+                if (data && data.links) {
+                    var link = data.links[0];
+
+                    if (link.url.indexOf('.appcache') > -1) {
+                        var linkStart = link.url.indexOf('manifest="');
+                        var linkEnd = link.url.indexOf('.appcache', linkStart) + 9;
+                        link.url = link.url.substring(linkStart, linkEnd);
+                    }
+
+                    link.status = status;
+                    link.url = link.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
+                    deferred.resolve(link);
+                } else {
+                    deferred.resolve(null);
+                }
+
+            }).error(function (data, status) {
+                if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line
+                    retryCount++;
+                    listShareLinkService(path, access_token);
+                } else {
+                    retryCount = 0;
+                    if (typeof $rootScope.socket !== 'undefined') {
+                        $rootScope.socket.emit('dropBoxEvent', {
+                            message: '[DropBox Operation End-Error] : List ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
+                        });
+                    }
+                    appCrash.showPop(data);
+                    deferred.reject(data);
+                }
+
+
+            });
+            return deferred.promise;
+        };
         var shareLinkService = function (path, access_token) {
             if (typeof $rootScope.socket !== 'undefined') {
                 $rootScope.socket.emit('dropBoxEvent', {
@@ -885,66 +936,7 @@ cnedApp.factory('dropbox', ['$http', '$q', '$rootScope', 'appCrash', 'configurat
             return deferred.promise;
         };
 
-        var listShareLinkService = function (path, access_token) {
-            if (typeof $rootScope.socket !== 'undefined') {
-                $rootScope.socket.emit('dropBoxEvent', {
-                    message: '[DropBox Operation Begin] : List ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
-                });
-            }
-            var deferred = $q.defer();
-            $http({
-                method: 'POST',
-                url: 'https://api.dropboxapi.com/2/sharing/list_shared_links',
-                data: {
-                    path: path
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    'Content-Type': 'application/json'
-                }
-            }).success(function (data, status) {
-                if (typeof $rootScope.socket !== 'undefined') {
-                    $rootScope.socket.emit('dropBoxEvent', {
-                        message: '[DropBox Operation End-Success] : List ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
-                    });
-                }
-                retryCount = 0;
 
-                if (data && data.links) {
-                    var link = data.links[0];
-
-                    if (link.url.indexOf('.appcache') > -1) {
-                        var linkStart = link.url.indexOf('manifest="');
-                        var linkEnd = link.url.indexOf('.appcache', linkStart) + 9;
-                        link.url = link.url.substring(linkStart, linkEnd);
-                    }
-
-                    link.status = status;
-                    link.url = link.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
-                    deferred.resolve(link);
-                } else {
-                    deferred.resolve(null);
-                }
-
-            }).error(function (data, status) {
-                if ((status === 401 || status === 504 || status === 408) && retryCount < 3) { // jshint ignore:line
-                    retryCount++;
-                    listShareLinkService(path, access_token);
-                } else {
-                    retryCount = 0;
-                    if (typeof $rootScope.socket !== 'undefined') {
-                        $rootScope.socket.emit('dropBoxEvent', {
-                            message: '[DropBox Operation End-Error] : List ShareLink [query] :' + path + ' [access_token] :' + access_token + ' [user_token] ' + localStorage.getItem('compteId')
-                        });
-                    }
-                    appCrash.showPop(data);
-                    deferred.reject(data);
-                }
-
-
-            });
-            return deferred.promise;
-        };
         var renameService = function (oldFilePath, newFilePath, access_token, noPopup) {
             if (typeof $rootScope.socket !== 'undefined') {
                 $rootScope.socket.emit('dropBoxEvent', {

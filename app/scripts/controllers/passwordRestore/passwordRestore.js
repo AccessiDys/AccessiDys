@@ -31,7 +31,6 @@
 
 
 /* jshint undef: true, unused: true */
-/*global $:false */
 
 angular.module('cnedApp').controller('passwordRestoreCtrl', function ($scope, md5, $rootScope, $http, $location, configuration, UtilsService) {
 

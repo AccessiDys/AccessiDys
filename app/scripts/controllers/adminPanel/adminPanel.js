@@ -27,8 +27,6 @@
 /* jshint loopfunc:true */
 
 angular.module('cnedApp').controller('AdminPanelCtrl', function ($scope, $http, $location, configuration, $rootScope, serviceCheck, LoaderService, UtilsService) {
-    /* global $:false */
-
     $scope.headers = ['Nom', 'Prenom', 'Email', 'Autorisation', 'Action'];
     $scope.isOcrDropdownOpen = false;
     $scope.isVoiceDropdownOpen = false;

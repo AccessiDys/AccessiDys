@@ -75,14 +75,10 @@ describe('Controller:PrintCtrl', function () {
             workspaceService : workspaceService
         });
     }));
-
-    it('PrintCtrl:drawLine()', function () {
-        expect(scope.loader).toBe(true);
-    });
 	
 	it('PrintCtrl:init', inject(function($rootScope, $timeout) {
         // mock angular element (cause offset is not supported in tests)
-        spyOn(angular, 'element').andReturn({
+        spyOn(angular, 'element').and.returnValue({
             offset : function() {
                 return {left: 20};
             },
@@ -193,8 +189,4 @@ describe('Controller:PrintCtrl', function () {
         expect(scope.currentContent.length).toBe(0);
         $timeout.flush();
     }));
-
-    it('PrintCtrl:hideLoader()', function () {
-        scope.hideLoader();
-    });
 });

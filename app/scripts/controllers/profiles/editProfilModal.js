@@ -41,6 +41,51 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
         coloration: ''
     };
 
+    var reset = function () {
+        $scope.requiredFieldErrors = [];
+        $scope.profile = {};
+        $scope.profileTagIndex = 0;
+        $scope.styleName = '';
+        $scope.style = {
+            police: '',
+            taille: '',
+            interligne: '',
+            styleValue: '',
+            spaceSelected: '',
+            spaceCharSelected: '',
+            coloration: ''
+        };
+    };
+
+
+    var checkRequiredFields = function () {
+        var isValid = true;
+
+        if ($scope.style.police == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Police ');
+        }
+        if ($scope.style.taille == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Taille ');
+        }
+        if ($scope.style.interligne == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Interligne ');
+        }
+        if ($scope.style.coloration == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Coloration ');
+        }
+        if ($scope.style.styleValue == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Graisse ');
+        }
+        if ($scope.style.space == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Espace entre Les mots ');
+        }
+        if ($scope.style.spaceChar == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Espace entre Les caractères ');
+        }
+
+        return isValid;
+    };
+
     $uibModalInstance.opened.then(function () {
         $scope.styleName = $scope.profile.profileTags.tags[profileTagIndex].tagDetail.libelle;
 
@@ -100,50 +145,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
         }
     };
 
-    var reset = function () {
-        $scope.requiredFieldErrors = [];
-        $scope.profile = {};
-        $scope.profileTagIndex = 0;
-        $scope.styleName = '';
-        $scope.style = {
-            police: '',
-            taille: '',
-            interligne: '',
-            styleValue: '',
-            spaceSelected: '',
-            spaceCharSelected: '',
-            coloration: ''
-        };
-    };
 
-
-    var checkRequiredFields = function () {
-        var isValid = true;
-
-        if ($scope.style.police == null) { // jshint ignore:line
-            $scope.requiredFieldErrors.push(' Police ');
-        }
-        if ($scope.style.taille == null) { // jshint ignore:line
-            $scope.requiredFieldErrors.push(' Taille ');
-        }
-        if ($scope.style.interligne == null) { // jshint ignore:line
-            $scope.requiredFieldErrors.push(' Interligne ');
-        }
-        if ($scope.style.coloration == null) { // jshint ignore:line
-            $scope.requiredFieldErrors.push(' Coloration ');
-        }
-        if ($scope.style.styleValue == null) { // jshint ignore:line
-            $scope.requiredFieldErrors.push(' Graisse ');
-        }
-        if ($scope.style.space == null) { // jshint ignore:line
-            $scope.requiredFieldErrors.push(' Espace entre Les mots ');
-        }
-        if ($scope.style.spaceChar == null) { // jshint ignore:line
-            $scope.requiredFieldErrors.push(' Espace entre Les caractères ');
-        }
-
-        return isValid;
-    };
 
     $scope.dismissModal = function () {
         $uibModalInstance.dismiss();

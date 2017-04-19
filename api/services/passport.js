@@ -115,7 +115,7 @@ module.exports = function (passport) {
             // User.findOne wont fire unless data is sent back
             process.nextTick(function () {
                 if (!req.body.nom || !req.body.prenom) {
-                    return done(404, {message: "Missing fields"});
+                    return done(404, {message: 'Missing fields'});
                 }
                 // find a user whose email is the same as the forms email
                 // we are checking to see if the user trying to login already exists
@@ -179,7 +179,7 @@ module.exports = function (passport) {
                                             });
                                             userProfil.save(function (err) {
                                                 if (err) {
-                                                    console.log('error creating user profil for default profil')
+                                                    console.log('error creating user profil for default profil');
                                                 }
                                             });
                                         }

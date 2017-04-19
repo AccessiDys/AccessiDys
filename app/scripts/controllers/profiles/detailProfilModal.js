@@ -23,14 +23,29 @@
  *
  */
 'use strict';
-/* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $uibModalInstance, $rootScope, profilsService, gettextCatalog, $timeout, template, profile) {
+angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $uibModalInstance, $rootScope, profilsService,
+                                                                             ToasterService, template, profile) {
     $scope.template = template;
     $scope.profile = profile;
 
     $scope.forceApplyRules = true;
+
+    var checkRequiredFields = function () {
+        var isValid = true;
+
+        if (!$scope.profile.nom) {
+            ToasterService.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.mandatory');
+            isValid = false;
+        }
+
+        return isValid;
+    };
+
+    var reset = function () {
+        $scope.profile = profile;
+    };
 
     $scope.editTag = function (index) {
         $uibModalInstance.close({
@@ -119,46 +134,13 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
                         }
 
                     } else {
-                        $scope.loader = false;
-                        $scope.loaderMsg = '';
-                        $scope.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.alreadyexist');
+                        ToasterService.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.alreadyexist');
                     }
                 });
         }
 
     };
 
-    var checkRequiredFields = function () {
-        var isValid = true;
 
-        if (!$scope.profile.nom) {
-            $scope.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.mandatory');
-            isValid = false;
-        }
-
-        return isValid;
-    };
-
-    var reset = function () {
-        $scope.profile = profile;
-    };
-
-    $scope.toasterMsg = '';
-    $scope.forceToasterApdapt = false;
-    $scope.listTagsByProfilToaster = [];
-
-    /**
-     * Show success toaster
-     * @param msg
-     */
-    $scope.showToaster = function (id, msg) {
-        $scope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
-        $scope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-        $scope.forceToasterApdapt = true;
-        $timeout(function() {
-            angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-            $scope.forceToasterApdapt = false;
-        }, 0);
-    };
 
 });

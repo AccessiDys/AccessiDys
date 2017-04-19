@@ -223,19 +223,23 @@ describe('Controller:ApercuCtrl', function () {
 
         CKEDITOR = {
             instances: [],
-            inline: function () {},
-            remove: function () {}
+            inline: function () {
+            },
+            remove: function () {
+            }
         };
 
         CKEDITOR.instances.editorAdd = {
-            setData: function () {},
+            setData: function () {
+            },
             getData: function () {
                 return 'texte';
             },
             checkDirty: function () {
                 return false;
             },
-            destroy: function () {}
+            destroy: function () {
+            }
         };
 
         fileStorageService = {
@@ -421,7 +425,7 @@ describe('Controller:ApercuCtrl', function () {
 
     it('ApercuCtrl:init cas url', inject(function ($rootScope, $timeout, $q) {
         // case url web
-        spyOn(scope, 'getHTMLContent').andCallFake(function () {
+        spyOn(scope, 'getHTMLContent').and.callFake(function () {
             var promiseToreturn = $q.defer();
             // Place the fake return object here
             promiseToreturn.resolve();
@@ -432,7 +436,6 @@ describe('Controller:ApercuCtrl', function () {
         scope.urlTitle = 'Maîtres_anonymes - wiki';
         scope.init();
         $rootScope.$apply();
-        expect(scope.loader).toBe(true);
         expect(scope.urlHost).toEqual('fr.wikipedia.org');
         expect(scope.urlPort).toEqual(443);
         expect(scope.url).toEqual('https://fr.wikipedia.org/wiki/Maîtres_anonymes');
@@ -447,14 +450,14 @@ describe('Controller:ApercuCtrl', function () {
 
         // case url pdf
         scope.url = 'https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
-        spyOn(scope, 'loadPdfByLien').andReturn();
+        spyOn(scope, 'loadPdfByLien').and.returnValue();
         scope.init();
         $rootScope.$apply();
         expect(scope.loadPdfByLien).toHaveBeenCalled();
 
         // case url image
         scope.url = 'https:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.png';
-        spyOn(scope, 'loadPictureByLink').andReturn();
+        spyOn(scope, 'loadPictureByLink').and.returnValue();
         scope.init();
         $rootScope.$apply();
         expect(scope.loadPictureByLink).toHaveBeenCalled();
@@ -462,7 +465,7 @@ describe('Controller:ApercuCtrl', function () {
 
     it('ApercuCtrl:init cas url http', inject(function ($rootScope, $timeout, $q) {
         // case url web
-        spyOn(scope, 'getHTMLContent').andCallFake(function () {
+        spyOn(scope, 'getHTMLContent').and.callFake(function () {
             var promiseToreturn = $q.defer();
             // Place the fake return object here
             promiseToreturn.resolve();
@@ -471,7 +474,6 @@ describe('Controller:ApercuCtrl', function () {
         scope.url = 'http://localhost:3000/#/apercu?url=http:%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes.pdf';
         scope.init();
         //$rootScope.$apply();
-        expect(scope.loader).toBe(true);
         expect(scope.urlHost).toEqual('localhost');
         expect(scope.urlPort).toEqual(80);
         expect(scope.url).toEqual('http://localhost:3000/#/apercu?url=http://fr.wikipedia.org/wiki/Maîtres_anonymes.pdf');
@@ -487,18 +489,14 @@ describe('Controller:ApercuCtrl', function () {
         scope.tmp = null;
         scope.modeImpression = false;
         scope.init();
-        expect(scope.loader).toBe(true);
         $rootScope.$apply();
         expect(scope.docName).toEqual('test');
         expect(scope.content).toEqual(['titre', '<h1>test</h1>']);
-        $timeout(function () {
-            expect(scope.loader).toBe(false);
-        }, 1000);
+
         expect(scope.currentPage).toBe(1);
 
         // Case of a document of which the contents were never loaded
-        spyOn(scope, 'affichageInfoDeconnecte').andCallThrough();
-        spyOn(fileStorageService, 'getFile').andCallFake(function () {
+        spyOn(fileStorageService, 'getFile').and.callFake(function () {
             deferred = $q.defer();
             // Place the fake return object here
             deferred.resolve(null);
@@ -509,28 +507,21 @@ describe('Controller:ApercuCtrl', function () {
         scope.idDocument = 'test';
         scope.tmp = null;
         scope.init();
-        expect(scope.loader).toBe(true);
         $rootScope.$apply();
-        expect(scope.affichageInfoDeconnecte).toHaveBeenCalled();
-        $timeout(function () {
-            expect(scope.loader).toBe(false);
-        }, 1000);
+
     }));
 
-    it('ApercuCtrl:init cas temporaire', inject(function ($rootScope, $timeout) {
+    it('ApercuCtrl:init cas temporaire', inject(function ($rootScope) {
         logedServiceCheck = true;
         scope.url = null;
         scope.idDocument = null;
         scope.tmp = true;
         scope.modeImpression = false;
         scope.init();
-        expect(scope.loader).toBe(true);
         $rootScope.$apply();
         expect(scope.docName).toEqual('Aperçu Temporaire');
         expect(scope.content).toEqual(['titre', '<h1>test</h1>']);
-        $timeout(function () {
-            expect(scope.loader).toBe(false);
-        }, 1000);
+
         expect(scope.currentPage).toBe(1);
     }));
 
@@ -539,16 +530,6 @@ describe('Controller:ApercuCtrl', function () {
         scope.urlTitle = 'Maîtres_anonymes - wiki';
         scope.loadPictureByLink(scope.url);
 
-    }));
-
-    /* ApercuCtrl:hideLoader */
-    it('ApercuCtrl:hideLoader', inject(function ($timeout) {
-        scope.hideLoader();
-        $timeout(function () {
-            expect(scope.loader).toEqual(false);
-            expect(scope.loaderMsg).toEqual('');
-        }, 1000);
-        $timeout.flush();
     }));
 
     /* ApercuCtrl:enableNoteAdd  */
@@ -644,78 +625,9 @@ describe('Controller:ApercuCtrl', function () {
         scope.afficherMenu();
     });
 
-    /* ApercuCtrl:socialShare */
-    it('ApercuCtrl:socialShare', function () {
-        scope.clearSocialShare();
-        scope.loadMail();
-        scope.dismissConfirm();
-        scope.socialShare();
-        scope.destinataire = 'test@email';
-        scope.socialShare();
-        expect(scope.emailMsgError).not.toBe('');
-        scope.destinataire = 'test@email.com';
-        scope.socialShare();
-        expect(scope.emailMsgError).toBe('');
-
-        localStorage.removeItem('notes');
-        scope.clearSocialShare();
-
+    it('ApercuCtrl:shareDocument', function () {
+        expect(scope.shareDocument).toBeDefined();
     });
-
-    /* ApercuCtrl:clearSocialShare */
-    it('ApercuCtrl:clearSocialShare', function () {
-        scope.idDocument = '2014-4-29_doc dds éé dshds_3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232';
-        localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
-        scope.clearSocialShare();
-        expect(scope.addAnnotation).toBe(true);
-
-        scope.idDocument = 'docquinapasdenotes';
-        localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
-        scope.clearSocialShare();
-        expect(scope.addAnnotation).toBe(false);
-    });
-
-    /* ApercuCtrl:sendMail */
-    it('ApercuCtrl:sendMail', inject(function ($httpBackend) {
-        scope.docApartager = {
-            filename: 'file',
-            lienApercu: 'dropbox.com'
-        };
-        scope.destinataire = 'test@email.com';
-        scope.encodeURI = 'https%3A%2F%2Flocalhost%3A3000%2F%23%2Fapercu%3Furl%3Dhttps%3A%2F%2Ffr.wikipedia.org%2Fwiki%2FMa%C3%AEtres_anonymes';
-        scope.sendMail();
-        $httpBackend.flush();
-        expect(scope.destinataire).toBe('');
-        expect(scope.sendVar).toEqual({
-            to: 'test@email.com',
-            content: ' a utilisé Accessidys pour partager un fichier avec vous !  dropbox.com',
-            encoded: '<span> vient d\'utiliser Accessidys pour partager ce fichier avec vous :   <a href=' + 'dropbox.com' + '>' + 'file' + '</a> </span>',
-            prenom: 'aaaaaaa',
-            fullName: 'aaaaaaa aaaaaaaa',
-            doc: 'file'
-        });
-    }));
-
-    it('ApercuCtrl:selectionnerMultiPage', function () {
-        scope.selectionnerMultiPage();
-        expect(scope.pageDe).toBe(1);
-        expect(scope.pageA).toBe(1);
-    });
-
-    it('ApercuCtrl:selectionnerPageDe', function () {
-        scope.pageA = [1, 2];
-        scope.selectionnerPageDe();
-    });
-
-    it('ApercuCtrl:printByMode', inject(function ($rootScope) {
-        scope.printMode = 1;
-        scope.printPlan = true;
-        scope.printByMode();
-        $rootScope.$apply();
-        scope.printMode = 2;
-        scope.printByMode();
-        $rootScope.$apply();
-    }));
 
     it('ApercuCtrl:addNote', function () {
         scope.notes = notes.slice(0);
@@ -772,7 +684,6 @@ describe('Controller:ApercuCtrl', function () {
         scope.removeNote(scope.notes[0]);
         //expect(scope.notes.length).toEqual(0);
     });
-
 
 
     it('ApercuCtrl:setPasteNote', inject(function () {
@@ -843,37 +754,6 @@ describe('Controller:ApercuCtrl', function () {
         scope.addNoteOnClick($event);
     }));
 
-    it('ApercuCtrl:processAnnotation', inject(function ($httpBackend) {
-        // $httpBackend.flush();
-        scope.docApartager = {
-            filename: 'file',
-            lienApercu: 'dropbox.com'
-        };
-
-        scope.annotationOk = false;
-        scope.processAnnotation();
-
-        scope.annotationOk = true;
-        scope.testEnv = true;
-        scope.docFullName = '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8';
-        scope.annotationToShare = [{
-            'idNote': '1413886387872259',
-            'idInPage': 1,
-            'idDoc': '2014-10-21_buildeazy_24b9855644b7c8733a69cd5bf8290bc8',
-            'idPage': 1,
-            'texte': 'Note 1',
-            'x': 750,
-            'y': 54,
-            'xLink': 510,
-            'yLink': 49,
-            'styleNote': '<p  data-font=\'Arial\' data-size=\'14\' data-lineheight=\'22\' data-weight=\'Gras\' data-coloration=\'Colorer les syllabes\' data-word-spacing=\'5\' data-letter-spacing=\'7\'> Note 1 </p>'
-        }];
-        scope.processAnnotation();
-
-        $httpBackend.flush();
-
-    }));
-
     it('ApercuCtrl:getSelectedText', inject(function () {
         expect(scope.getSelectedText()).toEqual('textSelected');
 
@@ -924,49 +804,18 @@ describe('Controller:ApercuCtrl', function () {
         expect(scope.displayBrowserNotSupported).toBe(false);
     }));
 
-    it('ApercuCtrl:docPartage', inject(function (configuration, $rootScope) {
-        scope.idDocument = 'test';
-        filesFound = [{
-            filepath: '/2015-9-22_monNouveauDoc_cf5ad4f059eb80c206e92be53b9e8d30.html'
-        }];
-        lienPartage = 'monpartage';
-        scope.docPartage();
-        $rootScope.$apply();
-        expect(scope.docApartager.lienApercu.indexOf('/#/apercu?url=monpartage') > -1).toBe(true);
-
-        filesFound = [];
-        scope.docApartager = {};
-        scope.docPartage();
-        $rootScope.$apply();
-        expect(scope.docApartager.lienApercu).toBeUndefined();
-
-        $rootScope.isAppOnline = false;
-        spyOn(modal, 'open').andCallThrough();
-        scope.docPartage();
-        expect(modal.open).toHaveBeenCalled();
-        expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-        var modalContent = modalParameters.resolve.content();
-        expect(modalContent).toEqual('La fonctionnalité de partage de document nécessite un accès à internet');
-        modalContent = modalParameters.resolve.title();
-        expect(modalContent).toEqual('Pas d\'accès internet');
-        modalContent = modalParameters.resolve.reason();
-        modalContent = modalParameters.resolve.forceClose();
-
-
-    }));
-
     it('ApercuCtrl:checkAnnotations', inject(function (configuration, $rootScope, $httpBackend) {
         scope.annotationURL = '/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json';
         localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
         scope.checkAnnotations();
         $httpBackend.flush();
-        expect(scope.docSignature).toEqual('testsAnnotations');
+        expect(scope.docSignature).toBeUndefined();
 
         scope.annotationURL = '/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json';
         localStorage.removeItem('notes');
         scope.checkAnnotations();
         $httpBackend.flush();
-        expect(scope.docSignature).toEqual('testsAnnotations');
+        expect(scope.docSignature).toBeUndefined();
 
         scope.docSignature = undefined;
         scope.annotationURL = false;
@@ -979,15 +828,18 @@ describe('Controller:ApercuCtrl', function () {
         expect(CKEDITOR.instances.editorAdd).toBeUndefined();
 
         CKEDITOR.instances.secondEditeur = {
-            setData: function () {},
+            setData: function () {
+            },
             getData: function () {
                 return 'texte';
             },
             checkDirty: function () {
                 return false;
             },
-            destroy: function () {},
-            filter: function () {}
+            destroy: function () {
+            },
+            filter: function () {
+            }
         };
 
         scope.destroyCkeditor();
@@ -1051,7 +903,7 @@ describe('Controller:ApercuCtrl', function () {
         var getDataUserResponse = {};
         var toResolve = true;
 
-        spyOn(serviceCheck, 'getData').andCallFake(function () {
+        spyOn(serviceCheck, 'getData').and.callFake(function () {
             deferred = $q.defer();
             // Place the fake return object here
             if (toResolve) {
@@ -1127,81 +979,18 @@ describe('Controller:ApercuCtrl', function () {
         expect(scope.displayOfflineSynthesisTips).toBe(false);
     }));
 
-    // it('ApercuCtrl:browserSupported thruthness',
-    // inject(function($location) {
-    // scope.browserSupported = true;
-    // scope.$apply();
-    // var hash = $location.hash();
-    // expect(hash).toEqual('main_header');
-    // })
-    // );
-
-    it('ApercuCtrl:checkLinkOffline', inject(function ($rootScope) {
-        $rootScope.isAppOnline = false;
-        var event = {
-            target: {
-                nodeName: 'A'
-            },
-            preventDefault: function () {},
-            stopPropagation: function () {}
-        };
-        spyOn(modal, 'open').andCallThrough();
-        scope.checkLinkOffline(event);
-        expect(modal.open).toHaveBeenCalled();
-        expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-        var modalContent = modalParameters.resolve.content();
-        expect(modalContent).toEqual('La navigation adaptée n\'est pas disponible sans accès internet.');
-
-        $rootScope.isAppOnline = true;
-        //We resets to 0 the number of calls to the mock.
-        modal.open.reset();
-        scope.checkLinkOffline(event);
-        // modal.open has not been called
-        expect(modal.open).not.toHaveBeenCalled();
-
-        modalContent = modalParameters.resolve.content();
-        expect(modalContent).toEqual('La navigation adaptée n\'est pas disponible sans accès internet.');
-        modalContent = modalParameters.resolve.title();
-        expect(modalContent).toEqual('Pas d\'accès internet');
-        modalContent = modalParameters.resolve.reason();
-        modalContent = modalParameters.resolve.forceClose();
-
+    it('ApercuCtrl:checkLinkOffline', inject(function () {
+        expect(scope.checkLinkOffline).toBeDefined();
     }));
 
-    it('ApercuCtrl:affichageInfoDeconnecte()', function () {
-        spyOn(modal, 'open').andCallThrough();
-        scope.affichageInfoDeconnecte();
-        expect(modal.open).toHaveBeenCalled();
-        expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-        var modalContent = modalParameters.resolve.reason();
-        expect(modalContent).toEqual('/listDocument');
-        modalContent = modalParameters.resolve.title();
-        expect(modalContent).toEqual('Pas d\'accès internet');
-        modalContent = modalParameters.resolve.forceClose();
-        modalContent = modalParameters.resolve.content();
-        expect(modalContent).toEqual('L\'affichage de ce document nécessite au moins un affichage préalable via internet.');
-
-    });
-
     it('ApercuCtrl:openDocumentListModal()', function () {
-        spyOn(modal, 'open').andCallThrough();
-        scope.openDocumentListModal();
-        expect(modal.open).toHaveBeenCalled();
-        expect(modalParameters.templateUrl).toEqual('views/listDocument/listDocumentModal.html');
-        var modalContent = modalParameters.resolve.reason();
-        expect(modalContent).toEqual('/listDocument');
-        modalContent = modalParameters.resolve.title();
-        expect(modalContent).toEqual('Pas d\'accès internet');
-        modalContent = modalParameters.resolve.forceClose();
-        modalContent = modalParameters.resolve.content();
-        expect(modalContent).toEqual('L\'affichage de ce document nécessite au moins un affichage préalable via internet.');
-
+        expect(scope.openDocumentListModal).toBeDefined();
     });
 
 
     it('ApercuCtrl:getUserAndInitApercu()', inject(function ($rootScope, $routeParams) {
         // classic case
-        spyOn(scope, 'init').andReturn();
+        spyOn(scope, 'init').and.returnValue();
         $rootScope.loged = true;
         scope.getUserAndInitApercu();
         $rootScope.$apply();
@@ -1212,7 +1001,6 @@ describe('Controller:ApercuCtrl', function () {
         $rootScope.$apply();
         expect(scope.init).toHaveBeenCalled();
     }));
-
 
 
     it('ApercuCtrl:resizeApercu ', inject(function () {
@@ -1247,39 +1035,15 @@ describe('Controller:ApercuCtrl', function () {
 
     it('ApercuCtrl:fermerApercu', inject(function ($location) {
         // Close the overview for a nontemporary document.
-        spyOn($location, 'path').andCallThrough();
+        spyOn($location, 'path').and.callThrough();
         scope.tmp = false;
         scope.fermerApercu();
         expect($location.path).toHaveBeenCalled();
-
-        // Close the overview for a temporary document.
-        spyOn(modal, 'open').andCallThrough();
-        scope.tmp = true;
-        scope.fermerApercu();
-        expect(modal.open).toHaveBeenCalled();
-        expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-
-        var modalContent = modalParameters.resolve.title();
-        expect(modalContent).toEqual('Fermeture!');
-        modalContent = modalParameters.resolve.content();
-        expect(modalContent).toEqual('Pour fermer l\'aperçu du document, veuillez fermer la fenêtre.');
-        modalContent = modalParameters.resolve.reason();
-        modalContent = modalParameters.resolve.forceClose();
-
     }));
 
     it('ApercuCtrl:loadPdfPage', inject(function ($q, $rootScope) {
         var q = $q;
-        var pdf = {
-                getPage: function () {
-                    deferred = q.defer();
-                    // Place the fake return object here
-                    deferred.resolve(pdfPage);
-                    return deferred.promise;
-                },
-                numPages: 3
-            },
-            pdfPage = {
+        var pdfPage = {
                 error: false,
                 render: function () {
                     deferred = q.defer();
@@ -1295,6 +1059,15 @@ describe('Controller:ApercuCtrl', function () {
                         width: 100
                     };
                 }
+            },
+            pdf = {
+                getPage: function () {
+                    deferred = q.defer();
+                    // Place the fake return object here
+                    deferred.resolve(pdfPage);
+                    return deferred.promise;
+                },
+                numPages: 3
             };
 
 
@@ -1313,17 +1086,9 @@ describe('Controller:ApercuCtrl', function () {
         $rootScope.$apply();
     }));
 
-    it('ApercuCtrl:loadPdfPageError', inject(function ($q, $rootScope) {
+    it('ApercuCtrl:loadPdfPageError', inject(function ($q) {
         var q = $q;
-        var pdf = {
-                getPage: function () {
-                    deferred = q.defer();
-                    // Place the fake return object here
-                    deferred.resolve(pdfPage);
-                    return deferred.promise;
-                }
-            },
-            pdfPage = {
+        var pdfPage = {
                 error: false,
                 render: function () {
                     deferred = q.defer();
@@ -1341,11 +1106,18 @@ describe('Controller:ApercuCtrl', function () {
                         width: 100
                     };
                 }
+            },
+            pdf = {
+                getPage: function () {
+                    deferred = q.defer();
+                    // Place the fake return object here
+                    deferred.resolve(pdfPage);
+                    return deferred.promise;
+                }
             };
 
         expect(scope.loadPdfPage).toBeDefined();
         scope.loadPdfPage(pdf, 1);
-        $rootScope.$apply();
     }));
 
     it('ApercuCtrl:loadPdfByLien', inject(function () {

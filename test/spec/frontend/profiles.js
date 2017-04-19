@@ -24,9 +24,6 @@
  */
 
 
-/* global spyOn:false */
-/* global jQuery */
-/* global gapi:true */
 'use strict';
 
 describe('Controller:ProfilesCtrl', function () {
@@ -158,63 +155,63 @@ describe('Controller:ProfilesCtrl', function () {
     };
 
     var profiles = [{
-        _id: "58bd55d2cfdeac0100382091",
+        _id: '58bd55d2cfdeac0100382091',
         nom: 'test',
         type: 'profile',
         profileTags: {
             type: 'tags',
             tags: [{
-                _id: "58bd55d2cfdeac0100382092",
-                coloration: "Colorer les lignes RBV",
-                id_tag: "58b686cfb102ed01008bb6a7",
-                interligne: "1",
-                police: "opendyslexicregular",
-                profil: "58b7b5e0c589b701007af018",
+                _id: '58bd55d2cfdeac0100382092',
+                coloration: 'Colorer les lignes RBV',
+                id_tag: '58b686cfb102ed01008bb6a7',
+                interligne: '1',
+                police: 'opendyslexicregular',
+                profil: '58b7b5e0c589b701007af018',
                 spaceCharSelected: 1,
                 spaceSelected: 1,
-                style: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap",
-                styleValue: "Gras",
-                tag: "58b686cfb102ed01008bb6a7",
+                style: '<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap',
+                styleValue: 'Gras',
+                tag: '58b686cfb102ed01008bb6a7',
                 tagDetail: {
-                    _id: "58b686cfb102ed01008bb6a7",
-                    libelle: "Titre 1",
+                    _id: '58b686cfb102ed01008bb6a7',
+                    libelle: 'Titre 1',
                     niveau: 1,
                     position: 1,
-                    balise: "h1"
+                    balise: 'h1'
                 },
-                taille: "24",
-                texte: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap"
+                taille: '24',
+                texte: '<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap'
             }]
         }
     }];
 
     var profile = {
-        _id: "58bd55d2cfdeac0100382091",
+        _id: '58bd55d2cfdeac0100382091',
         nom: 'test',
         type: 'profile',
         profileTags: {
             type: 'tags',
             tags: [{
-                _id: "58bd55d2cfdeac0100382092",
-                coloration: "Colorer les lignes RBV",
-                id_tag: "58b686cfb102ed01008bb6a7",
-                interligne: "1",
-                police: "opendyslexicregular",
-                profil: "58b7b5e0c589b701007af018",
+                _id: '58bd55d2cfdeac0100382092',
+                coloration: 'Colorer les lignes RBV',
+                id_tag: '58b686cfb102ed01008bb6a7',
+                interligne: '1',
+                police: 'opendyslexicregular',
+                profil: '58b7b5e0c589b701007af018',
                 spaceCharSelected: 1,
                 spaceSelected: 1,
-                style: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap",
-                styleValue: "Gras",
-                tag: "58b686cfb102ed01008bb6a7",
+                style: '<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap',
+                styleValue: 'Gras',
+                tag: '58b686cfb102ed01008bb6a7',
                 tagDetail: {
-                    _id: "58b686cfb102ed01008bb6a7",
-                    libelle: "Titre 1",
+                    _id: '58b686cfb102ed01008bb6a7',
+                    libelle: 'Titre 1',
                     niveau: 1,
                     position: 1,
-                    balise: "h1"
+                    balise: 'h1'
                 },
-                taille: "24",
-                texte: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap"
+                taille: '24',
+                texte: '<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap'
             }]
         }
     };
@@ -287,7 +284,7 @@ describe('Controller:ProfilesCtrl', function () {
                 return deferred.promise;
             }
         };
-        //spyOn(modal, 'open').andCallThrough();
+        //spyOn(modal, 'open').and.callThrough();
 
 
         tagsService = {
@@ -337,7 +334,7 @@ describe('Controller:ProfilesCtrl', function () {
         };
 
         // $scope.token =
-        // "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec";
+        // 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjaGFpbmUiOiI5dW5nc3l2aSJ9.yG5kCziw7xMLa9_6fzlJpQnX6PSURyX8CGlZeDTW8Ec';
 
         configuration.DROPBOX_TYPE = 'sandbox';
 
@@ -524,18 +521,6 @@ describe('Controller:ProfilesCtrl', function () {
         $rootScope.$apply();
     }));
 
-    it('ProfilesCtrl:delegationInfoDeconnecte', function () {
-        $scope.delegationInfoDeconnecte();
-        //expect(modal.open).toHaveBeenCalled();
-        //expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-    });
-
-    it('ProfilesCtrl:partageInfoDeconnecte', function () {
-        $scope.partageInfoDeconnecte();
-        //expect(modal.open).toHaveBeenCalled();
-        //expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-    });
-
 
     it('ProfilesCtrl:isDelegated()', inject(function () {
         var param = {
@@ -613,21 +598,14 @@ describe('Controller:ProfilesCtrl', function () {
     }));
 
 
-    it('ProfilesCtrl:supprimerProfil()', inject(function ($rootScope, $httpBackend) {
-        expect($scope.preSupprimerProfil).toBeDefined();
-        expect($scope.supprimerProfil).toBeDefined();
+    it('ProfilesCtrl:deleteProfile()', inject(function () {
+        expect($scope.deleteProfile).toBeDefined();
 
-        $scope.sup = {
+        var profile = {
             nom: 'name'
         };
-        spyOn(jQuery.fn, 'text').andReturn('name');
 
-        //$scope.preSupprimerProfil(profil);
-        $scope.supprimerProfil();
-        $httpBackend.flush();
-        $rootScope.$apply();
-
-        expect($scope.profilFlag).toEqual(profil);
+        $scope.deleteProfile(profile);
     }));
 
     it('ProfilesCtrl:editStyleChange()', inject(function () {
@@ -637,69 +615,64 @@ describe('Controller:ProfilesCtrl', function () {
 
     it('ProfilesCtrl:openProfileModal()', inject(function () {
 
-        var result = {
-            policeList: '',
-            tailleList: '',
-            interligneList: '',
-            weightList: '',
-            colorList: '',
-            spaceSelected: '',
-            spaceCharSelected: '',
-            type: 'modification',
-            editTag: '',
-            tagList: ''
-        };
+        expect($scope.openProfileModal).toBeDefined();
 
-        $scope.openProfileModal({
-            nom: ''
-        });
+        $scope.openProfileModal('create', profile);
 
+        $scope.openProfileModal('update', profile);
 
-        modal.openCall(result);
-
-
-        result = {
-            nom: '',
-            policeList: '',
-            tailleList: '',
-            interligneList: '',
-            weightList: '',
-            colorList: '',
-            spaceSelected: '',
-            spaceCharSelected: '',
-            type: 'other',
-            editTag: '',
-            tagList: ''
-        };
-        modal.openCall(result);
-
-        modal.cancelCall('modification');
+        $scope.openProfileModal('duplicate', profile);
     }));
 
     it('ProfilesCtrl:openTagEditModal()', inject(function () {
         expect($scope.openTagEditModal).toBeDefined();
+
+        $scope.openTagEditModal(profile, 0);
     }));
 
 
     it('ProfilesCtrl:openRenameProfilModal()', inject(function () {
         expect($scope.openRenameProfilModal).toBeDefined();
+
+        $scope.openRenameProfilModal(profile);
     }));
 
     it('ProfilesCtrl:initProfil()', inject(function () {
         expect($scope.getProfiles).toBeDefined();
         expect($scope.initDetailProfil).toBeDefined();
         expect($scope.initProfil).toBeDefined();
-        $scope.initProfil();
     }));
 
-    it('ProfilesCtrl:mettreParDefaut()', inject(function ($httpBackend) {
-        var param = {
-            nom: 'Nom2',
-            descriptif: 'descriptif',
-            photo: '/9j/4AAQSkZJRgABAQAAAQABAAD/wCVAA/9k=',
-            owner: '5334398c0bbd4cd21daecf5b',
-            _id: '5334398c0bbd4cd21daecf5c'
-        };
+    it('ProfilesCtrl:showLoader()', function () {
+        expect($scope.showLoader).toBeDefined();
+        $scope.showLoader();
+
+        expect($scope.loader).toEqual(true);
+        expect($scope.loaderMsg).toEqual('Affichage de la liste des profils en cours ...');
+    });
+
+    it('ProfilesCtrl:hideLoader()', function () {
+        expect($scope.hideLoader).toBeDefined();
+        $scope.hideLoader();
+
+        expect($scope.loader).toEqual(false);
+        expect($scope.loaderMsg).toEqual('');
+    });
+
+    it('ProfilesCtrl:showLoaderFromLoop()', function () {
+        expect($scope.showLoaderFromLoop).toBeDefined();
+        $scope.showLoaderFromLoop(0);
+    });
+
+    it('ProfilesCtrl:showProfilLoaderFromLoop()', function () {
+        expect($scope.showProfilLoaderFromLoop).toBeDefined();
+        $scope.showProfilLoaderFromLoop(0);
+
+        expect($scope.loader).toEqual(true);
+        expect($scope.loaderMsg).toEqual('Affichage du profil en cours ...');
+    });
+
+    it('ProfilesCtrl:mettreParDefaut()', inject(function () {
         $scope.defaultVar = {
             userID: '5334398c0bbd4cd21daecf5b',
             profilID: '533436a90bbd4cd21daecf4b',
@@ -707,9 +680,6 @@ describe('Controller:ProfilesCtrl', function () {
         };
         $scope.testEnv = true;
         expect($scope.mettreParDefaut).toBeDefined();
-        $scope.mettreParDefaut(param);
-        $httpBackend.flush();
-        expect($scope.defaultVarFlag).toEqual(profils);
     }));
 
     it('ProfilesCtrl:isDefault()', inject(function () {
@@ -750,109 +720,26 @@ describe('Controller:ProfilesCtrl', function () {
         expect($scope.isDeletable(profil)).toBeFalsy();
     }));
 
-    it('ProfilesCtrl:retirerParDefaut()', inject(function ($httpBackend) {
-        $scope.testEnv = true;
-        $scope.retirerParDefaut(profil);
-        $httpBackend.flush();
+    it('ProfilesCtrl:retirerParDefaut()', inject(function () {
+        expect($scope.retirerParDefaut).toBeDefined();
     }));
 
-    it('ProfilesCtrl:preRemoveFavourite()', function () {
-        $scope.preRemoveFavourite(profil);
-        expect($scope.profilId).toBe(profil._id);
-    });
-
-    it('ProfilesCtrl:removeFavourite()', inject(function ($httpBackend) {
-        $scope.testEnv = true;
-        $scope.removeFavourite();
-        $httpBackend.flush();
+    it('ProfilesCtrl:removeFavourite()', inject(function () {
+        expect($scope.removeFavourite).toBeDefined();
     }));
 
-    it('ProfilesCtrl:sendEmailDuplique()', inject(function ($httpBackend) {
-        $scope.oldProfil = profil;
-        $scope.sendEmailDuplique();
-        $httpBackend.flush();
-    }));
-
-    it('ProfilesCtrl:preDeleguerProfil()', inject(function ($rootScope) {
-        expect($scope.preDeleguerProfil).toBeDefined();
-        $scope.preDeleguerProfil(profil);
-        expect($scope.delegateEmail).toBe('');
-        $rootScope.isAppOnline = false;
-        $scope.profDelegue = undefined;
-        expect($scope.profDelegue).toBeUndefined();
-    }));
-
-
-
-    it('ProfilesCtrl:retireDeleguerProfil()', inject(function ($httpBackend) {
+    it('ProfilesCtrl:cancelDelegateByOwner()', inject(function () {
         $scope.profRetirDelegue = profil;
-        $scope.retireDeleguerProfil();
-        $httpBackend.flush();
+        $scope.cancelDelegateByOwner();
     }));
 
-    it('ProfilesCtrl:profilApartager()', function () {
-        $scope.profilApartager(profil);
-        expect($scope.profilPartage).toBe(profil);
+    it('ProfilesCtrl:shareProfile()', function () {
+        $scope.shareProfile(profil);
     });
 
-    it('ProfilesCtrl:loadMail()', function () {
-        $scope.loadMail();
-        expect($scope.displayDestination).toBeTruthy();
-    });
-
-    it('ProfilesCtrl:clearSocialShare()', function () {
-        $scope.clearSocialShare();
-    });
-
-    it('ProfilesCtrl:socialShare()', function () {
-        $scope.destinataire = 'emailTest@mymail.fr';
-        spyOn(location, 'absUrl').andReturn('/detailProfil');
-        $scope.profilPartage = profil;
-        $scope.socialShare();
-    });
-
-    it('ProfilesCtrl:verifyEmail()', function () {
-        $scope.verifyEmail('test@test.com');
-        expect($scope.verifyEmail('test@test.com')).toBeTruthy();
-    });
-
-    it('ProfilesCtrl:sendMail()', inject(function ($httpBackend, $location, $rootScope, configuration) {
-        $scope.destination = 'test@test.com';
-        $scope.destinataire = 'test@test.com';
-        $scope.currentUrl = $location.absUrl();
-        $scope.profilPartage = profil;
-        $rootScope.currentUser = $scope.dataRecu;
-        $scope.sendMail();
-        expect($scope.verifyEmail($scope.destination)).toBeTruthy();
-        expect($scope.destination.length).not.toBe(null);
-        expect($rootScope.currentUser.dropbox.accessToken).not.toBe(null);
-        expect(configuration.DROPBOX_TYPE).toBeTruthy();
-        expect($rootScope.currentUser).not.toBe(null);
-        $scope.sendVar = {
-            to: $scope.destinataire,
-            content: ' a utilisé Accessidys pour partager un fichier avec vous !  ',
-            encoded: '<span> vient d\'utiliser Accessidys pour partager un fichier avec vous !',
-            prenom: $rootScope.currentUser.local.prenom,
-            fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
-            doc: 'doc'
-        };
-        $scope.sendMail();
-        $httpBackend.flush();
-        expect($scope.sent).toBe(true);
-    }));
-
-    it('ProfilesCtrl:preAnnulerDeleguerProfil()', inject(function ($rootScope) {
-        $scope.preAnnulerDeleguerProfil(profil);
-        expect($scope.profAnnuleDelegue).toBe(profil);
-        $rootScope.isAppOnline = false;
-        $scope.preAnnulerDeleguerProfil = undefined;
-        expect($scope.preAnnulerDeleguerProfil).toBeUndefined();
-    }));
-
-    it('ProfilesCtrl:annuleDeleguerProfil()', inject(function ($httpBackend) {
-        $scope.profAnnuleDelegue = profil;
-        $scope.annuleDeleguerProfil();
-        $httpBackend.flush();
+    it('ProfilesCtrl:cancelDelegateByUser()', inject(function () {
+        expect($scope.cancelDelegateByUser).toBeDefined();
+        $scope.cancelDelegateByUser();
     }));
 
     it('ProfilesCtrl:specificFilter()', function () {
@@ -861,7 +748,7 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.specificFilter();
     });
 
-    it('ProfilesCtrl:initDetailProfil()', inject(function ($httpBackend) {
+    it('ProfilesCtrl:initDetailProfil()', inject(function () {
         $scope.initDetailProfil();
     }));
 
@@ -877,28 +764,6 @@ describe('Controller:ProfilesCtrl', function () {
         $httpBackend.flush();
     }));
 
-    it('ProfilesCtrl:detailsProfilApartager()', function () {
-
-        $scope.profilPartage = {
-            _id: '52d8f928548367ee2d000006',
-            photo: './files/profilImage.jpg',
-            descriptif: 'descriptif3',
-            nom: 'Nom3',
-            delegate: true,
-            preDelegated: '52d8f928548367ee2d53424232'
-        };
-        console.log($scope.profilPartage);
-        $scope.detailsProfilApartager();
-    });
-
-    it('ProfilesCtrl:affichageInfoDeconnecte()', function () {
-        $scope.affichageInfoDeconnecte();
-
-        expect(modalParameters.templateUrl).toEqual('views/common/informationModal.html');
-        var modalContent = modalParameters.resolve.reason();
-        expect(modalContent).toEqual('/profiles');
-    });
-
     it('ProfilesCtrl:getTagsDescription()', function () {
         var result = $scope.getTagsDescription('52c6cde4f6f46c5a5a000004');
         expect(result.libelle).toEqual('Exercice');
@@ -908,27 +773,5 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.profiles = profiles;
         var result = $scope.generateProfileName('prenom', 0, 0);
         expect(result).toEqual('prenom');
-    });
-
-    it('ProfilesCtrl:attachGoogle()', function () {
-
-        var options;
-        gapi = {
-            interactivepost: {
-                render: function (arg1, arg2) {
-                    options = arg2;
-                }
-            }
-        };
-
-        $scope.attachGoogle();
-
-        options.callback('test');
-        options.onshare('test');
-        $scope.googleShareStatus = 2;
-        options.onshare({
-            status: 'started'
-        });
-
     });
 });

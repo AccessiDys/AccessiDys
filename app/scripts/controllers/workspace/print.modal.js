@@ -24,6 +24,10 @@
  */
 'use strict';
 
+/*global
+ $:false, angular
+ */
+
 angular.module('cnedApp').controller('PrintModalCtrl', function ($scope, $rootScope, $uibModalInstance,
                                                                  $window, fileStorageService, workspaceService,
                                                                  content, docSignature, notes) {
@@ -83,7 +87,7 @@ angular.module('cnedApp').controller('PrintModalCtrl', function ($scope, $rootSc
 
         var win = $window.open(); // Keep window reference which is not accessible in promise
 
-        fileStorageService.saveTempFileForPrint($scope.content).then(function (data) {
+        fileStorageService.saveTempFileForPrint($scope.content).then(function () {
 
             workspaceService.saveTempNotesForPrint($scope.notes);
 

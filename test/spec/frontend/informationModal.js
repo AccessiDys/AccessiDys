@@ -31,7 +31,7 @@ describe('Controller: InformationModalCtrl', function() {
     // load the controller's module
     beforeEach(module('cnedApp'));
 
-    var $scope, controller, modalInstance, contenu = 'TEST', raison = '/', titre = 'INFO', location, forcerFermeture = null;
+    var $scope, controller, modalInstance, contenu = 'TEST', titre = 'INFO', location, redirection = '/', isTranslate = false;
     // Initialize the controller and a mock scope
     beforeEach(inject(function($controller, $rootScope) {
         modalInstance = {
@@ -48,33 +48,35 @@ describe('Controller: InformationModalCtrl', function() {
 
     }));
 
-    it('InformationModalCtrl:closeModal()', inject(function($controller) {
+    it('InformationModalCtrl:closeModal()', inject(function($rootScope, $controller) {
         spyOn(modalInstance, 'close');
         spyOn(location, 'path');
         // if test
         controller = $controller('InformationModalCtrl', {
             $scope : $scope,
-            $modalInstance : modalInstance,
-            content : contenu,
-            reason : raison,
+            $rootScope: $rootScope,
+            $uibModalInstance : modalInstance,
+            $location : location,
             title : titre,
-            forceClose : forcerFermeture,
-            $location : location
+            content : contenu,
+            redirection : redirection,
+            isTranslate: isTranslate
         });
         $scope.closeModal();
         expect(modalInstance.close).toHaveBeenCalled();
         expect(location.path).toHaveBeenCalled();
 
         // else test
-        raison = '/listDocument';
+        redirection = '/listDocument';
         controller = $controller('InformationModalCtrl', {
             $scope : $scope,
-            $modalInstance : modalInstance,
-            content : contenu,
-            reason : raison,
+            $rootScope: $rootScope,
+            $uibModalInstance : modalInstance,
+            $location : location,
             title : titre,
-            forceClose : forcerFermeture,
-            $location : location
+            content : contenu,
+            redirection : redirection,
+            isTranslate: isTranslate
         });
         $scope.closeModal();
         expect(modalInstance.close).toHaveBeenCalled();

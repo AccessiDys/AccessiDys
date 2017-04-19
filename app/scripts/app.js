@@ -168,7 +168,6 @@ angular.module('cnedApp').config(['$compileProvider',
 
 
 angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, configuration, $timeout, $window, storageService, $interval, serviceCheck, $localForage, $routeParams) {
-    /*global $:false */
     //Delay between every check of session.
     $rootScope.sessionTime = 43200000;
     $rootScope.checkIsOnline = function () {
@@ -242,13 +241,7 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
             id: false
         };
 
-        if (next.templateUrl && next.templateUrl === 'views/index/main.html'
-            || next.templateUrl === 'views/passport/inscriptionContinue.html'
-            || next.templateUrl === 'views/passwordRestore/passwordRestore.html'
-            || next.templateUrl === 'views/common/errorPage.html'
-            || next.templateUrl === 'views/needUpdate/needUpdate.html'
-            || next.templateUrl === 'views/signup/signup.html') {
-
+        if (next.templateUrl && next.templateUrl === 'views/index/main.html' || next.templateUrl === 'views/passport/inscriptionContinue.html' || next.templateUrl === 'views/passwordRestore/passwordRestore.html' || next.templateUrl === 'views/common/errorPage.html' || next.templateUrl === 'views/needUpdate/needUpdate.html' || next.templateUrl === 'views/signup/signup.html') {
             $rootScope.isLoginScreen = true;
         } else {
             $rootScope.isLoginScreen = false;

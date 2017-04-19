@@ -159,7 +159,7 @@ describe('Controller:UserAccountCtrl', function () {
         deferred = q.defer();
         // Place the fake return object here
         deferred.resolve(tmpVar);
-        spyOn(serviceCheck, 'getData').andReturn(deferred.promise);
+        spyOn(serviceCheck, 'getData').and.returnValue(deferred.promise);
 
         $scope.initial();
 
@@ -223,67 +223,7 @@ describe('Controller:UserAccountCtrl', function () {
         $scope.verifyString(tmpChaine2);
     }));
 
-    it('UserAccountCtrl:modifierPassword should set modifierPassword function', inject(function () {
-        expect($scope.modifierPassword).toBeDefined();
-
-        $scope.compte = {
-            oldPassword: '',
-            newPassword: '',
-            reNewPassword: ''
-        };
-        console.log('T1');
-        $scope.modifierPassword();
-        expect($scope.erreur).toEqual(true);
-
-        $scope.compte = {
-            oldPassword: 'asdff',
-            newPassword: 'sqs',
-            reNewPassword: 'c'
-        };
-        console.log('T2');
-        $scope.modifierPassword();
-        expect($scope.erreur).toEqual(true);
-
-        $scope.compte = {
-            oldPassword: accounts.local.password,
-            newPassword: 'password',
-            reNewPassword: 'password'
-        };
-        console.log('T3');
-        $scope.modifierPassword();
-
-        $scope.compte = {
-            nom: 'undefined',
-            prenom: 'undefined',
-            oldPassword: accounts.local.password,
-            newPassword: 'password',
-            reNewPassword: 'password'
-        };
-        console.log('T4');
-        $scope.modifierPassword();
-        expect($scope.erreur).toEqual(true);
-
-        $scope.compte = {
-            oldPassword: '§§µµµ§§',
-            newPassword: '§§§§µµµ',
-            reNewPassword: '§§§§µµµ'
-        };
-        console.log('T5');
-        $scope.modifierPassword();
-
-
-    }));
-
     it('UserAccountCtrl:verifyPassword should set verifyPassword function', inject(function () {
         expect($scope.modifierPasswordDisplay).toBeFalsy();
     }));
-
-    it('UserAccountCtrl:cancelModification should set cancelModification function', inject(function () {
-        expect($scope.verifyPassword).toBeDefined();
-        expect($scope.verifyPassword('password')).toBeTruthy();
-        expect($scope.verifyPassword('001')).toBeFalsy();
-        $scope.cancelModification();
-    }));
-
-
 });

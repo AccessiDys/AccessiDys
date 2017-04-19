@@ -27,7 +27,7 @@
 'use strict';
 
 describe('Controller:ProfilesRenommageModalCtrl', function () {
-    var $scope, controller, modalInstance;
+    var $scope, controller, modalInstance, ToasterService, profile;
 
 
     beforeEach(module('cnedApp'));
@@ -37,7 +37,7 @@ describe('Controller:ProfilesRenommageModalCtrl', function () {
 
     });
 
-    beforeEach(inject(function ($controller, $rootScope) {
+    beforeEach(inject(function ($controller, $rootScope, _ToasterService_) {
 
         $scope = $rootScope.$new();
 
@@ -50,13 +50,16 @@ describe('Controller:ProfilesRenommageModalCtrl', function () {
             }
         };
 
-        var profile = {
+        ToasterService = _ToasterService_;
+
+        profile = {
             nom: 'test'
         };
 
         controller = $controller('profilesRenommageModalCtrl', {
             $scope: $scope,
-            $modalInstance: modalInstance,
+            $uibModalInstance: modalInstance,
+            ToasterService: ToasterService,
             profile: profile
         });
     }));

@@ -36,6 +36,7 @@ var helpers = require('../helpers/helpers.js');
  */
 exports.create = function(req, res) {
   var newSysParam = new sysParam();
+
   var mydate = new Date();
   newSysParam.appVersion = req.body.newvaleur;
   newSysParam.dateVersion = mydate.getDate() + '/' + (mydate.getMonth() + 1) + '/' + mydate.getFullYear() + '_' + mydate.getHours() + ':' + mydate.getMinutes() + ':' + mydate.getSeconds();

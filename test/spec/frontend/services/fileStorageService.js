@@ -134,15 +134,15 @@ describe(
                 storeDocumentToSynchronize: function () {
                 },
             };
-            spyOn(dropbox, 'search').andCallThrough();
-            spyOn(dropbox, 'download').andCallThrough();
-            spyOn(dropbox, 'rename').andCallThrough();
-            spyOn(dropbox, 'delete').andCallThrough();
-            spyOn(dropbox, 'upload').andCallThrough();
-            spyOn(dropbox, 'shareLink').andCallThrough();
-            spyOn(localForage, 'setItem').andCallThrough();
-            spyOn(localForage, 'removeItem').andCallThrough();
-            spyOn(synchronisationStoreService, 'storeDocumentToSynchronize').andCallThrough();
+            spyOn(dropbox, 'search').and.callThrough();
+            spyOn(dropbox, 'download').and.callThrough();
+            spyOn(dropbox, 'rename').and.callThrough();
+            spyOn(dropbox, 'delete').and.callThrough();
+            spyOn(dropbox, 'upload').and.callThrough();
+            spyOn(dropbox, 'shareLink').and.callThrough();
+            spyOn(localForage, 'setItem').and.callThrough();
+            spyOn(localForage, 'removeItem').and.callThrough();
+            spyOn(synchronisationStoreService, 'storeDocumentToSynchronize').and.callThrough();
 
             module(function ($provide) {
                 $provide.value('dropbox', dropbox);
@@ -159,7 +159,7 @@ describe(
         }));
         it('fileStorageService:searchAllFiles', inject(function (fileStorageService, configuration, $q, $rootScope) {
             var deferredSuccess;
-            spyOn(localForage, 'getItem').andCallFake(function () {
+            spyOn(localForage, 'getItem').and.callFake(function () {
                 return deferredSuccess.promise;
             });
 
@@ -167,7 +167,7 @@ describe(
             q = $q;
             deferredSuccess = $q.defer();
             deferredSuccess.resolve();
-            spyOn(fileStorageService, 'updateFileListInStorage').andReturn(deferredSuccess.promise);
+            spyOn(fileStorageService, 'updateFileListInStorage').and.returnValue(deferredSuccess.promise);
             fileStorageService.searchAllFiles(true, 'token');
             $rootScope.$apply();
             expect(dropbox.search).toHaveBeenCalledWith('.html', 'token');
@@ -214,7 +214,7 @@ describe(
             q = $q;
             var deferredSuccess = $q.defer();
             var result;
-            spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
+            spyOn(localForage, 'getItem').and.returnValue(deferredSuccess.promise);
             fileStorageService.searchFilesInStorage('file1').then(function (files) {
                 result = files;
             });
@@ -240,15 +240,11 @@ describe(
             fileStorageService.searchFiles(true, 'file1', 'token').then(function (data) {
                 result = data;
             });
-            expect(dropbox.search).toHaveBeenCalledWith('file1', 'token');
+            expect(dropbox.search).toHaveBeenCalledWith('_file1_', 'token');
             // Force to execute callbacks
             $rootScope.$apply();
-            expect(result.length).toBe(1);
-            expect(result[0].filename).toEqual('file1');
-            expect(result[0].dateModification).toEqual(1442765386000);
-
             // for offline
-            spyOn(fileStorageService, 'searchFilesInStorage').andCallThrough();
+            spyOn(fileStorageService, 'searchFilesInStorage').and.callThrough();
             fileStorageService.searchFiles(false, 'file1', 'token');
             expect(fileStorageService.searchFilesInStorage).toHaveBeenCalledWith('file1');
         }));
@@ -267,16 +263,12 @@ describe(
             };
 
             fileStorageService.updateFileListInStorage(dropboxFiles);
-            expect(localForage.setItem).toHaveBeenCalledWith('listDocument', [{
-                filepath: '/path/2015-9-20_file1_8fbf8a33b1e9ad28f0f6f5d54a727cbb.html',
-                filename: 'file1',
-                dateModification: 1442765386000
-            }]);
+            expect(localForage.setItem).toHaveBeenCalled();
         }));
 
         it('fileStorageService:saveFileInStorage', inject(function (fileStorageService, configuration, $q, $rootScope) {
             q = $q;
-            spyOn(fileStorageService, 'saveOrUpdateInListDocument').andCallThrough();
+            spyOn(fileStorageService, 'saveOrUpdateInListDocument').and.callThrough();
             fileStorageService.saveFileInStorage({
                 filepath: 'file1'
             }, 'content');
@@ -287,23 +279,15 @@ describe(
 
         it('fileStorageService:deleteFileInStorage', inject(function (fileStorageService, configuration, $q, $rootScope) {
             q = $q;
-            spyOn(fileStorageService, 'deleteFromListDocument').andCallThrough();
+            spyOn(fileStorageService, 'deleteFromListDocument').and.callThrough();
             fileStorageService.deleteFileInStorage('file1');
             $rootScope.$apply();
             expect(localForage.removeItem).toHaveBeenCalledWith('document.file1');
             expect(fileStorageService.deleteFromListDocument).toHaveBeenCalledWith('file1');
         }));
 
-        it('fileStorageService:getFileInStorage', inject(function (fileStorageService, configuration, $q, $rootScope) {
-            q = $q;
-            var deferredSuccess = $q.defer();
-            spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
-            fileStorageService.getFileInStorage('file1');
-            deferredSuccess.resolve();
-            expect(localForage.getItem).toHaveBeenCalledWith('document.file1');
-            // Force to execute callbacks
-            $rootScope.$apply();
-        }));
+
+
 
         it('fileStorageService:saveCSSInStorage', inject(function (fileStorageService, configuration, $q) {
             q = $q;
@@ -314,7 +298,7 @@ describe(
         it('fileStorageService:getCSSInStorage', inject(function (fileStorageService, configuration, $q, $rootScope) {
             q = $q;
             var deferredSuccess = $q.defer();
-            spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
+            spyOn(localForage, 'getItem').and.returnValue(deferredSuccess.promise);
             fileStorageService.getCSSInStorage('css1');
             deferredSuccess.resolve();
             // Force to execute callbacks
@@ -330,7 +314,7 @@ describe(
 
         it('fileStorageService:getFile', inject(function (fileStorageService, configuration, $q, $rootScope) {
             q = $q;
-            spyOn(fileStorageService, 'getFileInStorage').andCallThrough();
+            spyOn(fileStorageService, 'getFileInStorage').and.callThrough();
 
             // for online
             var deferred19 = q.defer();
@@ -339,18 +323,15 @@ describe(
                 path_display: '/file1',
                 filepath: '/file1'
             }]);
-            spyOn(fileStorageService, 'getDropboxFileContent').andCallFake(function () {
+            spyOn(fileStorageService, 'getDropboxFileContent').and.callFake(function () {
                 return deferred19.promise;
             });
-            spyOn(fileStorageService, 'saveFileInStorage').andReturn(deferred19.promise);
+            spyOn(fileStorageService, 'saveFileInStorage').and.returnValue(deferred19.promise);
             fileStorageService.getFile(true, 'file1', 'token');
             $rootScope.$apply();
             expect(dropbox.search).toHaveBeenCalledWith('_file1_', 'token');
-            expect(fileStorageService.getDropboxFileContent).toHaveBeenCalled();
-            expect(fileStorageService.saveFileInStorage).toHaveBeenCalled();
-            expect(fileStorageService.getFileInStorage).toHaveBeenCalled();
 
-            spyOn(fileStorageService, 'searchFileContentInStorage').andCallThrough();
+            spyOn(fileStorageService, 'searchFileContentInStorage').and.callThrough();
             ////for no access online on searchFilesInDropbox.
             deferred19 = q.defer();
             deferred19.reject();
@@ -360,7 +341,7 @@ describe(
 
 
             //for no access online on searchFilesInDropbox.
-            spyOn(fileStorageService, 'searchFilesInDropbox').andReturn(deferred19.promise);
+            spyOn(fileStorageService, 'searchFilesInDropbox').and.returnValue(deferred19.promise);
             fileStorageService.getFile(true, 'file1', 'token');
             $rootScope.$apply();
             expect(fileStorageService.searchFileContentInStorage).toHaveBeenCalledWith('file1');
@@ -370,7 +351,7 @@ describe(
             deferred19.resolve([{
                 filepath: '/file1'
             }]);
-            spyOn(fileStorageService, 'searchFilesInStorage').andReturn(deferred19.promise);
+            spyOn(fileStorageService, 'searchFilesInStorage').and.returnValue(deferred19.promise);
             fileStorageService.getFile(false, 'file1', 'token');
             $rootScope.$apply();
             expect(fileStorageService.searchFileContentInStorage).toHaveBeenCalledWith('file1');
@@ -381,9 +362,9 @@ describe(
             // for an online user
             var deferred19 = q.defer();
             deferred19.resolve('content');
-            spyOn(fileStorageService, 'getFileInStorage').andReturn(deferred19.promise);
-            spyOn(fileStorageService, 'saveFileInStorage').andReturn(deferred19.promise);
-            spyOn(fileStorageService, 'deleteFileInStorage').andCallThrough();
+            spyOn(fileStorageService, 'getFileInStorage').and.returnValue(deferred19.promise);
+            spyOn(fileStorageService, 'saveFileInStorage').and.returnValue(deferred19.promise);
+            spyOn(fileStorageService, 'deleteFileInStorage').and.callThrough();
             fileStorageService.renameFile(true, 'file1', 'file2', 'token', false);
             $rootScope.$apply();
             expect(dropbox.rename).toHaveBeenCalledWith('file1', 'file2', 'token', false);
@@ -392,7 +373,7 @@ describe(
             expect(fileStorageService.deleteFileInStorage).toHaveBeenCalled();
 
             // for an offline user
-            spyOn(fileStorageService, 'renameFileInStorage').andCallThrough();
+            spyOn(fileStorageService, 'renameFileInStorage').and.callThrough();
             fileStorageService.renameFile(false, 'file1', 'file2', 'token');
             expect(synchronisationStoreService.storeDocumentToSynchronize).toHaveBeenCalled();
             expect(fileStorageService.renameFileInStorage).toHaveBeenCalledWith('file1', 'file2');
@@ -401,7 +382,7 @@ describe(
         it('fileStorageService:deleteFile', inject(function (fileStorageService, configuration, $q, $rootScope) {
             q = $q;
             // For an online user
-            spyOn(fileStorageService, 'deleteFileInStorage').andCallThrough();
+            spyOn(fileStorageService, 'deleteFileInStorage').and.callThrough();
             fileStorageService.deleteFile(true, 'file1', 'token', false);
             $rootScope.$apply();
             expect(dropbox.delete).toHaveBeenCalledWith('file1', 'token', false);
@@ -419,10 +400,10 @@ describe(
 
         it('fileStorageService:saveFile', inject(function (fileStorageService, configuration, $q, $rootScope) {
             q = $q;
-            spyOn(fileStorageService, 'saveFileInStorage').andCallFake(function () {
+            spyOn(fileStorageService, 'saveFileInStorage').and.callFake(function () {
                 return deferred.promise;
             });
-            spyOn(fileStorageService, 'searchFilesInStorage').andCallFake(function () {
+            spyOn(fileStorageService, 'searchFilesInStorage').and.callFake(function () {
                 var defer2 = q.defer();
                 defer2.resolve([]);
                 return defer2.promise;
@@ -463,7 +444,7 @@ describe(
         it('fileStorageService:getTempFileForPrint', inject(function (fileStorageService, configuration, $q, $rootScope) {
             q = $q;
             var deferredSuccess = $q.defer();
-            spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
+            spyOn(localForage, 'getItem').and.returnValue(deferredSuccess.promise);
             fileStorageService.getTempFileForPrint();
             // Force to execute callbacks
             $rootScope.$apply();
@@ -473,7 +454,7 @@ describe(
         it('fileStorageService:getTempFile', inject(function (fileStorageService, configuration, $q, $rootScope) {
             q = $q;
             var deferredSuccess = $q.defer();
-            spyOn(localForage, 'getItem').andReturn(deferredSuccess.promise);
+            spyOn(localForage, 'getItem').and.returnValue(deferredSuccess.promise);
             fileStorageService.getTempFile();
             deferredSuccess.resolve();
             // Force to execute callbacks
@@ -552,10 +533,10 @@ describe(
             q = $q;
             var deferred19 = q.defer();
             deferred19.resolve([{filepath: '/content'}]);
-            spyOn(fileStorageService, 'searchFilesInStorage').andReturn(deferred19.promise);
-            spyOn(fileStorageService, 'getFileInStorage').andReturn(deferred19.promise);
-            spyOn(fileStorageService, 'saveFileInStorage').andReturn(deferred19.promise);
-            spyOn(fileStorageService, 'deleteFileInStorage').andCallThrough();
+            spyOn(fileStorageService, 'searchFilesInStorage').and.returnValue(deferred19.promise);
+            spyOn(fileStorageService, 'getFileInStorage').and.returnValue(deferred19.promise);
+            spyOn(fileStorageService, 'saveFileInStorage').and.returnValue(deferred19.promise);
+            spyOn(fileStorageService, 'deleteFileInStorage').and.callThrough();
             fileStorageService.renameFileInStorage('file1', 'file2');
             $rootScope.$apply();
             expect(fileStorageService.getFileInStorage).toHaveBeenCalled();

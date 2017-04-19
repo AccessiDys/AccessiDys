@@ -24,11 +24,10 @@
  */
 
 /* global spyOn:false */
-/* global jQuery */
 'use strict';
 
 describe('Controller:DetailProfilModalCtrl', function () {
-    var $scope, controller, modalInstance, profilsService, template, profile, q, deferred;
+    var $scope, controller, modalInstance, profilsService, template, profile, q, deferred, toasterService;
 
     beforeEach(module('cnedApp'));
 
@@ -47,8 +46,16 @@ describe('Controller:DetailProfilModalCtrl', function () {
             nom: 'test'
         };
 
+        toasterService = {
+          showToaster: function(){
+              return true;
+          }
+        };
+
+        spyOn(toasterService, 'showToaster').and.callThrough();
+
         profilsService = {
-            lookForExistingProfile: function (isAppOnline, profile) {
+            lookForExistingProfile: function () {
                 deferred = q.defer();
                 // Place the fake return object here
                 deferred.resolve(undefined);
@@ -68,9 +75,10 @@ describe('Controller:DetailProfilModalCtrl', function () {
             }
         };
 
-        spyOn(profilsService, 'lookForExistingProfile').andCallThrough();
-        spyOn(profilsService, 'addProfil').andCallThrough();
-        spyOn(profilsService, 'updateProfil').andCallThrough();
+        spyOn(profilsService, 'lookForExistingProfile').and.callThrough();
+        spyOn(profilsService, 'addProfil').and.callThrough();
+        spyOn(profilsService, 'updateProfil').and.callThrough();
+
     });
 
     beforeEach(inject(function ($controller, $rootScope, $q) {
@@ -80,9 +88,10 @@ describe('Controller:DetailProfilModalCtrl', function () {
 
         controller = $controller('profilesAffichageModalCtrl', {
             $scope: $scope,
-            $modalInstance: modalInstance,
+            $uibModalInstance: modalInstance,
             $rootScope: $rootScope.$new(),
             profilsService: profilsService,
+            ToasterService: toasterService,
             template: template,
             profile: profile
         });
@@ -97,11 +106,14 @@ describe('Controller:DetailProfilModalCtrl', function () {
         expect($scope.dismissModal).toBeDefined();
         expect($scope.save).toBeDefined();
 
-        // Variables
-        expect($scope.requiredFieldErrors).toBeDefined();
-        expect($scope.requiredFieldErrors).toEqual([]);
-        expect($scope.duplicateNameError).toBeDefined();
-        expect($scope.duplicateNameError).toEqual(false);
+        expect($scope.template).toBeDefined();
+        expect($scope.template).toEqual('update');
+
+        expect($scope.profile).toBeDefined();
+        expect($scope.profile.nom).toEqual('test');
+
+        expect($scope.forceApplyRules).toBeDefined();
+        expect($scope.forceApplyRules).toEqual(true);
     });
 
     it('DetailProfilModalCtrl:editTag', function () {

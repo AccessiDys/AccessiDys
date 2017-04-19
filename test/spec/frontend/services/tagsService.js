@@ -60,8 +60,8 @@ describe('Service: tagsService', function () {
                 return deferred.promise;
             }
         };
-        spyOn(localForage, 'setItem').andCallThrough();
-        spyOn(localForage, 'getItem').andCallThrough();
+        spyOn(localForage, 'setItem').and.callThrough();
+        spyOn(localForage, 'getItem').and.callThrough();
 
         module(function ($provide) {
             $provide.value('$localForage', localForage);

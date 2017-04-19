@@ -24,7 +24,7 @@
  */
 'use strict';
 
-
+/*global cnedApp */
 cnedApp.service('LoaderService', function ($rootScope) {
 
     $rootScope.showLoader = false;

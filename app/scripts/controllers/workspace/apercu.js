@@ -658,8 +658,8 @@ angular.module('cnedApp')
             // accents
             return serviceCheck.htmlPreview(encodeURI(url)).then(function (htmlFile) {
 
-                if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf("<title>") > -1) {
-                    $scope.urlTitle = UtilsService.cleanUpSpecialChars(htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf("<title>") + 7, htmlFile.documentHtml.indexOf("</title>")));
+                if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf('<title>') > -1) {
+                    $scope.urlTitle = UtilsService.cleanUpSpecialChars(htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<title>') + 7, htmlFile.documentHtml.indexOf('</title>')));
                 } else if(!$scope.urlTitle) {
                     $scope.urlTitle = UtilsService.cleanUpSpecialChars(url);
                 }
@@ -1219,7 +1219,7 @@ angular.module('cnedApp')
 
                         for (var i = 0; i < files.matches.length; i++) {
                             if (files.matches[i].metadata.name.indexOf('_' + $scope.idDocument + '_') > -1) {
-                                file = files.matches[i].metadata
+                                file = files.matches[i].metadata;
                             }
                         }
 

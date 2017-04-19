@@ -22,7 +22,6 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
-/* global SpeechSynthesisUtterance:false */
 
 'use strict';
 

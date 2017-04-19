@@ -24,7 +24,7 @@
  */
 'use strict';
 
-
+/*global cnedApp */
 cnedApp.service('ToasterService', function ($rootScope, $timeout, gettextCatalog) {
 
     $rootScope.toasterMsg = '';

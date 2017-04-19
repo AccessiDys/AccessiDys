@@ -226,24 +226,15 @@ describe('Controller:AdminPanelCtrl', function () {
     }));
 
 
-    it('AdminPanelCtrl:	showOptions', inject(function () {
-        expect($scope.showOptions).toBeDefined();
-        var event = {
-            currentTarget: {
-                className: 'some class active'
-            }
-        };
-        $scope.showOptions(event);
+    it('AdminPanelCtrl:	check init', inject(function () {
+        expect($scope.headers).toBeDefined();
+        expect($scope.headers).toEqual(['Nom', 'Prenom', 'Email', 'Autorisation', 'Action']);
 
-        event.currentTarget.className = 'some class';
-        $scope.showOptions(event);
+        expect($scope.isOcrDropdownOpen).toBeDefined();
+        expect($scope.isOcrDropdownOpen).toEqual(false);
 
-    }));
-
-
-    it('AdminPanelCtrl:	hideDroDownOptions', inject(function () {
-        expect($scope.hideDroDownOptions).toBeDefined();
-        $scope.hideDroDownOptions();
+        expect($scope.isVoiceDropdownOpen).toBeDefined();
+        expect($scope.isVoiceDropdownOpen).toEqual(false);
     }));
 
 
@@ -293,13 +284,13 @@ describe('Controller:AdminPanelCtrl', function () {
     it('AdminPanelCtrl:allAccounts should set allAccounts 3 function', inject(function ($httpBackend) {
         $scope.listAccounts();
         $httpBackend.flush();
-        expect($scope.comptes).toBe(accounts);
+        expect($scope.comptes.length).toBe(2);
     }));
 
     it('AdminPanelCtrl:initial should set initial function 1', inject(function () {
         expect($scope.initial).toBeDefined();
 
-        spyOn(serviceCheck, 'getData').andCallThrough();
+        spyOn(serviceCheck, 'getData').and.callThrough();
 
         $scope.initial();
 
@@ -318,25 +309,9 @@ describe('Controller:AdminPanelCtrl', function () {
         expect($scope.deleteAccount).toBeDefined();
     });
 
-    it('AdminPanelCtrl:deleteAccount should set deleteAccount function', inject(function ($httpBackend) {
-        $scope.deleteAccount();
-        $httpBackend.flush();
+    it('AdminPanelCtrl:deleteAccount should set deleteAccount function', inject(function () {
+        $scope.deleteAccount(account);
     }));
-
-    it('AdminPanelCtrl:deleteAccount should set deleteAccount function', inject(function ($httpBackend) {
-        $scope.deleteAccount();
-        expect($scope.loader).toBe(true);
-        $httpBackend.flush();
-        expect($scope.deleted).toBe(account);
-        expect($scope.loader).toBe(false);
-        expect($scope.listAccounts).toBeDefined();
-    }));
-
-    it('AdminPanelCtrl:preSupprimer should set preSupprimer function', function () {
-        expect($scope.preSupprimer).toBeDefined();
-        $scope.preSupprimer(account);
-        expect($scope.compteAsupprimer).toBe(account);
-    });
 
     it('AdminPanelCtrl:specificFilter function', function () {
         $scope.comptes = [{

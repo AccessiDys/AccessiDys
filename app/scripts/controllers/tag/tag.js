@@ -24,7 +24,6 @@
  */
 
 'use strict';
-/* global $ */
 
 angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configuration, tagsService, Analytics, ToasterService, gettextCatalog, UtilsService, $log) {
 
@@ -97,14 +96,7 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
 
     $scope.delete = function (tag) {
 
-        if (tag.libelle !== 'Titre 1'
-            && tag.libelle !== 'Titre 2'
-            && tag.libelle !== 'Titre 3'
-            && tag.libelle !== 'Titre 4'
-            && tag.libelle !== 'Paragraphe'
-            && tag.libelle !== 'Annotation'
-            && tag.libelle !== 'Liste à puces'
-            && tag.libelle !== 'Liste numérotée') { // jshint ignore:line
+        if (tag.libelle !== 'Titre 1' && tag.libelle !== 'Titre 2' && tag.libelle !== 'Titre 3' && tag.libelle !== 'Titre 4' && tag.libelle !== 'Paragraphe' && tag.libelle !== 'Annotation' && tag.libelle !== 'Liste à puces' && tag.libelle !== 'Liste numérotée') { // jshint ignore:line
 
             UtilsService.openConfirmModal('style.label.delete.title',
                 gettextCatalog.getString('style.label.delete.anwser').replace('style.label', tag.libelle), true)

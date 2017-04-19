@@ -24,7 +24,7 @@
  */
 'use strict';
 
-
+/*global cnedApp */
 cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck, $uibModal, fileStorageService, md5, LoaderService) {
 
 

@@ -30,8 +30,7 @@
  */
 
 
-/* global $:false */
-angular.module('cnedApp').controller('passportContinueCtrl', function ($scope, $http, $rootScope, $location, serviceCheck, dropbox, configuration) {
+angular.module('cnedApp').controller('passportContinueCtrl', function ($scope, $http, $rootScope, $location, serviceCheck, dropbox, configuration, UtilsService) {
 
     $scope.guest = $rootScope.loged;
     $scope.missingDropbox = $rootScope.dropboxWarning;

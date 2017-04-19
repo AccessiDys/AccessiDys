@@ -24,38 +24,13 @@
  */
 
 'use strict';
-
+/*global cnedApp */
 cnedApp.directive('vocalSynthesis',
 
     function (keyboardSelectionService, speechService, serviceCheck, $log, $timeout, $window) {
         return {
             restrict: 'A',
-            link: function (scope, elm, attrs) {
-
-                function speak() {
-                    $log.debug('$scope.speak');
-                    speechService.stopSpeech();
-                    $timeout(function () {
-                        var text = getSelectedText();
-                        $log.debug('$scope.getSelectedText()', text);
-                        if (text && !/^\s*$/.test(text)) {
-                            checkAudioRights().then(function (audioRights) {
-                                $log.debug('$scope.checkAudioRights()', audioRights);
-
-                                if (audioRights && checkBrowserSupported()) {
-                                    serviceCheck.isOnline().then(function () {
-                                        scope.displayOfflineSynthesisTips = false;
-                                        speechService.speech(text, true);
-                                        window.document.addEventListener('click', $scope.stopSpeech, false);
-                                    }, function () {
-                                        scope.displayOfflineSynthesisTips = !scope.neverShowOfflineSynthesisTips;
-                                        speechService.speech(text, false);
-                                    });
-                                }
-                            });
-                        }
-                    }, 10);
-                }
+            link: function (scope, elm) {
 
                 function getSelectedText() {
                     var text = '';
@@ -94,9 +69,35 @@ cnedApp.directive('vocalSynthesis',
                     return browserSupported;
                 }
 
+                function speak() {
+                    $log.debug('$scope.speak');
+                    speechService.stopSpeech();
+                    $timeout(function () {
+                        var text = getSelectedText();
+                        $log.debug('$scope.getSelectedText()', text);
+                        if (text && !/^\s*$/.test(text)) {
+                            checkAudioRights().then(function (audioRights) {
+                                $log.debug('$scope.checkAudioRights()', audioRights);
+
+                                if (audioRights && checkBrowserSupported()) {
+                                    serviceCheck.isOnline().then(function () {
+                                        scope.displayOfflineSynthesisTips = false;
+                                        speechService.speech(text, true);
+                                        window.document.addEventListener('click', scope.stopSpeech, false);
+                                    }, function () {
+                                        scope.displayOfflineSynthesisTips = !scope.neverShowOfflineSynthesisTips;
+                                        speechService.speech(text, false);
+                                    });
+                                }
+                            });
+                        }
+                    }, 10);
+                }
+
+
                 function speakOnKeyboard(event) {
                     if (keyboardSelectionService.isSelectionCombination(event)) {
-                        $scope.speak();
+                        scope.speak();
                     }
                 }
 

@@ -24,7 +24,7 @@
  */
 'use strict';
 
-
+/*global cnedApp */
 cnedApp.service('EmailService', function ($http, configuration) {
 
     var methods = {

@@ -23,7 +23,6 @@
  *
  */
 'use strict';
-/* global $:false */
 /* jshint loopfunc:true */
 
 angular.module('cnedApp')
@@ -50,7 +49,6 @@ angular.module('cnedApp')
                 UserService.findUserByEmail($scope.form.email)
                     .success(function (data) {
                         if (data) {
-                            var emailTo = data.local.email;
 
                             var sendParam = {
                                 idProfil: profile._id,
@@ -81,7 +79,7 @@ angular.module('cnedApp')
                                         });
                                     });
 
-                                }, function (error) {
+                                }, function () {
                                     LoaderService.hideLoader();
 
                                     $uibModalInstance.close({

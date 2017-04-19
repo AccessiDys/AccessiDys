@@ -29,10 +29,10 @@
  * having something to do with the bookmarklet
  */
 
-/* global $:false */
 /* jshint undef: true, unused: true */
 
-angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope, md5, $http, $location, configuration, serviceCheck, dropbox, storageService, $localForage, synchronisationService, $uibModal) {
+angular.module('cnedApp').controller('passportCtrl', function ($scope, $rootScope, md5, $http, $location,
+                                                               configuration, serviceCheck, dropbox, storageService, $localForage, synchronisationService, $uibModal, UtilsService) {
 
     $scope.stepsTitle = 'CRÉATION DE VOTRE COMPTE SUR ACCESSIDYS';
     $scope.stepsSubTitle = 'Saisissez vos informations et créez votre compte Accessidys';
@@ -42,24 +42,24 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
     $scope.guest = $rootScope.loged;
     $scope.passwordRestoreMessage = '';
     $scope.obj = {
-        nomSign : '',
-        prenomSign : '',
-        emailSign : '',
-        passwordSign : '',
-        passwordConfirmationSign : ''
+        nomSign: '',
+        prenomSign: '',
+        emailSign: '',
+        passwordSign: '',
+        passwordConfirmationSign: ''
     };
     $scope.erreur = {
-        erreurSigninNom : false,
-        erreurSigninNomMessage : '',
-        erreurSigninPrenom : false,
-        erreurSigninPrenomMessage : '',
-        erreurSigninEmail : false,
-        erreurSigninEmailMessage : '',
-        erreurSigninPasse : false,
-        erreurSigninPasseMessage : '',
-        erreurSigninConfirmationPasse : false,
-        erreurSigninConfirmationPasseMessage : '',
-        erreurSigninEmailNonDisponibleMessage : false
+        erreurSigninNom: false,
+        erreurSigninNomMessage: '',
+        erreurSigninPrenom: false,
+        erreurSigninPrenomMessage: '',
+        erreurSigninEmail: false,
+        erreurSigninEmailMessage: '',
+        erreurSigninPasse: false,
+        erreurSigninPasseMessage: '',
+        erreurSigninConfirmationPasse: false,
+        erreurSigninConfirmationPasseMessage: '',
+        erreurSigninEmailNonDisponibleMessage: false
     };
     $scope.emailLogin = null;
     $scope.passwordLogin = null;
@@ -82,16 +82,16 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
     $scope.basculeButton = true;
     $scope.showBascule = true;
     $scope.locationURL = window.location.href;
-    $rootScope.$watch('dropboxWarning', function() {
+    $rootScope.$watch('dropboxWarning', function () {
         $scope.guest = $rootScope.loged;
         $scope.apply; // jshint ignore:line
     });
 
-    $rootScope.$on('initPassport', function() {
+    $rootScope.$on('initPassport', function () {
         $scope.init();
     });
 
-    $scope.init = function() {
+    $scope.init = function () {
         if ($location.absUrl().indexOf('https://dl.dropboxusercontent.com/') > -1) {
             $scope.showBascule = false;
         }
@@ -101,7 +101,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                 $scope.emailLogin = localStorage.getItem('redirectionEmail');
                 $scope.passwordLogin = localStorage.getItem('redirectionPassword');
                 $scope.apply; // jshint ignore:line
-                storageService.removeService([ 'redirectionEmail', 'redirectionPassword' ], 0).then(function() {
+                storageService.removeService(['redirectionEmail', 'redirectionPassword'], 0).then(function () {
                     $scope.login();
                 });
             } else {
@@ -110,7 +110,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         }
         if ($rootScope.loged) {
             var tmp = serviceCheck.getData();
-            tmp.then(function(result) { // this is only run after $http
+            tmp.then(function (result) { // this is only run after $http
                 // completes
                 if (result.loged) {
                     if (result.dropboxWarning === false) {
@@ -128,7 +128,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
                         if ($scope.testEnv === false) {
                             $location.path('/listDocument').search({
-                                key : localStorage.getItem('compteId')
+                                key: localStorage.getItem('compteId')
                             });
                         }
                     }
@@ -137,35 +137,31 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         }
     };
 
-    $scope.signin = function() {
+    $scope.signin = function () {
         $scope.erreurSigninEmailNonDisponible = false;
-        if ($scope.verifyEmail($scope.obj.emailSign)
-            && $scope.verifyPassword($scope.obj.passwordSign)
-            && $scope.verifyString($scope.obj.nomSign)
-            && $scope.verifyString($scope.obj.prenomSign)
-            && $scope.obj.passwordConfirmationSign === $scope.obj.passwordSign) {
-			$scope.obj.emailSign = $scope.obj.emailSign.toLowerCase();
+        if ($scope.verifyEmail($scope.obj.emailSign) && $scope.verifyPassword($scope.obj.passwordSign) && $scope.verifyString($scope.obj.nomSign) && $scope.verifyString($scope.obj.prenomSign) && $scope.obj.passwordConfirmationSign === $scope.obj.passwordSign) {
+            $scope.obj.emailSign = $scope.obj.emailSign.toLowerCase();
             var data = {
-                email : $scope.obj.emailSign,
-                password : $scope.obj.passwordSign,
-                nom : $scope.obj.nomSign,
-                prenom : $scope.obj.prenomSign
+                email: $scope.obj.emailSign,
+                password: $scope.obj.passwordSign,
+                nom: $scope.obj.nomSign,
+                prenom: $scope.obj.prenomSign
             };
-            
-            $http.post(configuration.URL_REQUEST + '/signup', data).success(function(data) {
+
+            $http.post(configuration.URL_REQUEST + '/signup', data).success(function (data) {
                 $scope.basculeButton = false;
                 $scope.steps = 'step_two';
                 $scope.stepsTitle = 'COMPTE DROPBOX';
                 $scope.stepsSubTitle = 'Association avec compte DropBox';
                 $scope.singinFlag = data;
-                var tmp = [ {
-                    name : 'compteId',
-                    value : data.local.token
-                } ];
-                $localForage.removeItem('compteOffline').then(function() {
+                var tmp = [{
+                    name: 'compteId',
+                    value: data.local.token
+                }];
+                $localForage.removeItem('compteOffline').then(function () {
                     $localForage.setItem('compteOffline', data);
                 });
-                storageService.writeService(tmp, 0).then(function() {
+                storageService.writeService(tmp, 0).then(function () {
                     $scope.inscriptionStep1 = false;
                     $scope.inscriptionStep2 = true;
                     $scope.step2 = 'btn btn-primary btn-circle';
@@ -173,7 +169,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     UtilsService.showInformationModal('Informations',
                         'Votre compte Accessidys a bien été créé. Vous pouvez désormais l\'utiliser pour accéder à l\'application Accessidys. Cependant vous ne pourrez le faire qu\'après avoir associé ce compte à votre compte DropBox. Nous vous proposons d’en créer un si nécessaire dans l\'étape suivante.', null, true);
                 });
-            }).error(function() {
+            }).error(function () {
                 $scope.erreur.erreurSigninEmail = false;
                 $scope.erreur.erreurSigninEmailNonDisponible = true;
             });
@@ -241,7 +237,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         }
     };
 
-    $scope.login = function() {
+    $scope.login = function () {
         if ($scope.testEnv === false) {
             if (document.getElementById('email').value && document.getElementById('mdp').value) {
                 $scope.emailLogin = document.getElementById('email').value;
@@ -252,43 +248,43 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
             $scope.emailLogin = $scope.emailLogin.toLowerCase();
             // $rootScope.salt
             var data = {
-                email : $scope.emailLogin,
-                password : md5.createHash($scope.passwordLogin)
+                email: $scope.emailLogin,
+                password: md5.createHash($scope.passwordLogin)
             };
             $http.get(configuration.URL_REQUEST + '/login', {
-                params : data
-            }).success(function(dataRecue) {
+                params: data
+            }).success(function (dataRecue) {
                 // If the user authenticates, 
                 // raise the blocking in disconnected mode.
                 $rootScope.isAppOnline = true;
-                var tmp = [ {
-                    name : 'compteId',
-                    value : dataRecue.local.token
-                } ];
+                var tmp = [{
+                    name: 'compteId',
+                    value: dataRecue.local.token
+                }];
                 if (localStorage.getItem('deconnexion')) {
                     localStorage.removeItem('deconnexion');
                 }
-                $localForage.removeItem('compteOffline').then(function() {
+                $localForage.removeItem('compteOffline').then(function () {
                     $localForage.setItem('compteOffline', dataRecue);
                 });
-                storageService.writeService(tmp, 0).then(function(data) {
+                storageService.writeService(tmp, 0).then(function () {
                     $scope.loginFlag = dataRecue;
                     $rootScope.loged = true;
                     $rootScope.currentUser = dataRecue;
                     $rootScope.updateListProfile = true;
 
                 });
-                synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken, dataRecue.local.email).then(function(synchronizedItems) {
+                synchronisationService.sync(dataRecue.local.token, dataRecue.dropbox.accessToken, dataRecue.local.email).then(function (synchronizedItems) {
                     if (synchronizedItems.docsSynchronized && synchronizedItems.docsSynchronized.length > 0 || synchronizedItems.profilsSynchronized && synchronizedItems.profilsSynchronized.length > 0) {
                         $uibModal.open({
-                            templateUrl : 'views/synchronisation/resultatSynchronisationModal.html',
-                            controller : 'SynchronisationModalCtrl',
-                            size : 'sm',
-                            resolve : {
-                                docsSynchronized : function() {
+                            templateUrl: 'views/synchronisation/resultatSynchronisationModal.html',
+                            controller: 'SynchronisationModalCtrl',
+                            size: 'sm',
+                            resolve: {
+                                docsSynchronized: function () {
                                     return synchronizedItems.docsSynchronized;
                                 },
-                                profilsSynchronized : function() {
+                                profilsSynchronized: function () {
                                     return synchronizedItems.profilsSynchronized;
                                 }
                             }
@@ -303,7 +299,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
                     }
 
                 });
-            }).error(function() {
+            }).error(function () {
                 $scope.erreurLogin = true;
             });
         } else {
@@ -311,15 +307,15 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         }
     };
 
-    $scope.setListTagsByProfil = function() {
+    $scope.setListTagsByProfil = function () {
         var token = {
-            id : localStorage.getItem('compteId')
+            id: localStorage.getItem('compteId')
         };
-        $http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token).success(function(data) {
+        $http.post(configuration.URL_REQUEST + '/chercherProfilsParDefaut', token).success(function (data) {
             $scope.profilDefautFlag = data;
             $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-                idProfil : $scope.profilDefautFlag[0].profilID
-            }).success(function(data) {
+                idProfil: $scope.profilDefautFlag[0].profilID
+            }).success(function (data) {
                 $scope.listTagsByProfil = data;
                 localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
             });
@@ -327,66 +323,66 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         });
     };
 
-    $scope.roleRedirect = function() {
+    $scope.roleRedirect = function () {
         $rootScope.uploadDoc = {};
 
         if ($location.search().url && $location.search().url !== '') {
             var bookmarkletUrl = $location.search().url;
             if ($scope.testEnv === false) {
                 $location.path('/apercu').search({
-                    url : bookmarkletUrl
+                    url: bookmarkletUrl
                 });
             }
         } else if ($location.search().idProfil && $location.search().idProfil !== '') {
             $location.path('/profiles').search({
-                idProfil : $location.search().idProfil
+                idProfil: $location.search().idProfil
             });
         } else if ($location.search().idDocument && $location.search().idDocument !== '') {
             $location.path('/apercu').search({
-                idDocument : $location.search().idDocument
+                idDocument: $location.search().idDocument
             });
         } else {
             if ($scope.testEnv === false) {
                 if ($scope.loginFlag.local.role === 'admin') {
                     $location.path('/adminPanel').search({
-                        key : localStorage.getItem('compteId')
+                        key: localStorage.getItem('compteId')
                     });
                 } else {
                     $location.path('/listDocument').search({
-                        key : localStorage.getItem('compteId')
+                        key: localStorage.getItem('compteId')
                     });
                 }
             }
         }
     };
-    $scope.goNext = function() {
+    $scope.goNext = function () {
         $scope.showlogin = !$scope.showlogin;
         $scope.obj = {
-            nomSign : '',
-            prenomSign : '',
-            emailSign : '',
-            passwordSign : '',
-            passwordConfirmationSign : ''
+            nomSign: '',
+            prenomSign: '',
+            emailSign: '',
+            passwordSign: '',
+            passwordConfirmationSign: ''
         };
         $scope.erreur = {
-            erreurSigninNom : false,
-            erreurSigninNomMessage : '',
-            erreurSigninPrenom : false,
-            erreurSigninPrenomMessage : '',
-            erreurSigninEmail : false,
-            erreurSigninEmailMessage : '',
-            erreurSigninPasse : false,
-            erreurSigninPasseMessage : '',
-            erreurSigninConfirmationPasse : false,
-            erreurSigninConfirmationPasseMessage : '',
-            erreurSigninEmailNonDisponibleMessage : false
+            erreurSigninNom: false,
+            erreurSigninNomMessage: '',
+            erreurSigninPrenom: false,
+            erreurSigninPrenomMessage: '',
+            erreurSigninEmail: false,
+            erreurSigninEmailMessage: '',
+            erreurSigninPasse: false,
+            erreurSigninPasseMessage: '',
+            erreurSigninConfirmationPasse: false,
+            erreurSigninConfirmationPasseMessage: '',
+            erreurSigninEmailNonDisponibleMessage: false
         };
         $scope.emailLogin = null;
         $scope.passwordLogin = null;
         $scope.erreurLogin = false;
     };
 
-    $scope.verifyEmail = function(email) {
+    $scope.verifyEmail = function (email) {
         var reg = /^([a-zA-Z0-9éèàâîôç_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         if (reg.test(email)) {
             return true;
@@ -395,7 +391,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         }
     };
 
-    $scope.verifyString = function(chaine) {
+    $scope.verifyString = function (chaine) {
         var ck_nomPrenom = /^[A-Za-z0-9éèàâîôç_\.\-\+' ]{1,100}$/;
         if (chaine === null) {
             return false;
@@ -406,7 +402,7 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         return true;
     };
 
-    $scope.verifyPassword = function(password) {
+    $scope.verifyPassword = function (password) {
         var ck_password = /^[A-Za-z0-9éèàâîôç!@#$%^&*()_]{6,20}$/;
 
         if (!ck_password.test(password)) {
@@ -415,12 +411,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
         return true;
     };
 
-    $scope.showPasswordRestorePanel = function() {
+    $scope.showPasswordRestorePanel = function () {
         $scope.loginSign = !$scope.loginSign;
         $scope.passwordForgotten = !$scope.passwordForgotten;
     };
 
-    $scope.restorePassword = function() {
+    $scope.restorePassword = function () {
         if ($scope.verifyEmail($scope.emailRestore)) {
 
             var data = {};
@@ -428,12 +424,12 @@ angular.module('cnedApp').controller('passportCtrl', function($scope, $rootScope
 
             /* jshint ignore:start */
 
-            $http.post(configuration.URL_REQUEST + '/restorePassword', data).success(function() {
+            $http.post(configuration.URL_REQUEST + '/restorePassword', data).success(function () {
                 $scope.successRestore = true;
                 $scope.failRestore = false;
 
                 $scope.emailRestoreShow = $scope.emailRestore;
-            }).error(function() {
+            }).error(function () {
                 $scope.failRestore = true;
                 $scope.successRestore = false;
                 $scope.passwordRestoreMessage = 'Email : le courriel saisi n\'est pas identifié dans la plate-forme Accessidys.';

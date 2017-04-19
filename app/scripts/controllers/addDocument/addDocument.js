@@ -58,12 +58,17 @@ angular
             $scope.caret = {
                 lastPosition: null,
                 savePosition: function () {
+
+                    /* jshint ignore:start */
                     $scope.caret.lastPosition = rangy.getSelection().saveCharacterRanges(document.getElementById('editorAdd'));
+                    /* jshint ignore:end */
                 },
                 restorePosition: function () {
+                    /* jshint ignore:start */
                     if ($scope.caret.lastPosition) {
                         rangy.getSelection().restoreCharacterRanges(document.getElementById('editorAdd'), $scope.caret.lastPosition);
                     }
+                    /* jshint ignore:end */
                 }
             };
 
@@ -209,7 +214,7 @@ angular
 
                 if ($scope.idDocument) {
                     mode = 'edit';
-                    filePath = $scope.existingFile.filepath
+                    filePath = $scope.existingFile.filepath;
                 } else {
                     mode = 'create';
                 }
@@ -424,7 +429,7 @@ angular
 
                                     pageNumber++;
                                     if (pageNumber <= pdf.numPages) {
-                                        LoaderService.setLoaderProgress((pageNumber / pdf.numPages) * 100)
+                                        LoaderService.setLoaderProgress((pageNumber / pdf.numPages) * 100);
                                         $scope.insertPageBreak();
                                         $scope.loadPdfPage(pdf, pageNumber);
                                     } else {
@@ -543,7 +548,7 @@ angular
                 if (evt.lengthComputable) {
                     // evt.loaded the bytes browser receive
                     // evt.total the total bytes seted by the header
-                    LoaderService.setLoaderProgress((evt.loaded / evt.total) * 100)
+                    LoaderService.setLoaderProgress((evt.loaded / evt.total) * 100);
                 }
             };
 
@@ -699,7 +704,7 @@ angular
                                 CKEDITOR.instances.editorAdd.lang.format['tag_' + removeStringsUppercaseSpaces(tag.libelle)] = tag.libelle;
                             }
 
-                            CKEDITOR.instances.editorAdd.lang.format['panelTitle'] = 'Styles';
+                            CKEDITOR.instances.editorAdd.lang.format.panelTitle = 'Styles';
                         }
                         if ($scope.idDocument) {
                             $scope.$apply(function () {

@@ -54,6 +54,70 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                     $rootScope.tmpLine = 0;
                 }
 
+                function addASpace(elementAction) {
+                    if (elementAction.textContent)
+                        elementAction.textContent = ' ' + elementAction.textContent + ' ';
+                }
+
+                /*
+                 * Detect and separate the syllables of the words of a paragraph.
+                 */
+                var syllabeAction = function (param, elementAction) {
+                    var p = elementAction.parentElement;
+                    var tmpTxt = elementAction.textContent;
+                    tmpTxt = tmpTxt.replace(/</g, '&lt;');
+                    tmpTxt = tmpTxt.replace(/>/g, '&gt;');
+                    if (!scope.editorContent)
+                        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
+                    tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+
+                    // wrap each syllables with a <span>, add a space after the last
+                    // syllable
+                    var words = tmpTxt.split(' ');
+                    var text = '';
+                    for (var i = 0; i < words.length; i++) {
+                        var currentWord = words[i].trim();
+
+                        if (currentWord.indexOf('|') > -1) {
+                            var syllabes = currentWord.split('|');
+                            for (var j = 0; j < syllabes.length; j++) {
+                                if (j === syllabes.length - 1) {
+                                    // add a space
+                                    text = text + '<span>' + syllabes[j] + '</span> ';
+                                } else {
+                                    text = text + '<span>' + syllabes[j] + '</span>';
+                                }
+                            }
+                        } else {
+                            text = text + '<span>' + currentWord + '</span> ';
+                        }
+                    }
+                    if (!scope.editorContent)
+                        text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
+
+                    angular.element(elementAction).replaceWith($.parseHTML(text));
+
+                    $(window).resize(function () {
+
+                        //console.log('p = ' + p);
+
+                        var line = 0;
+                        $('span:not(.customSelect, .customSelectInner)', p).each(function () {
+                            var word = $(this);
+                            if (line !== 3) {
+                                line++;
+                            } else {
+                                line = 1;
+                            }
+                            word.attr('class', 'line' + line);
+                        }); // each
+                    }); // resize
+
+                    $(window).resize();
+                };
+
+
+
                 var removeAllSpan = function (element) {
                     var spans = element.find('span');
                     angular.forEach(spans, function (span) {
@@ -64,229 +128,11 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                     element[0].normalize();
                 };
 
-                var adapt = function (newHTML) {
-
-                    $(element).html(newHTML);
-
-                    //console.log('Execute adaptation');
-
-                    if (scope.showLoader !== undefined) {
-                        //console.log('loader');
-                        scope.showLoader();
-                    }
-
-                    // first apply css styles
-                    $timeout(function () {
-                        applyStyles();
-                        //console.log('style done');
-                        // then apply adaptation with coloration
-                        $timeout(function () {
-                            applyAdaptation();
-
-                            if (scope.hideLoader !== undefined) {
-                                //console.log('hideLoader');
-                                scope.hideLoader();
-                            }
-
-                            watchApplyRulesInProgress = false;
-                            watchContentInProgress = false;
-                            watchTagsInProgress = false;
-
-                        }, 1000);
+                function getTextNodes(elementAction) {
+                    return $(elementAction).contents().filter(function () {
+                        return this.nodeType === 3;
                     });
-
-
-                    // cleans white spaces at the end of empty lines so that rangy
-                    // can find is way
-                    angular.element('#editorAdd').find('p').each(function (idx, el) {
-                        if ($(el).text() === '\xa0 ' || $(el).text() === '\xa0') {
-                            if (!scope.editorContent)
-                                $(el).html('<br/>');
-                        }
-                    });
-
-
-                };
-
-                var getTagsById = function (listTags, id) {
-                    for (var i = 0; i < listTags.length; i++) {
-
-                        //console.log('listtags i=' + listTags[i]._id + ' / id=' + id);
-
-                        if (listTags[i]._id === id) {
-                            return listTags[i];
-                        }
-                    }
-                    return {};
-                };
-
-                scope.$watch('applyRules', function (value) {
-
-                    //console.log('observe applyrules : ' + value + ' / ' + scope.applyRules);
-
-
-                    //console.log(shallApplyStyleRules);
-                    //console.log(value);
-
-                    watchApplyRulesInProgress = (value === true);
-                    //check if any other watch is in progress
-                    if (watchApplyRulesInProgress && !watchContentInProgress && !watchTagsInProgress) {
-
-                        //console.log('observe applyrules execution');
-
-
-                        $rootScope.lineWord = 0;
-                        $rootScope.tmpLine; // jshint ignore:line
-
-                        if ($rootScope.tmpLine !== 0) {
-                            $rootScope.tmpLine = 0;
-                        }
-                        adapt(scope.regleStyle, scope.tags); // Compile
-
-                    }
-                });
-
-
-                scope.$watch('tags', function () {
-
-                    //console.log('observe tags : applyRules=' + scope.applyRules);
-
-                    //if no ask for applying rules, do nothing
-                    if (!scope.applyRules)
-                        return;
-
-                    $rootScope.lineWord = 0;
-                    $rootScope.tmpLine; // jshint ignore:line
-
-                    if ($rootScope.tmpLine !== 0) {
-                        $rootScope.tmpLine = 0;
-                    }
-                    if (!watchContentInProgress && !watchApplyRulesInProgress) {
-
-                        watchTagsInProgress = true;
-
-                        $rootScope.lineWord = 0;
-                        $rootScope.tmpLine; // jshint ignore:line
-
-                        if ($rootScope.tmpLine !== 0) {
-                            $rootScope.tmpLine = 0;
-                        }
-                        adapt(scope.regleStyle, scope.tags);
-
-                    }
-
-                });
-
-                var applyAdaptation = function () {
-
-
-                    //console.log('applyAdaptation');
-
-                    var listTagsByProfil = scope.tags;
-                    var listTags = JSON.parse(localStorage.getItem('listTags'));
-
-                    for (var i = 0; i < listTagsByProfil.length; i++) {
-                        var tagByProfil = listTagsByProfil[i];
-                        var tag = getTagsById(listTags, tagByProfil.tag);
-
-                        //console.log(tag);
-
-                        var balise = tag.balise;
-                        var elementFound = [];
-                        var j = 0;
-                        if (balise !== 'div') {
-
-                            elementFound = $(element).find(balise);
-                            for (j = 0; j < elementFound.length; j++) {
-                                regleColoration(tagByProfil.coloration, elementFound[j]);
-                            }
-
-                        } else {
-                            elementFound = $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle));
-                            for (j = 0; j < elementFound.length; j++) {
-                                regleColoration(tagByProfil.coloration, elementFound[j]);
-                            }
-                        }
-                        // regleColoration('Couleur par défaut', element);
-                    }
-
-                    //apply on DOM
-                    $compile(element.contents())(scope);
-
-                };
-
-                var applyStyles = function () {
-
-                    console.log('apply styles');
-
-                    var listTagsByProfil = scope.tags;
-
-                    var listTags = JSON.parse(localStorage.getItem('listTags'));
-
-                    for (var i = 0; i < listTagsByProfil.length; i++) {
-                        var tagByProfil = listTagsByProfil[i];
-                        var tag = getTagsById(listTags, tagByProfil.tag);
-                        var balise = tag.balise;
-                        var elementFound = [];
-                        var j = 0;
-                        if (balise !== 'div') {
-
-                            elementFound = $(element).find(balise);
-                            for (j = 0; j < elementFound.length; j++) {
-                                applyCSS(elementFound[j], tagByProfil);
-                            }
-
-                        } else {
-                            elementFound = $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle));
-                            for (j = 0; j < elementFound.length; j++) {
-                                applyCSS(elementFound[j], tagByProfil);
-                            }
-                        }
-                    }
-
-                    //apply on DOM
-                    $compile(element.contents())(scope);
-                };
-
-                var applyCSS = function (element, profilTag) {
-                    // Transformation appropriate to the application
-
-                    if(scope.preview){
-                        if(element.tagName != 'P' ){
-                            $(element).css({
-                                'height': (1.286 + (profilTag.interligne - 1) * 0.18) + 'em',
-                                'overflow': 'hidden'
-                            });
-                        } else {
-                            $(element).css({
-                                'height': ((1.286 + (profilTag.interligne - 1) * 0.18) * 4)  + 'em',
-                                'overflow': 'hidden'
-                            });
-                        }
-                    }
-
-
-                    $(element).css('font-family', profilTag.police);
-                    $(element).css('font-size', (profilTag.taille / 12) + 'em');
-                    $(element).css('line-height', (1.286 + (profilTag.interligne - 1) * 0.18) + 'em');
-                    $(element).css('font-weight', profilTag.styleValue);
-                    $(element).css('word-spacing', (0 + (profilTag.spaceSelected - 1) * 0.18) + 'em');
-                    $(element).css('letter-spacing', (0 + (profilTag.spaceCharSelected - 1) * 0.12) + 'em');
-                };
-
-                var currentParam = '';
-                var currentElementAction = '';
-                var hyphenatorSettings = {
-                    'onhyphenationdonecallback': function () {
-                        // console.log('done ... ');
-                        syllabeAction(currentParam, currentElementAction);
-                    },
-                    hyphenchar: '|',
-                    defaultlanguage: 'fr',
-                    useCSS3hyphenation: true,
-                    displaytogglebox: true,
-                };
-                Hyphenator.config(hyphenatorSettings);
+                }
 
                 /*
                  * Detect and separate the lines of a paragraph..
@@ -443,10 +289,7 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                     }
                 };
 
-                function addASpace(elementAction) {
-                    if (elementAction.textContent)
-                        elementAction.textContent = ' ' + elementAction.textContent + ' ';
-                }
+
 
                 /*
                  * Configure the Hyphenator plugin.
@@ -472,62 +315,366 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                     }
                 };
 
-                /*
-                 * Detect and separate the syllables of the words of a paragraph.
-                 */
-                var syllabeAction = function (param, elementAction) {
-                    var p = elementAction.parentElement;
-                    var tmpTxt = elementAction.textContent;
-                    tmpTxt = tmpTxt.replace(/</g, '&lt;');
-                    tmpTxt = tmpTxt.replace(/>/g, '&gt;');
-                    if (!scope.editorContent)
-                        tmpTxt = tmpTxt.replace(/\n/g, ' <br/> ');
-                    tmpTxt = tmpTxt.replace(/\xA0/g, '&nbsp;');
+                function regleColoration(param, elementAction) {
+                    //console.log('regle coloration');
+                    var element;
+                    switch (param) {
+                        case 'Pas de coloration':
+                            lineAction(elementAction, 3);
+                            element = angular.element(elementAction);
+                            element.find('.line1').css('background-color', '');
+                            element.find('.line2').css('background-color', '');
+                            element.find('.line3').css('background-color', '');
+                            element.css('color', 'black');
+                            element.find('span').css('color', 'black');
+                            // $(elementAction).text($(elementAction).text());
+                            break;
 
-                    // wrap each syllables with a <span>, add a space after the last
-                    // syllable
-                    var words = tmpTxt.split(' ');
-                    var text = '';
-                    for (var i = 0; i < words.length; i++) {
-                        var currentWord = words[i].trim();
+                        case 'Colorer les lignes RBV':
+                            lineAction(elementAction, 3);
+                            element = angular.element(elementAction);
+                            element.find('.line1').css('color', '#D90629');
+                            element.find('.line2').css('color', '#066ED9');
+                            element.find('.line3').css('color', '#4BD906');
+                            break;
+                        case 'Colorer les lignes RVJ':
+                            lineAction(elementAction, 3);
+                            element = angular.element(elementAction);
+                            element.find('.line1').css('color', '#D90629');
+                            element.find('.line2').css('color', '#4BD906');
+                            element.find('.line3').css('color', '#ECE20F');
+                            break;
 
-                        if (currentWord.indexOf('|') > -1) {
-                            var syllabes = currentWord.split('|');
-                            for (var j = 0; j < syllabes.length; j++) {
-                                if (j === syllabes.length - 1) {
-                                    // add a space
-                                    text = text + '<span>' + syllabes[j] + '</span> ';
-                                } else {
-                                    text = text + '<span>' + syllabes[j] + '</span>';
-                                }
-                            }
+                        case 'Colorer les lignes RBVJ':
+                            lineAction(elementAction, 4);
+                            element = angular.element(elementAction);
+                            element.find('.line1').css('color', '#D90629');
+                            element.find('.line2').css('color', '#066ED9');
+                            element.find('.line3').css('color', '#4BD906');
+                            element.find('.line4').css('color', '#ECE20F');
+                            break;
+
+                        case 'Colorer les mots':
+                            wordAction(elementAction);
+                            element = angular.element(elementAction);
+                            element.find('.line1').css('background-color', '');
+                            element.find('.line2').css('background-color', '');
+                            element.find('.line3').css('background-color', '');
+                            element.find('.line1').css('color', '#D90629');
+                            element.find('.line2').css('color', '#066ED9');
+                            element.find('.line3').css('color', '#4BD906');
+                            break;
+
+                        case 'Surligner les mots':
+                            wordAction(elementAction);
+                            element = angular.element(elementAction);
+                            element.find('.line1').css({
+                                'background-color': '#fffd01',
+                                'color': '#000'
+                            });
+                            element.find('.line2').css({
+                                'background-color': '#04ff04',
+                                'color': '#000'
+                            });
+                            element.find('.line3').css({
+                                'background-color': '#04ffff',
+                                'color': '#000'
+                            });
+                            break;
+
+                        case 'Surligner les lignes RBV':
+                            lineAction(elementAction, 3);
+                            element = angular.element(elementAction);
+                            element.css('color', '');
+                            element.find('span').css('color', 'black');
+                            element.find('.line1').css('background-color', '#D90629');
+                            element.find('.line2').css('background-color', '#066ED9');
+                            element.find('.line3').css('background-color', '#4BD906');
+                            break;
+                        case 'Surligner les lignes RVJ':
+                            lineAction(elementAction, 3);
+                            element = angular.element(elementAction);
+                            element.css('color', '');
+                            element.find('span').css('color', 'black');
+                            element.find('.line1').css('background-color', '#D90629');
+                            element.find('.line2').css('background-color', '#4BD906');
+                            element.find('.line3').css('background-color', '#ECE20F');
+                            break;
+                        case 'Surligner les lignes RBVJ':
+                            lineAction(elementAction, 4);
+                            element = angular.element(elementAction);
+                            element.css('color', '');
+                            element.find('span').css('color', 'black');
+                            element.find('.line1').css('background-color', '#D90629');
+                            element.find('.line2').css('background-color', '#066ED9');
+                            element.find('.line3').css('background-color', '#4BD906');
+                            element.find('.line4').css('background-color', '#ECE20F');
+                            break;
+                        case 'Colorer les syllabes':
+                            removeAllSpan(angular.element(elementAction));
+                            decoupe('color-syllabes', elementAction);
+                            element = angular.element(elementAction);
+                            element.css('color', '');
+                            element.find('span').css('color', '');
+                            element.find('.line1').css('color', '#D90629');
+                            element.find('.line2').css('color', '#066ED9');
+                            element.find('.line3').css('color', '#4BD906');
+                            break;
+
+                    }
+                }
+
+                var applyCSS = function (element, profilTag) {
+                    // Transformation appropriate to the application
+
+                    if(scope.preview){
+                        if(element.tagName !== 'P' ){
+                            $(element).css({
+                                'height': (1.286 + (profilTag.interligne - 1) * 0.18) + 'em',
+                                'overflow': 'hidden'
+                            });
                         } else {
-                            text = text + '<span>' + currentWord + '</span> ';
+                            $(element).css({
+                                'height': ((1.286 + (profilTag.interligne - 1) * 0.18) * 4)  + 'em',
+                                'overflow': 'hidden'
+                            });
                         }
                     }
-                    if (!scope.editorContent)
-                        text = text.replace(/<span><br\/><\/span>/g, '<br/> ');
 
-                    angular.element(elementAction).replaceWith($.parseHTML(text));
 
-                    $(window).resize(function () {
-
-                        //console.log('p = ' + p);
-
-                        var line = 0;
-                        $('span:not(.customSelect, .customSelectInner)', p).each(function () {
-                            var word = $(this);
-                            if (line !== 3) {
-                                line++;
-                            } else {
-                                line = 1;
-                            }
-                            word.attr('class', 'line' + line);
-                        }); // each
-                    }); // resize
-
-                    $(window).resize();
+                    $(element).css('font-family', profilTag.police);
+                    $(element).css('font-size', (profilTag.taille / 12) + 'em');
+                    $(element).css('line-height', (1.286 + (profilTag.interligne - 1) * 0.18) + 'em');
+                    $(element).css('font-weight', profilTag.styleValue);
+                    $(element).css('word-spacing', (0 + (profilTag.spaceSelected - 1) * 0.18) + 'em');
+                    $(element).css('letter-spacing', (0 + (profilTag.spaceCharSelected - 1) * 0.12) + 'em');
                 };
+
+                var getTagsById = function (listTags, id) {
+                    for (var i = 0; i < listTags.length; i++) {
+
+                        //console.log('listtags i=' + listTags[i]._id + ' / id=' + id);
+
+                        if (listTags[i]._id === id) {
+                            return listTags[i];
+                        }
+                    }
+                    return {};
+                };
+
+                var applyStyles = function () {
+
+                    console.log('apply styles');
+
+                    var listTagsByProfil = scope.tags;
+
+                    var listTags = JSON.parse(localStorage.getItem('listTags'));
+
+                    for (var i = 0; i < listTagsByProfil.length; i++) {
+                        var tagByProfil = listTagsByProfil[i];
+                        var tag = getTagsById(listTags, tagByProfil.tag);
+                        var balise = tag.balise;
+                        var elementFound = [];
+                        var j = 0;
+                        if (balise !== 'div') {
+
+                            elementFound = $(element).find(balise);
+                            for (j = 0; j < elementFound.length; j++) {
+                                applyCSS(elementFound[j], tagByProfil);
+                            }
+
+                        } else {
+                            elementFound = $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle));
+                            for (j = 0; j < elementFound.length; j++) {
+                                applyCSS(elementFound[j], tagByProfil);
+                            }
+                        }
+                    }
+
+                    //apply on DOM
+                    $compile(element.contents())(scope);
+                };
+
+                var applyAdaptation = function () {
+
+
+                    //console.log('applyAdaptation');
+
+                    var listTagsByProfil = scope.tags;
+                    var listTags = JSON.parse(localStorage.getItem('listTags'));
+
+                    for (var i = 0; i < listTagsByProfil.length; i++) {
+                        var tagByProfil = listTagsByProfil[i];
+                        var tag = getTagsById(listTags, tagByProfil.tag);
+
+                        //console.log(tag);
+
+                        var balise = tag.balise;
+                        var elementFound = [];
+                        var j = 0;
+                        if (balise !== 'div') {
+
+                            elementFound = $(element).find(balise);
+                            for (j = 0; j < elementFound.length; j++) {
+                                regleColoration(tagByProfil.coloration, elementFound[j]);
+                            }
+
+                        } else {
+                            elementFound = $(element).find('div.' + removeStringsUppercaseSpaces(tag.libelle));
+                            for (j = 0; j < elementFound.length; j++) {
+                                regleColoration(tagByProfil.coloration, elementFound[j]);
+                            }
+                        }
+                        // regleColoration('Couleur par défaut', element);
+                    }
+
+                    //apply on DOM
+                    $compile(element.contents())(scope);
+
+                };
+
+
+
+
+
+                function regleEspace(param, elementAction) {
+                    var tmp = 0 + (param - 1) * 0.18;
+                    $(elementAction).css('word-spacing', '' + tmp + 'em');
+                }
+
+                function regleCharEspace(param, elementAction) {
+                    var tmp = 0 + (param - 1) * 0.12;
+                    $(elementAction).css('letter-spacing', '' + tmp + 'em');
+                }
+
+
+
+                var adapt = function (newHTML) {
+
+                    $(element).html(newHTML);
+
+                    //console.log('Execute adaptation');
+
+                    if (scope.showLoader !== undefined) {
+                        //console.log('loader');
+                        scope.showLoader();
+                    }
+
+                    // first apply css styles
+                    $timeout(function () {
+                        applyStyles();
+                        //console.log('style done');
+                        // then apply adaptation with coloration
+                        $timeout(function () {
+                            applyAdaptation();
+
+                            if (scope.hideLoader !== undefined) {
+                                //console.log('hideLoader');
+                                scope.hideLoader();
+                            }
+
+                            watchApplyRulesInProgress = false;
+                            watchContentInProgress = false;
+                            watchTagsInProgress = false;
+
+                        }, 1000);
+                    });
+
+
+                    // cleans white spaces at the end of empty lines so that rangy
+                    // can find is way
+                    angular.element('#editorAdd').find('p').each(function (idx, el) {
+                        if ($(el).text() === '\xa0 ' || $(el).text() === '\xa0') {
+                            if (!scope.editorContent)
+                                $(el).html('<br/>');
+                        }
+                    });
+
+
+                };
+
+
+
+                scope.$watch('applyRules', function (value) {
+
+                    //console.log('observe applyrules : ' + value + ' / ' + scope.applyRules);
+
+
+                    //console.log(shallApplyStyleRules);
+                    //console.log(value);
+
+                    watchApplyRulesInProgress = (value === true);
+                    //check if any other watch is in progress
+                    if (watchApplyRulesInProgress && !watchContentInProgress && !watchTagsInProgress) {
+
+                        //console.log('observe applyrules execution');
+
+
+                        $rootScope.lineWord = 0;
+                        $rootScope.tmpLine; // jshint ignore:line
+
+                        if ($rootScope.tmpLine !== 0) {
+                            $rootScope.tmpLine = 0;
+                        }
+                        adapt(scope.regleStyle, scope.tags); // Compile
+
+                    }
+                });
+
+
+                scope.$watch('tags', function () {
+
+                    //console.log('observe tags : applyRules=' + scope.applyRules);
+
+                    //if no ask for applying rules, do nothing
+                    if (!scope.applyRules)
+                        return;
+
+                    $rootScope.lineWord = 0;
+                    $rootScope.tmpLine; // jshint ignore:line
+
+                    if ($rootScope.tmpLine !== 0) {
+                        $rootScope.tmpLine = 0;
+                    }
+                    if (!watchContentInProgress && !watchApplyRulesInProgress) {
+
+                        watchTagsInProgress = true;
+
+                        $rootScope.lineWord = 0;
+                        $rootScope.tmpLine; // jshint ignore:line
+
+                        if ($rootScope.tmpLine !== 0) {
+                            $rootScope.tmpLine = 0;
+                        }
+                        adapt(scope.regleStyle, scope.tags);
+
+                    }
+
+                });
+
+
+
+
+
+
+
+                var currentParam = '';
+                var currentElementAction = '';
+                var hyphenatorSettings = {
+                    'onhyphenationdonecallback': function () {
+                        // console.log('done ... ');
+                        syllabeAction(currentParam, currentElementAction);
+                    },
+                    hyphenchar: '|',
+                    defaultlanguage: 'fr',
+                    useCSS3hyphenation: true,
+                    displaytogglebox: true,
+                };
+                Hyphenator.config(hyphenatorSettings);
+
+
+
+
 
                 // Test on Listener if it is already registered
                 if (!$rootScope.$$listeners.reglesStyleChange) {
@@ -619,130 +766,7 @@ function ($rootScope, $timeout, removeHtmlTags, removeStringsUppercaseSpaces, $c
                     });
                 }
 
-                function getTextNodes(elementAction) {
-                    return $(elementAction).contents().filter(function () {
-                        return this.nodeType === 3;
-                    });
-                }
 
-                function regleEspace(param, elementAction) {
-                    var tmp = 0 + (param - 1) * 0.18;
-                    $(elementAction).css('word-spacing', '' + tmp + 'em');
-                }
-
-                function regleCharEspace(param, elementAction) {
-                    var tmp = 0 + (param - 1) * 0.12;
-                    $(elementAction).css('letter-spacing', '' + tmp + 'em');
-                }
-
-                function regleColoration(param, elementAction) {
-                    //console.log('regle coloration');
-                    var element;
-                    switch (param) {
-                    case 'Pas de coloration':
-                        lineAction(elementAction, 3);
-                        element = angular.element(elementAction);
-                        element.find('.line1').css('background-color', '');
-                        element.find('.line2').css('background-color', '');
-                        element.find('.line3').css('background-color', '');
-                        element.css('color', 'black');
-                        element.find('span').css('color', 'black');
-                        // $(elementAction).text($(elementAction).text());
-                        break;
-
-                    case 'Colorer les lignes RBV':
-                        lineAction(elementAction, 3);
-                        element = angular.element(elementAction);
-                        element.find('.line1').css('color', '#D90629');
-                        element.find('.line2').css('color', '#066ED9');
-                        element.find('.line3').css('color', '#4BD906');
-                        break;
-                    case 'Colorer les lignes RVJ':
-                        lineAction(elementAction, 3);
-                        element = angular.element(elementAction);
-                        element.find('.line1').css('color', '#D90629');
-                        element.find('.line2').css('color', '#4BD906');
-                        element.find('.line3').css('color', '#ECE20F');
-                        break;
-
-                    case 'Colorer les lignes RBVJ':
-                        lineAction(elementAction, 4);
-                        element = angular.element(elementAction);
-                        element.find('.line1').css('color', '#D90629');
-                        element.find('.line2').css('color', '#066ED9');
-                        element.find('.line3').css('color', '#4BD906');
-                        element.find('.line4').css('color', '#ECE20F');
-                        break;
-
-                    case 'Colorer les mots':
-                        wordAction(elementAction);
-                        element = angular.element(elementAction);
-                        element.find('.line1').css('background-color', '');
-                        element.find('.line2').css('background-color', '');
-                        element.find('.line3').css('background-color', '');
-                        element.find('.line1').css('color', '#D90629');
-                        element.find('.line2').css('color', '#066ED9');
-                        element.find('.line3').css('color', '#4BD906');
-                        break;
-
-                    case 'Surligner les mots':
-                        wordAction(elementAction);
-                        element = angular.element(elementAction);
-                        element.find('.line1').css({
-                            'background-color': '#fffd01',
-                            'color': '#000'
-                        });
-                        element.find('.line2').css({
-                            'background-color': '#04ff04',
-                            'color': '#000'
-                        });
-                        element.find('.line3').css({
-                            'background-color': '#04ffff',
-                            'color': '#000'
-                        });
-                        break;
-
-                    case 'Surligner les lignes RBV':
-                        lineAction(elementAction, 3);
-                        element = angular.element(elementAction);
-                        element.css('color', '');
-                        element.find('span').css('color', 'black');
-                        element.find('.line1').css('background-color', '#D90629');
-                        element.find('.line2').css('background-color', '#066ED9');
-                        element.find('.line3').css('background-color', '#4BD906');
-                        break;
-                    case 'Surligner les lignes RVJ':
-                        lineAction(elementAction, 3);
-                        element = angular.element(elementAction);
-                        element.css('color', '');
-                        element.find('span').css('color', 'black');
-                        element.find('.line1').css('background-color', '#D90629');
-                        element.find('.line2').css('background-color', '#4BD906');
-                        element.find('.line3').css('background-color', '#ECE20F');
-                        break;
-                    case 'Surligner les lignes RBVJ':
-                        lineAction(elementAction, 4);
-                        element = angular.element(elementAction);
-                        element.css('color', '');
-                        element.find('span').css('color', 'black');
-                        element.find('.line1').css('background-color', '#D90629');
-                        element.find('.line2').css('background-color', '#066ED9');
-                        element.find('.line3').css('background-color', '#4BD906');
-                        element.find('.line4').css('background-color', '#ECE20F');
-                        break;
-                    case 'Colorer les syllabes':
-                        removeAllSpan(angular.element(elementAction));
-                        decoupe('color-syllabes', elementAction);
-                        element = angular.element(elementAction);
-                        element.css('color', '');
-                        element.find('span').css('color', '');
-                        element.find('.line1').css('color', '#D90629');
-                        element.find('.line2').css('color', '#066ED9');
-                        element.find('.line3').css('color', '#4BD906');
-                        break;
-
-                    }
-                }
 
             }
         };

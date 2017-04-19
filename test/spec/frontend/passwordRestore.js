@@ -103,11 +103,6 @@ describe('Controller: passwordRestoreCtrl', function() {
     expect(tmp).toBe(true);
   }));
 
-  it('restorePassword: errorCheck', inject(function() {
-    expect($scope.errorCheck).toBeDefined();
-    $scope.errorCheck();
-  }));
-
 
 
 });

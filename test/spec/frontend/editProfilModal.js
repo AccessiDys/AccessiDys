@@ -24,11 +24,10 @@
  */
 
 /* global spyOn:false */
-/* global jQuery */
 'use strict';
 
 describe('Controller:EditProfilModalCtrl', function () {
-    var $scope, controller, modalInstance, timeoutCallback, $interval, profile, profileTagIndex;
+    var $scope, controller, modalInstance, $interval, profile, profileTagIndex;
 
 
     beforeEach(module('cnedApp'));
@@ -41,26 +40,26 @@ describe('Controller:EditProfilModalCtrl', function () {
             profileTags: {
                 type: 'tags',
                 tags: [{
-                    _id: "58bd55d2cfdeac0100382092",
-                    coloration: "Colorer les lignes RBV",
-                    id_tag: "58b686cfb102ed01008bb6a7",
-                    interligne: "1",
-                    police: "opendyslexicregular",
-                    profil: "58b7b5e0c589b701007af018",
+                    _id: '58bd55d2cfdeac0100382092',
+                    coloration: 'Colorer les lignes RBV',
+                    id_tag: '58b686cfb102ed01008bb6a7',
+                    interligne: '1',
+                    police: 'opendyslexicregular',
+                    profil: '58b7b5e0c589b701007af018',
                     spaceCharSelected: 1,
                     spaceSelected: 1,
-                    style: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap",
-                    styleValue: "Gras",
-                    tag: "58b686cfb102ed01008bb6a7",
+                    style: '<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap',
+                    styleValue: 'Gras',
+                    tag: '58b686cfb102ed01008bb6a7',
                     tagDetail: {
-                        _id: "58b686cfb102ed01008bb6a7",
-                        libelle: "Titre 1",
+                        _id: '58b686cfb102ed01008bb6a7',
+                        libelle: 'Titre 1',
                         niveau: 1,
                         position: 1,
-                        balise: "h1"
+                        balise: 'h1'
                     },
-                    taille: "24",
-                    texte: "<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap"
+                    taille: '24',
+                    texte: '<h1>Titre 1: AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap'
                 }]
             }
         };
@@ -89,13 +88,9 @@ describe('Controller:EditProfilModalCtrl', function () {
 
         $interval = _$interval_;
 
-        var timeout = function (item) {
-            timeoutCallback = item;
-        };
-
         controller = $controller('styleEditModalCtrl', {
             $scope: $scope,
-            $modalInstance: modalInstance,
+            $uibModalInstance: modalInstance,
             $rootScope: $rootScope,
             $interval: $interval,
             $log: $log,
@@ -120,7 +115,7 @@ describe('Controller:EditProfilModalCtrl', function () {
             space: 1,
             spaceChar: 1,
             coloration: 'Colorer les lignes RBV'
-        })
+        });
 
     });
 

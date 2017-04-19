@@ -27,6 +27,7 @@
  * angular.element(this).scope() returns undefined. It's then impossible to get the scope of an DOM element through the expression  angular.element(this).scope().
  * File upload became impossible by calling the function angular.element(this).scope().setFiles(this)*/
 'use strict';
+/*global cnedApp */
 cnedApp.directive('uploadFile', function ($rootScope, ToasterService, $timeout) {
     return {
         restrict: 'AE',
@@ -41,10 +42,7 @@ cnedApp.directive('uploadFile', function ($rootScope, ToasterService, $timeout) 
                 $timeout(function () {
                     for (var i = 0; i < element.files.length; i++) {
                         var filename = '';
-                        if (element.files[i].type !== 'image/jpeg'
-                            && element.files[i].type !== 'image/png'
-                            && element.files[i].type !== 'application/pdf'
-                            && element.files[i].type !== 'application/epub+zip') {
+                        if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip') {
                             if (element.files[i].type === '' && element.files[i].name.indexOf('.epub') > -1) {
                                 filename = element.files[i].name;
 

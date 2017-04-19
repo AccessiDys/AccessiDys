@@ -58,102 +58,7 @@ cnedApp.directive('draggableNote',
                     });
                 }
 
-
-                $timeout(function () {
-                    drawLine();
-                }, 300);
-
-
-                /* If the mouse button is pressed */
-                elm.bind('mousedown', function ($event) {
-                    tagID = $event.target.id;
-
-                    startX = elm.prop('offsetLeft');
-                    startY = elm.prop('offsetTop');
-                    initialMouseX = $event.clientX;
-                    initialMouseY = $event.clientY;
-
-                    // click on new editable text
-                    if (tagID.indexOf('note-id-') > -1 || tagID.indexOf('link-id-') > -1) {
-                        $document.bind('mousemove', mousemove);
-                        $document.bind('mouseup', mouseup);
-
-                        return true;
-                    }
-                });
-
                 /* If the mouse cursor moves to the document */
-
-                function mousemove($event) {
-                    $event.preventDefault();
-
-                    tagID = $event.target.id;
-
-                    var dx = $event.clientX - initialMouseX;
-                    var dy = $event.clientY - initialMouseY;
-
-                    elm.css({
-                        top: startY + dy + 'px',
-                        left: startX + dx + 'px'
-                    });
-
-                    drawLine();
-
-                    return false;
-                }
-
-                /* If the mouse button is released */
-
-                function mouseup($event) {
-                    tagID = $event.target.id;
-
-
-                    /* If I move the contents of the note in the permitted area */
-                    if (tagID.indexOf('note-id-') > -1) {
-
-                        var x = (elm.offset().left - 15 - container.offset().left) / container.width() * 100;
-                        var y = (elm.offset().top - container.offset().top) / container.height() * 100;
-
-                        elm.css({
-                            top: y + '%',
-                            left: x + '%'
-                        });
-
-                        scope.note.y = y;
-                        scope.note.x = x;
-                        /* If I move the arrow annotation */
-                    } else if (tagID.indexOf('link-id-') > -1) {
-
-                        var x = (elm.offset().left + 7 - container.offset().left) / container.width() * 100;
-                        var y = (elm.offset().top - container.offset().top) / container.height() * 100;
-
-                        elm.css({
-                            top: y + '%',
-                            left: x + '%'
-                        });
-
-                        scope.note.yLink = y;
-                        scope.note.xLink = x;
-                    }
-
-
-                    /* If I move the arrow and the contents of the note */
-                    if (tagID.indexOf('note-id-') > -1 || tagID.indexOf('link-id-') > -1) {
-                        scope.editNote(scope.note);
-                    }
-
-
-                    if (type === 'content') {
-                        $document.unbind('mousemove', mousemove);
-                        $document.unbind('mouseup', mouseup);
-
-                    } else if (type === 'link') {
-                        $document.unbind('mousemove', mousemove);
-                        $document.unbind('mouseup', mouseup);
-                    }
-
-
-                }
 
                 function drawLine() {
                     var x, y, xLink, yLink;
@@ -196,6 +101,107 @@ cnedApp.directive('draggableNote',
                         });
                     }
                 }
+
+                function mousemove($event) {
+                    $event.preventDefault();
+
+                    tagID = $event.target.id;
+
+                    var dx = $event.clientX - initialMouseX;
+                    var dy = $event.clientY - initialMouseY;
+
+                    elm.css({
+                        top: startY + dy + 'px',
+                        left: startX + dx + 'px'
+                    });
+
+                    drawLine();
+
+                    return false;
+                }
+
+                /* If the mouse button is released */
+
+                function mouseup($event) {
+                    tagID = $event.target.id;
+
+
+                    /* jshint ignore:start */
+                    /* If I move the contents of the note in the permitted area */
+                    if (tagID.indexOf('note-id-') > -1) {
+
+                        var x = (elm.offset().left - 15 - container.offset().left) / container.width() * 100;
+                        var y = (elm.offset().top - container.offset().top) / container.height() * 100;
+
+                        elm.css({
+                            top: y + '%',
+                            left: x + '%'
+                        });
+
+                        scope.note.y = y;
+                        scope.note.x = x;
+                        /* If I move the arrow annotation */
+                    } else if (tagID.indexOf('link-id-') > -1) {
+
+                        var x = (elm.offset().left + 7 - container.offset().left) / container.width() * 100;
+                        var y = (elm.offset().top - container.offset().top) / container.height() * 100;
+
+                        elm.css({
+                            top: y + '%',
+                            left: x + '%'
+                        });
+
+                        scope.note.yLink = y;
+                        scope.note.xLink = x;
+                    }
+                    /* jshint ignore:end */
+
+
+                    /* If I move the arrow and the contents of the note */
+                    if (tagID.indexOf('note-id-') > -1 || tagID.indexOf('link-id-') > -1) {
+                        scope.editNote(scope.note);
+                    }
+
+
+                    if (type === 'content') {
+                        $document.unbind('mousemove', mousemove);
+                        $document.unbind('mouseup', mouseup);
+
+                    } else if (type === 'link') {
+                        $document.unbind('mousemove', mousemove);
+                        $document.unbind('mouseup', mouseup);
+                    }
+
+
+                }
+
+
+
+
+                $timeout(function () {
+                    drawLine();
+                }, 300);
+
+
+                /* If the mouse button is pressed */
+                elm.bind('mousedown', function ($event) {
+                    tagID = $event.target.id;
+
+                    startX = elm.prop('offsetLeft');
+                    startY = elm.prop('offsetTop');
+                    initialMouseX = $event.clientX;
+                    initialMouseY = $event.clientY;
+
+                    // click on new editable text
+                    if (tagID.indexOf('note-id-') > -1 || tagID.indexOf('link-id-') > -1) {
+                        $document.bind('mousemove', mousemove);
+                        $document.bind('mouseup', mouseup);
+
+                        return true;
+                    }
+                });
+
+
 
                 $rootScope.$on('redrawLines', function () {
                     $log.debug('redrawLines');

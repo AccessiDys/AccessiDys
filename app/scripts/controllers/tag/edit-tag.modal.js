@@ -97,14 +97,7 @@ angular.module('cnedApp').controller('EditTagModalCtrl', function ($scope, $uibM
                 $scope.showNiveauTag = false;
             }
 
-            if ($scope.tag.libelle == 'Titre 1'
-                || $scope.tag.libelle == 'Titre 2'
-                || $scope.tag.libelle == 'Titre 3'
-                || $scope.tag.libelle == 'Titre 4'
-                || $scope.tag.libelle == 'Paragraphe'
-                || $scope.tag.libelle == 'Annotation'
-                || $scope.tag.libelle == 'Liste à puces'
-                || $scope.tag.libelle == 'Liste numérotée') { // jshint ignore:line
+            if ($scope.tag.libelle === 'Titre 1' || $scope.tag.libelle === 'Titre 2' || $scope.tag.libelle === 'Titre 3' || $scope.tag.libelle === 'Titre 4' || $scope.tag.libelle === 'Paragraphe' || $scope.tag.libelle === 'Annotation' || $scope.tag.libelle === 'Liste à puces' || $scope.tag.libelle === 'Liste numérotée') { // jshint ignore:line
                 $scope.isDisabled = true;
             }
         }
@@ -131,7 +124,7 @@ angular.module('cnedApp').controller('EditTagModalCtrl', function ($scope, $uibM
         } else if (!$scope.showNiveauTag && (!$scope.tag.niveau || $scope.tag.niveau.length <= 0)) {
             ToasterService.showToaster('#edit-tag-error-toaster', 'style.message.save.ko.level.mandatory');
         } else if (!$scope.tag.balise) {
-            ToasterService.showToaster('#edit-tag-error-toaster', 'style.message.save.ko.html.mandatory')
+            ToasterService.showToaster('#edit-tag-error-toaster', 'style.message.save.ko.html.mandatory');
             return;
         }
 
@@ -150,7 +143,7 @@ angular.module('cnedApp').controller('EditTagModalCtrl', function ($scope, $uibM
         var xhr = new XMLHttpRequest();
         xhr.addEventListener('load', $scope.uploadComplete, false);
         xhr.addEventListener('error', $scope.uploadFailed, false);
-        if($scope.mode === 'create'){
+        if ($scope.mode === 'create') {
             xhr.open('POST', configuration.URL_REQUEST + '/addTag');
         } else {
             xhr.open('POST', configuration.URL_REQUEST + '/updateTag');
@@ -172,8 +165,7 @@ angular.module('cnedApp').controller('EditTagModalCtrl', function ($scope, $uibM
         });
     };
 
-    $scope.resetImportFile = function(){
-
+    $scope.resetImportFile = function () {
         $scope.form.files = [0];
     };
 

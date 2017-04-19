@@ -69,22 +69,10 @@ describe('Controller:TagCtrl', function () {
         $httpBackend.whenPOST(configuration.URL_REQUEST + '/updateTag').respond(tag);
     }));
 
-    it('TagCtrl:showDefaultNiveau', function () {
-        expect($scope.showDefaultNiveau).toBeDefined();
-        $scope.showDefaultNiveau(tag);
-        expect(tag.niveau).toBe(1);
-    });
-
     it('TagCtrl:getLibelleNiveau', function () {
         expect($scope.getLibelleNiveau).toBeDefined();
         var libNiv = $scope.getLibelleNiveau(2);
         expect(libNiv).toBe('Niveau 2');
-    });
-
-    it('TagCtrl:clearTag', function () {
-        expect($scope.clearTag).toBeDefined();
-        $scope.clearTag();
-        expect($scope.showNiveauTag).toBe(true);
     });
 
     it('TagCtrl:afficherTags', inject(function ($httpBackend) {
@@ -98,59 +86,29 @@ describe('Controller:TagCtrl', function () {
 
     }));
 
-    it('TagCtrl:setFiles', function () {
-        var elm = {
-            files: [{
-                'webkitRelativePath': '',
-                'lastModifiedDate': '2014-06-12T10:12:18.000Z',
-                'name': 'p4.pdf',
-                'type': 'image/PDF',
-                'size': 1208
-			}]
-        };
-        $scope.setFiles(elm);
-        expect($scope.files.length).toEqual(0);
-    });
 
-
-    it('TagCtrl:setFiles', function () {
-        var elm2 = {
-            files: [{
-                'webkitRelativePath': '',
-                'lastModifiedDate': '2014-06-12T10:12:18.000Z',
-                'name': 'p4.png',
-                'type': 'image/png',
-                'size': 1208
-			}]
-        };
-        $scope.setFiles(elm2);
-        expect($scope.files.length).toEqual(1);
-    });
-
-
-    it('TagCtrl:ajouterTag', function () {
-        expect($scope.ajouterTag).toBeDefined();
-        expect($scope.preAjouterTag).toBeDefined();
-        $scope.preAjouterTag();
+    it('TagCtrl:create', function () {
+        expect($scope.create).toBeDefined();
+        $scope.create();
         $scope.tag = tag;
         $scope.tag.libelle = '';
-        $scope.ajouterTag();
+        $scope.create();
         $scope.tag = tag;
         $scope.tag.libelle = 'Solution';
-        $scope.ajouterTag();
+        $scope.create();
         $scope.tag = tag;
         $scope.tag.libelle = 'Solution';
         $scope.showNiveauTag = false;
         $scope.tag.position = 1;
         $scope.tag.niveau = undefined;
-        $scope.ajouterTag();
+        $scope.create();
         $scope.tag.libelle = 'Solution';
         $scope.showNiveauTag = true;
         $scope.tag.position = 1;
-        $scope.ajouterTag();
+        $scope.create();
         $scope.tag = tag;
         $scope.tag.balise = undefined;
-        $scope.ajouterTag();
+        $scope.create();
 
         $scope.files = [{
             'webkitRelativePath': '',
@@ -159,13 +117,13 @@ describe('Controller:TagCtrl', function () {
             'type': 'image/png',
             'size': 1208
 		}];
-        $scope.ajouterTag();
+        $scope.create();
 
 
         $scope.xhrObj = jasmine.createSpyObj('xhrObj', ['addEventListener', 'open', 'send']);
-        spyOn(window, 'XMLHttpRequest').andReturn($scope.xhrObj);
+        spyOn(window, 'XMLHttpRequest').and.returnValue($scope.xhrObj);
         $scope.files = undefined;
-        $scope.ajouterTag();
+        $scope.create();
         $scope.files = [{
             'webkitRelativePath': '',
             'lastModifiedDate': '2014-06-12T10:12:18.000Z',
@@ -173,41 +131,36 @@ describe('Controller:TagCtrl', function () {
             'type': 'image/png',
             'size': 1208
 		}];
-        $scope.ajouterTag();
-        //expect($scope.xhrObj.addEventListener).toHaveBeenCalled();
-        //expect($scope.xhrObj.addEventListener.calls.length).toBe(2);
+        $scope.create();
     });
 
-    it('TagCtrl:modifierTag', function () {
-        expect($scope.preModifierTag).toBeDefined();
-        $scope.preModifierTag(tag1);
-        expect($scope.showNiveauTag).toEqual(false);
-        expect($scope.modifierTag).toBeDefined();
+    it('TagCtrl:edit', function () {
+        expect($scope.edit).toBeDefined();
         $scope.fiche = tag1;
         $scope.fiche.libelle = '';
-        $scope.modifierTag();
+        $scope.edit();
         $scope.fiche = tag1;
         $scope.fiche.libelle = 'Solution';
-        $scope.modifierTag();
+        $scope.edit();
         $scope.fiche = tag1;
         $scope.fiche.libelle = 'Solution';
         $scope.showNiveauTag = false;
         $scope.fiche.position = 1;
         $scope.fiche.niveau = undefined;
-        $scope.modifierTag();
+        $scope.edit();
         $scope.fiche.libelle = 'Solution';
         $scope.showNiveauTag = true;
         $scope.fiche.position = 1;
-        $scope.modifierTag();
+        $scope.edit();
         $scope.fiche.balise = undefined;
-        $scope.modifierTag();
+        $scope.edit();
 
         $scope.fiche = tag1;
         $scope.fiche.libelle = 'Titre 1';
-        $scope.preModifierTag(tag1);
+
 
         $scope.xhrObj = jasmine.createSpyObj('xhrObj', ['addEventListener', 'open', 'send']);
-        spyOn(window, 'XMLHttpRequest').andReturn($scope.xhrObj);
+        spyOn(window, 'XMLHttpRequest').and.returnValue($scope.xhrObj);
         $scope.files = [{
             'webkitRelativePath': '',
             'lastModifiedDate': '2014-06-12T10:12:18.000Z',
@@ -215,15 +168,6 @@ describe('Controller:TagCtrl', function () {
             'type': 'image/png',
             'size': 1208
 		}];
-        $scope.modifierTag();
-        //expect($scope.xhrObj.addEventListener).toHaveBeenCalled();
-        //expect($scope.xhrObj.addEventListener.calls.length).toBe(2);
+        $scope.edit();
     });
-
-    it('TagCtrl:uploadComplete', function () {
-        expect($scope.uploadComplete).toBeDefined();
-        $scope.uploadComplete();
-        expect($scope.showNiveauTag).toBe(true);
-    });
-
 });

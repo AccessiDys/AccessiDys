@@ -26,7 +26,10 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScope, $scope, $uibModalInstance, dropbox, EmailService, ToasterService, LoaderService, $log, $timeout, mode, itemToShare) {
+var FB = FB;
+
+angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScope, $scope, $uibModalInstance, dropbox,
+                                                                       EmailService, ToasterService, LoaderService, $log, $timeout, mode, itemToShare) {
 
 
     $scope.hasRightToShare = false;

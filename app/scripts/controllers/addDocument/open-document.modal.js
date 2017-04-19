@@ -61,14 +61,11 @@ angular.module('cnedApp').controller('OpenDocumentModalCtrl', function ($rootSco
                 if (doc.files[0].type === 'application/pdf') {
                     doc.type = 'pdf';
 
-                } else if (doc.files[0].type === 'image/jpeg'
-                    || doc.files[0].type === 'image/png'
-                    || doc.files[0].type === 'image/jpg') {
+                } else if (doc.files[0].type === 'image/jpeg' || doc.files[0].type === 'image/png' || doc.files[0].type === 'image/jpg') {
 
                     doc.type = 'image';
 
-                } else if (doc.files[0].type === 'application/epub+zip'
-                    || (doc.files[0].type === '' && doc.files[0].name.indexOf('.epub'))) {
+                } else if (doc.files[0].type === 'application/epub+zip' || (doc.files[0].type === '' && doc.files[0].name.indexOf('.epub'))) {
 
                     doc.type = 'epub';
 

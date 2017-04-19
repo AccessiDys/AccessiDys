@@ -28,7 +28,6 @@
 angular.module('cnedApp').controller('UserAccountCtrl', function ($scope, $http, md5, configuration, $location, $rootScope, serviceCheck, ToasterService, UserService) {
 
 
-    /*global $:false */
     $scope.oneAtATime = true;
     $scope.compte = {};
     $scope.infoModif = false;

@@ -26,6 +26,7 @@
 'use strict';
 /* global $:false */
 /* global cnedApp:false */
+/*global JSZip */
 /* jshint unused: false, undef:false */
 
 /**

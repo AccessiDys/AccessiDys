@@ -25,7 +25,7 @@
 
 /*jshint loopfunc:true*/
 /*global
- $:false, angular
+ angular
  */
 
 'use strict';
@@ -63,6 +63,15 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
      */
     function showTitleDoc(title) {
         $scope.docName = title;
+    }
+
+    //fix for printing images
+    function correctImg() {
+        var links = angular.element('a');
+        angular.forEach(links, function (a) {
+            var linkEl = angular.element(a);
+            linkEl.replaceWith('<span>' + linkEl.html() + '</span>');
+        });
     }
 
     /**
@@ -219,13 +228,6 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
     };
     $scope.init();
 
-    //fix for printing images
-    function correctImg() {
-        var links = angular.element('a');
-        angular.forEach(links, function (a) {
-            var linkEl = angular.element(a);
-            linkEl.replaceWith('<span>' + linkEl.html() + '</span>');
-        });
-    }
+
 
 });

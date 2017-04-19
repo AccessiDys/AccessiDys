@@ -23,7 +23,6 @@
  *
  */
 'use strict';
-/* global $ */
 
 var FB = FB;
 var gapi = gapi;

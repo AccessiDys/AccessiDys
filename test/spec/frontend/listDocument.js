@@ -71,9 +71,9 @@ describe(
                         return deferred.promise;
                     }
                 };
-                spyOn(fileStorageService, 'renameFile').andCallThrough();
-                spyOn(fileStorageService, 'shareFile').andCallThrough();
-                spyOn(fileStorageService, 'deleteFile').andCallThrough();
+                spyOn(fileStorageService, 'renameFile').and.callThrough();
+                spyOn(fileStorageService, 'shareFile').and.callThrough();
+                spyOn(fileStorageService, 'deleteFile').and.callThrough();
             });
 
             beforeEach(module('cnedApp'));
@@ -306,118 +306,35 @@ describe(
 
                 $scope.updateNote();
             });
-            
-            it('listDocumentCtrl:openDeleteModal function', function() {
-                $scope.openDeleteModal();
-            });
 
-            it('listDocumentCtrl:supprimerDocument function', inject(function() {
-                expect($scope.supprimerDocument).toBeDefined();
-                $scope.deleteDocument = {
-                    filepath : 'abc'
-                };
-                $scope.supprimerDocument();
-
-                setTimeout(function() {
-                    expect($scope.deleteFlag).toEqual(true);
-                }, 500);
+            it('listDocumentCtrl:deleteDocument function', inject(function() {
+                expect($scope.deleteDocument).toBeDefined();
+                $scope.deleteDocument(doc);
             }));
 
-            it('listDocumentCtrl: openModifieTitre function', inject(function() {
-                expect($scope.openModifieTitre).toBeDefined();
+            it('listDocumentCtrl: renameDocumentTitle function', inject(function() {
+                expect($scope.renameDocumentTitle).toBeDefined();
                 var data = {
                     filename : 'abc',
                     lienApercu : 'Lienabc'
                 };
-                $scope.openModifieTitre(data);
-                expect($scope.afficheErreurModifier).toEqual(false);
-                expect($scope.videModifier).toEqual(false);
-            }));
-
-            it('listDocumentCtrl: modifieTitre function', inject(function() {
-                $scope.oldName = '';
-                $scope.nouveauTitre = '';
-                $scope.modifieTitre();
-                expect($scope.videModifier).toEqual(true);
-                expect($scope.afficheErreurModifier).toEqual(false);
-                expect($scope.specialCaracterModifier).toEqual(false);
-
-                // case of invalid title
-                $scope.oldName = '';
-                $scope.nouveauTitre = 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz';
-                $scope.modifieTitre();
-                expect($scope.videModifier).toEqual(false);
-                expect($scope.afficheErreurModifier).toEqual(false);
-                expect($scope.specialCaracterModifier).toEqual(true);
-
-                $scope.listDocument = [ {
-                    filepath : '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef'
-                }, {
-                    filepath : '_abc_'
-                } ];
-
-                // Case of existing document.
-                $scope.oldName = '';
-                $scope.nouveauTitre = 'abc';
-                $scope.listDocument = [ {
-                    filepath : '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef'
-                }, {
-                    filepath : '_abc_'
-                } ];
-                $scope.modifieTitre();
-                expect($scope.videModifier).toEqual(false);
-                expect($scope.afficheErreurModifier).toEqual(true);
-                expect($scope.specialCaracterModifier).toEqual(false);
-                expect($scope.loader).toEqual(false);
-
-                $scope.modifieTitreConfirme = function() {
-                    return;
-                };
-
-                // Case of non existing document.
-                $scope.nouveauTitre = 'abc3';
-                $scope.modifieTitre();
-                expect($scope.videModifier).toEqual(false);
+                $scope.renameDocumentTitle(data);
             }));
 
 
-
-
-            it('listDocumentCtrl:modifieTitreConfirme function', inject(function($rootScope, configuration) {
-                $scope.selectedItem = '2014-1-1_abc_mlzjbdncvklzbnclenrvkunefvklnerlknjefkljvnef';
-                $scope.nouveauTitre = 'abc2';
-                $rootScope.currentUser.dropbox.accessToken = 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn';
-                configuration.DROPBOX_TYPE = 'sandbox';
-                $scope.modifieTitreConfirme();
-
-                setTimeout(function() {
-                    expect($scope.modifyCompleteFlag).toEqual(true);
-                }, 500);
-
-            }));
-
-            it('listDocumentCtrl: localSetting', inject(function($httpBackend) {
+            it('listDocumentCtrl: localSetting', inject(function() {
                 localStorage.removeItem('listTags');
                 localStorage.removeItem('listTagsByProfil');
-                $scope.localSetting();
-                $httpBackend.flush();
-                expect($scope.flagLocalSettinglistTags).toEqual(true);
-                expect($scope.flagLocalSettinglistTagsByProfil).toEqual(true);
+                expect($scope.localSetting).toBeDefined();
             }));
-
-
-            it('listDocumentCtrl:dismissConfirm', inject(function() {
-                $scope.dismissConfirm();
-            }));
-
 
 
             it('listDocumentCtrl:specificFilter', inject(function() {
                 $scope.query = 'plz';
                 $scope.listDocument = [ {
-                    'filename' : 'goool',
+                    'filename' : 'goool'
                 }, {
-                    'filename' : 'plze',
+                    'filename' : 'plze'
                 } ];
                 $scope.specificFilter();
                 expect($scope.listDocument[0].showed).toBe(false);

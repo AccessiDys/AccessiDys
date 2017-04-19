@@ -23,11 +23,7 @@
  *
  */
 'use strict';
-/* global $:false */
 /* jshint loopfunc:true */
-
-var FB = FB;
-var gapi = gapi;
 
 angular.module('cnedApp')
     .controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces,
@@ -618,7 +614,7 @@ angular.module('cnedApp')
             }
 
             $http.post(configuration.URL_REQUEST + '/cancelDefaultProfile', $scope.token)
-                .success(function (data) {
+                .success(function () {
                     ToasterService.showToaster('#profile-success-toaster', 'profile.message.default.ok');
                     $scope.getProfiles();
                 });
@@ -714,7 +710,7 @@ angular.module('cnedApp')
                         $scope.token.favProfile = params;
                     }
                     $http.post(configuration.URL_REQUEST + '/removeUserProfileFavoris', $scope.token)
-                        .success(function (data) {
+                        .success(function () {
                             ToasterService.showToaster('#profile-success-toaster', 'profile.message.favorite.delete');
                             $scope.getProfiles();
                         });
@@ -860,7 +856,7 @@ angular.module('cnedApp')
                         default: false
                     }
                 };
-                $http.post(configuration.URL_REQUEST + '/addUserProfilFavoris', token).success(function (data) {
+                $http.post(configuration.URL_REQUEST + '/addUserProfilFavoris', token).success(function () {
                     $scope.showFavouri = false;
                     ToasterService.showToaster('#profile-success-toaster', 'profile.message.favorite.ok');
                     $rootScope.$broadcast('initCommon'); // TODO revoir
@@ -883,7 +879,7 @@ angular.module('cnedApp')
                 sendedVars: $scope.varToSend
             };
             $http.post(configuration.URL_REQUEST + '/delegateUserProfil', tmpToSend)
-                .success(function (data) {
+                .success(function () {
 
                     $http.post(configuration.URL_REQUEST + '/findUserById', {
                         idUser: $scope.detailProfil.owner

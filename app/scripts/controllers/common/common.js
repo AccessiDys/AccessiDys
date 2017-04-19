@@ -25,8 +25,6 @@
 
 'use strict';
 
-/* global $:false */
-
 angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http,
                                                              configuration, dropbox, storageService, profilsService, $localForage, $interval,
                                                              $uibModal, $routeParams, tagsService, $log, UtilsService) {
@@ -223,9 +221,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                         //'User is defined as logged on rootScope
 
-                        if ($location.path() === '/detailProfil'
-                            && lien.indexOf('#/detailProfil') > -1
-                            && $rootScope.loged !== true) {
+                        if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
                             //'Looking for detailProfil
                             $scope.listDocumentDropBox = '#/';
                             $scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));

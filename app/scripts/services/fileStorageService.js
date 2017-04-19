@@ -110,7 +110,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
                     for (var i = 0; i < files.matches.length; i++) {
                         if (files.matches[i].metadata.name.indexOf('_' + filename + '_') > -1) {
-                            file = files.matches[i].metadata
+                            file = files.matches[i].metadata;
                         }
                     }
 
