@@ -48,63 +48,52 @@ require('./api/services/passport')(passport); // pass passport for configuration
 if (env !== 'test') {
     var log4js = require('log4js');
     log4js.configure({
-        appenders : [ {
-            type : 'console'
+        appenders: [{
+            type: 'console'
         }, {
-            'type' : 'dateFile',
-            'filename' : '../logs/adaptation.log',
-            'pattern' : '-yyyy-MM-dd',
-            'category' : [ 'console' ],
-            'alwaysIncludePattern' : true
-        } ],
-        replaceConsole : true
+            'type': 'dateFile',
+            'filename': '../logs/adaptation.log',
+            'pattern': '-yyyy-MM-dd',
+            'category': ['console'],
+            'alwaysIncludePattern': true
+        }],
+        replaceConsole: true
     });
 
     var logger = log4js.getLogger('adaptation');
     logger.setLevel('ERROR');
 }
 
-app.configure(function() {
-    app.use(express.cookieParser()); // read cookies (needed for auth)
 
-    app.use(express.bodyParser({
-        limit : '50mb'
-    }));
-    // app.use(function noCache(req, res, next) {
-    // res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-    // res.header("Pragma", "no-cache");
-    // res.header("Expires", 0);
-    // next();
-    // });
-    app.use(function(req, res, next) {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-        res.header('Access-Control-Allow-Headers', 'Content-Type');
-        next();
-    });
-
-    app.use(express.session({
-        secret : 'ilovescotchscotchyscotchscotch'
-    })); // session secret
-    app.use(passport.initialize());
-    app.use(passport.session()); // persistent login sessions
-    // app.use(flash()); // use connect-flash for flash messages stored in
-    // session
-
-    if (env !== 'test') {
-        app.use(log4js.connectLogger(logger, {
-            level : log4js.levels.ERROR
-        }));
-    }
-
+/*app.use(express.bodyParser({
+    limit: '50mb'
+}));*/
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
 });
+
+app.use(express.session({
+    secret: 'ilovescotchscotchyscotchscotch'
+})); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+if (env !== 'test') {
+    app.use(log4js.connectLogger(logger, {
+        level: log4js.levels.ERROR
+    }));
+}
+
 
 app.use(express.static('./app'));
 
 /* Catch et Log des erreurs dans tous le projet */
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     var d = domain.create();
-    d.on('error', function(er) {
+    d.on('error', function (er) {
         console.log('Une erreure s\'est produite, Detail : ', er.message);
         res.send(500);
     });
@@ -113,7 +102,7 @@ app.use(function(req, res, next) {
     d.add(req);
     d.add(res);
 
-    d.run(function() {
+    d.run(function () {
         app.router(req, res, next);
     });
 });
@@ -138,8 +127,8 @@ require('./patches/patch_profil');
 var privateKey = fs.readFileSync('../sslcert/' + config.SSL_KEY, 'utf8');
 var certificate = fs.readFileSync('../sslcert/' + config.SSL_CERT, 'utf8');
 var credentials = {
-    key : privateKey,
-    cert : certificate
+    key: privateKey,
+    cert: certificate
 };
 var httpsServer = https.createServer(credentials, app);
 
@@ -152,14 +141,14 @@ var io = require('socket.io').listen(httpsServer);
 
 // var socket = require('./routes/socket.js')(io);
 global.io = io;
-global.io.on('connection', function(socket) {
+global.io.on('connection', function (socket) {
     // socket.emit('news', {
     // hello: 'liaison avec serveur etablie'
     // });
-    socket.on('dropBoxEvent', function(data) {
+    socket.on('dropBoxEvent', function (data) {
         console.log(data.message);
     });
-    socket.on('my other event', function(data) {
+    socket.on('my other event', function (data) {
         console.log('une session a été ouverte avec un navigateur');
     });
 });

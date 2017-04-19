@@ -60,6 +60,7 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
     $httpProvider.interceptors.push('app.httpinterceptor');
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
+    // TODO mettre en place l'UI ROUTER
     $routeProvider.when('/', {
         templateUrl: 'views/index/main.html',
         controller: 'MainCtrl'
@@ -89,11 +90,6 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
             controller: 'TagCtrl',
             pageTrack: '/style/list.html'  // angular-google-analytics extension
         })
-        .when('/userAccount', {
-            templateUrl: 'views/userAccount/userAccount.html',
-            controller: 'UserAccountCtrl',
-            doNotTrack: true       // angular-google-analytics extension
-        })
         .when('/inscriptionContinue', {
             templateUrl: 'views/passport/inscriptionContinue.html',
             controller: 'passportContinueCtrl'
@@ -108,20 +104,10 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
             controller: 'listDocumentCtrl',
             pageTrack: '/document/list.html'  // angular-google-analytics extension
         })
-        .when('/passwordHelp', {
-            templateUrl: 'views/passwordRestore/passwordRestore.html',
-            controller: 'passwordRestoreCtrl',
-            doNotTrack: true       // angular-google-analytics extension
-        })
         .when('/detailProfil', {
             templateUrl: 'views/profiles/detailProfil.html',
             controller: 'ProfilesCtrl',
             pageTrack: '/profile/detail.html'  // angular-google-analytics extension
-        })
-        .when('/404', {
-            templateUrl: 'views/404/404.html',
-            controller: 'notFoundCtrl',
-            doNotTrack: true       // angular-google-analytics extension
         })
         .when('/needUpdate', {
             templateUrl: 'views/needUpdate/needUpdate.html',
@@ -130,17 +116,14 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
         })
         .when('/mentions', {
             templateUrl: 'views/infoPages/mentions.html',
-            controller: 'infoPagesCtrl',
             pageTrack: '/legal-notice.html'  // angular-google-analytics extension
         })
         .when('/a-propos', {
             templateUrl: 'views/infoPages/about.html',
-            controller: 'infoPagesCtrl',
             pageTrack: '/presentation.html'  // angular-google-analytics extension
         })
         .when('/contribuer', {
             templateUrl: 'views/infoPages/contribute.html',
-            controller: 'infoPagesCtrl',
             pageTrack: '/contribute.html'  // angular-google-analytics extension
         })
         .otherwise({
@@ -214,39 +197,16 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
     if (typeof io !== 'undefined') {
         $rootScope.socket = io.connect('https://localhost:3000', {secure: true});
     }
-    if ($rootScope.socket) {
-        $rootScope.socket.on('news', function () {
-            $rootScope.socket.emit('my other event', {
-                my: 'data ehhoooo'
-            });
-        });
-    }
 
     $rootScope.goHome = function () {
         $location.path('/');
     };
-    $rootScope.backToHome = function () {
-        if ($location.absUrl().indexOf('/listDocument') > 0) {
-            window.location.reload();
-        } else {
-            window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
-        }
-    };
-
-    $rootScope.isLoginScreen = false;
 
     $rootScope.$on('$routeChangeStart', function (event, next) {
 
         var data = {
             id: false
         };
-
-        if (next.templateUrl && next.templateUrl === 'views/index/main.html' || next.templateUrl === 'views/passport/inscriptionContinue.html' || next.templateUrl === 'views/passwordRestore/passwordRestore.html' || next.templateUrl === 'views/common/errorPage.html' || next.templateUrl === 'views/needUpdate/needUpdate.html' || next.templateUrl === 'views/signup/signup.html') {
-            $rootScope.isLoginScreen = true;
-        } else {
-            $rootScope.isLoginScreen = false;
-
-        }
 
         if (window.location.href.indexOf('key=') > -1) {
             var callbackKey = window.location.href.substring(window.location.href.indexOf('key=') + 4, window.location.href.length);

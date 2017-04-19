@@ -133,17 +133,6 @@
     padding: 22px 10px 20px 18px !important;
 }
 
-.page_authentification .content {
-    width: 802px;
-    padding: 0;
-    /*padding: 22px 10px 20px 18px;*/
-}
-
-.page_authentification .content .authentification_container {
-    width: 802px;
-    padding: 22px 10px 20px 18px;
-}
-
 .browsers {
     padding: 20px 15px 17px 15px;
     border-top: 1px solid #d2d2d2;
@@ -946,112 +935,14 @@ option {
     background: #fafafa;
 }
 
-.page_authentification h2, .compte_details h2 {
-    font-size: 20px;
-    font-family: 'arial narrow', sans-serif;
-    color: #414243;
-    margin-bottom: 37px;
-    line-height: 23px;
-    font-weight: bold;
-    font-stretch: condensed;
-}
 
-.page_authentification h2 span.blue-subtitle, .compte_details h2 span.blue-subtitle {
-    font-size: 18px;
-    font-family: "helveticaCND";
-    color: #086e80;
-    text-transform: none;
-    font-weight: normal;
-}
-
-.page_authentification #loginbox h2 {
-    margin-bottom: 30px;
-}
-
-.page_authentification .form_container {
-    padding-left: 136px;
-    padding-right: 127px;
-    margin-bottom: 13px;
-}
-
-.page_authentification .form_container .control_group, .form_container .control_group {
-    overflow: hidden;
-    clear: both;
-    margin-bottom: 15px;
-}
-
-.page_authentification .form_container .control_group.last {
-    margin-bottom: 30px;
-}
-
-.page_authentification .form_container .control_group label, .globalFieldStyle .control_group label, #shareModal .control_group label {
-    width: 135px;
-    padding-right: 4px;
-    padding-left: 30px;
-    display: block;
-    float: left;
-    min-height: 34px;
-    color: #fff;
-    padding-top: 8px;
-    font-family: 'arial narrow', sans-serif;
-    font-stretch: condensed;
-    text-transform: uppercase;
-    font-size: 13px;
-    background-color: #5f6162;
-    background-position: 9px center;
-    background-repeat: no-repeat;
-    margin: 0;
-    position: relative;
-
-}
-
-.page_authentification .form_container .control_group label.two_lignes, label.two_lignes {
-    height: 34px;
-    padding-top: 5px !important;
-    line-height: 13px;
-}
 
 label.without_icn {
     padding-left: 10px !important;
 }
 
-.page_authentification .form_container .control_group label:after, .globalFieldStyle .control_group label:after, #shareModal .control_group label:after {
-    content: " ";
-    display: block;
-    position: absolute;
-    right: -4px;
-    top: 50%;
-    margin-top: -3px;
-    width: 0px;
-    height: 0px;
-    border-style: solid;
-    border-width: 3.5px 0 3.5px 4px;
-    border-color: transparent transparent transparent #5f6162;
-
-}
-
-.page_authentification .form_container .control_group label#label_user, #label_name_etap-one, #label_fname_etap-one {
-    background-image: url('images/user_icn.png');
-}
-
-.page_authentification .form_container .control_group label#label_mdp, #label_pwd_etap-one, #label_comfpsw_etap-one, .label_keys-icn {
-    background-image: url('images/pwd_icn.png');
-}
-
 #label_email_etap-one {
     background-image: url('images/mail.png');
-}
-
-.page_authentification .form_container .control_group input, .globalFieldStyle .control_group input, #shareModal .control_group input {
-    background: url('images/dotted_bg.png') repeat 0 0 #fff;
-    float: left;
-    height: 34px;
-    border: 1px solid #bebebe;
-    border-left: none;
-    width: 373px;
-    padding-left: 15px;
-    font-family: "helveticaCND";
-    font-size: 14px;
 }
 
 .input_simple {
@@ -1141,22 +1032,8 @@ label.without_icn {
     padding-top: 82px;
 }
 
-.ngdialog-close {
-    display: none;
-}
-
-/*.btn_simple.normal_padding {
-	padding: 6px 30px 3px 30px;
-}*/
-/*.btn_simple.much_padding {
-	padding: 6px 70px 3px 70px;
-}*/
 .much_padding {
     padding: 9px 16px !important;
-}
-
-.page_authentification.blue {
-    font-size: 16px;
 }
 
 .black_link {
