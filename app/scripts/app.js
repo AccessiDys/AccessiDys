@@ -90,10 +90,6 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
             controller: 'TagCtrl',
             pageTrack: '/style/list.html'  // angular-google-analytics extension
         })
-        .when('/inscriptionContinue', {
-            templateUrl: 'views/passport/inscriptionContinue.html',
-            controller: 'passportContinueCtrl'
-        })
         .when('/adminPanel', {
             templateUrl: 'views/adminPanel/adminPanel.html',
             controller: 'AdminPanelCtrl',
