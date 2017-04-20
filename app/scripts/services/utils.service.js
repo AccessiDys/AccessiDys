@@ -104,20 +104,6 @@ cnedApp.service('UtilsService', function ($uibModal) {
         },
 
         /**
-         * Open upgrade modal
-         */
-        openUpgradeModal: function () {
-
-            return $uibModal.open({
-                templateUrl: 'views/common/upgrade.modal.html',
-                controller: 'UpgradeModalCtrl',
-                size: 'upgrade'
-            }).result;
-
-        },
-
-
-        /**
          * Test the truthfulness of a link (by checking the presence of the http protocol in String)
          *
          * @method verifyLink

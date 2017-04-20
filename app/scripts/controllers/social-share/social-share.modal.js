@@ -76,8 +76,6 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
      * If there are annotations then upload to dropbox
      */
     $scope.processAnnotation = function () {
-        localStorage.setItem('lockOperationDropBox', true);
-
         if ($scope.shareAnnotation && $scope.itemToShare.name && $scope.itemToShare.annotationsToShare) {
 
             var fileName = $scope.itemToShare.name + '.json';
@@ -89,14 +87,11 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
                             $scope.itemToShare.linkToShare += '&annotation=' + result.url;
                             $scope.itemToShare.linkToShare = $scope.itemToShare.linkToShare;
                             $scope.hasRightToShare = true;
-                            localStorage.setItem('lockOperationDropBox', false);
                             $scope.attachFacebook();
                             $scope.twitterLink = encodeURIComponent($scope.itemToShare.linkToShare);
                         });
                 });
         } else {
-            localStorage.setItem('lockOperationDropBox', false);
-
             $scope.itemToShare.linkToShare = $scope.itemToShare.linkToShare;
             $scope.hasRightToShare = true;
             $scope.attachFacebook();

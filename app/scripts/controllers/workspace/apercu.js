@@ -35,16 +35,16 @@
 angular.module('cnedApp')
     .controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location,
                                         $log, $q, $anchorScroll, serviceCheck, configuration, dropbox,
-                                        verifyEmail, generateUniqueId, storageService, htmlEpubTool, $routeParams,
+                                        verifyEmail, generateUniqueId, storageService, htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
                                         gettextCatalog, $localForage, UtilsService, LoaderService,Analytics, ToasterService) {
 
-        $scope.idDocument = $routeParams.idDocument;
-        $scope.tmp = $routeParams.tmp;
-        $scope.url = $routeParams.url;
-        $scope.urlTitle = $routeParams.title; // Web adapt case
-        $scope.annotationURL = $routeParams.annotation;
+        $scope.idDocument = $stateParams.idDocument;
+        $scope.tmp = $stateParams.tmp;
+        $scope.url = $stateParams.url;
+        $scope.urlTitle = $stateParams.title; // Web adapt case
+        $scope.annotationURL = $stateParams.annotation;
         $scope.isEnableNoteAdd = false;
         $scope.showDuplDocModal = false;
         $scope.showDestination = false;
@@ -68,9 +68,9 @@ angular.module('cnedApp')
         $scope.neverShowOfflineSynthesisTips = false;
         $scope.resizeDocApercu = 'Agrandir';
         $scope.forceApplyRules = true;
-        if (!$routeParams.mode || $routeParams.mode === 'lecture') {
+        if (!$stateParams.mode || $stateParams.mode === 'lecture') {
             $scope.modeImpression = true;
-        } else if ($routeParams.mode === 'page') {
+        } else if ($stateParams.mode === 'page') {
             $scope.modeImpression = false;
         }
         $scope.numeroPageRechercher = 0;
@@ -790,7 +790,6 @@ angular.module('cnedApp')
          */
         $scope.init = function () {
             LoaderService.showLoader('document.message.info.load', false);
-            localStorage.setItem('lockOperationDropBox', false);
 
             $scope.originalHtml = '';
             $scope.isSummaryActive = false;
@@ -1078,7 +1077,7 @@ angular.module('cnedApp')
          */
 
         $scope.getUserAndInitApercu = function () {
-            var url = $routeParams.url;
+            var url = $stateParams.url;
             // ex: sharing document ref: CNED-383
             if (url && url.indexOf('dropboxusercontent') > -1) {
                 $scope.init();
@@ -1130,11 +1129,11 @@ angular.module('cnedApp')
                 refresh = $location.url();
             }
             if (!$scope.modeImpression) {
-                $routeParams.mode = 'lecture';
+                $stateParams.mode = 'lecture';
                 refresh += '&mode=lecture';
                 $scope.modeImpression = true;
             } else {
-                $routeParams.mode = 'page';
+                $stateParams.mode = 'page';
                 refresh += '&mode=page';
                 $scope.modeImpression = false;
             }

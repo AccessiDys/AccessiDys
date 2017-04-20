@@ -31,7 +31,7 @@ var cnedApp = angular.module('cnedApp', [
     'ngCookies',
     'ngResource',
     'ngSanitize',
-    'ngRoute',
+    'ui.router',
     'gettext',
     'ui.bootstrap',
     'angular-md5',
@@ -42,7 +42,7 @@ var cnedApp = angular.module('cnedApp', [
     '720kb.socialshare'
 ]);
 
-cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
+cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
 
     // Log enable / disable
     $logProvider.debugEnabled((configuration.ENV === 'dev'));
@@ -51,6 +51,7 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
     AnalyticsProvider.setAccount(configuration.GOOGLE_ANALYTICS_ID);
     AnalyticsProvider.trackPages(true);
     AnalyticsProvider.trackUrlParams(true);
+    AnalyticsProvider.setPageEvent('$stateChangeSuccess');
 
     // HttpProvider settings
     $sceDelegateProvider.resourceUrlWhitelist([
@@ -60,70 +61,80 @@ cnedApp.config(function ($routeProvider, $sceDelegateProvider, $httpProvider, An
     $httpProvider.interceptors.push('app.httpinterceptor');
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-    // TODO mettre en place l'UI ROUTER
-    $routeProvider.when('/', {
-        templateUrl: 'views/index/main.html',
-        controller: 'MainCtrl'
-    })
-        .when('/apercu', {
+    $urlRouterProvider.otherwise('/404');
+
+    $stateProvider
+        .state('app', {
+            url: '',
+            abstract: true
+        })
+        .state('app.home', {
+            url: '/',
+            templateUrl: 'views/index/home.html',
+            controller: 'CommonCtrl'
+        })
+        .state('app.overview', {
+            url: '/apercu?idDocument&tmp&url&title&annotation&mode',
             templateUrl: 'views/workspace/apercu.html',
             controller: 'ApercuCtrl',
             pageTrack: '/overview.html'  // angular-google-analytics extension
         })
-        .when('/addDocument', {
+        .state('app.edit-document', {
+            url: '/addDocument?idDocument&title&url',
             templateUrl: 'views/addDocument/addDocument.html',
             controller: 'AddDocumentCtrl',
             pageTrack: '/document/edit.html'  // angular-google-analytics extension
         })
-        .when('/print', {
+        .state('app.print-document', {
+            url: '/print?documentId&plan&mode',
             templateUrl: 'views/workspace/print.html',
             controller: 'PrintCtrl',
             pageTrack: '/print.html'  // angular-google-analytics extension
         })
-        .when('/profiles', {
+        .state('app.list-profile', {
+            url: '/profiles',
             templateUrl: 'views/profiles/profiles.html',
             controller: 'ProfilesCtrl',
             pageTrack: '/profile/list.html'  // angular-google-analytics extension
         })
-        .when('/tag', {
-            templateUrl: 'views/tag/tag.html',
-            controller: 'TagCtrl',
-            pageTrack: '/style/list.html'  // angular-google-analytics extension
-        })
-        .when('/adminPanel', {
-            templateUrl: 'views/adminPanel/adminPanel.html',
-            controller: 'AdminPanelCtrl',
-            pageTrack: '/admin/users.html'  // angular-google-analytics extension
-        })
-        .when('/listDocument', {
-            templateUrl: 'views/listDocument/listDocument.html',
-            controller: 'listDocumentCtrl',
-            pageTrack: '/document/list.html'  // angular-google-analytics extension
-        })
-        .when('/detailProfil', {
+        .state('app.detail-profile', {
+            url: '/detailProfil',
             templateUrl: 'views/profiles/detailProfil.html',
             controller: 'ProfilesCtrl',
             pageTrack: '/profile/detail.html'  // angular-google-analytics extension
         })
-        .when('/needUpdate', {
-            templateUrl: 'views/needUpdate/needUpdate.html',
-            controller: 'needUpdateCtrl',
-            pageTrack: '/admin/app-update.html'  // angular-google-analytics extension
+        .state('app.list-style', {
+            url: '/tag',
+            templateUrl: 'views/tag/tag.html',
+            controller: 'TagCtrl',
+            pageTrack: '/style/list.html'  // angular-google-analytics extension
         })
-        .when('/mentions', {
+        .state('app.list-document', {
+            url: '/listDocument',
+            templateUrl: 'views/listDocument/listDocument.html',
+            controller: 'listDocumentCtrl',
+            pageTrack: '/document/list.html'  // angular-google-analytics extension
+        })
+
+        .state('app.legal-notice', {
+            url: '/mentions',
             templateUrl: 'views/infoPages/mentions.html',
             pageTrack: '/legal-notice.html'  // angular-google-analytics extension
         })
-        .when('/a-propos', {
+        .state('app.presentation', {
+            url: '/a-propos',
             templateUrl: 'views/infoPages/about.html',
             pageTrack: '/presentation.html'  // angular-google-analytics extension
         })
-        .when('/contribuer', {
+        .state('app.contribute', {
+            url: '/contribuer',
             templateUrl: 'views/infoPages/contribute.html',
             pageTrack: '/contribute.html'  // angular-google-analytics extension
         })
-        .otherwise({
-            redirectTo: '/404'
+
+        .state('app.404', {
+            url: '/404',
+            templateUrl: 'views/404/404.html'
         });
 });
 
@@ -146,7 +157,7 @@ angular.module('cnedApp').config(['$compileProvider',
 ]);
 
 
-angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, configuration, $timeout, $window, storageService, $interval, serviceCheck, $localForage, $routeParams) {
+angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, configuration, $timeout, $window, storageService, $interval, serviceCheck, $localForage) {
     //Delay between every check of session.
     $rootScope.sessionTime = 43200000;
     $rootScope.checkIsOnline = function () {
@@ -165,7 +176,7 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
         });
     };
 
-    //environment variable for testing.
+    /*//environment variable for testing.
     if (!testEnv) {
         $rootScope.checkIsOnline().then(function () {
             if ($rootScope.isAppOnline === true) {
@@ -185,10 +196,7 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
         $interval($rootScope.checkIsOnline, 5000);
     } else {
         $rootScope.isAppOnline = true;
-    }
-
-    /* Initialization of the Lock treatment of documents on DropBox */
-    localStorage.setItem('lockOperationDropBox', false);
+    }*/
 
     if (typeof io !== 'undefined') {
         $rootScope.socket = io.connect('https://localhost:3000', {secure: true});
@@ -212,9 +220,6 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
             }, {
                 name: 'listDocLink',
                 value: '#/listDocument'
-            }, {
-                name: 'lockOperationDropBox',
-                value: false
             }];
             storageService.writeService(tmp, 0).then(function () {
                 data = {

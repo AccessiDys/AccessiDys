@@ -1164,12 +1164,4 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
         };
     }
 ]);
-// Define a simple audio service
-/*
- * cnedApp.factory(' audio ', function($document) { var audioElement =
- * $document[0].createElement(' audio '); // <-- Magic trick here return {
- * audioElement: audioElement,
- *
- * play: function(filename) { audioElement.src = filename; audioElement.play(); //
- * <-- Thats all you need } }; });
- */
+

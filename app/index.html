@@ -87,31 +87,15 @@
 <div ng-include="'views/common/header.html'" data-ng-show="!apercu || isGuest" class="header_zone"
      id="main_header"></div>
 
-<div class="container" data-ng-view></div>
+<div class="container" data-ui-view>
+    <div data-ui-view></div>
+</div>
 
 <!-- Footer -->
 <div data-ng-include="'views/common/footer.html'"></div>
 <!-- End Footer -->
 <div class="no-show">A</div>
-<!--<div data-ng-show='indexLoader' class="loader_cover">
-    <div id="loader_container">
-        <div class="loader_bar">
-            <div class="progress_bar" style="width:{{loaderProgress}}%;">&nbsp;
-            </div>
-        </div>
-        <p class="hide_if_emergency loader_txt">{{loaderMessage}} <img src="styles/images/loader_points.gif"
-                                                                       alt="loader"/></p>
-        <p class="emergency_message loader_txt">Une version plus récente de l'application a été détectée. Mise à jour de
-            votre document en cours . Veuillez patienter <img src="styles/images/loader_points.gif" alt="loader"/></p>
-    </div>
-</div>
-<div class="fixed_loader" id="upgradeLoader" style="display:none;">
-    <div class="loadre_container">
-        <p class="loader_txt"
-        >Une version plus récente de l'application a été détectée. Mise à jour de votre document en
-            cours . Veuillez patienter .<img src="styles/images/loader_points.gif" alt="loader"/></p>
-    </div>
-</div>-->
+
 
 
 
@@ -119,7 +103,6 @@
 <div data-appcache-updated></div>
 
 <!-- bower:js -->
-<script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -129,6 +112,7 @@
 <script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
 <script src="bower_components/angular-audio/app/angular.audio.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/jquery/dist/jquery.js"></script>
 <script src="bower_components/underscore/underscore.js"></script>
 <script src="bower_components/rangy/rangy-core.js"></script>
 <script src="bower_components/rangy/rangy-classapplier.js"></script>
@@ -145,6 +129,9 @@
 <script src="bower_components/pdfjs-dist/build/pdf.js"></script>
 <script src="bower_components/pdfjs-dist/build/pdf.worker.js"></script>
 <script src="bower_components/angular-socialshare/dist/angular-socialshare.min.js"></script>
+<script src="bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
+<script src="bower_components/jasmine-jquery/lib/jasmine-jquery.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <!-- endbower -->
 
 <script src="bower_components/ckeditor/ckeditor.js"></script>
@@ -172,7 +159,6 @@
 <script src="scripts/services/keyboardSelectionService.js"></script>
 <script src="scripts/services/synchronisationService.js"></script>
 <script src="scripts/services/synchronisationStoreService.js"></script>
-<script src="scripts/controllers/index/main.js"></script>
 <script src="scripts/controllers/common/common.js"></script>
 <script src="scripts/controllers/common/information.modal.js"></script>
 <script src="scripts/controllers/tag/tag.js"></script>
@@ -180,14 +166,8 @@
 <script src="scripts/controllers/workspace/listDocumentModal.js"></script>
 <script src="scripts/controllers/workspace/print.js"></script>
 <script src="scripts/controllers/profiles/profiles.js"></script>
-<script src="scripts/controllers/passport/passport.js"></script>
-<script src="scripts/controllers/passport/passportContinue.js"></script>
-<script src="scripts/controllers/userAccount/userAccount.js"></script>
-<script src="scripts/controllers/adminPanel/adminPanel.js"></script>
 <script src="scripts/controllers/listDocument/listDocument.js"></script>
 <script src="scripts/controllers/addDocument/addDocument.js"></script>
-<script src="scripts/controllers/passwordRestore/passwordRestore.js"></script>
-<script src="scripts/controllers/404/404.js"></script>
 <script src="scripts/controllers/needUpdate/needUpdate.js"></script>
 <script src="scripts/controllers/synchronisation/synchronisationModal.js"></script>
 <script src="scripts/directives/bodyClasses.js"></script>
@@ -215,192 +195,10 @@
 <script src="scripts/directives/historyBrowser.js"></script>
 <script src="scripts/controllers/common/upgrade.modal.js"></script>
 <script src="scripts/controllers/workspace/print.modal.js"></script>
-<script src="scripts/controllers/userAccount/edit-password.modal.js"></script>
 <script src="scripts/directives/vocalSynthesis.js"></script>
 <!-- endbuild -->
 
 <script type="text/javascript">
-
-    function AppcacheUpdated() {
-        console.log('AppcacheUpdated');
-        var elementScope;
-        var fileCounter = 0;
-        console.log('window.applicationCache.status');
-        console.log(window.applicationCache.status);
-
-        return {
-            restrict: 'EA',
-            scope: {},
-            link: function (scope) {
-                elementScope = scope;
-            },
-            controller: function ($scope, $rootScope, $timeout, $location) {
-
-                var appCache = window.applicationCache;
-                console.log(window.applicationCache.status);
-                $rootScope.indexLoader = false;
-                $rootScope.emergencyUpgrade = false;
-                $rootScope.loaderMessage = '';
-                appCache.addEventListener('cached', function (e) {
-                    console.log('window.applicationCache.addEventListener cached');
-                    console.log(e);
-                    console.log(window.applicationCache.status);
-                    console.log('timeout');
-                    var tmp = window.location.href;
-                    if (tmp.indexOf("adaptation.html") > 0 && tmp.indexOf("/listDocument") > 0) {
-                        $rootScope.loaderMessage = 'Vérification de vos documents. Veuillez patienter ';
-                    } else {
-                        if (tmp.indexOf("/workspace") > 0) {
-                            $rootScope.$broadcast('showFileDownloadLoader');
-                        }
-                        if ($rootScope.emergencyUpgrade == false) {
-                            $rootScope.indexLoader = false;
-                            if (!$rootScope.$$phase) {
-                                $rootScope.$digest();
-                            }
-                        }
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        }
-                    }
-                    $timeout(function () {
-                        $rootScope.$broadcast('RefreshListDocument');
-                        $rootScope.$broadcast('UpgradeProcess');
-                        $scope.show = false;
-                    });
-                });
-
-                appCache.addEventListener('updateready', function (e) {
-                    console.log('Update Ready ==> updateready 1 ... ');
-                    //window.location.reload();
-                    localStorage.setItem('appcacheUpdated', true);
-                    if (localStorage.getItem('appCheck') != null) {
-                        localStorage.removeItem('appcacheUpdated');
-                        localStorage.removeItem('appCheck');
-
-                        setTimeout(function () {
-                            window.location.reload()
-                        }, 2000)
-                    }
-                });
-
-                appCache.addEventListener('downloading', function (event) {
-                    console.log("Started Download.");
-                    $rootScope.indexLoader = true;
-                    $('.loader_cover').show();
-                    if (!$rootScope.$$phase) {
-                        $rootScope.$digest();
-                    }
-                }, false);
-
-                appCache.addEventListener('progress', function (event) {
-                    $rootScope.indexLoader = true;
-                    $('.loader_cover').show();
-                    console.log('_________Progress______________');
-                    if (!event.loaded || !event.total) {
-                        fileCounter++;
-                        event.loaded = fileCounter;
-                        event.total = 128;
-                    }
-                    console.log(event.loaded + " of " + event.total);
-                    if (event.loaded === event.total) {
-                        $rootScope.loaderMessage = '';
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        }
-
-                    } else {
-                        var tmp = window.location.href;
-                        if (tmp.indexOf("#/listDocument") > -1) {
-                            $rootScope.loaderMessage = 'Chargement de la liste de vos documents en cours. Veuillez patienter ';
-                        } else {
-                            var urlMatch = /((\d+)(-)(\d+)(-)(\d+))/i.exec(encodeURIComponent(tmp));
-                            if (urlMatch && urlMatch.length > 0) {
-                                $rootScope.loaderMessage = 'Mise en cache de votre document en cours. Veuillez patienter ';
-                            } else {
-                                $rootScope.loaderMessage = 'Mise en cache de l\'application en cours. Veuillez patienter ';
-                            }
-                        }
-                        $rootScope.loaderProgress = parseInt((event.loaded * 100) / event.total);
-                        $rootScope.indexLoader = true;
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        }
-                    }
-
-                }, false);
-
-                appCache.addEventListener('noupdate', function (event) {
-                    console.log('noupdate event');
-                    var tmp = window.location.href;
-                    if (tmp.indexOf("adaptation.html" && tmp.indexOf("/listDocument") > 0) > 0) {
-                        $rootScope.loaderMessage = 'Vérification de vos documents en cours.Veuillez patienter ';
-                    } else {
-                        if (tmp.indexOf("/workspace") > 0) {
-                            $rootScope.$broadcast('showFileDownloadLoader');
-                        }
-                        if ($rootScope.emergencyUpgrade == false) {
-                            $rootScope.indexLoader = false;
-                            if (!$rootScope.$$phase) {
-                                $rootScope.$digest();
-                            }
-                        }
-                        if (!$rootScope.$$phase) {
-                            $rootScope.$digest();
-                        }
-                    }
-                    $timeout(function () {
-                        $rootScope.$broadcast('RefreshListDocument');
-                        $rootScope.$broadcast('UpgradeProcess');
-
-                        $scope.show = false;
-                    }, 500, true);
-                }, false);
-
-
-                appCache.addEventListener('checking', function (event) {
-                    console.log('noupdate event + affiche Loader ici');
-                    $rootScope.indexLoader = true;
-                }, false);
-
-                if (!navigator.onLine) {
-                    console.log('you are really offline');
-                    $scope.show = true;
-                }
-                if (window.applicationCache.status === 4) {
-                    console.log('Update Ready ==> updateready 2 ... ');
-                    //window.location.reload();
-                    localStorage.setItem('appcacheUpdated', true);
-                    if (localStorage.getItem('appCheck') != null) {
-                        localStorage.removeItem('appcacheUpdated');
-                        localStorage.removeItem('appCheck');
-
-                        setTimeout(function () {
-                            window.location.reload()
-                        }, 2000)
-                    }
-                }
-                if (window.applicationCache.status === 1) {
-                    console.log('window.applicationCache.addEventListener noupdate');
-                    console.log(window.applicationCache.status);
-                    $scope.show = true;
-
-                }
-                $scope.$watch("show", function (value) {
-                    console.log('show ==> ' + value);
-                    if (value === true && ($location.absUrl().indexOf('listDocument') > 0 || $location.absUrl().indexOf('apercu'))) {
-                        console.log('emitting event');
-                        $timeout(function () {
-                            $rootScope.$broadcast('RefreshListDocument');
-                            $rootScope.$broadcast('UpgradeProcess');
-                            $scope.show = false;
-                        });
-                    }
-                });
-            }
-
-        };
-    }
 
     angularModule = angular.module('cnedApp');
     if (typeof PDFJS !== 'undefined') {

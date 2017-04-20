@@ -21,126 +21,98 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
-<div data-ng-controller="CommonCtrl" data-ng-init="initCommon()">
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
 
-            <div class="border-purple"></div>
-            <div class="border-orange"></div>
-            <div class="divider-white"></div>
+        <div class="border-purple"></div>
+        <div class="border-orange"></div>
+        <div class="divider-white"></div>
 
-            <div class="navbar-header">
-                <a href="{{logoRedirection}}" class="navbar-brand" title="Retour à l'accueil">
-                    <img width="180px" src="/styles/images/header_logoCned.png" alt="AccessiDys">
-                </a>
-            </div>
+        <div class="navbar-header">
+            <a ui-sref="app.home" class="navbar-brand" title="Retour à l'accueil">
+                <img width="180px" src="/styles/images/header_logoCned.png" alt="AccessiDys">
+            </a>
+        </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse">
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
 
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="current_profile" data-ng-if="!isGuest">
-                        <label>Profil actuel</label>
-                        <select id="headerSelect"
-                                style="-webkit-appearance: menulist-button; width: 215px; position: absolute; opacity: 0; height: 43px; font-size: 18px;"
-                                data-ng-model="form.currentProfile" ng-change="onChangeCurrentProfile()">
-                            <option data-ng-repeat="profil in listeProfilsParUser"
-                                    data-ng-if="profil.type == 'profile'" data-ng-value="profil.nom">
-                                {{profil.nom}}
-                            </option>
-                        </select>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="current_profile" data-ng-if="!isGuest">
+                    <label>Profil actuel</label>
+                    <select id="headerSelect"
+                            style="-webkit-appearance: menulist-button; width: 215px; position: absolute; opacity: 0; height: 43px; font-size: 18px;"
+                            data-ng-model="form.currentProfile" ng-change="onChangeCurrentProfile()">
+                        <option data-ng-repeat="profil in listeProfilsParUser"
+                                data-ng-if="profil.type == 'profile'" data-ng-value="profil.nom">
+                            {{profil.nom}}
+                        </option>
+                    </select>
 
-                        <span class="customSelect ng-pristine ng-untouched ng-valid" style="display: inline-block;">
-                            <span class="customSelectInner" style="width: 24px; display: inline-block;">{{profilActuel}}</span>
+                    <span class="customSelect ng-pristine ng-untouched ng-valid" style="display: inline-block;">
+                            <span class="customSelectInner"
+                                  style="width: 24px; display: inline-block;">{{profilActuel}}</span>
                         </span>
-                    </li>
-                    <li class="dropdown" data-ng-if="!isGuest" uib-dropdown>
-                        <a class="dropdown-toggle"
-                           data-toggle="dropdown"
-                           role="button"
-                           aria-haspopup="true"
-                           aria-expanded="false"
-                           uib-dropdown-toggle>
-                            Menu
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li data-ng-show="admin" class="regles">
-                                <a href="#/tag"
-                                   id="regles_submenu" title="Styles" translate>
-                                    Styles
-                                </a>
-                            </li>
-                            <li class="my_profils">
-                                <a href="#/profiles" id="profiles_submenu" title="Mes profils" translate>
-                                    Profils
-                                </a>
-                            </li>
-                            <li class="my_docs">
-                                <a href="#/listDocument" id="documents_submenu" title="Mes documents" translate>
-                                    Documents
-                                </a>
-                            </li>
-                            <li class="my_account">
-                                <a href="" id="account_submenu" title="Mon compte" translate
-                                   data-ng-click="goToUserAccount();">
-                                    monCompte
-                                </a>
-                            </li>
-                            <li data-ng-show="admin" class="managment">
-                                <a href="#/adminPanel" id="administration_submenu"
-                                   title="Administration" translate>
-                                    Administration
-                                </a>
-                            </li>
-                            <li class="bookmarklet">
-                                <a href="" title="Web adapté" id="bookmarklet_submenu"
-                                   data-ng-click="bookmarkletPopin()">
-                                    <i class="fa fa-globe" aria-hidden="true"></i>
-                                    Web adapté
-                                </a>
-                            </li>
-                            <li data-ng-show="admin" class="update_appli">
-                                <a href="" title="update" id="update_submenu" data-toggle="modal"
-                                   data-target="#openUpgradeModal"
-                                   data-ng-click="updgradeService()">
-                                    Mettre à jour</a>
-                            </li>
-
-                            <li data-ng-show="logout" class="signout">
-                                <a href="" id="logout_submenu" title="Se deconnecter" translate
-                                   data-ng-click="logoutFonction()">
-                                    SeDeconnecter
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div>
-
-
-    </nav>
-
-
-
-
-    <div class="loader_cover" data-ng-if="showLoader">
-        <div id="loader_container" data-ng-if="showLoaderProgress">
-            <div class="loader_bar">
-                <div class="progress_bar" data-ng-style="loaderProgressStyle"> </div>
-            </div>
-            <p class="loader_txt">
-                {{loaderMessage | translate}} <img src="/styles/images/loader_points.gif" alt="loader"/>
-            </p>
-        </div>
-        <div data-ng-if="!showLoaderProgress">
-            <div class="fixed_loader">
-                <div class="loadre_container">
-                    <p class="loader_txt">{{loaderMessage | translate}}</p>
-                </div>
-            </div>
-        </div>
+                </li>
+                <li class="dropdown" data-ng-if="!isGuest" uib-dropdown>
+                    <a class="dropdown-toggle"
+                       data-toggle="dropdown"
+                       role="button"
+                       aria-haspopup="true"
+                       aria-expanded="false"
+                       uib-dropdown-toggle>
+                        Menu
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li data-ng-show="admin" class="regles">
+                            <a ui-sref="app.list-style"
+                               id="regles_submenu" title="Styles" translate>
+                                Styles
+                            </a>
+                        </li>
+                        <li class="my_profils">
+                            <a ui-sref="app.list-profile" id="profiles_submenu" title="Mes profils" translate>
+                                Profils
+                            </a>
+                        </li>
+                        <li class="my_docs">
+                            <a ui-sref="app.list-document" id="documents_submenu" title="Mes documents" translate>
+                                Documents
+                            </a>
+                        </li>
+                        <li class="bookmarklet">
+                            <a href="" title="Web adapté" id="bookmarklet_submenu"
+                               data-ng-click="bookmarkletPopin()">
+                                <i class="fa fa-globe" aria-hidden="true"></i>
+                                Web adapté
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
     </div>
 
 
+</nav>
+
+
+<div class="loader_cover" data-ng-if="showLoader">
+    <div id="loader_container" data-ng-if="showLoaderProgress">
+        <div class="loader_bar">
+            <div class="progress_bar" data-ng-style="loaderProgressStyle"> </div>
+        </div>
+        <p class="loader_txt">
+            {{loaderMessage | translate}} <img src="/styles/images/loader_points.gif" alt="loader"/>
+        </p>
+    </div>
+    <div data-ng-if="!showLoaderProgress">
+        <div class="fixed_loader">
+            <div class="loadre_container">
+                <p class="loader_txt">{{loaderMessage | translate}}</p>
+            </div>
+        </div>
+    </div>
 </div>
+
+

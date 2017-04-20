@@ -71,12 +71,10 @@ angular.module('cnedApp')
             UtilsService.openConfirmModal('document.label.delete.title',
                 gettextCatalog.getString('document.label.delete.anwser').replace('document.name', document.filename), true)
                 .then(function () {
-                    localStorage.setItem('lockOperationDropBox', true);
                     LoaderService.showLoader('document.message.info.delete.inprogress', true);
                     LoaderService.setLoaderProgress(30);
 
                     fileStorageService.deleteFile($rootScope.isAppOnline, document.filepath, $rootScope.currentUser.dropbox.accessToken).then(function () {
-                        localStorage.setItem('lockOperationDropBox', false);
                         LoaderService.setLoaderProgress(100);
                         LoaderService.hideLoader();
                         /* Removing notes of the document on localStorage */
@@ -97,7 +95,6 @@ angular.module('cnedApp')
 
             documentService.editDocumentTitle(document.filename, [], 'edit')
                 .then(function (params) {
-                    localStorage.setItem('lockOperationDropBox', true);
                     LoaderService.showLoader('document.message.info.rename.inprogress', true);
                     LoaderService.setLoaderProgress(10);
 
@@ -108,7 +105,6 @@ angular.module('cnedApp')
                     fileStorageService.renameFile($rootScope.isAppOnline, document.filepath, '/' + newTitle + '.html', $rootScope.currentUser.dropbox.accessToken)
                         .then(function () {
                             LoaderService.setLoaderProgress(80);
-                            localStorage.setItem('lockOperationDropBox', false);
                             $scope.updateNote('EDIT');
                             $scope.getListDocument();
                         });
@@ -208,7 +204,6 @@ angular.module('cnedApp')
         };
 
         $scope.getListDocument = function () {
-            localStorage.setItem('lockOperationDropBox', false);
             LoaderService.showLoader('document.message.info.load', false);
             return serviceCheck.getData().then(function (data) {
                 var dropboxToken = '';

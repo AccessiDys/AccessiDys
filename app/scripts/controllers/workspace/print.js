@@ -31,7 +31,7 @@
 'use strict';
 
 angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, $http, $window, $location,
-                                                            $routeParams, $q, $log, $timeout, configuration,
+                                                            $stateParams, $q, $log, $timeout, configuration,
                                                             dropbox, removeHtmlTags, workspaceService, serviceCheck,
                                                             fileStorageService, LoaderService) {
 
@@ -122,24 +122,24 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
             },
             notes = [];
 
-        showTitleDoc($routeParams.documentId);
+        showTitleDoc($stateParams.documentId);
         fileStorageService.getTempFileForPrint().then(function (data) {
             $scope.content = data;
             //delete the plan if it is disabled
-            if (parseInt($routeParams.plan) === plan.ENABLED) {
+            if (parseInt($stateParams.plan) === plan.ENABLED) {
                 summaryOffset = 1;
             } else {
                 summaryOffset = 0;
             }
 
-            var mode = parseInt($routeParams.mode);
+            var mode = parseInt($stateParams.mode);
             switch (mode) {
 
                 case modes.CURRENT_PAGE:
 
-                    var page = parseInt($routeParams.page);
+                    var page = parseInt($stateParams.page);
                     offset = parseInt(page);
-                    notes.push(parseInt($routeParams.page));
+                    notes.push(parseInt($stateParams.page));
 
                     //it means we have plan == 1;
                     if (summaryOffset === 1 && parseInt(page) !== 0) {
@@ -180,8 +180,8 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
                     break;
 
                 case modes.MULTIPAGE:
-                    var pageFrom = parseInt($routeParams.pageDe),
-                        pageTo = parseInt($routeParams.pageA),
+                    var pageFrom = parseInt($stateParams.pageDe),
+                        pageTo = parseInt($stateParams.pageA),
                         currentContent = [];
                     offset = pageFrom;
 

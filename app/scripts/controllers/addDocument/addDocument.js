@@ -33,14 +33,14 @@ angular
     .module('cnedApp')
     .controller(
         'AddDocumentCtrl',
-        function ($log, $scope, $rootScope, $routeParams, $timeout, tagsService, serviceCheck, $http,
+        function ($log, $scope, $rootScope, $stateParams, $timeout, tagsService, serviceCheck, $http,
                   $location, dropbox, $window, configuration, htmlEpubTool, fileStorageService,
                   removeStringsUppercaseSpaces, $interval,
                   canvasToImage, UtilsService, LoaderService, ToasterService, documentService) {
 
-            $scope.idDocument = $routeParams.idDocument;
-            $scope.docTitleTmp = $routeParams.title;
-            $scope.url = $routeParams.url;
+            $scope.idDocument = $stateParams.idDocument;
+            $scope.docTitleTmp = $stateParams.title;
+            $scope.url = $stateParams.url;
             $scope.applyRules = false;
             // Parameters to initialize
             $scope.pageTitre = 'Ajouter un document';
@@ -51,7 +51,6 @@ angular
             // Initialize the lock of the document
             // (to activate the alert pop-up if output of the page ) 
             // in false
-            localStorage.setItem('lockOperationDropBox', false);
             $scope.lien = '';
 
 
@@ -85,16 +84,6 @@ angular
                 $scope.currentData = $scope.currentData.replace(/<div class="accessidys-break-page ng-scope">&nbsp;<\/div>/g, '');
                 $scope.currentData = $scope.currentData.replace(/<div style="page-break-after: always"><span style="display: none;">&nbsp;<\/span><\/div>/g, $scope.pageBreakElement);
                 $scope.currentData = $scope.currentData.replace(/<div class="ng-scope" style="page-break-after: always"><span style="display: none;">&nbsp;<\/span><\/div>/g, $scope.pageBreakElement);
-
-
-                if ($scope.currentData === '') {
-                    localStorage.setItem('lockOperationDropBox', false);
-                } else {
-                    localStorage.setItem('lockOperationDropBox', true);
-                }
-                if (!CKEDITOR.instances.editorAdd.checkDirty()) {
-                    localStorage.setItem('lockOperationDropBox', false);
-                }
 
 
                 $timeout(function () {
@@ -174,8 +163,6 @@ angular
              * @method $scope.getText
              */
             $scope.getText = function () {
-                localStorage.setItem('lockOperationDropBox', true);
-
                 if ($scope.applyStyleInterval) {
                     $interval.cancel($scope.applyStyleInterval);
                 }

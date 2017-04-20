@@ -27,7 +27,7 @@
 
 angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http,
                                                              configuration, dropbox, storageService, profilsService, $localForage, $interval,
-                                                             $uibModal, $routeParams, tagsService, $log, UtilsService) {
+                                                             $uibModal, tagsService, $log, UtilsService) {
 
 
     $rootScope.isFullsize = true;
@@ -81,43 +81,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         });
     };
 
-    $rootScope.$watch('loged', function () {
-        if ($rootScope.loged !== undefined) {
-
-
-            if ($routeParams.deconnexion) {
-                $rootScope.loged = false;
-            }
-            // if a session verification interval exists, 
-            // cancel for reassignment.
-            if ($rootScope.sessionPool) {
-                $interval.cancel($rootScope.sessionPool);
-            }
-            // Resetting the session check in every change of state of the user session..
-            if ($rootScope.loged && $rootScope.isAppOnline) {
-                $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
-            }
-            $scope.logout = $rootScope.loged;
-
-            if ($rootScope.loged === true) {
-                //if loged, user is no more a guest
-                $rootScope.isGuest = false;
-                $scope.isGuest = false;
-
-            } else if ($rootScope.loged === false) {
-                $scope.listDocumentDropBox = '#/listDocument';
-            }
-        }
-    });
-
-    $rootScope.$watch('admin', function () {
-        $scope.admin = $rootScope.admin;
-    });
-
-    $rootScope.$watch('dropboxWarning', function () {
-        $scope.guest = $rootScope.loged;
-    });
-
     $rootScope.$watch('currentUser', function () {
         $scope.currentUserData = $rootScope.currentUser;
         if ($scope.currentUserData && $scope.currentUserData._id) {
@@ -166,10 +129,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     });
 
     $scope.initCommon = function () {
-        if ($rootScope.isGuest) {
-            localStorage.removeItem('compteId');
-        }
-
         $log.debug('initCommon --->');
 
         $rootScope.defaultProfilList = false;
@@ -235,36 +194,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                     }
                 }
             });
-    };
-
-    $scope.logoutFonction = function () {
-
-        if (!$rootScope.isAppOnline) {
-            UtilsService.showInformationModal('label.offline', 'label.offline.info.exit');
-        } else {
-            var toLogout = serviceCheck.deconnect();
-            toLogout.then(function (responce) {
-                localStorage.setItem('deconnexion', 'true');
-                if (responce.deconnected) {
-                    //Disconnection done
-                    $rootScope.loged = false;
-                    $rootScope.isGuest = true;
-                    $rootScope.dropboxWarning = false;
-                    $rootScope.admin = null;
-                    $rootScope.currentUser = {};
-                    $scope.listDocumentDropBox = '';
-                    $rootScope.listDocumentDropBox = '';
-                    $rootScope.uploadDoc = {};
-                    $scope.logoRedirection = configuration.DEFAULT_PATH;
-                    if ($scope.testEnv === false) {
-                        $timeout(function () {
-                            window.location.href = configuration.URL_REQUEST;
-                        }, 1000);
-                    }
-                }
-            });
-        }
-
     };
 
     // displays user profiles
@@ -380,27 +309,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 }, 10);
             });
         });
-    };
-
-    $scope.updgradeService = function () {
-        UtilsService.openUpgradeModal();
-    };
-
-
-    /**
-     * Access the screen "My Account".
-     * If the user is not connected to internet,
-     * a popup is displayed indicating that the feature is not available.
-     *
-     * @method $scope.goToUserAccount
-     */
-    $scope.goToUserAccount = function () {
-        if (!$rootScope.isAppOnline) {
-            UtilsService.showInformationModal('label.offline', 'useraccount.message.info.offline');
-
-        } else {
-            $location.path('/userAccount');
-        }
     };
 
     $rootScope.openVocalHelpModal = function () {

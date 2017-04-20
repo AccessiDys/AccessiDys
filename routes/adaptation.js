@@ -290,12 +290,6 @@ module.exports = function (app, passport) {
 
 
 
-    // Documents structure routes
-    var docStructure = require('../api/dao/docStructure');
-    app.post('/ajouterDocStructure', docStructure.createDocuments);
-    app.post('/getDocument', docStructure.getDocument);
-    app.post('/getDocuments', docStructure.all);
-
     // Routes for tag manipulating
     var tags = require('../api/dao/tag');
     app.post('/addTag', checkIsLoged, tags.create);
@@ -393,11 +387,11 @@ module.exports = function (app, passport) {
     app.post('/setAuthorisations', isLoggedInAdmin, userAccount.setAuthorisations);
 
 
-    var sysParamDAO = require('../api/dao/sysParamDAO');
+    /*var sysParamDAO = require('../api/dao/sysParamDAO');
     app.post('/createVersion', isLoggedInAdmin, sysParamDAO.create);
     app.post('/updateVersion', isLoggedInAdmin, sysParamDAO.update);
     app.post('/allVersion', checkIsLoged, sysParamDAO.all);
-    app.post('/findTagByIdVersion', sysParamDAO.findTagById);
+    app.post('/findTagByIdVersion', sysParamDAO.findTagById);*/
 
 
     //profils service

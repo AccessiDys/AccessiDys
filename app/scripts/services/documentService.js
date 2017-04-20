@@ -61,7 +61,6 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             $log.debug('Check if document already exist', document);
 
-            localStorage.setItem('lockOperationDropBox', true);
             fileStorageService.searchFiles($rootScope.isAppOnline, document.title, $rootScope.currentUser.dropbox.accessToken)
                 .then(function (filesFound) {
 
@@ -74,7 +73,6 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                         }
                     }
 
-                    localStorage.setItem('lockOperationDropBox', false);
 
                     deferred.resolve(isDocumentExist);
 
@@ -139,11 +137,8 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
                         LoaderService.setLoaderProgress(40);
 
-                        localStorage.setItem('lockOperationDropBox', true);
                         fileStorageService.saveFile($rootScope.isAppOnline, documentName, document.data, $rootScope.currentUser.dropbox.accessToken)
                             .then(function (data) {
-                                localStorage.setItem('lockOperationDropBox', false);
-
                                 LoaderService.setLoaderProgress(75);
                                 LoaderService.hideLoader();
 
