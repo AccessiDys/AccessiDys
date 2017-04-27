@@ -634,3 +634,151 @@ exports.existingProfiles = function (req, res) {
         }
     });
 };
+
+
+/**
+ * Search a profile and the user associated with this profile
+ */
+exports.getProfiles = function (req, res) {
+    var listeProfils = [];
+
+    async.waterfall([
+
+            function (callback) {
+
+                /* Default profiles */
+                UserProfil.find({
+                    'default': true
+                }, function (err, item) {
+                    if (err) {
+                        res.send({
+                            'result': 'error'
+                        });
+                    } else {
+                        if (item) {
+
+                            var stringProfilsIds = [];
+                            for (var i = 0; i < item.length; i++) {
+                                stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
+                            }
+
+                            if (stringProfilsIds.length > 0) {
+
+                                Profil.find({
+                                    '_id': {
+                                        $in: stringProfilsIds
+                                    }
+                                }, function (err, profils) {
+
+                                    if (profils) {
+
+                                        for (var i = 0; i < profils.length; i++) {
+                                            var profilModified = profils[i].toObject();
+                                            profilModified.state = 'default';
+                                            listeProfils.push(profilModified);
+                                        }
+                                    }
+
+                                    callback(null, 'one');
+                                });
+                            } else {
+                                callback(null, 'one');
+                            }
+                        }
+                    }
+                });
+
+            },
+            /*function (arg1, callback) {
+
+             callback(null, 'one', 'two', 'three', 'four');
+
+             //  delegated Profiles.
+             UserProfil.find({
+             delegatedID: req.user._id,
+             delegate: true
+             }, function (err, item) {
+             if (err) {
+             res.send({
+             'result': 'error'
+             });
+             } else {
+             if (item) {
+
+             var stringProfilsIds = [];
+             for (var i = 0; i < item.length; i++) {
+             stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
+             }
+
+             if (stringProfilsIds.length > 0) {
+             Profil.find({
+             '_id': {
+             $in: stringProfilsIds
+             }
+             }, function (err, profils) {
+
+             if (profils) {
+             for (var i = 0; i < profils.length; i++) {
+             var profilModified = profils[i].toObject();
+             profilModified.state = 'delegated';
+             listeProfils.push(profilModified);
+             }
+             }
+
+             callback(null, 'one', 'two', 'three', 'four');
+             });
+             } else {
+             callback(null, 'one', 'two', 'three', 'four');
+             }
+             }
+             }
+             });
+
+             },*/
+            function (arg1, callback) {
+                /* Selections of the tags of profile */
+
+                var stringProfilsIds = [];
+                for (var i = 0; i < listeProfils.length; i++) {
+                    stringProfilsIds.push(listeProfils[i]._id);
+                }
+
+                ProfilTag.find({
+                    profil: {
+                        $in: stringProfilsIds
+                    }
+                }, function (err, tags) {
+                    if (tags) {
+
+                        var result = [];
+
+                        for (var i = 0; i < listeProfils.length; i++) {
+
+                            listeProfils[i].profileTags = [];
+
+                            for (var j = 0; j < tags.length; j++) {
+                                if (listeProfils[i]._id == tags[j].profil) { // jshint ignore:line
+
+                                    delete tags[j]._id;
+                                    delete tags[j].profil;
+
+                                    listeProfils[i].profileTags.push(tags[j]);
+                                }
+                            }
+
+                            result.push({
+                                filename: listeProfils[i].nom,
+                                data: listeProfils[i],
+                                provider: 'accessidys'
+                            });
+                        }
+                        res.send(result);
+                    }
+                });
+
+                // res.send("error");
+            }
+        ],
+        function (err, result) {
+        });
+};

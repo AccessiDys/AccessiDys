@@ -638,22 +638,17 @@ angular
              */
             $scope.editExistingDocument = function () {
                 $scope.pageTitre = 'Editer le document';
-                fileStorageService.searchFiles($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (files) {
-                    $scope.existingFile = files[0];
-                    $scope.docTitre = $scope.idDocument;
-                    LoaderService.setLoaderProgress(27);
+                fileStorageService.get($scope.idDocument, 'document').then(function (file) {
+                    $log.debug('Init document edit', file);
 
-                    fileStorageService.getFile($rootScope.isAppOnline, $scope.idDocument, $rootScope.currentUser.dropbox.accessToken).then(function (filecontent) {
-                        if (filecontent === null) {
-                            LoaderService.hideLoader();
-                            UtilsService.showInformationModal('label.offline', 'document.message.info.display.offline', '/listDocument');
-                        } else {
-                            CKEDITOR.instances.editorAdd.setData(filecontent, {
-                                callback: $scope.resetDirtyCKEditor
-                            });
-                            LoaderService.hideLoader();
-                        }
+                    $scope.existingFile = file;
+                    $scope.docTitre = $scope.idDocument;
+                    LoaderService.setLoaderProgress(50);
+
+                    CKEDITOR.instances.editorAdd.setData(file.data, {
+                        callback: $scope.resetDirtyCKEditor
                     });
+                    LoaderService.hideLoader();
                 });
             };
 

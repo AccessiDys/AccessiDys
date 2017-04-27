@@ -29,7 +29,7 @@ angular.module('cnedApp')
     .controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces,
                                           configuration, $location, serviceCheck, verifyEmail, $window,
                                           profilsService, $uibModal, $timeout, tagsService, $log, _, Analytics,
-                                          gettextCatalog, UtilsService, LoaderService, EmailService, ToasterService) {
+                                          gettextCatalog, UtilsService, LoaderService, EmailService, ToasterService, UserService) {
 
         /* Initializations */
         $scope.displayTextSimple = 'AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu’aux cadres supérieurs trop pressés jusqu’aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d’affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d’attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d’origine. Qu’il s’agisse d’un fichier PDF numérisé, d’un document Office, d’un livre électronique au format ePub ou d’une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d’une expérience de lecture totalement personnalisée.';
@@ -321,7 +321,7 @@ angular.module('cnedApp')
         };
 
         $scope.displayOwner = function (param) {
-            if (param.state === 'mine' || ($rootScope.currentUser.local.role === 'admin' && $rootScope.currentUser._id === param.owner)) {
+            if (UserService.getData().email === param.owner) {
                 return 'Moi-même';
             } else if (param.state === 'favoris') {
                 return 'Favoris';
@@ -333,7 +333,7 @@ angular.module('cnedApp')
         };
 
         $scope.showLoader = function () {
-            console.log('loader show');
+
             $scope.loader = true;
             $scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
         };
@@ -375,6 +375,8 @@ angular.module('cnedApp')
             }
         };
 
+        // TODO
+        /*
         $scope.cancelDelegateByOwner = function (profile) {
             if (!$rootScope.isAppOnline) {
                 UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
@@ -423,13 +425,14 @@ angular.module('cnedApp')
 
                     });
             }
-        };
+        };*/
 
         /**
          * Cancel the profile delegation by owner
          * @param profil
          */
-        $scope.cancelDelegateByUser = function (profil) {
+        // TODO
+        /*$scope.cancelDelegateByUser = function (profil) {
             if (!$rootScope.isAppOnline) {
                 UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
             } else {
@@ -478,7 +481,7 @@ angular.module('cnedApp')
                     });
 
             }
-        };
+        };*/
 
         /**
          * Delete a profile
@@ -487,12 +490,12 @@ angular.module('cnedApp')
         $scope.deleteProfile = function (profile) {
 
             UtilsService.openConfirmModal('profile.label.delete.title',
-                gettextCatalog.getString('profile.label.delete.anwser').replace('profile.name', profile.nom), true)
+                gettextCatalog.getString('profile.label.delete.anwser').replace('profile.name', profile.data.nom), true)
                 .then(function () {
                     LoaderService.showLoader('profile.message.info.delete.inprogress', true);
                     LoaderService.setLoaderProgress(30);
 
-                    profilsService.deleteProfil($rootScope.isAppOnline, $rootScope.currentUser._id, profile._id)
+                    profilsService.deleteProfil(profile)
                         .then(function () {
                             LoaderService.setLoaderProgress(100);
                             LoaderService.hideLoader();
@@ -520,13 +523,13 @@ angular.module('cnedApp')
 
                 var itemToShare = {
                     linkToShare: '',
-                    name: profile.nom
+                    name: profile.data.nom
                 };
 
                 if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
                     itemToShare.linkToShare = decodeURI($location.absUrl());
                 } else {
-                    itemToShare.linkToShare = decodeURI($location.absUrl().replace('profiles', 'detailProfil?idProfil=' + profile._id));
+                    itemToShare.linkToShare = decodeURI($location.absUrl().replace('profiles', 'detailProfil?idProfil=' + profile.data._id));
                 }
 
 
@@ -618,21 +621,21 @@ angular.module('cnedApp')
         };
 
         $scope.isDefault = function (param) {
-            if (param && param.stateDefault || param.state === 'default') {
+            if (param && param.data.state === 'default') {
                 return true;
             }
             return false;
         };
 
         $scope.isOwner = function (param) {
-            if (param && param.owner === $rootScope.currentUser._id) {
+            if (param && param.data.owner === UserService.getData().email) {
                 return true;
             }
             return false;
         };
 
         $scope.isDelegated = function (param) {
-            if (param && param.state === 'delegated') {
+            if (param && param.data.state === 'delegated') {
                 return true;
             }
             return false;
@@ -640,58 +643,52 @@ angular.module('cnedApp')
 
         $scope.isPreDelegated = function (param) {
 
-            if (param && param.preDelegated && $rootScope.currentUser._id === param.preDelegated) {
+            if (param && param.data.preDelegated && UserService.getData().email === param.preDelegated) {
                 return true;
             }
             return false;
         };
 
         $scope.isFavourite = function (param) {
-            if (param && (param.state === 'favoris' || param.state === 'default')) {
-                return true;
-            }
-            return false;
-        };
-
-        $scope.isProfil = function (param) {
-            if (param && param.type === 'profile') {
+            if (param && (param.data.state === 'favoris' || param.data.state === 'default')) {
                 return true;
             }
             return false;
         };
 
         $scope.isOwnerDelagate = function (param) {
-            if (param && param.delegated && param.owner === $rootScope.currentUser._id) {
+            if (param && param.data.delegated && param.data.owner === UserService.getData().email) {
                 return true;
             }
             return false;
         };
 
         $scope.isAnnuleDelagate = function (param) {
-            if (param && param.preDelegated && param.owner === $rootScope.currentUser._id) {
+            if (param && param.data.preDelegated && param.data.owner === UserService.getData().email) {
                 return true;
             }
             return false;
         };
 
         $scope.isDelegatedOption = function (param) {
-            if (param && !param.delegated && !param.preDelegated && param.owner === $rootScope.currentUser._id) {
+            if (param && !param.data.delegated && !param.data.preDelegated && param.data.owner === UserService.getData().email) {
                 return true;
             }
             return false;
         };
 
         $scope.isDeletableIHM = function (param) {
-            if (param.owner === $rootScope.currentUser._id) {
+            if (param.data.owner === UserService.getData().email) {
                 return true;
             }
             return false;
         };
 
 
+        // TODO
         $scope.removeFavourite = function (profile) {
 
-            UtilsService.openConfirmModal('deleteFavoris', 'messageSuppression', false)
+            /*UtilsService.openConfirmModal('deleteFavoris', 'messageSuppression', false)
                 .then(function () {
 
                     var params = {
@@ -711,7 +708,7 @@ angular.module('cnedApp')
                             ToasterService.showToaster('#profile-success-toaster', 'profile.message.favorite.delete');
                             $scope.getProfiles();
                         });
-                });
+                });*/
         };
 
         /* sending email when duplicating. */
@@ -721,7 +718,7 @@ angular.module('cnedApp')
             }).success(function (data) {
                 $scope.findUserByIdFlag = data;
                 if (data && data.local) {
-                    var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+                    var fullName = UserService.getData().firstName + ' ' + UserService.getData().lastName;
                     $scope.sendVar = {
                         emailTo: data.local.email,
                         content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
@@ -759,7 +756,7 @@ angular.module('cnedApp')
             // loop of Profiles
             for (var i = 0; i < $scope.profiles.length; i++) {
                 if ($scope.profiles[i].type === 'profile') {
-                    if ($scope.profiles[i].nom && $scope.profiles[i].nom.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1 || $scope.profiles[i].descriptif && $scope.profiles[i].descriptif.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1) {
+                    if ($scope.profiles[i].data.nom && $scope.profiles[i].data.nom.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1 || $scope.profiles[i].data.descriptif && $scope.profiles[i].data.descriptif.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1) {
                         // Query Found
                         $scope.profiles[i].showed = true;
                     } else {
@@ -785,52 +782,46 @@ angular.module('cnedApp')
 
             var profileId = $location.search().idProfil;
 
-            serviceCheck.getData().then(function (data) {
+            // TODO get user profile on dropbox
+            profilsService.getUserProfil(profileId)
+                .then(function (data) {
+                    if (data === null || !data) {
+                        UtilsService.showInformationModal('label.offline', 'profile.message.info.display.offline', '/profiles');
+                    } else {
+                        var profile = data;
 
-                $rootScope.currentUser = data;
-                $scope.currentUserData = data.user;
-                $rootScope.currentUser = data.user;
+                        tagsService.getTags().then(function (tags) {
 
-                profilsService.getUserProfil(profileId)
-                    .then(function (data) {
-                        if (data === null || !data) {
-                            UtilsService.showInformationModal('label.offline', 'profile.message.info.display.offline', '/profiles');
-                        } else {
-                            var profile = data;
+                            profilsService.getProfilTags(profile.profilID).then(function (data) {
 
-                            tagsService.getTags().then(function (tags) {
+                                profile.data.profileTags = {};
+                                profile.data.profileTags.idProfil = profile._id;
+                                profile.data.profileTags = data;
 
-                                profilsService.getProfilTags(profile.profilID).then(function (data) {
-
-                                    profile.profileTags = {};
-                                    profile.profileTags.idProfil = profile._id;
-                                    profile.profileTags.tags = data;
-
-                                    _.each(profile.profileTags.tags, function (item) {
-                                        item.tagDetail = _.find(tags, function (tag) {
-                                            return item.tag === tag._id;
-                                        });
-
-
-                                        if (typeof item.tagDetail === 'object') {
-                                            item.texte = '<' + item.tagDetail.balise + ' class="' + removeStringsUppercaseSpaces(item.tagDetail.libelle) + '">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
-                                        }
-
-                                        // Avoid mapping with backend
-                                        item.id_tag = item.tag;
-                                        item.style = item.texte;
+                                _.each(profile.data.profileTags, function (item) {
+                                    item.tagDetail = _.find(tags, function (tag) {
+                                        return item.tag === tag._id;
                                     });
 
-                                    $scope.detailProfil = profile;
-                                    $log.debug('$scope.detailProfil', $scope.detailProfil);
+
+                                    if (typeof item.tagDetail === 'object') {
+                                        item.texte = '<' + item.tagDetail.balise + ' class="' + removeStringsUppercaseSpaces(item.tagDetail.libelle) + '">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
+                                    }
+
+                                    // Avoid mapping with backend
+                                    item.id_tag = item.tag;
+                                    item.style = item.texte;
                                 });
 
+                                $scope.detailProfil = profile;
+                                $log.debug('$scope.detailProfil', $scope.detailProfil);
                             });
-                        }
 
-                    });
+                        });
+                    }
 
-            });
+                });
+
 
             // Get back the profile and the current userProfil
 
@@ -839,7 +830,8 @@ angular.module('cnedApp')
         /*
          * Add a profile to his favorites.
          */
-        $scope.ajouterAmesFavoris = function () {
+        // TODO
+        /*$scope.ajouterAmesFavoris = function () {
 
             $log.debug('$scope.detailProfil', $scope.detailProfil);
             if ($rootScope.currentUser && $scope.detailProfil) {
@@ -859,12 +851,14 @@ angular.module('cnedApp')
                     $rootScope.$broadcast('initCommon'); // TODO revoir
                 });
             }
-        };
+        };*/
 
         /*
          * Accept the delegation of a profile.
          */
-        $scope.deleguerUserProfil = function () {
+
+        //TODO
+        /*$scope.deleguerUserProfil = function () {
             $scope.loader = true;
             $scope.varToSend = {
                 profilID: $scope.detailProfil.profilID,
@@ -905,7 +899,7 @@ angular.module('cnedApp')
                             }
                         });
                 });
-        };
+        };*/
 
         /**
          * This function retrieves the label(description) of a tag.
@@ -931,58 +925,34 @@ angular.module('cnedApp')
 
                 $log.debug('Gettings tags ', tags);
 
-                profilsService.getProfilsByUser($rootScope.isAppOnline).then(function (data) {
-                    if (data) {
+                profilsService.getProfiles().then(function (res) {
+                    if (res) {
 
-                        _.each(data, function (profile) {
+                        _.each(res, function (profile) {
 
-                            if (profile && profile.type === 'profile') {
+                            if (profile) {
 
-                                if ($rootScope.currentUser.local.role === 'admin' && profile.state === 'mine') {
-                                    // Avoid duplicate profiles when the user is administrator
-                                    for (var j = 0; j < data.length; j++) {
-                                        if (profile._id === data[j]._id && data[j].state === 'default' && data[j].owner === $rootScope.currentUser._id) {
-                                            profile.stateDefault = true;
-                                            data.splice(j, 2);
-                                        }
-                                    }
-                                }
-
-                                profile.profileTags = _.find(data, function (profileTags) {
-
-                                    var isReturned = false;
-
-                                    if (profileTags.type === 'tags' && profile._id === profileTags.idProfil) {
-                                        isReturned = true;
-
-                                        _.each(profileTags.tags, function (item) {
-                                            item.tagDetail = _.find(tags, function (tag) {
-                                                return item.tag === tag._id;
-                                            });
+                                _.each(profile.data.profileTags, function (item) {
+                                    item.tagDetail = _.find(tags, function (tag) {
+                                        return item.tag === tag._id;
+                                    });
 
 
-                                            if (typeof item.tagDetail === 'object') {
-                                                item.texte = '<' + item.tagDetail.balise + ' class="' + removeStringsUppercaseSpaces(item.tagDetail.libelle) + '">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
-                                            }
-
-                                            // Avoid mapping with backend
-                                            item.id_tag = item.tag;
-                                            item.style = item.texte;
-
-                                        });
-
-
-                                        delete profileTags.tagsText;
+                                    if (typeof item.tagDetail === 'object') {
+                                        item.texte = '<' + item.tagDetail.balise + ' class="' + removeStringsUppercaseSpaces(item.tagDetail.libelle) + '">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
                                     }
 
-                                    return isReturned;
+                                    // Avoid mapping with backend
+                                    item.id_tag = item.tag;
+                                    item.style = item.texte;
+
                                 });
 
-                                profile.profileTags.tags.sort(function (a, b) {
+                                profile.data.profileTags.sort(function (a, b) {
                                     return a.tagDetail.position - b.tagDetail.position;
                                 });
 
-                                if (profile.nom === 'Accessidys par défaut' || profile.owner === 'scripted') {
+                                if (profile.data.nom === 'Accessidys par défaut' || profile.data.owner === 'scripted') {
                                     $scope.defaultSystemProfile = profile;
                                 }
 
@@ -992,8 +962,6 @@ angular.module('cnedApp')
                         });
 
                         $log.debug('getProfiles.getProfilsByUser() - $scope.profiles :', $scope.profiles);
-
-                        $rootScope.$emit('refreshProfilAcutel', data);
                     }
                 });
             });
@@ -1002,9 +970,9 @@ angular.module('cnedApp')
         $scope.create = function () {
 
             var profileToCreate = angular.copy($scope.defaultSystemProfile);
-            profileToCreate.nom = $scope.generateProfileName($rootScope.currentUser.local.prenom, 0, 0);
-            profileToCreate.owner = $rootScope.currentUser._id;
-            profileToCreate.updated = new Date();
+            profileToCreate.data.nom = $scope.generateProfileName(UserService.getData().firstName, 0, 0);
+            profileToCreate.data.owner = UserService.getData().email;
+            profileToCreate.data.updated = new Date();
 
             $scope.openProfileModal('create', profileToCreate);
 
@@ -1027,10 +995,10 @@ angular.module('cnedApp')
             $scope.oldProfil = profile;
 
             var profileToDuplicate = angular.copy(profile);
-            profileToDuplicate.nom += ' Copie';
-            profileToDuplicate.descriptif += ' Copie';
-            profileToDuplicate.owner = $rootScope.currentUser._id;
-            profileToDuplicate.updated = new Date();
+            profileToDuplicate.data.nom += ' Copie';
+            profileToDuplicate.data.descriptif += ' Copie';
+            profileToDuplicate.data.owner = UserService.getData().email;
+            profileToDuplicate.data.updated = new Date();
 
             $scope.openProfileModal('duplicate', profileToDuplicate);
 

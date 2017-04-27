@@ -1,5 +1,5 @@
-﻿<!-- 
- File: needUpdate.html
+/*File: oauth.service.js
+ *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
@@ -20,17 +20,20 @@
  * You should have received a copy of the GNU Affero General Public
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
- -->
- <!-- Header -->
-<!-- End Header -->
-<div document-methodes="" class="doc-General">
-  <div class="erreur_container">
-  	<div class="visu_opps erreur_page">
-  		<img src="{{urlImg}}" alt="" /> <br>
-  		<p>Le propriétaire du document doit effectuer une mise à jour, pour que vous puissiez consulter une version plus stable du document</p> <br>
-  		<span>revenir vers la page d’accueil</span> <br>
-  		<a href="#" class="btn_simple light_blue" title="Page accueil">Page accueil</a>
-  	</div>
-  </div>
-</div>
+ *
+ */
+
+'use strict';
+
+cnedApp.factory('OauthService',
+    function ($http) {
+        return {
+
+            token: function () {
+
+                return $http.get('/auth/token');
+            }
+        };
+    });
+
 

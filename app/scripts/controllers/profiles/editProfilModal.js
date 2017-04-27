@@ -87,16 +87,16 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
     };
 
     $uibModalInstance.opened.then(function () {
-        $scope.styleName = $scope.profile.profileTags.tags[profileTagIndex].tagDetail.libelle;
+        $scope.styleName = $scope.profile.data.profileTags[profileTagIndex].tagDetail.libelle;
 
         $scope.style = {
-            police: $scope.profile.profileTags.tags[profileTagIndex].police,
-            taille: $scope.profile.profileTags.tags[profileTagIndex].taille,
-            interligne: $scope.profile.profileTags.tags[profileTagIndex].interligne,
-            styleValue: $scope.profile.profileTags.tags[profileTagIndex].styleValue,
-            space: $scope.profile.profileTags.tags[profileTagIndex].spaceSelected,
-            spaceChar: $scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected,
-            coloration: $scope.profile.profileTags.tags[profileTagIndex].coloration
+            police: $scope.profile.data.profileTags[profileTagIndex].police,
+            taille: $scope.profile.data.profileTags[profileTagIndex].taille,
+            interligne: $scope.profile.data.profileTags[profileTagIndex].interligne,
+            styleValue: $scope.profile.data.profileTags[profileTagIndex].styleValue,
+            space: $scope.profile.data.profileTags[profileTagIndex].spaceSelected,
+            spaceChar: $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected,
+            coloration: $scope.profile.data.profileTags[profileTagIndex].coloration
         };
 
         $scope.interValTmp = $interval(function () {
@@ -106,22 +106,22 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             var modalEdit = $('#styleEditModal');
 
             // set span text value of customselect
-            modalEdit.find('select[data-ng-model="style.police"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].police);
-            modalEdit.find('select[data-ng-model="style.taille"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].taille);
-            modalEdit.find('select[data-ng-model="style.interligne"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].interligne);
-            modalEdit.find('select[data-ng-model="style.styleValue"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].styleValue);
-            modalEdit.find('select[data-ng-model="style.space"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].spaceSelected);
-            modalEdit.find('select[data-ng-model="style.spaceChar"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected);
-            modalEdit.find('select[data-ng-model="style.coloration"] + .customSelect .customSelectInner').text($scope.profile.profileTags.tags[profileTagIndex].coloration);
+            modalEdit.find('select[data-ng-model="style.police"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].police);
+            modalEdit.find('select[data-ng-model="style.taille"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].taille);
+            modalEdit.find('select[data-ng-model="style.interligne"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].interligne);
+            modalEdit.find('select[data-ng-model="style.styleValue"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].styleValue);
+            modalEdit.find('select[data-ng-model="style.space"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].spaceSelected);
+            modalEdit.find('select[data-ng-model="style.spaceChar"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].spaceCharSelected);
+            modalEdit.find('select[data-ng-model="style.coloration"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].coloration);
 
-            $scope.editStyleChange('police', $scope.profile.profileTags.tags[profileTagIndex].police);
-            $scope.editStyleChange('taille', $scope.profile.profileTags.tags[profileTagIndex].taille);
-            $scope.editStyleChange('interligne', $scope.profile.profileTags.tags[profileTagIndex].interligne);
-            $scope.editStyleChange('style', $scope.profile.profileTags.tags[profileTagIndex].styleValue);
-            $scope.editStyleChange('space', $scope.profile.profileTags.tags[profileTagIndex].spaceSelected);
-            $scope.editStyleChange('spaceChar', $scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected);
+            $scope.editStyleChange('police', $scope.profile.data.profileTags[profileTagIndex].police);
+            $scope.editStyleChange('taille', $scope.profile.data.profileTags[profileTagIndex].taille);
+            $scope.editStyleChange('interligne', $scope.profile.data.profileTags[profileTagIndex].interligne);
+            $scope.editStyleChange('style', $scope.profile.data.profileTags[profileTagIndex].styleValue);
+            $scope.editStyleChange('space', $scope.profile.data.profileTags[profileTagIndex].spaceSelected);
+            $scope.editStyleChange('spaceChar', $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected);
 
-            $scope.editStyleChange('coloration', $scope.profile.profileTags.tags[profileTagIndex].coloration);
+            $scope.editStyleChange('coloration', $scope.profile.data.profileTags[profileTagIndex].coloration);
 
 
         }, 200);
@@ -129,13 +129,13 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
 
     $scope.closeModal = function () {
         if (checkRequiredFields()) {
-            $scope.profile.profileTags.tags[profileTagIndex].police = $scope.style.police;
-            $scope.profile.profileTags.tags[profileTagIndex].taille = $scope.style.taille;
-            $scope.profile.profileTags.tags[profileTagIndex].interligne = $scope.style.interligne;
-            $scope.profile.profileTags.tags[profileTagIndex].styleValue = $scope.style.styleValue;
-            $scope.profile.profileTags.tags[profileTagIndex].spaceSelected = $scope.style.space;
-            $scope.profile.profileTags.tags[profileTagIndex].spaceCharSelected = $scope.style.spaceChar;
-            $scope.profile.profileTags.tags[profileTagIndex].coloration = $scope.style.coloration;
+            $scope.profile.data.profileTags[profileTagIndex].police = $scope.style.police;
+            $scope.profile.data.profileTags[profileTagIndex].taille = $scope.style.taille;
+            $scope.profile.data.profileTags[profileTagIndex].interligne = $scope.style.interligne;
+            $scope.profile.data.profileTags[profileTagIndex].styleValue = $scope.style.styleValue;
+            $scope.profile.data.profileTags[profileTagIndex].spaceSelected = $scope.style.space;
+            $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceChar;
+            $scope.profile.data.profileTags[profileTagIndex].coloration = $scope.style.coloration;
 
             $uibModalInstance.close({
                 profile: $scope.profile

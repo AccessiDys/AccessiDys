@@ -62,8 +62,8 @@
             <table>
                 <tbody>
                 <tr>
-                    <td class="">Profil: {{profile.nom}}</td>
-                    <td class="">Descriptif: {{profile.descriptif}}</td>
+                    <td class="">Profil: {{profile.data.nom}}</td>
+                    <td class="">Descriptif: {{profile.data.descriptif}}</td>
                     <td style="width: 20px;">
                         <button data-ng-click="editName()" class="rules_edit_btn" title="Renommer"></button>
                     </td>
@@ -75,10 +75,10 @@
             <h2>Styles :</h2>
             <table>
                 <tbody>
-                <tr data-ng-repeat="profileTag in profile.profileTags.tags track by $index" data-ng-if="profileTag.tagDetail != null">
+                <tr data-ng-repeat="profileTag in profile.data.profileTags track by $index" data-ng-if="profileTag.tagDetail != null">
                     <td>
                         <div regle-style="profileTag.texte"
-                             tags="profile.profileTags.tags"
+                             tags="profile.data.profileTags"
                              apply-rules="forceApplyRules"
                              class="resetAll apercu-tags"
                              preview="true">

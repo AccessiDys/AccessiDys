@@ -132,7 +132,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
      */
     this.syncDocument = function(token, docItem, operations, rejectedItems) {
         if (docItem.action === 'update') {
-            operations.push(fileStorageService.searchFiles(true, docItem.docName, token).then(function(files) {
+            operations.push(fileStorageService.get(true, docItem.docName, token).then(function(files) {
                 if (!files || !files.length || files[0].dateModification < docItem.dateModification) {
                     return fileStorageService.saveFile(true, docItem.docName, docItem.content, token, true).then(null, function() {
                         rejectedItems.push(docItem);
@@ -147,7 +147,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
         }
 
         if (docItem.action === 'delete') {
-            operations.push(fileStorageService.searchFiles(true, docItem.docName, token).then(function(files) {
+            operations.push(fileStorageService.get(true, docItem.docName, token).then(function(files) {
                 if (files && files.length > 0) {
                     return fileStorageService.deleteFile(true, docItem.docName, token, true).then(null, function() {
                         rejectedItems.push(docItem);
@@ -161,7 +161,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
             }));
         }
         if (docItem.action === 'rename') {
-            operations.push(fileStorageService.searchFiles(true, docItem.filename, token).then(function(files) {
+            operations.push(fileStorageService.get(true, docItem.filename, token).then(function(files) {
                 //If the document to be renamed exists in a version previous to this one.
                 if (files && files.length && files[0].dateModification < docItem.dateModification) {
                     return fileStorageService.renameFile(true, docItem.oldDocName, docItem.newDocName, token, true).then(null, function() {
@@ -176,7 +176,7 @@ cnedApp.service('synchronisationService', function($localForage, fileStorageServ
             }));
         }
         if (docItem.action === 'update_rename') {
-            operations.push(fileStorageService.searchFiles(true, docItem.docName, token).then(function(files) {
+            operations.push(fileStorageService.get(true, docItem.docName, token).then(function(files) {
                 if (!files || !files.length || files[0].dateModification < docItem.dateModification) {
                     return fileStorageService.saveFile(true, docItem.docName, docItem.content, token, true).then(function() {
                         return fileStorageService.renameFile(true, docItem.docName, docItem.newDocName, token, true).then(null, function() {

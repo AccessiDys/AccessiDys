@@ -1,0 +1,92 @@
+<!--
+ File: my-backup.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+<h1 class="animated fadeInLeft">Ma sauvegarde</h1>
+<!-- Header -->
+<!-- End Header -->
+<div class="content page_authentification my-backup-page">
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <div class="info" data-ng-if="!userData.token">
+                <i class="fa fa-exclamation-triangle icon" aria-hidden="true"></i>
+                <h4 class="content">Vous n'êtes pas encore connecté à un espace de sauvegarde</h4>
+            </div>
+
+            <div class="info mt-10" data-ng-if="userData.token">
+                <h4 class="content">
+                    <img data-ng-src="{{selectedStorage.img}}" height="40"/>
+                    Sauvegardé sur le compte {{selectedStorage.name}} de corentin.langlais@gmail.com</h4>
+            </div>
+
+            <p class="mt-10" data-ng-if="userData.token"><strong>Votre espace de sauvegarde vous permets de retrouver vos documents sur tou vos appareils.</strong></p>
+        </div>
+    </div>
+
+    <br><br>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h3 class="mb-25" data-ng-if="!userData.token">Se connecter à un espace de sauvegarde</h3>
+            <h3 class="mb-25" data-ng-if="userData.token">Déplacer ma sauvegarde</h3>
+
+
+            <h4 class="mb-25 mt-10">1 - Sélectionner</h4>
+
+            <slick infinite="true" slides-to-show="3" slides-to-scroll="3" class="col-md-8 col-md-offset-2 mb-25">
+                <div data-ng-repeat="storage in storages">
+                    <img data-ng-src="{{storage.img}}" height="80" data-ng-click="selectStorage(storage)"/>
+                </div>
+            </slick>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+
+            <h4 class="mb-25 mt-10">2 - Vous avez un compte ? Identifiez-vous avec</h4>
+
+            <div class="selected-storage col-md-12 text-center mb-25">
+                <img data-ng-src="{{selectedStorage.img}}">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 mb-25 mt-20 text-center">
+
+            <button type="button" class="reset_btn" title="Annuler" id="cancel-button-top" data-ng-click="getToken()">
+                Annuler
+            </button>
+
+            <button class="btn_simple light_blue" title="S'identifier" name="login_btn" data-ng-click="login()" data-ng-disabled="!selectedStorage">
+                S'identifier
+            </button>
+
+
+        </div>
+    </div>
+
+</div>
+

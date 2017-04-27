@@ -48,6 +48,8 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick.css" />
+    <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick-theme.css" />
     <!-- endbower -->
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -129,9 +131,9 @@
 <script src="bower_components/pdfjs-dist/build/pdf.js"></script>
 <script src="bower_components/pdfjs-dist/build/pdf.worker.js"></script>
 <script src="bower_components/angular-socialshare/dist/angular-socialshare.min.js"></script>
-<script src="bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
-<script src="bower_components/jasmine-jquery/lib/jasmine-jquery.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/slick-carousel/slick/slick.min.js"></script>
+<script src="bower_components/angular-slick/dist/slick.js"></script>
 <!-- endbower -->
 
 <script src="bower_components/ckeditor/ckeditor.js"></script>
@@ -168,7 +170,6 @@
 <script src="scripts/controllers/profiles/profiles.js"></script>
 <script src="scripts/controllers/listDocument/listDocument.js"></script>
 <script src="scripts/controllers/addDocument/addDocument.js"></script>
-<script src="scripts/controllers/needUpdate/needUpdate.js"></script>
 <script src="scripts/controllers/synchronisation/synchronisationModal.js"></script>
 <script src="scripts/directives/bodyClasses.js"></script>
 <script src="scripts/directives/regleStyle.js"></script>
@@ -196,6 +197,10 @@
 <script src="scripts/controllers/common/upgrade.modal.js"></script>
 <script src="scripts/controllers/workspace/print.modal.js"></script>
 <script src="scripts/directives/vocalSynthesis.js"></script>
+<script src="scripts/services/providers/dropbox.provider.js"></script>
+<script src="scripts/services/providers/cache.provider.js"></script>
+<script src="scripts/controllers/backup/my-backup.js"></script>
+<script src="scripts/services/oauth.service.js"></script>
 <!-- endbuild -->
 
 <script type="text/javascript">

@@ -243,12 +243,6 @@ describe('Controller:ApercuCtrl', function () {
         };
 
         fileStorageService = {
-            getFile: function () {
-                deferred = $q.defer();
-                // Place the fake return object here
-                deferred.resolve('<h1>test</h1>');
-                return deferred.promise;
-            },
             getTempFile: function () {
                 deferred = $q.defer();
                 // Place the fake return object here
@@ -261,7 +255,7 @@ describe('Controller:ApercuCtrl', function () {
                 deferred.resolve();
                 return deferred.promise;
             },
-            searchFiles: function () {
+            get: function () {
                 deferred = $q.defer();
                 // Place the fake return object here
                 deferred.resolve(filesFound);
@@ -496,7 +490,7 @@ describe('Controller:ApercuCtrl', function () {
         expect(scope.currentPage).toBe(1);
 
         // Case of a document of which the contents were never loaded
-        spyOn(fileStorageService, 'getFile').and.callFake(function () {
+        spyOn(fileStorageService, 'get').and.callFake(function () {
             deferred = $q.defer();
             // Place the fake return object here
             deferred.resolve(null);

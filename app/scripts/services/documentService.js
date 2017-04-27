@@ -25,7 +25,7 @@
 'use strict';
 
 /*global cnedApp */
-cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck, $uibModal, fileStorageService, md5, LoaderService) {
+cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck, $uibModal, fileStorageService, LoaderService) {
 
 
     var methods = {
@@ -61,7 +61,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             $log.debug('Check if document already exist', document);
 
-            fileStorageService.searchFiles($rootScope.isAppOnline, document.title, $rootScope.currentUser.dropbox.accessToken)
+            fileStorageService.get(document.title, 'document')
                 .then(function (filesFound) {
 
                     var isDocumentExist = false;
@@ -122,28 +122,21 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                             });
 
                     } else {
-                        LoaderService.setLoaderProgress(20);
-
-                        var documentName = '';
-
-                        if(mode === 'edit'){
-                            documentName = document.filePath;
-                        } else {
-                            var now = new Date();
-                            var tmpDate = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-                            var hash = md5.createHash(document.data);
-                            documentName = tmpDate + '_' + encodeURIComponent(document.title) + '_' + hash + '.html';
-                        }
-
                         LoaderService.setLoaderProgress(40);
 
-                        fileStorageService.saveFile($rootScope.isAppOnline, documentName, document.data, $rootScope.currentUser.dropbox.accessToken)
+                        var file =  {
+                            filename: document.title,
+                            filepath: document.filePath,
+                            data: document.data
+                        };
+
+                        fileStorageService.save(file, 'document')
                             .then(function (data) {
                                 LoaderService.setLoaderProgress(75);
                                 LoaderService.hideLoader();
-
                                 deferred.resolve(data);
-
+                            }, function(){
+                                deferred.reject();
                             });
                     }
 

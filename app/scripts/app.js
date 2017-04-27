@@ -39,7 +39,8 @@ var cnedApp = angular.module('cnedApp', [
     'ngAudio',
     'LocalForageModule',
     'angular-google-analytics',
-    '720kb.socialshare'
+    '720kb.socialshare',
+    'slick'
 ]);
 
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
@@ -61,17 +62,23 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
     $httpProvider.interceptors.push('app.httpinterceptor');
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
-    $urlRouterProvider.otherwise('/404');
+    $urlRouterProvider.otherwise('/');
 
     $stateProvider
         .state('app', {
             url: '',
-            abstract: true
+            abstract: true,
+            controller: 'CommonCtrl',
+            resolve: {
+                userData: function (UserService, $log) {
+                    $log.debug('Init user data');
+                    return UserService.init();
+                }
+            }
         })
         .state('app.home', {
             url: '/',
-            templateUrl: 'views/index/home.html',
-            controller: 'CommonCtrl'
+            templateUrl: 'views/index/home.html'
         })
         .state('app.overview', {
             url: '/apercu?idDocument&tmp&url&title&annotation&mode',
@@ -135,6 +142,31 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
         .state('app.404', {
             url: '/404',
             templateUrl: 'views/404/404.html'
+        })
+
+        .state('app.my-backup', {
+            url: '/ma-sauvegarde.html?auth',
+            templateUrl: 'views/backup/my-backup.html',
+            controller: 'MyBackupCtrl',
+            pageTrack: '/overview.html',  // angular-google-analytics extension,
+            resolve: {
+                auth: function ($stateParams, UserService, OauthService, $log) {
+
+                    if ($stateParams.auth) {
+
+                        OauthService.token().then(function (res) {
+                            $log.debug('get token ', res.data);
+                            return UserService.saveData(res.data);
+                        }, function () {
+                            return null;
+                        });
+
+                    } else {
+                        return null;
+                    }
+
+                }
+            }
         });
 });
 
@@ -176,57 +208,19 @@ angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, c
         });
     };
 
-    /*//environment variable for testing.
+    //environment variable for testing.
     if (!testEnv) {
         $rootScope.checkIsOnline().then(function () {
-            if ($rootScope.isAppOnline === true) {
-                //performing the check of the session.
-                $rootScope.sessionPool = $interval(serviceCheck.getData, $rootScope.sessionTime);
-                var url = $routeParams.url;
-                //If he was offline, as he is now online, bring it to authenticate
-                if ((!url || url.indexOf('dropboxusercontent') <= -1) && localStorage.getItem('wasOffline') === 'true') {
-
-                    localStorage.removeItem('wasOffline');
-                    $rootScope.loged = false;
-                    $routeParams.deconnexion = 'true';
-                    $location.path('/').search($routeParams);
-                }
-            }
+            //
         });
         $interval($rootScope.checkIsOnline, 5000);
     } else {
         $rootScope.isAppOnline = true;
-    }*/
+    }
 
     if (typeof io !== 'undefined') {
         $rootScope.socket = io.connect('https://localhost:3000', {secure: true});
     }
 
-    $rootScope.goHome = function () {
-        $location.path('/');
-    };
 
-    $rootScope.$on('$routeChangeStart', function (event, next) {
-
-        var data = {
-            id: false
-        };
-
-        if (window.location.href.indexOf('key=') > -1) {
-            var callbackKey = window.location.href.substring(window.location.href.indexOf('key=') + 4, window.location.href.length);
-            var tmp = [{
-                name: 'compteId',
-                value: callbackKey
-            }, {
-                name: 'listDocLink',
-                value: '#/listDocument'
-            }];
-            storageService.writeService(tmp, 0).then(function () {
-                data = {
-                    id: callbackKey
-                };
-                $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
-            });
-        }
-    });
 });

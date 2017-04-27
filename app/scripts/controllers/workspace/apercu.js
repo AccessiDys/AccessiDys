@@ -38,7 +38,7 @@ angular.module('cnedApp')
                                         verifyEmail, generateUniqueId, storageService, htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
-                                        gettextCatalog, $localForage, UtilsService, LoaderService,Analytics, ToasterService) {
+                                        gettextCatalog, $localForage, UtilsService, LoaderService, Analytics, ToasterService) {
 
         $scope.idDocument = $stateParams.idDocument;
         $scope.tmp = $stateParams.tmp;
@@ -197,7 +197,7 @@ angular.module('cnedApp')
          * and show them in the overview.
          */
         $scope.restoreNotesStorage = function (/* idx */) {
-            $log.debug('$scope.docSignature',$scope.docSignature);
+            $log.debug('$scope.docSignature', $scope.docSignature);
             $scope.notes = workspaceService.restoreNotesStorage($scope.docSignature);
         };
 
@@ -505,7 +505,7 @@ angular.module('cnedApp')
          * ---------- Process Print -----------
          */
 
-        $scope.openPrintModal = function(){
+        $scope.openPrintModal = function () {
             $uibModal.open({
                 templateUrl: 'views/workspace/print.modal.html',
                 controller: 'PrintModalCtrl',
@@ -660,7 +660,7 @@ angular.module('cnedApp')
 
                 if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf('<title>') > -1) {
                     $scope.urlTitle = UtilsService.cleanUpSpecialChars(htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<title>') + 7, htmlFile.documentHtml.indexOf('</title>')));
-                } else if(!$scope.urlTitle) {
+                } else if (!$scope.urlTitle) {
                     $scope.urlTitle = UtilsService.cleanUpSpecialChars(url);
                 }
 
@@ -677,21 +677,8 @@ angular.module('cnedApp')
                         $scope.$apply(function () {
 
                             $scope.originalHtml = html;
-
-                            // if is guest then load admin profiles
-                            if ($rootScope.isGuest) {
-                                $http.post(configuration.URL_REQUEST + '/findAdmin').then(function (result) {
-                                    localStorage.setItem('compteId', result.data._id);
-                                    return tagsService.getTags().then(function (resultTags) {
-                                        localStorage.setItem('listTags', JSON.stringify(resultTags));
-                                        $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                                        $scope.setPage($scope.currentPage);
-                                    });
-                                });
-                            } else {
-                                $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                                $scope.setPage($scope.currentPage);
-                            }
+                            $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
+                            $scope.setPage($scope.currentPage);
 
                         });
 
@@ -700,39 +687,11 @@ angular.module('cnedApp')
                 $timeout($scope.destroyCkeditor());
                 CKEDITOR.inline('virtualEditor', ckConfig);
             }, function (err) {
-                $log.error('err transform html' , err);
+                $log.error('err transform html', err);
                 UtilsService.showInformationModal('Erreur technique', 'L\'import du document a échoué. Une erreur technique est survenue.', null, true);
             });
         };
 
-        /**
-         * Recover the html contents of a doc
-         *
-         * @method $scope.getDocContent
-         * @param {String}
-         *            idDocument
-         * @return Promise
-         */
-        $scope.getDocContent = function (idDocument) {
-            var deferred = $q.defer();
-            serviceCheck.getData().then(function (result) {
-                var token = '';
-                if (result.user && result.user.dropbox) {
-                    token = result.user.dropbox.accessToken;
-                }
-                return fileStorageService.getFile($rootScope.isAppOnline, idDocument, token);
-            }).then(function (data) {
-                if (data === null) {
-                    deferred.reject();
-                } else {
-                    var content = workspaceService.parcourirHtml(data);
-
-                    deferred.resolve(content);
-                }
-            });
-
-            return deferred.promise;
-        };
 
         /**
          * Recover the tmp html content from the localStorage
@@ -794,11 +753,11 @@ angular.module('cnedApp')
             $scope.originalHtml = '';
             $scope.isSummaryActive = false;
 
-            if($scope.urlTitle){
+            if ($scope.urlTitle) {
                 $scope.urlTitle = UtilsService.cleanUpSpecialChars($scope.urlTitle);
             }
 
-            if($rootScope.isFullsize) {
+            if ($rootScope.isFullsize) {
                 $scope.resizeDocApercu = 'Agrandir';
             } else {
                 $scope.resizeDocApercu = 'Réduire';
@@ -818,11 +777,6 @@ angular.module('cnedApp')
 
             $scope.currentPage = 1;
 
-            if ($rootScope.isGuest || !$rootScope.loged) {
-                //if not connected : Load of admin profils as default profils
-                $rootScope.defaultProfilList = true;
-            }
-
             $localForage.getItem('vocalHelpShowed').then(function (result) {
                 if (!result) {
                     $scope.openVocalHelpModal();
@@ -841,8 +795,6 @@ angular.module('cnedApp')
                     $scope.urlPort = 80;
                 }
                 $scope.url = decodeURIComponent($scope.url);
-
-                $log.debug('$scope.url', $scope.url);
 
                 // In the case of an url of access to a pdf.
                 if ($scope.url.indexOf('.pdf') > 0) {
@@ -865,12 +817,13 @@ angular.module('cnedApp')
 
             // View from a document
             if ($scope.idDocument) {
-                var contentGet = $scope.getDocContent($scope.idDocument);
-                contentGet.then(function (data) {
+                fileStorageService.get($scope.idDocument, 'document').then(function (file) {
 
-                    $log.debug('get content data', data);
+                    $log.debug('get content data', file);
 
-                    $scope.content = data;
+                    $scope.content = workspaceService.parcourirHtml(file.data);
+
+                    $log.debug('$scope.content', $scope.content);
                     $scope.showTitleDoc($scope.idDocument);
                     $scope.showEditer = true;
                     $scope.setPage($scope.currentPage);
@@ -1069,27 +1022,6 @@ angular.module('cnedApp')
             }
         };
 
-        /**
-         * Checks whether the user is authenticated (logged in or in
-         * Offline mode) before generating the overview
-         *
-         * @method $scope.getUserAndInitApercu
-         */
-
-        $scope.getUserAndInitApercu = function () {
-            var url = $stateParams.url;
-            // ex: sharing document ref: CNED-383
-            if (url && url.indexOf('dropboxusercontent') > -1) {
-                $scope.init();
-            } else {
-                serviceCheck.getData().then(function () {
-                    if ($rootScope.loged === true) {
-                        $scope.init();
-                    }
-                });
-            }
-        };
-
         $rootScope.$on('profilChanged', function () {
             $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
         });
@@ -1211,6 +1143,7 @@ angular.module('cnedApp')
                 UtilsService.showInformationModal('label.offline', 'document.message.info.share.offline');
             } else {
 
+                // TODO changer l'appel
                 fileStorageService.searchFilesInDropbox('_' + $scope.idDocument + '_', $rootScope.currentUser.dropbox.accessToken).then(function (files) {
                     var file = null;
 
@@ -1224,7 +1157,7 @@ angular.module('cnedApp')
 
                     }
 
-                    if(file){
+                    if (file) {
                         var document = fileStorageService.transformDropboxFileToStorageFile(file);
 
                         var itemToShare = {
@@ -1236,8 +1169,8 @@ angular.module('cnedApp')
                         if (localStorage.getItem('notes') !== null) {
                             var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
 
-                            $log.debug('has notes ' , noteList.hasOwnProperty(document.filename));
-                            $log.debug('noteList ' , noteList);
+                            $log.debug('has notes ', noteList.hasOwnProperty(document.filename));
+                            $log.debug('noteList ', noteList);
 
                             if (noteList.hasOwnProperty(document.filename)) {
                                 itemToShare.annotationsToShare = noteList[document.filename];
@@ -1246,7 +1179,7 @@ angular.module('cnedApp')
 
                         fileStorageService.shareFile(document.filepath, $rootScope.currentUser.dropbox.accessToken)
                             .then(function (shareLink) {
-                                itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?title=' + encodeURIComponent(document.filename) +'&url=' + encodeURIComponent(shareLink);
+                                itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?title=' + encodeURIComponent(document.filename) + '&url=' + encodeURIComponent(shareLink);
 
                                 //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
                                 UtilsService.openSocialShareModal('document', itemToShare)
@@ -1272,5 +1205,5 @@ angular.module('cnedApp')
 
         };
 
-        $scope.getUserAndInitApercu();
+        $scope.init();
     });

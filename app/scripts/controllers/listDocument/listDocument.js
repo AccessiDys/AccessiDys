@@ -74,7 +74,7 @@ angular.module('cnedApp')
                     LoaderService.showLoader('document.message.info.delete.inprogress', true);
                     LoaderService.setLoaderProgress(30);
 
-                    fileStorageService.deleteFile($rootScope.isAppOnline, document.filepath, $rootScope.currentUser.dropbox.accessToken).then(function () {
+                    fileStorageService.delete(document, 'document').then(function () {
                         LoaderService.setLoaderProgress(100);
                         LoaderService.hideLoader();
                         /* Removing notes of the document on localStorage */
@@ -91,18 +91,14 @@ angular.module('cnedApp')
          * Rename a document title
          * @param document The document to be renamed
          */
-        $scope.renameDocumentTitle = function(document){
+        $scope.renameDocumentTitle = function (document) {
 
             documentService.editDocumentTitle(document.filename, [], 'edit')
                 .then(function (params) {
                     LoaderService.showLoader('document.message.info.rename.inprogress', true);
                     LoaderService.setLoaderProgress(10);
 
-                    var signature = /((_)([A-Za-z0-9_%]+))/i.exec(encodeURIComponent(document.filepath))[0].replace(/((_+)([A-Za-z0-9_%]*)(_+))/i.exec(encodeURIComponent(document.filepath))[0], '');
-                    var ladate = new Date();
-                    var tmpDate = ladate.getFullYear() + '-' + (ladate.getMonth() + 1) + '-' + ladate.getDate();
-                    var newTitle = tmpDate + '_' + encodeURIComponent(params.title) + '_' + signature;
-                    fileStorageService.renameFile($rootScope.isAppOnline, document.filepath, '/' + newTitle + '.html', $rootScope.currentUser.dropbox.accessToken)
+                    fileStorageService.rename(document, params.title, 'document')
                         .then(function () {
                             LoaderService.setLoaderProgress(80);
                             $scope.updateNote('EDIT');
@@ -139,9 +135,9 @@ angular.module('cnedApp')
                     }
                 }
 
-                fileStorageService.shareFile(document.filepath, $rootScope.currentUser.dropbox.accessToken)
+                fileStorageService.shareFile(document)
                     .then(function (shareLink) {
-                        itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?title=' + encodeURIComponent(document.filename) +'&url=' + encodeURIComponent(shareLink);
+                        itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?title=' + encodeURIComponent(document.filename) + '&url=' + encodeURIComponent(shareLink);
 
                         //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
                         UtilsService.openSocialShareModal('document', itemToShare)
@@ -205,20 +201,13 @@ angular.module('cnedApp')
 
         $scope.getListDocument = function () {
             LoaderService.showLoader('document.message.info.load', false);
-            return serviceCheck.getData().then(function (data) {
-                var dropboxToken = '';
-                if (data.user && data.user.dropbox) {
-                    dropboxToken = data.user.dropbox.accessToken;
-                }
-                LoaderService.setLoaderProgress(20);
-                fileStorageService.searchAllFiles($rootScope.isAppOnline, $rootScope.currentUser.dropbox.accessToken).then(function (listDocument) {
-                    LoaderService.setLoaderProgress(100);
-                    LoaderService.hideLoader();
-                    $scope.listDocument = listDocument;
-                    $scope.initialiseShowDocs();
-                }, function () {
-                    LoaderService.hideLoader();
-                });
+            LoaderService.setLoaderProgress(20);
+
+            fileStorageService.list('document').then(function (listDocument) {
+                LoaderService.setLoaderProgress(100);
+                LoaderService.hideLoader();
+                $scope.listDocument = listDocument;
+                $scope.initialiseShowDocs();
             }, function () {
                 LoaderService.hideLoader();
             });

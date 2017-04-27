@@ -34,7 +34,7 @@ angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($sc
      */
     $scope.closeModal = function () {
 
-        if(!$scope.profile.nom || $scope.profile.nom.length < 1) {
+        if(!$scope.profile.data.nom || $scope.profile.data.nom.length < 1) {
 
             ToasterService.showToaster('#rename-profile-success-toaster', 'profile.message.save.ko.name.mandatory');
 

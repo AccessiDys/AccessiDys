@@ -72,7 +72,7 @@ describe(
                     deferred.resolve({});
                     return deferred.promise;
                 },
-                searchFiles: function (online, query) {
+                get: function (online, query) {
                     deferred = q.defer();
                     // Place the fake return object here
                     if (query.indexOf('Doublon') !== -1) {
@@ -88,16 +88,9 @@ describe(
                     }
                     return deferred.promise;
                 },
-                getFile: function () {
-                    deferred = q.defer();
-                    // Place the fake return object here
-                    deferred.resolve({});
-                    return deferred.promise;
-                }
             };
             spyOn(modal, 'open').and.callThrough();
             spyOn(fileStorageService, 'saveTempFile').and.callThrough();
-            spyOn(fileStorageService, 'getFile').and.callThrough();
 
             documentService = {
                 openDocument: function () {
@@ -472,11 +465,11 @@ describe(
         });
 
         it('AddDocumentCtrl:editExistingDocument', function () {
-            spyOn(fileStorageService, 'searchFiles').and.callThrough();
+            spyOn(fileStorageService, 'get').and.callThrough();
             $scope.idDocument = 'file';
             $scope.editExistingDocument();
             expect($scope.pageTitre).toEqual('Editer le document');
-            expect(fileStorageService.searchFiles).toHaveBeenCalledWith(true, 'file', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn');
+            expect(fileStorageService.get).toHaveBeenCalledWith(true, 'file', 'PBy0CqYP99QAAAAAAAAAATlYTo0pN03u9voi8hWiOY6raNIH-OCAtzhh2O5UNGQn');
         });
 
         it('AddDocumentCtrl:createCKEditor', inject(function () {

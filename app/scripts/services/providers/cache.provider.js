@@ -1,0 +1,102 @@
+/*File: cache.provider.js
+ *
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+'use strict';
+
+cnedApp.factory('CacheProvider',
+    function ($q, $localForage, _) {
+
+        return {
+            list: function (storageName) {
+                return $localForage.getItem(storageName);
+            },
+            get: function (filename, storageName) {
+
+                var deferred = $q.defer();
+
+                $localForage.getItem(storageName).then(function (items) {
+                    if (data) {
+                        _.each(items, function (item) {
+                            if (item && item.filename === filename) {
+                                deferred.resolve(item);
+                            }
+                        });
+                    } else {
+                        deferred.resolve();
+                    }
+                });
+
+                return deferred.promise;
+            },
+            delete: function (file, storageName) {
+                return $localForage.removeItem(storageName, file);
+            },
+            saveAll: function (files, storageName) {
+                var deferred = $q.defer();
+
+                $localForage.setItem(storageName, files).then(function () {
+                    deferred.resolve(files);
+                });
+
+                return deferred.promise;
+            },
+            save: function (file, storageName) {
+
+                var deferred = $q.defer();
+
+                $localForage.getItem(storageName).then(function (items) {
+                    if (items) {
+                        var isFound = false;
+                        var index = 0;
+                        _.each(items, function (item) {
+                            if (item && file && item.filename === file.filename) {
+                                isFound = true;
+                            }
+                            index++;
+                        });
+
+                        if (isFound) {
+                            items[index] = file;
+                            $localForage.setItem(storageName, items).then(function () {
+                                deferred.resolve(file);
+                            });
+                        } else {
+                            items.push(file);
+                            deferred.resolve(file);
+                        }
+                    } else {
+                        $localForage.setItem(storageName, [file]).then(function () {
+                            deferred.resolve(file);
+                        });
+                    }
+                });
+
+                return deferred.promise;
+
+            }
+        };
+    });
+
+

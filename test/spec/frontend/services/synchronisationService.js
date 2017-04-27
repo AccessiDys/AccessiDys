@@ -133,7 +133,7 @@ describe(
                 };
 
                 fileStorageService = {
-                    searchFiles : function() {
+                    get : function() {
 
                     },
                     saveFile : function() {
@@ -175,7 +175,7 @@ describe(
                 spyOn(fileStorageService, 'renameFile').and.callFake(function() {
                     return deferred.promise;
                 });
-                spyOn(fileStorageService, 'searchFiles').and.callFake(function() {
+                spyOn(fileStorageService, 'get').and.callFake(function() {
                     return deferred2.promise;
                 });
 

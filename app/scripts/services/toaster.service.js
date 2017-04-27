@@ -43,7 +43,7 @@ cnedApp.service('ToasterService', function ($rootScope, $timeout, gettextCatalog
             $rootScope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
             $rootScope.forceToasterApdapt = true;
             $timeout(function () {
-                angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
+                //angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
                 $rootScope.forceToasterApdapt = false;
             }, 0);
         }

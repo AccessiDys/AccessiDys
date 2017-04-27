@@ -61,7 +61,7 @@ describe(
                         deferred.resolve({});
                         return deferred.promise;
                     },
-                    searchAllFiles : function() {
+                    list : function() {
                         deferred = q.defer();
                         // Place the fake return object here
                         deferred.resolve([ {

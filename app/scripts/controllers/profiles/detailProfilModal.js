@@ -35,7 +35,7 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
     var checkRequiredFields = function () {
         var isValid = true;
 
-        if (!$scope.profile.nom) {
+        if (!$scope.profile.data.nom) {
             ToasterService.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.mandatory');
             isValid = false;
         }
@@ -79,18 +79,6 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
 
         if (checkRequiredFields()) {
 
-            var profile = {
-                _id: $scope.profile._id,
-                nom: $scope.profile.nom,
-                owner: $scope.profile.owner,
-                descriptif: $scope.profile.descriptif,
-                photo: $scope.profile.photo,
-                preDelegated: $scope.profile.preDelegated,
-                updated: $scope.profile.updated,
-                state: $scope.profile.state,
-                delegated: $scope.profile.delegated
-            };
-
             switch ($scope.template) {
                 case 'create':
                     $scope.loaderMsg = 'Enregistrement du profil en cours ...';
@@ -106,32 +94,22 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
             $scope.loader = true;
 
             // Check if the profile name does not already exists
-            profilsService.lookForExistingProfile($rootScope.isAppOnline, profile)
+            profilsService.lookForExistingProfile(profile)
                 .then(function (res) {
                     if (!res) {
 
-                        if ($scope.template === 'create' || $scope.template === 'duplicate') {
-                            delete profile._id;
-                            profile.photo = './files/profilImage/profilImage.jpg';
-                            profilsService.addProfil($rootScope.isAppOnline, profile, $scope.profile.profileTags.tags)
-                                .then(function () {
-                                    if ($scope.template === 'duplicate') {
-                                        $scope.sendEmailDuplique();
-                                    }
+                        delete $scope.profile._id;
+                        $scope.profile.data.state = 'mine';
 
-                                    $scope.dismissModal('save');
-                                });
+                        profilsService.saveProfile($scope.profile)
+                            .then(function () {
+                                if ($scope.template === 'duplicate') {
+                                    $scope.sendEmailDuplique();
+                                }
 
-                        } else if ($scope.template === 'update') {
+                                $scope.dismissModal('save');
+                            });
 
-                            profilsService.updateProfil($rootScope.isAppOnline, profile)
-                                .then(function () {
-                                    profilsService.updateProfilTags($rootScope.isAppOnline, profile, $scope.profile.profileTags.tags).then(function () {
-                                        $scope.dismissModal('save');
-                                    });
-                                });
-
-                        }
 
                     } else {
                         ToasterService.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.alreadyexist');
@@ -140,7 +118,6 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
         }
 
     };
-
 
 
 });

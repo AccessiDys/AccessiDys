@@ -115,19 +115,6 @@ describe(
                     _id : 'testKO'
                 };
 
-                fileStorageService = {
-                    saveCSSInStorage : function() {
-                        deferred = q.defer();
-                        deferred.resolve({});
-                        return deferred.promise;
-                    },
-                    getCSSInStorage : function() {
-                        deferred = q.defer();
-                        // Place the fake return object here
-                        deferred.resolve({});
-                        return deferred.promise;
-                    }
-                };
                 synchronisationStoreService = {
                     storeTagToSynchronize : function(param) {
                         parameter = param;
@@ -143,8 +130,6 @@ describe(
                 };
                 spyOn(synchronisationStoreService, 'storeTagToSynchronize').and.callThrough();
                 spyOn(synchronisationStoreService, 'storeProfilToSynchronize').and.callThrough();
-                spyOn(fileStorageService, 'saveCSSInStorage').and.callThrough();
-                spyOn(fileStorageService, 'getCSSInStorage').and.callThrough();
 
                 module(function($provide) {
                     $provide.value('fileStorageService', fileStorageService);
@@ -167,22 +152,6 @@ describe(
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/ajouterProfils').respond(profilToUpdateOrDelete);
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/deleteProfil').respond('200');
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/setProfilTags').respond(profileTag);
-            }));
-
-            it('profilsService:getUrl', inject(function(profilsService, $httpBackend) {
-                localStorage.setItem('compteId', compteId);
-                localStorage.setItem('profilActuel', JSON.stringify(profil));
-                $httpBackend.expectGET(/\/cssProfil\/testProfil\?id=compteId.*/);
-                profilsService.getUrl();
-                $httpBackend.flush();
-                expect(fileStorageService.saveCSSInStorage).toHaveBeenCalled();
-                expect(fileStorageService.getCSSInStorage).toHaveBeenCalled();
-
-                localStorage.setItem('profilActuel', JSON.stringify(profilEchec));
-                $httpBackend.expectGET(/\/cssProfil\/testKO\?id=compteId.*/);
-                profilsService.getUrl();
-                $httpBackend.flush();
-                expect(fileStorageService.getCSSInStorage).toHaveBeenCalled();
             }));
 
             it('profilsService:updateProfil', inject(function(profilsService, $httpBackend, $rootScope) {

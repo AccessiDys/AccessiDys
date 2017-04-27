@@ -25,34 +25,48 @@
 'use strict';
 
 /*global cnedApp */
-cnedApp.service('UserService', function ($http, configuration, $uibModal) {
+cnedApp.service('UserService', function ($http, configuration, $localForage, $q) {
+
+    var userData = {
+        email: null,
+        firstName: null,
+        lastName: null,
+        provider: null,
+        token: null
+    };
 
     var methods = {
+
+        init: function () {
+            var deferred = $q.defer();
+
+            $localForage.getItem('userData').then(function (data) {
+                userData = data;
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        },
+
+        getData: function () {
+            return userData;
+        },
+
+        saveData: function (data) {
+            var deferred = $q.defer();
+
+            $localForage.setItem('userData', data).then(function () {
+                userData = data;
+                deferred.resolve(data);
+            });
+
+            return deferred.promise;
+        },
 
         findUserByEmail: function (email) {
             return $http.post(configuration.URL_REQUEST + '/findUserByEmail', {
                 email: email
             });
-        },
-
-
-        /**
-         * Open edit password modal
-         */
-        openEditPasswordModal: function(userId, token){
-            return $uibModal.open({
-                templateUrl: 'views/userAccount/edit-password.modal.html',
-                controller: 'editPasswordCtrl',
-                size: 'upgrade',
-                resolve: {
-                    userId: function () {
-                        return userId;
-                    },
-                    token: function () {
-                        return token;
-                    }
-                }
-            }).result;
         }
 
     };

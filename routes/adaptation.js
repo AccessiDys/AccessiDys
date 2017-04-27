@@ -26,8 +26,6 @@
 'use strict';
 var User = require('../models/User');
 
-var jwt = require('jwt-simple');
-var salt = 'toGenerateSalt';
 var socket = require('./socket.js');
 module.exports = function (app, passport) {
 
@@ -284,18 +282,15 @@ module.exports = function (app, passport) {
         }
     }
 
-    app.get('/adminService', isLoggedInAdmin, function (req, res) {
-        res.jsonp(200, req.user);
-    });
 
 
 
     // Routes for tag manipulating
     var tags = require('../api/dao/tag');
-    app.post('/addTag', checkIsLoged, tags.create);
+    app.post('/addTag', isLoggedInAdmin, tags.create);
     app.get('/readTags', tags.all);
-    app.post('/updateTag', checkIsLoged, tags.update);
-    app.post('/deleteTag', checkIsLoged, tags.remove);
+    app.post('/updateTag', isLoggedInAdmin, tags.update);
+    app.post('/deleteTag', isLoggedInAdmin, tags.remove);
     app.post('/getTagById', tags.findTagById);
 
     //test for manipulating image
@@ -334,11 +329,11 @@ module.exports = function (app, passport) {
     app.get('/listeProfils', populateUser, profils.listeProfils);
     app.post('/profilActuByToken', isLoggedIn, profils.profilActuByToken);
 
+    app.get('/profiles', profils.getProfiles);
+
     //route for userProfile manipulations
     var userProfil = require('../api/dao/userProfil');
     app.post('/ajouterUserProfil', isLoggedIn, userProfil.createUserProfil);
-    //app.post('/addUserProfil', userProfil.addUserProfil); //terre
-    //app.post('/removeUserProfile', isLoggedIn, userProfil.removeUserProfile);
     app.post('/setDefaultProfile', isLoggedIn, userProfil.setDefaultProfile);
     app.post('/chercherProfilParDefaut', userProfil.chercherProfilParDefaut); //free
     app.post('/chercherProfilActuel', isLoggedIn, userProfil.chercherProfilActuel);
@@ -370,71 +365,6 @@ module.exports = function (app, passport) {
     app.post('/deleteByProfilID', isLoggedIn, profilsTags.deleteByProfilID);
     app.post('/setProfilTags', isLoggedIn, profilsTags.setProfilTags);
 
-    //route for userAccount manipulations
-    var userAccount = require('../api/dao/userAccount');
-    app.post('/modifierInfosCompte', isLoggedIn, userAccount.update);
-    app.get('/allAccounts', isLoggedInAdmin, userAccount.all);
-    app.post('/deleteAccounts', isLoggedInAdmin, userAccount.supprimer);
-    app.post('/updateall', isLoggedInAdmin, userAccount.updateAll);
-    app.post('/modifierPassword', isLoggedIn, userAccount.modifierPassword);
-    app.post('/restorePassword', userAccount.restorePassword); //not loged
-    app.post('/saveNewPassword', userAccount.saveNewPassword); //not loged
-    app.post('/createAccount', userAccount.create);
-    app.post('/checkPasswordToken', userAccount.checkPasswordToken);
-    app.post('/findAdmin', userAccount.findAdmin);
-    app.post('/findUserById', userAccount.findUserById);
-    app.post('/findUserByEmail', userAccount.findUserByEmail);
-    app.post('/setAuthorisations', isLoggedInAdmin, userAccount.setAuthorisations);
-
-
-    /*var sysParamDAO = require('../api/dao/sysParamDAO');
-    app.post('/createVersion', isLoggedInAdmin, sysParamDAO.create);
-    app.post('/updateVersion', isLoggedInAdmin, sysParamDAO.update);
-    app.post('/allVersion', checkIsLoged, sysParamDAO.all);
-    app.post('/findTagByIdVersion', sysParamDAO.findTagById);*/
-
-
-    //profils service
-
-    var profils = require('../api/services/profils');
-    app.get('/cssProfil/:id', profils.getCSSProfil);
-
-
-    //passportJS
-    app.post('/checkIdentity', isLoggedIn, function (req, res) {
-        var user = req.user;
-        if (req.user._id == req.body.documentOwnerId) {
-            helpers.journalisation(1, req.user, req._parsedUrl.path, '');
-            res.jsonp(200, {
-                isOwner: true
-            });
-        } else {
-            helpers.journalisation(-1, req.user, req._parsedUrl.path, '');
-            res.jsonp(200, {
-                isOwner: false
-            });
-        }
-
-    });
-
-    app.post('/signup', passport.authenticate('local-signup', {
-            failureRedirect: '/#/',
-            failureFlash: true
-        }),
-
-        function (req, res) {
-            res.jsonp(req.user);
-        });
-
-    app.get('/login', passport.authenticate('local-login', {
-            failureRedirect: '/#/',
-            failureFlash: true
-        }),
-
-        function (req, res) {
-            res.jsonp(200, req.user);
-        });
-
     app.get('/profile', isLoggedIn, function (req, res) {
         var user = req.user;
         user.local.password = '';
@@ -451,38 +381,24 @@ module.exports = function (app, passport) {
         res.jsonp(200, user);
     });
 
-    app.get('/logout', isLoggedIn, function (req, res) {
-        User.findOne({
-            'local.token': req.user.local.token
-        }, function (err, user) {
-            if (err || !user) {
-                res.send(200);
-            } else {
-                user.local.tokenTime = '';
-                user.save(function (err) {
-                    if (err) {
-                        var item = {
-                            message: 'il ya un probleme dans la sauvgarde '
-                        };
-                        helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
-                        res.send(401, item);
-                    } else {
-                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-                        req.user = {};
-                        res.send(200);
-                    }
-                });
-
-            }
-        });
-    });
-
 
     app.get('/auth/dropbox', passport.authenticate('dropbox-oauth2'));
 
     app.get('/auth/dropbox/callback', passport.authenticate('dropbox-oauth2', {
-        failureRedirect: '/login'
+        failureRedirect: '/'
     }), function (req, res) {
-        res.redirect('/#/inscriptionContinue');
+        req.session.user = req.user;
+        res.redirect('/#/ma-sauvegarde.html?auth=true');
     });
+
+    app.get('/auth/token',  function (req, res) {
+
+        if(req.session.user){
+            res.send(req.session.user);
+        } else {
+            res.send();
+        }
+    });
+
+
 };

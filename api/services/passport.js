@@ -66,17 +66,16 @@ var events = require('events');
 module.exports = function (passport) {
 
     passport.serializeUser(function (user, done) {
-        done(null, user.id);
+        done(null, user);
     });
 
     // used to deserialize the user
     passport.deserializeUser(function (id, done) {
-        User.findById(id, function (err, user) {
-            done(err, user);
-        });
+        done(null, null);
     });
 
     passport.use(new DropboxOAuth2Strategy({
+            apiVersion: '2',
             clientID: DROPBOX_CLIENT_ID,
             clientSecret: DROPBOX_CLIENT_SECRET,
             callbackURL: URL_REQUEST + '/auth/dropbox/callback',
@@ -85,18 +84,14 @@ module.exports = function (passport) {
 
         function (req, accessToken, refreshToken, profile, done) {
             if (req) {
-                helpers.journalisation(0, req.user, req._parsedUrl.pathname, '[]');
-                var tmp = req.user;
-                tmp.dropbox.uid = profile._json.uid;
-                tmp.dropbox.display_name = profile._json.display_name;
-                tmp.dropbox.emails = profile._json.email;
-                tmp.dropbox.country = profile._json.country;
-                tmp.dropbox.referral_link = profile._json.referral_link;
-                tmp.dropbox.accessToken = accessToken;
-                tmp.save(function (err) {
-                    if (err) throw err;
-                    helpers.journalisation(1, tmp, req._parsedUrl.pathname, 'ID : [' + tmp._id + '] ' + ' Email : [' + tmp.local.email + ']' + ' dropbox-Email : [' + profile._json.email + '] ');
-                    return done(null, tmp);
+                console.log(profile._json);
+
+                return done(null, {
+                    email: profile._json.email,
+                    firstName:profile._json.name.given_name,
+                    lastName:profile._json.name.surname,
+                    token: accessToken,
+                    provider: 'dropbox'
                 });
             }
         }));

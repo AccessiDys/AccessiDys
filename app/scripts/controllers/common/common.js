@@ -25,34 +25,59 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, $location, $timeout, serviceCheck, gettextCatalog, $http,
-                                                             configuration, dropbox, storageService, profilsService, $localForage, $interval,
-                                                             $uibModal, tagsService, $log, UtilsService) {
+angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, profilsService, $uibModal, tagsService, $log, UserService, $state, userData) {
 
+    $log.debug('commonCtrl - userData', userData);
+
+    $rootScope.listeProfiles = [];
+    $rootScope.currentProfile = {};
+    $rootScope.$state = $state;
 
     $rootScope.isFullsize = true;
-    $rootScope.indexLoader = false;
-    $scope.logout = $rootScope.loged;
     $scope.admin = $rootScope.admin;
-    $scope.missingDropbox = $rootScope.dropboxWarning;
     $rootScope.apercu = false;
 
-    $rootScope.updateListProfile = false;
-    $rootScope.defaultProfilList = false;
-    $rootScope.updateProfilListe = false;
-    $rootScope.modifProfilListe = false;
-    $scope.testEnv = false;
     $scope.profilActuel = '';
-    $scope.listeProfilsParUser = [];
     $scope.form = {
         currentProfile: ''
     };
 
-    $scope.logoRedirection = configuration.DEFAULT_PATH;
-
     $rootScope.$on('refreshProfilAcutel', function (event, data) {
         $scope.listeProfilsParUser = data;
     });
+
+
+    $scope.initCommon = function () {
+
+        UserService.init();
+
+        // Init profile list and Tag
+
+        /*profilsService.getDefaultProfiles().then(function (res) {
+            $rootScope.listeProfiles = $rootScope.listeProfiles.concat(res);
+        });*/
+
+        profilsService.getProfiles().then(function (res) {
+
+            $log.debug('DEBUG - res', res);
+            $rootScope.listeProfiles = res;
+
+        });
+
+
+    };
+
+    $scope.onChangeCurrentProfile = function () {
+        $scope.currentProfile = angular.copy($scope.form.currentProfile);
+    };
+
+    $rootScope.openVocalHelpModal = function () {
+        $uibModal.open({
+            templateUrl: 'views/infoPages/vocalHelp.html',
+            controller: 'VocalHelpModalCtrl',
+            size: 'lg'
+        });
+    };
 
     $scope.bookmarkletPopin = function () {
         $uibModal.open({
@@ -65,258 +90,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     };
 
-    $scope.currentUserFunction = function () {
-        var token;
-        if (localStorage.getItem('compteId')) {
-            token = {
-                id: localStorage.getItem('compteId')
-            };
-        }
-        $http.post(configuration.URL_REQUEST + '/profilActuByToken', token).success(function (data) {
-
-            localStorage.setItem('profilActuel', JSON.stringify(data));
-            $scope.profilActuel = data.nom;
-            $scope.form.currentProfile = angular.copy($scope.profilActuel);
-            $scope.setDropDownActuel = data;
-        });
-    };
-
-    $rootScope.$watch('currentUser', function () {
-        $scope.currentUserData = $rootScope.currentUser;
-        if ($scope.currentUserData && $scope.currentUserData._id) {
-            $scope.token = {
-                id: $scope.currentUserData.local.token
-            };
-            $scope.currentUserFunction();
-        }
-    });
-
-    $rootScope.$watch('actu', function () {
-        if ($rootScope.actu && $scope.dataActuelFlag) {
-            if ($rootScope.actu.owner === $scope.dataActuelFlag.userID && $scope.dataActuelFlag.actuel === true) {
-                $scope.currentUserFunction();
-            }
-        }
-    });
-
-    $rootScope.$watch('updateListProfile', function () {
-        if ($scope.currentUserData) {
-
-            $scope.afficherProfilsParUser();
-        }
-    });
-
-    /*
-     * check if a defaultProfilList as been asked
-     */
-    $rootScope.$watch('defaultProfilList', function () {
-        if ($rootScope.defaultProfilList) {
-            //get from admin configuration the default profilList
-            $http.post(configuration.URL_REQUEST + '/findAdmin').then(function (result) {
-                $scope.currentUserData = {
-                    _id: result.data._id,
-                    local: {
-                        role: 'user'
-                    }
-                };
-                $scope.token = {};
-                localStorage.setItem('compteId', result.data.local.token);
-                $scope.afficherProfilsParUser();
-            }, function (error) {
-                $log.error('Error during getting Default profil :' + error);
-            });
-        }
-    });
-
-    $scope.initCommon = function () {
-        $log.debug('initCommon --->');
-
-        $rootScope.defaultProfilList = false;
-
-        serviceCheck.getData()
-            .then(function (result) { // this is only run after $http completes
-                $log.log('result ' + result);
-
-                if (result.loged) {
-                    $scope.logoRedirection = configuration.HOMEPAGE_PATH;
-
-                    if (result.dropboxWarning === false) {
-                        $rootScope.dropboxWarning = false;
-                        $scope.missingDropbox = false;
-                        $rootScope.loged = true;
-                        $rootScope.admin = result.admin;
-                        if ($location.path() !== '/inscriptionContinue') {
-                            $location.path('/inscriptionContinue');
-                        }
-                    } else {
-                        $rootScope.loged = true;
-                        $rootScope.dropboxWarning = true;
-                        $rootScope.admin = result.admin;
-                        $rootScope.currentUser = result.user;
-
-                        if (localStorage.getItem('compteId')) {
-                            $scope.requestToSend = {
-                                id: localStorage.getItem('compteId')
-                            };
-
-                            tagsService.getTags($scope.requestToSend).then(function (data) {
-                                $scope.listTags = data;
-                                localStorage.removeItem('listTags');
-                                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-                            });
-                        }
-                        $scope.token = {
-                            id: $rootScope.currentUser.local.token
-                        };
-                        $scope.listDocumentDropBox = $rootScope.listDocumentDropBox;
-                    }
-                    $rootScope.updateListProfile = true;
-                } else {
-
-                    //User is not logged on
-
-                    var lien = window.location.href;
-                    if ($rootScope.loged) {
-
-                        //'User is defined as logged on rootScope
-
-                        if ($location.path() === '/detailProfil' && lien.indexOf('#/detailProfil') > -1 && $rootScope.loged !== true) {
-                            //'Looking for detailProfil
-                            $scope.listDocumentDropBox = '#/';
-                            $scope.profilLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-                            $scope.userAccountLink = $location.absUrl().substring(0, $location.absUrl().indexOf('#/'));
-                        }
-                    } else {
-                        //User is Guest
-                        $scope.isGuest = true;
-                        $rootScope.isGuest = true;
-
-                    }
-                }
-            });
-    };
-
-    // displays user profiles
-    $scope.afficherProfilsParUser = function () {
-
-        $log.debug('afficherProfilsParUser --->');
-
-        $scope.requestToSend = {};
-        if (localStorage.getItem('compteId')) {
-            $scope.requestToSend = {
-                id: localStorage.getItem('compteId')
-            };
-        }
-        tagsService.getTags($scope.requestToSend).then(function (data) {
-            $scope.listTags = data;
-            localStorage.setItem('listTags', JSON.stringify(data));
-        });
-
-        profilsService.getProfilsByUser($rootScope.isAppOnline)
-            .then(function (data) {
-                /* Filter Admin profiles */
-                if ($scope.currentUserData && $scope.currentUserData.local.role === 'admin') {
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].type === 'profile' && data[i].state === 'mine') {
-                            for (var j = 0; j < data.length; j++) {
-                                if (data[i]._id === data[j]._id && data[j].state === 'default' && data[j].owner === $scope.currentUserData._id) {
-                                    data[i].stateDefault = true;
-                                    data.splice(j, 2);
-                                }
-                            }
-                        }
-                    }
-                }
-                $scope.listeProfilsParUser = data;
-                var profilActuelStorage = localStorage.getItem('profilActuel');
-                if (profilActuelStorage) {
-                    $scope.profilActuel = JSON.parse(profilActuelStorage).nom;
-                    $scope.form.currentProfile = angular.copy($scope.profilActuel);
-                    // Loading profile
-                    $scope.changeProfilActuel();
-
-                }
-            });
-    };
-
-    $scope.onChangeCurrentProfile = function () {
-        $scope.profilActuel = angular.copy($scope.form.currentProfile);
-
-        $scope.changeProfilActuel();
-    };
-
-    $scope.changeProfilActuel = function () {
-
-        $log.debug('changeProfilActuel --->');
-        $log.debug('actuelProfile', $scope.profilActuel);
-
-        // Set the Json of the selected current profile
-        var profilActuelSelected = {};
-        var profilFound = false;
-        for (var i = 0; i < $scope.listeProfilsParUser.length; i++) {
-            if ($scope.listeProfilsParUser[i].type === 'profile' && $scope.listeProfilsParUser[i].nom === $scope.profilActuel) {
-                profilActuelSelected = $scope.listeProfilsParUser[i];
-                profilFound = true;
-            }
-        }
-
-        if (!profilFound && $scope.listeProfilsParUser.length > 0) {
-            profilActuelSelected = $scope.listeProfilsParUser[0];
-        }
-
-        $scope.profilUser = {
-            profilID: profilActuelSelected._id,
-            userID: $scope.currentUserData._id
-        };
-
-        $scope.profilUserFavourite = {
-            profilID: profilActuelSelected._id,
-            userID: $scope.currentUserData._id,
-            favoris: true
-        };
-        if ($scope.token && $scope.token.id) {
-            $scope.token.profilesFavs = $scope.profilUserFavourite;
-        } else {
-            $scope.token.id = localStorage.getItem('compteId');
-            $scope.token.profilesFavs = $scope.profilUserFavourite;
-        }
-
-        $scope.token.newActualProfile = $scope.profilUser;
-
-        $scope.requestToSend = {};
-        if (localStorage.getItem('compteId')) {
-            $scope.requestToSend = {
-                id: localStorage.getItem('compteId')
-            };
-        }
-
-        tagsService.getTags($scope.requestToSend).then(function (data) {
-            $scope.listTags = data;
-            localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-
-            localStorage.setItem('profilActuel', JSON.stringify(profilActuelSelected));
-            $http.post(configuration.URL_REQUEST + '/ajouterUserProfil', $scope.token)
-                .success(function (data) {
-                    $scope.userProfilFlag = data;
-                });
-
-            profilsService.getProfilTags(profilActuelSelected._id).then(function (data) {
-                $scope.listTagsByProfil = data;
-                localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-
-                $timeout(function () {
-                    $rootScope.$emit('profilChanged');
-                }, 10);
-            });
-        });
-    };
-
-    $rootScope.openVocalHelpModal = function () {
-        $uibModal.open({
-            templateUrl: 'views/infoPages/vocalHelp.html',
-            controller: 'VocalHelpModalCtrl',
-            size: 'lg'
-        });
-    };
+    $scope.initCommon();
 
 });
