@@ -427,6 +427,7 @@ exports.listeProfils = function (req, res) {
             },
             function (arg1, arg2, callback) {
                 /* Favourite profiles */
+		console.log('Favourite profiles');
 
                 UserProfil.find({
                     userID: req.user._id,
@@ -441,6 +442,7 @@ exports.listeProfils = function (req, res) {
 
                             var stringProfilsIds = [];
                             for (var i = 0; i < item.length; i++) {
+				console.log('Profile ID = ', item[i].profilID);
                                 stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
                             }
 
@@ -471,6 +473,7 @@ exports.listeProfils = function (req, res) {
             },
             function (arg1, arg2, arg3, callback) {
                 /* delegated Profiles. */
+		console.log('Delegated profiles');
                 UserProfil.find({
                     delegatedID: req.user._id,
                     delegate: true
@@ -484,7 +487,8 @@ exports.listeProfils = function (req, res) {
 
                             var stringProfilsIds = [];
                             for (var i = 0; i < item.length; i++) {
-                                stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
+                                console.log('Profile ID = ', item[i].profilID);
+				stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
                             }
 
                             if (stringProfilsIds.length > 0) {
@@ -514,7 +518,7 @@ exports.listeProfils = function (req, res) {
             },
             function (arg1, arg2, arg3, arg4, callback) {
                 /* Default profiles */
-
+		console.log('Default Profile');
                 UserProfil.find({
                     'default': true
                 }, function (err, item) {
@@ -526,8 +530,14 @@ exports.listeProfils = function (req, res) {
                         if (item) {
 
                             var stringProfilsIds = [];
+				var tmpList = [];
+
                             for (var i = 0; i < item.length; i++) {
-                                stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
+				if(tmpList.indexOf(item[i].profilID)< 0 && mongoose.Types.ObjectId.isValid(item[i].profilID)){
+					console.log('Profile ID = ', item[i].profilID);
+					stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
+					tmpList.push(item[i].profilID);
+				}
                             }
 
                             if (stringProfilsIds.length > 0) {
@@ -561,13 +571,11 @@ exports.listeProfils = function (req, res) {
             function (arg1, arg2, arg3, arg4, arg5, callback) {
                 /* Selections of the tags of profile */
 
+		console.log('listeProfils length = ' ,listeProfils.length );
                 var stringProfilsIds = [];
                 for (var i = 0; i < listeProfils.length; i++) {
                     stringProfilsIds.push(listeProfils[i]._id);
                 }
-
-                console.log('=========== > ');
-                console.log('stringProfilsIds = ' + stringProfilsIds);
 
                 ProfilTag.find({
                     profil: {
