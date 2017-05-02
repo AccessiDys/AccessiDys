@@ -42,10 +42,10 @@
                     <label>Profil actuel</label>
                     <select id="headerSelect"
                             style="-webkit-appearance: menulist-button; width: 215px; position: absolute; opacity: 0; height: 43px; font-size: 18px;"
-                            data-ng-model="form.currentProfile" ng-change="onChangeCurrentProfile()">
-                        <option data-ng-repeat="profile in listeProfiles" data-ng-value="profile.data.nom">
-                            {{profile.data.nom}}
-                        </option>
+                            data-ng-model="currentProfile"
+                            data-ng-change="onChangeCurrentProfile(currentProfile)"
+                            ng-options="profile as profile.data.nom for profile in profiles track by profile.data.nom">
+
                     </select>
 
                     <span class="customSelect ng-pristine ng-untouched ng-valid" style="display: inline-block;">
@@ -86,10 +86,11 @@
                                 Web adapté
                             </a>
                         </li>
-                        <li class="bookmarklet" ui-sref-active="app.my-backup">
+                        <li class="my-backup" ui-sref-active="app.my-backup">
                             <a ui-sref="app.my-backup" title="Ma sauvegarde">
-                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                <i class="fa fa-floppy-o left" aria-hidden="true"></i>
                                 Ma sauvegarde
+                                <i class="fa fa-exclamation-triangle right" aria-hidden="true" data-ng-if="!userData.token"></i>
                             </a>
                         </li>
                     </ul>
@@ -119,5 +120,7 @@
         </div>
     </div>
 </div>
+
+
 
 

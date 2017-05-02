@@ -21,26 +21,34 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
+
 <h1 id="titreProfile" class="animated fadeInLeft" translate>Profils</h1>
 <div class="content" id="global_container">
     <div id="profilePage" data-ng-init="initProfil()" document-methodes=""
          class="doc-General">
 
-        <div class="alert-block alert-success alert-dismissable" id="profile-success-toaster">
+        <div class="alert-block alert-success alert-dismissable " id="profile-success-toaster">
             <i class="fa fa-check" aria-hidden="true"></i>
 
-            <strong regle-style="toasterMsg"
-                    apply-rules="forceToasterApdapt"
-                    tags="listTagsByProfilToaster">
+            <strong profile-coloration
+                    profile="currentProfile"
+                    text-livereload="true"
+                    parent="#profile-success-toaster"
+                    text="{{toasterMsg}}"
+                    class="{{currentProfile.data.className}}">
             </strong>
         </div>
 
-        <div class="alert-block alert-danger alert-dismissable" id="profile-error-toaster">
+        <div class="alert-block alert-danger alert-dismissable"
+             id="profile-error-toaster">
             <i class="fa fa-times" aria-hidden="true"></i>
 
-            <strong regle-style="toasterMsg"
-                    apply-rules="forceToasterApdapt"
-                    tags="listTagsByProfilToaster">
+            <strong profile-coloration
+                    profile="currentProfile"
+                    text-livereload="true"
+                    parent="#profile-error-toaster"
+                    text="{{toasterMsg}}"
+                    class="{{currentProfile.data.className}}">
             </strong>
         </div>
 
@@ -56,7 +64,8 @@
             <thead>
             <tr>
                 <th>
-                    <span class="cursor-pointer sort-column" data-ng-click="sortType = 'nom'; sortReverse = !sortReverse">
+                    <span class="cursor-pointer sort-column"
+                          data-ng-click="sortType = 'nom'; sortReverse = !sortReverse">
                         nom
                         <i class="fa" aria-hidden="true" data-ng-if="sortType === 'nom'"
                            data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
@@ -66,7 +75,8 @@
                 <th>descriptif</th>
                 <th>propriétaire</th>
                 <th>
-                    <span class="cursor-pointer sort-column" data-ng-click="sortType = 'updated'; sortReverse = !sortReverse">
+                    <span class="cursor-pointer sort-column"
+                          data-ng-click="sortType = 'updated'; sortReverse = !sortReverse">
                         date
                         <i class="fa" aria-hidden="true" data-ng-if="sortType === 'updated'"
                            data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
@@ -110,31 +120,31 @@
                     </button>
                     <ul class="action_list" uib-dropdown-menu>
                         <li class="setting_item"
-                            data-ng-hide="profile.state === 'favoris' || isOwnerDelagate(profile) || profile.state == 'default'">
+                            data-ng-hide="!isOwner(profile) || profile.state === 'favoris' || isOwnerDelagate(profile) || profile.state == 'default'">
                             <a href="" title="{{'Modifier' | translate}}"
                                data-ng-click="update(profile);" name="edit_profile">
                                 Modifier
                             </a>
                         </li>
-                        <li data-ng-if="admin && isDefault(profile) && isDeletableIHM(profile)"
+                        <li data-ng-if="admin && isDefault(profile) && isOwner(profile)"
                             class="default_profil">
                             <a href="" title="Retirer profil par défaut" data-ng-click="retirerParDefaut(profile)">
                                 Retirer profil par défaut
                             </a>
                         </li>
-                        <li data-ng-if="admin && !isDefault(profile) && isDeletableIHM(profile)"
+                        <li data-ng-if="admin && !isDefault(profile) && isOwner(profile)"
                             class="default_profil">
                             <a href="" title="Profil par défaut" data-ng-click="mettreParDefaut(profile)">
                                 Profil par défaut
                             </a>
                         </li>
                         <li class="duplicating_item"
-                            data-ng-show="profile.state == 'favoris' || profile.state == 'delegated' || profile.state == 'default'">
+                            data-ng-show="profile.data.state === 'favoris' || profile.data.state === 'delegated' || profile.data.state === 'default'">
                             <a href title="Dupliquer" data-ng-click="duplicate(profile)">
                                 Dupliquer
                             </a>
                         </li>
-                        <li class="delegate" data-ng-show="isDelegatedOption(profile)">
+                        <li class="delegate" data-ng-show="false">
                             <a href title="{{'Delegate' | translate}}" data-ng-click="delegateProfile(profile)">
                                 {{'Delegate' | translate}}
                             </a>
@@ -156,7 +166,7 @@
                                 Partager
                             </a>
                         </li>
-                        <li class="removing_item" data-ng-show="isDeletableIHM(profile)">
+                        <li class="removing_item" data-ng-show="isOwner(profile)">
                             <a href data-toggle="modal"
                                data-target="#deleteModal"
                                data-dismiss="modal"
@@ -182,14 +192,11 @@
             </tr>
             <tr>
                 <td colspan="6">
-                    <div class="resetAll apercu-tags" style="margin-bottom: 20px"
+                    <div class="resetAll {{profile.data.className}} preview" style="margin-bottom: 20px;"
                          data-ng-repeat="profileTag in profile.data.profileTags"
-                         regle-style="profileTag.texte"
-                         tags="profile.data.profileTags"
-                         apply-rules="forceApplyRules"
-                         data-show-loader="showLoaderFromLoop($index)"
-                         data-hide-loader="hideLoaderFromLoop($index, profile.data.profileTags.length)"
-                         preview="true">
+                         profile-coloration
+                         profile="profile"
+                         text="{{profileTag.texte}}">
                     </div>
                 </td>
             </tr>

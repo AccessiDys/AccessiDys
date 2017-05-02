@@ -248,34 +248,9 @@ describe('Controller:ProfilesCtrl', function () {
                 deferred.resolve(profil);
                 return deferred.promise;
             },
-            getProfilsByUser: function () {
-                deferred = q.defer();
-                deferred.resolve(profiles);
-                return deferred.promise;
-            },
             deleteProfil: function () {
                 deferred = q.defer();
                 deferred.resolve(profil);
-                return deferred.promise;
-            },
-            getProfilTags: function () {
-                deferred = q.defer();
-                deferred.resolve(profiles);
-                return deferred.promise;
-            },
-            updateProfil: function () {
-                deferred = q.defer();
-                deferred.resolve(profil);
-                return deferred.promise;
-            },
-            updateProfilTags: function () {
-                deferred = q.defer();
-                deferred.resolve(tags);
-                return deferred.promise;
-            },
-            getUserProfil: function () {
-                deferred = q.defer();
-                deferred.resolve(profile);
                 return deferred.promise;
             },
             lookForExistingProfile: function () {
@@ -582,19 +557,6 @@ describe('Controller:ProfilesCtrl', function () {
         };
         expect($scope.isDelegatedOption).toBeDefined();
         $scope.isDelegatedOption(param);
-    }));
-
-    it('ProfilesCtrl:isDeletableIHM()', inject(function () {
-        var param = {
-            delegated: false,
-            preDelegated: false,
-            owner: '123456'
-        };
-        $scope.currentUserData = {
-            _id: '123456'
-        };
-        expect($scope.isDeletableIHM).toBeDefined();
-        $scope.isDeletableIHM(param);
     }));
 
 

@@ -23,14 +23,8 @@
  -->
 
 <!doctype html>
-<!--[if lt IE 7]>
-<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>
-<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>
-<html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="fr"> <!--<![endif]-->
+
+<html class="no-js" lang="fr" data-ng-app="cnedApp">
 <head>
     <meta name="utf8beacon" content="éçñøåá—"/>
     <meta charset="utf-8">
@@ -60,8 +54,12 @@
     <link rel="stylesheet" href="styles/styles.min.css">
 
 
+    <style type="text/css" profile-style ng-repeat="profile in profiles" profile="profile"></style>
+    <style type="text/css" profile-style profile="tmpProfile"></style>
+
+
 </head>
-<body key-trap class="body-home" data-ng-app="cnedApp" history-browser="" data-ng-class="{'pt-105': isFullsize}">
+<body key-trap class="body-home"  history-browser="" data-ng-class="{'pt-105': isFullsize}">
 
 <div id="fb-root"></div>
 <script>
@@ -110,7 +108,6 @@
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
-<script src="bower_components/angular-route/angular-route.js"></script>
 <script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
 <script src="bower_components/angular-audio/app/angular.audio.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
@@ -127,6 +124,7 @@
 <script src="bower_components/angular-localforage/dist/angular-localForage.js"></script>
 <script src="bower_components/angular-md5/angular-md5.js"></script>
 <script src="bower_components/Hyphenator/Hyphenator.js"></script>
+<script src="bower_components/Hyphenator/patterns/fr.js"></script>
 <script src="bower_components/jszip/dist/jszip.js"></script>
 <script src="bower_components/pdfjs-dist/build/pdf.js"></script>
 <script src="bower_components/pdfjs-dist/build/pdf.worker.js"></script>
@@ -194,13 +192,13 @@
 <script src="scripts/controllers/tag/edit-tag.modal.js"></script>
 <script src="scripts/controllers/common/bookmarklet.modal.js"></script>
 <script src="scripts/directives/historyBrowser.js"></script>
-<script src="scripts/controllers/common/upgrade.modal.js"></script>
 <script src="scripts/controllers/workspace/print.modal.js"></script>
 <script src="scripts/directives/vocalSynthesis.js"></script>
 <script src="scripts/services/providers/dropbox.provider.js"></script>
 <script src="scripts/services/providers/cache.provider.js"></script>
 <script src="scripts/controllers/backup/my-backup.js"></script>
 <script src="scripts/services/oauth.service.js"></script>
+<script src="scripts/directives/profileColoration.js"></script>
 <!-- endbuild -->
 
 <script type="text/javascript">

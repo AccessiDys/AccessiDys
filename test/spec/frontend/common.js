@@ -128,16 +128,6 @@ describe(
                     deferred = q.defer();
                     deferred.resolve('blob://12ac');
                     return deferred.promise;
-                },
-                getProfilsByUser: function () {
-                    deferred = q.defer();
-                    deferred.resolve(profils);
-                    return deferred.promise;
-                },
-                getProfilTags: function () {
-                    deferred = q.defer();
-                    deferred.resolve(profils);
-                    return deferred.promise;
                 }
             };
         });

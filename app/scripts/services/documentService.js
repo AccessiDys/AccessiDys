@@ -25,7 +25,7 @@
 'use strict';
 
 /*global cnedApp */
-cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck, $uibModal, fileStorageService, LoaderService) {
+cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck, $uibModal, fileStorageService, LoaderService, _, UserService, UtilsService) {
 
 
     var methods = {
@@ -61,23 +61,15 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             $log.debug('Check if document already exist', document);
 
-            fileStorageService.get(document.title, 'document')
-                .then(function (filesFound) {
-
-                    var isDocumentExist = false;
-
-                    for (var i = 0; i < filesFound.length; i++) {
-                        if (filesFound[i].filepath.indexOf('.html') > 0 && filesFound[i].filepath.toLowerCase().indexOf('_' + document.title.toLowerCase() + '_') > 0) {
-                            isDocumentExist = true;
-                            break;
-                        }
+            fileStorageService.list('profile').then(function (documents) {
+                var isFound = false;
+                _.each(documents, function (item) {
+                    if (document.title === item.filename) {
+                        isFound = true;
                     }
-
-
-                    deferred.resolve(isDocumentExist);
-
                 });
-
+                deferred.resolve(isFound);
+            });
 
             return deferred.promise;
         },
@@ -124,18 +116,31 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     } else {
                         LoaderService.setLoaderProgress(40);
 
-                        var file =  {
+                        var file = {
                             filename: document.title,
                             filepath: document.filePath,
-                            data: document.data
+                            data: document.data,
+                            dateModification: new Date()
                         };
+
 
                         fileStorageService.save(file, 'document')
                             .then(function (data) {
                                 LoaderService.setLoaderProgress(75);
                                 LoaderService.hideLoader();
-                                deferred.resolve(data);
-                            }, function(){
+
+                                if (!UserService.getData().token) {
+                                    UtilsService.openConfirmModal('document.label.save.no-storage.title', 'document.label.save.no-storage.message', false)
+                                        .then(function () {
+                                            $rootScope.$state.go('app.my-backup', {prevState: 'app.edit-document', file: file});
+                                        }, function () {
+                                            deferred.resolve(data);
+                                        });
+                                } else {
+                                    deferred.resolve(data);
+                                }
+
+                            }, function () {
                                 deferred.reject();
                             });
                     }

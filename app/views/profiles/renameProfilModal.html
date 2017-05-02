@@ -32,9 +32,12 @@
 <div class="alert-block alert-danger alert-dismissable" id="rename-profile-success-toaster">
     <i class="fa fa-times" aria-hidden="true"></i>
 
-    <strong regle-style="toasterMsg"
-            apply-rules="forceToasterApdapt"
-            tags="listTagsByProfilToaster">
+    <strong profile-coloration
+            profile="currentProfile"
+            text-livereload="true"
+            parent="#rename-profile-success-toaster"
+            text="{{toasterMsg}}"
+            class="{{currentProfile.data.className}}">
     </strong>
 </div>
 

@@ -103,7 +103,8 @@ exports.sendMail = function (req, res) {
     var mailOptions = {};
     // create reusable transport method (opens pool of SMTP connections)
 
-    var smtpTransport = nodemailer.createTransport('SMTP', getSmtpOptions());
+    var smtpTransport = nodemailer.createTransport(
+        getSmtpOptions());
     // setup e-mail data with unicode symbols
 
     if (sentMailInfos.doc && sentMailInfos.doc.indexOf('idProfil') !== -1) {

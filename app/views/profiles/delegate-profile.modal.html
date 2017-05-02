@@ -30,12 +30,15 @@
 
 </div>
 
-<div class="alert-block alert-danger alert-dismissable" id="profile-delegate-success-toaster">
+<div class="alert-block alert-danger alert-dismissable {{currentProfile.data.className}}" id="profile-delegate-success-toaster">
     <i class="fa fa-times" aria-hidden="true"></i>
 
-    <strong regle-style="toasterMsg"
-            apply-rules="forceToasterApdapt"
-            tags="listTagsByProfilToaster">
+    <strong profile-coloration
+            profile="currentProfile"
+            text-livereload="true"
+            parent="#profile-delegate-success-toaster"
+            text="{{toasterMsg}}"
+            class="{{currentProfile.data.className}}">
     </strong>
 </div>
 

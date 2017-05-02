@@ -146,7 +146,8 @@ angular.module('cnedApp')
         /*
          * Make / Scroll the menu while scrolling.
          */
-        $(window).scroll(function () {
+        // TODO
+        /*$(window).scroll(function () {
             var dif_scroll = 0;
             if (angular.element('#page-content').offset()) {
                 if ($(window).scrollTop() >= angular.element('#page-content').offset().top) {
@@ -162,7 +163,7 @@ angular.module('cnedApp')
                 }
             }
 
-        });
+        });*/
 
 
         /**
@@ -426,7 +427,7 @@ angular.module('cnedApp')
         };
 
         $scope.resetLines = function () {
-            angular.element('.canvas-container').find('div').find('div').remove();
+            angular.element(document.getElementsByClassName("canvas-container")).find('div').find('div').remove();
             $scope.$emit('redrawLines');
         };
 

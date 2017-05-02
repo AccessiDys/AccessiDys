@@ -65,27 +65,33 @@ if (env !== 'test') {
 }
 
 
-/*app.use(express.bodyParser({
-    limit: '50mb'
-}));*/
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+app.configure(function () {
+    app.use(express.cookieParser()); // read cookies (needed for auth)
 
-app.use(express.session({
-    secret: 'ilovescotchscotchyscotchscotch'
-})); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-
-if (env !== 'test') {
-    app.use(log4js.connectLogger(logger, {
-        level: log4js.levels.ERROR
+    app.use(express.bodyParser({
+        limit: '50mb'
     }));
-}
+
+    app.use(function (req, res, next) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
+        next();
+    });
+
+    app.use(express.session({
+        secret: 'ilovescotchscotchyscotchscotch'
+    })); // session secret
+    app.use(passport.initialize());
+    app.use(passport.session()); // persistent login sessions
+
+    /*if (env !== 'test') {
+     app.use(log4js.connectLogger(logger, {
+     level : log4js.levels.ERROR
+     }));
+     }*/
+
+});
 
 
 app.use(express.static('./app'));
@@ -108,19 +114,19 @@ app.use(function (req, res, next) {
 });
 
 // Bootstrap models
-require('./models/DocStructure');
-require('./models/Document');
+//require('./models/DocStructure');
+//require('./models/Document');
 require('./models/Tag');
 require('./models/ProfilTag');
 require('./models/User');
 require('./models/UserProfil');
 require('./models/Profil');
-require('./models/sysParam');
+//require('./models/sysParam');
 
 // Patches
-require('./patches/version.js');
-require('./patches/patch_users');
-require('./patches/patch_profil');
+//require('./patches/version.js');
+//require('./patches/patch_users');
+//require('./patches/patch_profil');
 
 // Create HTTP/HTTPS Server
 
@@ -155,5 +161,59 @@ global.io.on('connection', function (socket) {
 // app.listen(3000);
 console.log('Express https server started on port 3000');
 console.log('ENV = ' + env);
+
+
+/*var Profil = mongoose.model('Profil'), UserProfil = mongoose.model('UserProfil'), User = mongoose.model('User'), ProfilTag = mongoose.model('ProfilTag');
+(function executeFindUser() {
+    Profil.find({
+        '_id': '57f366fc19fb10172dce8f36'
+    }).remove(function (err) {
+        if (err) {
+            console.log("erreur remove Profil: " + err);
+        } else {
+            console.log("Profile deleted ");
+        }
+    });
+
+    ProfilTag.find({
+        'profil': '57f366fc19fb10172dce8f36'
+    }).remove(function (err) {
+        if (err) {
+            console.log("erreur remove ProfilTag: " + err);
+        } else {
+            console.log("ProfilTag deleted ");
+        }
+    });
+
+    UserProfil.find({
+        'profilID': '57f366fc19fb10172dce8f36'
+    }).remove(function (err) {
+        if (err) {
+            console.log("erreur remove UserProfil: " + err);
+        } else {
+            console.log("UserProfil deleted ");
+        }
+    });
+
+    User.find().exec(function (err, users) {
+        if (!err) {
+
+            var result = [];
+
+            for (var i = 0; i < users.length; i++) {
+                result.push({
+                    nom: users[i].local.nom,
+                    prenom: users[i].local.prenom,
+                    email: users[i].local.email
+                });
+            }
+
+            fs.writeFile('./users_prod.json', JSON.stringify(result), 'utf8', function () {
+                console.log('Users writed');
+            });
+        }
+    });
+
+})();*/
 
 module.exports = app;

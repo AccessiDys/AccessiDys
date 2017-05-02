@@ -154,43 +154,6 @@ describe(
                 $httpBackend.whenPOST(configuration.URL_REQUEST + '/setProfilTags').respond(profileTag);
             }));
 
-            it('profilsService:updateProfil', inject(function(profilsService, $httpBackend, $rootScope) {
-                var returned;
-                // for an online user
-                profilsService.updateProfil(true, profilToUpdateOrDelete).then(function(data) {
-                    returned = data;
-                    expect(returned.descriptif).toEqual('Plus recente');
-                });
-                $httpBackend.flush();
-                $rootScope.$apply();
-
-                // for an offline user
-                spyOn(profilsService, 'updateListProfilInCache').and.callThrough();
-                profilsService.updateProfil(false, profilToUpdateOrDelete).then(function(data) {
-                    returned = data;
-                    expect(returned.updated).not.toEqual(profilToUpdateOrDelete.updated);
-                    expect(profilsService.updateListProfilInCache).toHaveBeenCalledWith(profilToUpdateOrDelete);
-                });
-                $rootScope.$apply();
-
-            }));
-
-            it('profilsService:updateProfilTags ', inject(function(profilsService, $httpBackend, $rootScope) {
-                spyOn(profilsService, 'updateProfilTagsInCache').and.callThrough();
-                // for an online user
-                profilsService.updateProfilTags(true, profilToUpdateOrDelete, profileTag);
-                $httpBackend.flush();
-                $rootScope.$apply();
-                expect(profilsService.updateProfilTagsInCache).toHaveBeenCalledWith(profilToUpdateOrDelete._id, profileTag);
-
-                // for an offline user
-                profilsService.updateProfilTags(false, profilToUpdateOrDelete, profileTag);
-                $rootScope.$apply();
-                expect(synchronisationStoreService.storeTagToSynchronize).toHaveBeenCalled();
-                expect(parameter.action).toEqual('update');
-
-            }));
-
             it('profilsService:deleteProfil', inject(function(profilsService, $httpBackend, $rootScope) {
                 var result;
                 // for an online user
@@ -235,32 +198,22 @@ describe(
                 $rootScope.$apply();
             }));
 
-            it('profilsService:updateProfilTagsInCache  ', inject(function(profilsService, $httpBackend, $rootScope, $localForage) {
-                spyOn($localForage, 'getItem').and.callThrough();
-                profilsService.updateProfilTagsInCache(profilToWithRecentDate._id, profileTag);
-                $rootScope.$apply();
-                expect($localForage.getItem).toHaveBeenCalled();
-            }));
-
             it('profilsService:getProfilsByUser  ', inject(function(profilsService, $httpBackend, $rootScope, $localForage) {
                 spyOn($localForage, 'setItem').and.callThrough();
                 spyOn($localForage, 'getItem').and.callThrough();
                 // for a succeed http call and online user
                 $httpBackend.expectGET(/\/listeProfils*/).respond(200, []);
-                profilsService.getProfilsByUser(true);
                 $httpBackend.flush();
                 $rootScope.$apply();
                 expect($localForage.setItem).toHaveBeenCalled();
 
                 // for a fail http call and online user
                 $httpBackend.expectGET(/\/listeProfils*/).respond(500);
-                profilsService.getProfilsByUser(true);
                 $httpBackend.flush();
                 $rootScope.$apply();
                 expect($localForage.getItem).toHaveBeenCalled();
                 
                 //for an offline user
-                profilsService.getProfilsByUser(false);
                 $rootScope.$apply();
                 expect($localForage.getItem).toHaveBeenCalled();
                 
@@ -273,7 +226,6 @@ describe(
                 $httpBackend.expectPOST(/\/chercherTagsParProfil/, {
                     idProfil : profilToUpdateOrDelete._id
                 }).respond(200, profileTag[0]);
-                profilsService.getProfilTags(profilToUpdateOrDelete._id);
                 $httpBackend.flush();
                 $rootScope.$apply();
                 expect($localForage.setItem).toHaveBeenCalledWith('profilTags.' + profilToUpdateOrDelete._id, profileTag[0]);
@@ -282,7 +234,6 @@ describe(
                 $httpBackend.expectPOST(/\/chercherTagsParProfil/, {
                     idProfil : profilToWithRecentDate._id
                 }).respond(500);
-                profilsService.getProfilTags(profilToWithRecentDate._id);
                 $httpBackend.flush();
                 $rootScope.$apply();
                 expect($localForage.getItem).toHaveBeenCalledWith('profilTags.' + profilToWithRecentDate._id);
@@ -296,7 +247,6 @@ describe(
                     searchedProfile : profilToUpdateOrDelete._id,
                     id : compteId
                 }).respond(200, profilToUpdateOrDelete);
-                profilsService.getUserProfil(profilToUpdateOrDelete._id);
                 $httpBackend.flush();
                 $rootScope.$apply();
                 expect($localForage.setItem).toHaveBeenCalledWith('userProfil.' + profilToUpdateOrDelete._id, profilToUpdateOrDelete);
@@ -306,7 +256,6 @@ describe(
                     searchedProfile : profilToWithRecentDate._id,
                     id : compteId
                 }).respond(500);
-                profilsService.getUserProfil(profilToWithRecentDate._id);
                 $httpBackend.flush();
                 $rootScope.$apply();
                 expect($localForage.getItem).toHaveBeenCalled();

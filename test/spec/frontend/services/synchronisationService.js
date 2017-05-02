@@ -105,12 +105,6 @@ describe(
                         deferred.resolve();
                         return deferred.promise;
                     },
-                    updateProfil : function() {
-                        deferred = q.defer();
-                        // Place the fake return object here
-                        deferred.resolve();
-                        return deferred.promise;
-                    },
                     deleteProfil : function() {
                         deferred = q.defer();
                         // Place the fake return object here
@@ -119,12 +113,6 @@ describe(
                                 _id : 'prof1'
                             }
                         });
-                        return deferred.promise;
-                    },
-                    updateProfilTags : function() {
-                        deferred = q.defer();
-                        // Place the fake return object here
-                        deferred.resolve();
                         return deferred.promise;
                     },
                     lookForExistingProfile : function() {
@@ -155,16 +143,12 @@ describe(
                 spyOn(profilsService, 'addProfil').and.callFake(function() {
                     return deferred.promise;
                 });
-                spyOn(profilsService, 'updateProfil').and.callFake(function() {
-                    return deferred.promise;
-                });
                 spyOn(profilsService, 'deleteProfil').and.callFake(function() {
                     return deferred.promise;
                 });
                 spyOn(profilsService, 'lookForExistingProfile').and.callFake(function() {
                     return deferred2.promise;
                 });
-                spyOn(profilsService, 'updateProfilTags').and.callThrough();
 
                 spyOn(fileStorageService, 'saveFile').and.callFake(function() {
                     return deferred.promise;
@@ -277,8 +261,6 @@ describe(
                 synchronisationService.syncProfil(profilItem, operations, rejectedItems);
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
-                expect(profilsService.updateProfil).toHaveBeenCalledWith(true, profilWithRecentDate);
-                expect(profilsService.updateProfilTags).toHaveBeenCalledWith(true, profilWithRecentDate, profileTag);
                 expect(rejectedItems.length).toBe(0);
 
                 // test avec un profil à mettre à jour avec conflit d'existance

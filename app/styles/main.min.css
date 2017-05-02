@@ -94,3 +94,49 @@
  .home-page {
      padding: 20px 40px !important;
  }
+
+ .navbar-default .navbar-nav .dropdown .dropdown-menu li.my-backup a {
+     background-image: none;
+ }
+
+ .navbar-default .navbar-nav .dropdown .dropdown-menu li.my-backup a i.left {
+     position: absolute;
+     left: 20px;
+     font-size: 25px;
+ }
+
+ .navbar-default .navbar-nav .dropdown .dropdown-menu li.my-backup a i.right.fa-exclamation-triangle {
+     position: absolute;
+     right: 20px;
+     font-size: 25px;
+     color: #ff472a;
+ }
+
+
+ .my-backup-page .fa-dropbox {
+     font-size: 60px;
+     color: rgb(49, 126, 222);
+ }
+
+ .my-backup-page .storage-container{
+     width: 70px;
+     height: 70px;
+     cursor: pointer;
+     text-align: center;
+     padding: 5px;
+ }
+
+ .my-backup-page .selected-storage{
+     height: 70px;
+     cursor: pointer;
+     text-align: center;
+     padding: 5px;
+ }
+
+ .storage-container.active{
+     background-color: #086e80;
+ }
+
+ .storage-container.active i{
+     color: #fff;
+ }

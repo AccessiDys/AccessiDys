@@ -41,8 +41,10 @@ cnedApp.service('UserService', function ($http, configuration, $localForage, $q)
             var deferred = $q.defer();
 
             $localForage.getItem('userData').then(function (data) {
-                userData = data;
-                deferred.resolve(data);
+                if (data) {
+                    userData = data;
+                }
+                deferred.resolve(userData);
             });
 
             return deferred.promise;

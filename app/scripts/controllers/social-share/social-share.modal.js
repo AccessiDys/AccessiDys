@@ -29,7 +29,8 @@
 var FB = FB;
 
 angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScope, $scope, $uibModalInstance, dropbox,
-                                                                       EmailService, ToasterService, LoaderService, $log, $timeout, mode, itemToShare) {
+                                                                       EmailService, ToasterService, LoaderService, $log,
+                                                                       $timeout, UserService, mode, itemToShare) {
 
 
     $scope.hasRightToShare = false;
@@ -80,9 +81,9 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
 
             var fileName = $scope.itemToShare.name + '.json';
 
-            dropbox.upload(fileName, $scope.itemToShare.annotationsToShare, $rootScope.currentUser.dropbox.accessToken, true)
+            dropbox.upload(fileName, $scope.itemToShare.annotationsToShare)
                 .then(function (data) {
-                    dropbox.shareLink(data.path_display, $rootScope.currentUser.dropbox.accessToken)
+                    dropbox.shareLink(data.path_display)
                         .then(function (result) {
                             $scope.itemToShare.linkToShare += '&annotation=' + result.url;
                             $scope.itemToShare.linkToShare = $scope.itemToShare.linkToShare;
@@ -110,8 +111,8 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
 
             var emailParams = {
                 to: $scope.form.email,
-                prenom: $rootScope.currentUser.local.prenom, // the first name
-                fullName: $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom,
+                prenom: UserService.getData().firstName, // the first name
+                fullName: UserService.getData().firstName + ' ' + UserService.getData().lastName,
                 content: '',
                 encoded: '',
                 doc: null

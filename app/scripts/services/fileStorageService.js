@@ -143,12 +143,14 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     return fileSaved;
                 });
             }, function(){
-                return null;
+                return CacheProvider.get(file.filename, storageName).then(function(fileFound){
+                    return fileFound;
+                });
             });
 
         } else {
-            return CacheProvider.get(file, storageName).then(function(fileFound){
-                return fileFound.data;
+            return CacheProvider.get(file.filename, storageName).then(function(fileFound){
+                return fileFound;
             });
         }
     };
@@ -173,6 +175,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
 
             return DropboxProvider.upload(file.filepath, file.data, UserService.getData().token).then(function (file) {
+                return CacheProvider.save(file, storageName);
+            }, function(){
                 return CacheProvider.save(file, storageName);
             });
 
@@ -234,7 +238,9 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
              };
              synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);*/
             return CacheProvider.delete(file, storageName).then(function () {
-                return CacheProvider.save(data, storageName);
+                file.filename = newName;
+                file.filepath = newFilePath;
+                return CacheProvider.save(file, storageName);
             });
         }
     };

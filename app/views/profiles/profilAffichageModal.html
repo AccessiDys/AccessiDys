@@ -47,12 +47,16 @@
 </div>
 <div class="modal-body">
     <div>
-        <div class="alert-block alert-danger alert-dismissable" id="profile-edit-modal-success-toaster">
+        <div class="alert-block alert-danger alert-dismissable"
+             id="profile-edit-modal-success-toaster">
             <i class="fa fa-times" aria-hidden="true"></i>
 
-            <strong regle-style="toasterMsg"
-                    apply-rules="forceToasterApdapt"
-                    tags="listTagsByProfilToaster">
+            <strong profile-coloration
+                    profile="currentProfile"
+                    text-livereload="true"
+                    parent="#profile-edit-modal-success-toaster"
+                    text="{{toasterMsg}}"
+                    class="{{currentProfile.data.className}}">
             </strong>
         </div>
 
@@ -75,13 +79,12 @@
             <h2>Styles :</h2>
             <table>
                 <tbody>
-                <tr data-ng-repeat="profileTag in profile.data.profileTags track by $index" data-ng-if="profileTag.tagDetail != null">
+                <tr data-ng-repeat="profileTag in tmpProfile.data.profileTags track by $index">
                     <td>
-                        <div regle-style="profileTag.texte"
-                             tags="profile.data.profileTags"
-                             apply-rules="forceApplyRules"
-                             class="resetAll apercu-tags"
-                             preview="true">
+                        <div class="resetAll {{tmpProfile.data.className}} preview"
+                             profile-coloration
+                             profile="tmpProfile"
+                             ng-bind-html="profileTag.texte" >
                         </div>
                     </td>
                     <td style="width: 20px;">

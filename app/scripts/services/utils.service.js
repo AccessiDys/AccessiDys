@@ -182,7 +182,32 @@ cnedApp.service('UtilsService', function ($uibModal) {
             str = str.replace(/[Ÿ]/g, 'y');
 
             return str.replace(/[^a-z0-9]/gi, ' ');
-        }
+        },
+
+        splitOnSyllable: function(text){
+            var formattedText = Hyphenator.hyphenate(text, 'fr');
+
+            formattedText = formattedText.replace(/(\b(?!<)[a-zA-Z0-9\-\_\|]+(?!>)\b)/gi, "%%$1%%");
+            formattedText = formattedText.replace(/(\|)/gi, '</span><span>');
+            formattedText = formattedText.replace(/(%%\b)/gi, '<span>');
+            formattedText = formattedText.replace(/(\b%%)/gi, '</span>');
+
+            return formattedText;
+        },
+
+        splitOnWordWithOutSpace: function(text){
+            var formattedText = text.replace(methods.wordRegex,'<span>$1</span> ');
+
+            return formattedText;
+        },
+
+        splitOnWordWithSpace: function(text){
+            var formattedText = text.replace(methods.wordRegex,'<span>$1 </span>');
+
+            return formattedText;
+        },
+
+        wordRegex: /([\w,.':\?\-éèêàâ]+)(?![^<]*>)/gi
 
     };
 

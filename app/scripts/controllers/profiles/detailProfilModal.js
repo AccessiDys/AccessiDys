@@ -26,11 +26,14 @@
 /* jshint loopfunc:true */
 
 angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $uibModalInstance, $rootScope, profilsService,
-                                                                             ToasterService, template, profile) {
+                                                                             ToasterService, UserService, UtilsService, LoaderService, template, profile) {
     $scope.template = template;
     $scope.profile = profile;
+    $rootScope.tmpProfile = angular.copy(profile);
 
-    $scope.forceApplyRules = true;
+    console.log('$rootScope.tmpProfile', $rootScope.tmpProfile);
+
+    $scope.currentStyle = {};
 
     var checkRequiredFields = function () {
         var isValid = true;
@@ -65,13 +68,12 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
     };
 
     $scope.dismissModal = function (operation) {
-        $scope.loader = false;
-        $scope.loaderMsg = '';
-
         reset();
+
         $uibModalInstance.dismiss({
             operation: operation,
-            template: $scope.template
+            template: $scope.template,
+            profile: $scope.profile
         });
     };
 
@@ -79,24 +81,12 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
 
         if (checkRequiredFields()) {
 
-            switch ($scope.template) {
-                case 'create':
-                    $scope.loaderMsg = 'Enregistrement du profil en cours ...';
-                    break;
-                case 'update':
-                    $scope.loaderMsg = 'Modification du profil en cours ...';
-                    break;
-                case 'duplicate':
-                    $scope.loaderMsg = 'Duplication du profil en cours ...';
-                    break;
-            }
-
-            $scope.loader = true;
+            LoaderService.showLoader('profile.message.info.save.inprogress', false);
 
             // Check if the profile name does not already exists
             profilsService.lookForExistingProfile(profile)
                 .then(function (res) {
-                    if (!res) {
+                    if ((!res && $scope.template !== 'update') || (res && $scope.template === 'update')) {
 
                         delete $scope.profile._id;
                         $scope.profile.data.state = 'mine';
@@ -107,7 +97,24 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
                                     $scope.sendEmailDuplique();
                                 }
 
-                                $scope.dismissModal('save');
+                                LoaderService.hideLoader();
+
+                                if (!UserService.getData().token) {
+                                    UtilsService.openConfirmModal('profile.label.save.no-storage.title', 'profile.label.save.no-storage.message', false)
+                                        .then(function () {
+                                            $scope.dismissModal('save');
+                                            $rootScope.$state.go('app.my-backup', {
+                                                prevState: 'app.list-profile',
+                                                file: $scope.profile
+                                            });
+
+                                        }, function () {
+                                            $scope.dismissModal('save');
+                                        });
+                                } else {
+                                    $scope.dismissModal('save');
+                                }
+
                             });
 
 

@@ -25,26 +25,17 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider) {
-
-    $scope.userData = UserService.getData();
-
+angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, auth) {
     $scope.storages = [{
         provider: 'dropbox',
         img: 'https://pbs.twimg.com/profile_images/662300942335737857/vJbiuGpn.png',
         name: 'Dropbox'
-    }, {
-        provider: 'nextcloud',
-        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Nextcloud_Logo.svg/1200px-Nextcloud_Logo.svg.png',
-        name: 'Dropbox'
-    }, {
-        provider: 'nuxeo',
-        img: 'https://www.storiesout.com/files/live/sites/storiesout/files/logo/nuxeo-big.png',
-        name: 'Nuxeo'
     }];
 
-    $scope.selectedStorage = {};
+    $scope.prevState = $stateParams.prevState;
+    $scope.file = $stateParams.file;
 
+    $scope.selectedStorage = {};
 
     /**
      * Select a storage to login
@@ -58,8 +49,24 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
      * Login to selected storage
      */
     $scope.login = function () {
+
+        if($scope.prevState){
+            CacheProvider.setItem({
+                prevState: $scope.prevState,
+                file: $scope.file
+            }, 'myBackupRouteData');
+        }
+
         if ($scope.selectedStorage.provider === 'dropbox') {
             DropboxProvider.auth();
+        }
+    };
+
+    $scope.cancel = function(){
+        if($scope.prevState){
+            $rootScope.$state.go($scope.prevState);
+        } else {
+            $rootScope.$state.go('app.list-document');
         }
     };
 

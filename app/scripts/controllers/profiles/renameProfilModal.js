@@ -25,23 +25,31 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $uibModalInstance, ToasterService, profile) {
+angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $uibModalInstance, ToasterService, profilsService, profile) {
     $scope.profile = profile;
-    $scope.profileName = profile.nom;
+    $scope.profileName = profile.data.nom;
 
     /**
      * This function closes a modal.
      */
     $scope.closeModal = function () {
 
-        if(!$scope.profile.data.nom || $scope.profile.data.nom.length < 1) {
+        if (!$scope.profile.data.nom || $scope.profile.data.nom.length < 1) {
 
             ToasterService.showToaster('#rename-profile-success-toaster', 'profile.message.save.ko.name.mandatory');
 
         } else {
-            $uibModalInstance.close({
-                profile: $scope.profile
-            });
+
+            profilsService.lookForExistingProfile(profile)
+                .then(function (res) {
+                    if (!res) {
+                        $uibModalInstance.close({
+                            profile: $scope.profile
+                        });
+                    } else {
+                        ToasterService.showToaster('#rename-profile-success-toaster', 'profile.message.save.ko.name.alreadyexist');
+                    }
+                });
         }
     };
 

@@ -90,7 +90,10 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
             url: '/addDocument?idDocument&title&url',
             templateUrl: 'views/addDocument/addDocument.html',
             controller: 'AddDocumentCtrl',
-            pageTrack: '/document/edit.html'  // angular-google-analytics extension
+            pageTrack: '/document/edit.html',  // angular-google-analytics extension,
+            params: {
+                file: null
+            }
         })
         .state('app.print-document', {
             url: '/print?documentId&plan&mode',
@@ -102,7 +105,10 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
             url: '/profiles',
             templateUrl: 'views/profiles/profiles.html',
             controller: 'ProfilesCtrl',
-            pageTrack: '/profile/list.html'  // angular-google-analytics extension
+            pageTrack: '/profile/list.html',  // angular-google-analytics extension
+            params: {
+                file: null
+            }
         })
         .state('app.detail-profile', {
             url: '/detailProfil',
@@ -149,21 +155,43 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
             templateUrl: 'views/backup/my-backup.html',
             controller: 'MyBackupCtrl',
             pageTrack: '/overview.html',  // angular-google-analytics extension,
+            params: {
+                prevState: null,
+                file: null
+            },
             resolve: {
-                auth: function ($stateParams, UserService, OauthService, $log) {
+                auth: function ($state, $stateParams, UserService, OauthService, $log, CacheProvider) {
 
-                    if ($stateParams.auth) {
+                    return CacheProvider.getItem('myBackupRouteData').then(function (routeData) {
 
-                        OauthService.token().then(function (res) {
-                            $log.debug('get token ', res.data);
-                            return UserService.saveData(res.data);
-                        }, function () {
-                            return null;
-                        });
+                        CacheProvider.setItem(null, 'myBackupRouteData');
 
-                    } else {
-                        return null;
-                    }
+
+                        if ($stateParams.auth) {
+
+                            return OauthService.token().then(function (res) {
+                                $log.debug('get token ', res.data);
+
+                                return UserService.saveData(res.data).then(function () {
+                                    if (routeData) {
+                                        $state.go(routeData.prevState, {file: routeData.file});
+                                    } else {
+                                        return res.data;
+                                    }
+                                });
+                            }, function () {
+                                return null; // TODO display error message
+                            });
+
+                        } else {
+                            if (routeData) {
+                                $state.go(routeData.prevState, {file: routeData.file});
+                            } else {
+                                return null;
+                            }
+                        }
+                    });
+
 
                 }
             }

@@ -66,18 +66,11 @@ describe('Controller:DetailProfilModalCtrl', function () {
                 // Place the fake return object here
                 deferred.resolve({});
                 return deferred.promise;
-            },
-            updateProfil: function () {
-                deferred = q.defer();
-                // Place the fake return object here
-                deferred.resolve({});
-                return deferred.promise;
             }
         };
 
         spyOn(profilsService, 'lookForExistingProfile').and.callThrough();
         spyOn(profilsService, 'addProfil').and.callThrough();
-        spyOn(profilsService, 'updateProfil').and.callThrough();
 
     });
 

@@ -248,8 +248,8 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'style.message.save.ko.file.type': 'Le type de fichier n\'est pas supporté. Merci de ne rattacher que des images.',
         'document.message.save.ko.connexion': 'Veuillez-vous connecter pour pouvoir enregistrer votre document.',
         'mail.send.ok' : 'Email envoyé avec succès.',
-        'profile.message.edit.ok' : 'Profil modifié avec succès.',
-        'profile.message.save.ok' : 'Profil ajouté avec succès.',
+        'profile.message.save.storage.ok' : 'Profil enregistré avec succès dans votre espace de sauvegarde.',
+        'profile.message.save.cache.ok' : 'Profil enregistré uniquement dans votre navigateur.',
         'profile.message.favorite.ok' : 'Profil ajouté aux profils favoris.',
         'profile.message.favorite.delete' : 'Profil supprimé de vos profils favoris.',
         'profile.message.default.ok' : 'Profil par défaut selectionné avec succès.',
@@ -306,7 +306,12 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'useraccount.message.save.ko.newpassword.length': 'Le nouveau mot de passe doit contenir de 6 à 20 caractères.',
         'useraccount.message.save.ko.newpassword.mandatory': 'Le champs Nouveau mot de passe est vide.',
         'useraccount.message.save.ko.newpassword.spacialchar': 'Le champs Nouveau mot de passe contient des caractères spéciaux.',
-        'useraccount.message.save.ko.newpassword.confirm': 'Le nouveau mot de passe et sa confirmation ne sont pas les mêmes.'
+        'useraccount.message.save.ko.newpassword.confirm': 'Le nouveau mot de passe et sa confirmation ne sont pas les mêmes.',
+        'document.label.save.no-storage.title': 'Sauvegarde de votre document',
+        'document.label.save.no-storage.message': 'Voulez-vous choisir un espace de sauvegarde pour retrouver vos documents sur tous vos appareils ?',
+        'profile.label.save.no-storage.title': 'Sauvegarde de votre profil',
+        'profile.label.save.no-storage.message': 'Voulez-vous choisir un espace de sauvegarde pour retrouver vos profils sur tous vos appareils ?',
+        'profile.message.info.save.inprogress': 'Sauvegarde du profil en cours veuillez patienter.'
     });
 
 } ]);

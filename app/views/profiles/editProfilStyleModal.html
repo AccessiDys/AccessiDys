@@ -148,11 +148,11 @@
                                         <span class="select-wrapper">
                                             <select
                                                     id="add_space" sselect
-                                                    data-ng-model="style.space"
-                                                    data-ng-change="editStyleChange('space', style.space)"
+                                                    data-ng-model="style.spaceSelected"
+                                                    data-ng-change="editStyleChange('spaceSelected', style.spaceSelected)"
                                                     required name="space">
                                                 <option data-ng-repeat="space in spaceLists"
-                                                        data-ng-selected="space.number == style.space"
+                                                        data-ng-selected="space.number == style.spaceSelected"
                                                         value="{{space.number}}">{{space.number}}
                                                 </option>
                                             </select>
@@ -165,11 +165,11 @@
                                         </label>
                                         <span class="select-wrapper">
                                             <select id="add_spaceChar" sselect
-                                                    data-ng-model="style.spaceChar"
-                                                    data-ng-change="editStyleChange('spaceChar', style.spaceChar)"
+                                                    data-ng-model="style.spaceCharSelected"
+                                                    data-ng-change="editStyleChange('spaceCharSelected', style.spaceCharSelected)"
                                                     required name="space">
                                                 <option data-ng-repeat="spaceChar in spaceCharLists"
-                                                        data-ng-selected="spaceChar.number == style.spaceChar"
+                                                        data-ng-selected="spaceChar.number == style.spaceCharSelected"
                                                         value="{{spaceChar.number}}">{{spaceChar.number}}
                                                 </option>
                                             </select>
@@ -178,15 +178,12 @@
                                 </div>
                                 <div class="col-md-5">
                                     <div class="show_zone">
-                                        <p class="shown-text-edit"
+                                        <p class="shown-text-edit {{tmpProfile.data.className}}"
                                            style="height: 296px;"
                                            id="style-affected-edit"
-                                           data-font="{{style.police}}"
-                                           data-size="{{style.taille}}"
-                                           data-lineheight="{{style.interline}}"
-                                           data-weight="{{style.styleValue}}"
-                                           data-coloration="{{style.coloration}}">
-                                            {{displayTextSimple}}
+                                           profile-coloration
+                                           profile="tmpProfile"
+                                           text="{{text}}">
                                         </p>
                                     </div>
                                 </div>

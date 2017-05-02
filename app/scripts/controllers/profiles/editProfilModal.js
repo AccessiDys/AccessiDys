@@ -27,19 +27,24 @@
 /* jshint loopfunc:true */
 
 angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $uibModalInstance, $rootScope, $interval, $log, $timeout, profile, profileTagIndex) {
+
     $scope.requiredFieldErrors = [];
     $scope.profile = profile;
+    $rootScope.tmpProfile = angular.copy(profile);
+    $scope.text = angular.copy($rootScope.tmpProfile.data.profileTags[profileTagIndex].texte);
     $scope.profileTagIndex = profileTagIndex;
     $scope.styleName = '';
     $scope.style = {
         police: '',
-        taille: '',
-        interligne: '',
+        taille: 0,
+        interligne: 0,
         styleValue: '',
-        spaceSelected: '',
-        spaceCharSelected: '',
+        spaceSelected: 0,
+        spaceCharSelected: 0,
         coloration: ''
     };
+
+
 
     var reset = function () {
         $scope.requiredFieldErrors = [];
@@ -48,13 +53,28 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
         $scope.styleName = '';
         $scope.style = {
             police: '',
-            taille: '',
-            interligne: '',
+            taille: 0,
+            interligne: 0,
             styleValue: '',
-            spaceSelected: '',
-            spaceCharSelected: '',
+            spaceSelected: 0,
+            spaceCharSelected: 0,
             coloration: ''
         };
+    };
+
+    var generateStyle = function(){
+
+        $scope.text = angular.copy($rootScope.tmpProfile.data.profileTags[profileTagIndex].texte);
+
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].police = $scope.style.police;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].taille = $scope.style.taille;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].interligne = $scope.style.interligne;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].styleValue = $scope.style.styleValue;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].spaceSelected = $scope.style.spaceSelected;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceCharSelected;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].coloration = $scope.style.coloration;
+
+
     };
 
 
@@ -94,10 +114,12 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             taille: $scope.profile.data.profileTags[profileTagIndex].taille,
             interligne: $scope.profile.data.profileTags[profileTagIndex].interligne,
             styleValue: $scope.profile.data.profileTags[profileTagIndex].styleValue,
-            space: $scope.profile.data.profileTags[profileTagIndex].spaceSelected,
-            spaceChar: $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected,
+            spaceSelected: $scope.profile.data.profileTags[profileTagIndex].spaceSelected,
+            spaceCharSelected: $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected,
             coloration: $scope.profile.data.profileTags[profileTagIndex].coloration
         };
+
+        generateStyle();
 
         $scope.interValTmp = $interval(function () {
             $interval.cancel($scope.interValTmp);
@@ -110,17 +132,16 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             modalEdit.find('select[data-ng-model="style.taille"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].taille);
             modalEdit.find('select[data-ng-model="style.interligne"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].interligne);
             modalEdit.find('select[data-ng-model="style.styleValue"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].styleValue);
-            modalEdit.find('select[data-ng-model="style.space"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].spaceSelected);
-            modalEdit.find('select[data-ng-model="style.spaceChar"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].spaceCharSelected);
+            modalEdit.find('select[data-ng-model="style.spaceSelected"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].spaceSelected);
+            modalEdit.find('select[data-ng-model="style.spaceCharSelected"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].spaceCharSelected);
             modalEdit.find('select[data-ng-model="style.coloration"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].coloration);
 
             $scope.editStyleChange('police', $scope.profile.data.profileTags[profileTagIndex].police);
             $scope.editStyleChange('taille', $scope.profile.data.profileTags[profileTagIndex].taille);
             $scope.editStyleChange('interligne', $scope.profile.data.profileTags[profileTagIndex].interligne);
             $scope.editStyleChange('style', $scope.profile.data.profileTags[profileTagIndex].styleValue);
-            $scope.editStyleChange('space', $scope.profile.data.profileTags[profileTagIndex].spaceSelected);
-            $scope.editStyleChange('spaceChar', $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected);
-
+            $scope.editStyleChange('spaceSelected', $scope.profile.data.profileTags[profileTagIndex].spaceSelected);
+            $scope.editStyleChange('spaceCharSelected', $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected);
             $scope.editStyleChange('coloration', $scope.profile.data.profileTags[profileTagIndex].coloration);
 
 
@@ -133,8 +154,8 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.profile.data.profileTags[profileTagIndex].taille = $scope.style.taille;
             $scope.profile.data.profileTags[profileTagIndex].interligne = $scope.style.interligne;
             $scope.profile.data.profileTags[profileTagIndex].styleValue = $scope.style.styleValue;
-            $scope.profile.data.profileTags[profileTagIndex].spaceSelected = $scope.style.space;
-            $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceChar;
+            $scope.profile.data.profileTags[profileTagIndex].spaceSelected = $scope.style.spaceSelected;
+            $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceCharSelected;
             $scope.profile.data.profileTags[profileTagIndex].coloration = $scope.style.coloration;
 
             $uibModalInstance.close({
@@ -146,13 +167,14 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
     };
 
 
-
     $scope.dismissModal = function () {
         $uibModalInstance.dismiss();
         reset();
     };
 
     $scope.editStyleChange = function (operation, value) {
+
+        console.log('Edit style change');
 
 
         switch (operation) {
@@ -171,30 +193,18 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             case 'style':
                 $scope.style.style = value;
                 break;
-            case 'space':
-                $scope.style.space = value;
+            case 'spaceSelected':
+                $scope.style.spaceSelected = value;
                 break;
-            case 'spaceChar':
-                $scope.style.spaceChar = value;
+            case 'spaceCharSelected':
+                $scope.style.spaceCharSelected = value;
                 break;
         }
 
+        generateStyle();
+
         $log.debug('editStyleChange operation = ' + operation, value);
 
-        $rootScope.$emit('reglesStyleChange', {
-            'operation': operation,
-            'element': 'shown-text-edit',
-            'value': value
-        });
-
-        // wait for 2s and force coloration.
-        $timeout(function() {
-            $rootScope.$emit('reglesStyleChange', {
-                'operation' : 'coloration',
-                'element' : 'shown-text-edit',
-                'value' : $scope.style.coloration
-            });
-        }, 1000);
     };
 
 });

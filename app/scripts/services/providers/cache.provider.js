@@ -37,7 +37,7 @@ cnedApp.factory('CacheProvider',
                 var deferred = $q.defer();
 
                 $localForage.getItem(storageName).then(function (items) {
-                    if (data) {
+                    if (items) {
                         _.each(items, function (item) {
                             if (item && item.filename === filename) {
                                 deferred.resolve(item);
@@ -62,20 +62,32 @@ cnedApp.factory('CacheProvider',
 
                 return deferred.promise;
             },
+            /**
+             * Save a file into local storage
+             * @param file
+             * @param storageName
+             */
             save: function (file, storageName) {
-
                 var deferred = $q.defer();
 
                 $localForage.getItem(storageName).then(function (items) {
+
+                    console.log('save in cache provider - items', items);
                     if (items) {
                         var isFound = false;
                         var index = 0;
-                        _.each(items, function (item) {
-                            if (item && file && item.filename === file.filename) {
+
+                        for(var i= 0; i < items.length ; i++){
+                            if (items[i] && file && items[i].filename === file.filename) {
                                 isFound = true;
+                                break;
                             }
                             index++;
-                        });
+                        }
+
+                        console.log('isFound', isFound);
+                        console.log('index', index);
+
 
                         if (isFound) {
                             items[index] = file;
@@ -84,7 +96,10 @@ cnedApp.factory('CacheProvider',
                             });
                         } else {
                             items.push(file);
-                            deferred.resolve(file);
+
+                            $localForage.setItem(storageName, items).then(function () {
+                                deferred.resolve(file);
+                            });
                         }
                     } else {
                         $localForage.setItem(storageName, [file]).then(function () {
@@ -94,7 +109,14 @@ cnedApp.factory('CacheProvider',
                 });
 
                 return deferred.promise;
+            },
 
+            setItem: function (item, storageName) {
+                return $localForage.setItem(storageName, item);
+            },
+
+            getItem: function (storageName) {
+                return $localForage.getItem(storageName);
             }
         };
     });

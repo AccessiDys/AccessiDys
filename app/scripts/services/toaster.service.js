@@ -28,8 +28,8 @@
 cnedApp.service('ToasterService', function ($rootScope, $timeout, gettextCatalog) {
 
     $rootScope.toasterMsg = '';
-    $rootScope.forceToasterApdapt = false;
     $rootScope.listTagsByProfilToaster = [];
+    $rootScope.toasterIsActive = false;
 
 
     var methods = {
@@ -39,13 +39,14 @@ cnedApp.service('ToasterService', function ($rootScope, $timeout, gettextCatalog
          * @param msg
          */
         showToaster: function (id, msg) {
-            $rootScope.listTagsByProfilToaster = JSON.parse(localStorage.getItem('listTagsByProfil'));
             $rootScope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-            $rootScope.forceToasterApdapt = true;
+
+            angular.element(document.querySelector(id)).css('display', 'block');
+
             $timeout(function () {
-                //angular.element(id).fadeIn('fast').delay(10000).fadeOut('fast');
-                $rootScope.forceToasterApdapt = false;
-            }, 0);
+                angular.element(document.querySelector(id)).css('display', 'none');
+            }, 10000);
+
         }
 
     };

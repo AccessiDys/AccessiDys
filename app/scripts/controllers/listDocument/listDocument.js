@@ -206,7 +206,13 @@ angular.module('cnedApp')
             fileStorageService.list('document').then(function (listDocument) {
                 LoaderService.setLoaderProgress(100);
                 LoaderService.hideLoader();
-                $scope.listDocument = listDocument;
+
+                if (listDocument) {
+
+                    $scope.listDocument = listDocument;
+                } else {
+                    $scope.listDocument = [];
+                }
                 $scope.initialiseShowDocs();
             }, function () {
                 LoaderService.hideLoader();

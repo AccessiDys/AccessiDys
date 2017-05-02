@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../env/env.iml" filepath="$PROJECT_DIR$/../env/env.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/kamel-leon.iml" filepath="$PROJECT_DIR$/.idea/kamel-leon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../logs/logs.iml" filepath="$PROJECT_DIR$/../logs/logs.iml" />
     </modules>
   </component>
 </project>

@@ -25,18 +25,24 @@
 <div class="alert-block alert-success alert-dismissable" id="overview-success-toaster">
     <i class="fa fa-check" aria-hidden="true"></i>
 
-    <strong regle-style="toasterMsg"
-            apply-rules="forceToasterApdapt"
-            tags="listTagsByProfilToaster">
+    <strong profile-coloration
+            profile="currentProfile"
+            text-livereload="true"
+            parent="#overview-success-toaster"
+            text="{{toasterMsg}}"
+            class="{{currentProfile.data.className}}">
     </strong>
 </div>
 
 <div class="alert-block alert-danger alert-dismissable" id="overview-error-toaster">
     <i class="fa fa-times" aria-hidden="true"></i>
 
-    <strong regle-style="toasterMsg"
-            apply-rules="forceToasterApdapt"
-            tags="listTagsByProfilToaster">
+    <strong profile-coloration
+            profile="currentProfile"
+            text-livereload="true"
+            parent="#overview-error-toaster"
+            text="{{toasterMsg}}"
+            class="{{currentProfile.data.className}}">
     </strong>
 </div>
 
@@ -197,12 +203,11 @@
                         <!-- Text -->
                         <div id="{{'adapt-content-' + currentPage }}"
                              tabindex="0" vocal-synthesis
-                             regle-style="currentContent"
-                             tags="listTagsByProfil"
-                             apply-rules="forceApplyRules"
-                             class="resetAll doc-apercu"
+                             text="{{currentContent}}"
+                             profile-coloration
+                             profile="currentProfile"
+                             class="resetAll doc-apercu {{currentProfile.data.className}}"
                              data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
-                             data-show-loader="showAdaptationLoader()" data-hide-loader="hideAdaptationLoader()"
                              data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
                              style="outline: none !important; z-index: 1; position: relative;">
                         </div>
@@ -254,8 +259,11 @@
                         <div id="{{'adapt-content-' + $index }}" tabindex="0"
                              vocal-synthesis
                              regle-style="page" tags="listTagsByProfil" apply-rules="forceApplyRules"
-                             class="resetAll doc-apercu"
+                             class="resetAll doc-apercu {{currentProfile.data.className}}"
                              style="outline: none !important; z-index: 1; position: relative;"
+                             text="{{currentContent}}"
+                             profile-coloration
+                             profile="currentProfile"
                              data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)"
                              data-show-loader="showAdaptationLoaderFromLoop($index)"
                              data-hide-loader="hideAdaptationLoaderFromLoop($index, content.length)"

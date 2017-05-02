@@ -158,9 +158,13 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
 
         var pages = self.splitPages(data);
 
+        console.log('pages' , pages);
+
         for (var page = 0; page < pages.length; page++) {
             var block = 0;
-            var element = angular.element(pages[page]);
+
+            retContent.push(pages[page]);
+            /*var element = angular.element(pages[page]);
             var tags = JSON.parse(localStorage.getItem('listTags'));
             element.each(function (index, element) {
 
@@ -176,7 +180,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
 
                     }
                 });
-            });
+            });*/
         }
 
         return retContent;
