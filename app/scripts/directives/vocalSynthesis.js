@@ -42,21 +42,6 @@ cnedApp.directive('vocalSynthesis',
                     return text;
                 }
 
-                function checkAudioRights() {
-                    return serviceCheck.getData().then(function (statusInformation) {
-                        if (statusInformation.user && statusInformation.user.local && statusInformation.user.local.authorisations) {
-                            scope.displayNoAudioRights = !statusInformation.user.local.authorisations.audio && !scope.neverShowNoAudioRights;
-                            return statusInformation.user.local.authorisations.audio;
-                        } else {
-                            scope.displayNoAudioRights = false;
-                            return true;
-                        }
-                    }, function () {
-                        scope.displayNoAudioRights = false;
-                        return true;
-                    });
-                }
-
                 function checkBrowserSupported() {
                     var browserSupported = speechService.isBrowserSupported();
                     if (!browserSupported && !scope.neverShowBrowserNotSupported) {
@@ -76,20 +61,17 @@ cnedApp.directive('vocalSynthesis',
                         var text = getSelectedText();
                         $log.debug('$scope.getSelectedText()', text);
                         if (text && !/^\s*$/.test(text)) {
-                            checkAudioRights().then(function (audioRights) {
-                                $log.debug('$scope.checkAudioRights()', audioRights);
 
-                                if (audioRights && checkBrowserSupported()) {
-                                    serviceCheck.isOnline().then(function () {
-                                        scope.displayOfflineSynthesisTips = false;
-                                        speechService.speech(text, true);
-                                        window.document.addEventListener('click', scope.stopSpeech, false);
-                                    }, function () {
-                                        scope.displayOfflineSynthesisTips = !scope.neverShowOfflineSynthesisTips;
-                                        speechService.speech(text, false);
-                                    });
-                                }
-                            });
+                            if (checkBrowserSupported()) {
+                                serviceCheck.isOnline().then(function () {
+                                    scope.displayOfflineSynthesisTips = false;
+                                    speechService.speech(text, true);
+                                    window.document.addEventListener('click', scope.stopSpeech, false);
+                                }, function () {
+                                    scope.displayOfflineSynthesisTips = !scope.neverShowOfflineSynthesisTips;
+                                    speechService.speech(text, false);
+                                });
+                            }
                         }
                     }, 10);
                 }

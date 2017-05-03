@@ -53,13 +53,10 @@
             <div class="profile_regles">
                 <h2>Styles :</h2>
                 <div data-ng-repeat="profileTag in detailProfil.data.profileTags track by $index"
-                     regle-style="profileTag.texte"
-                     tags="detailProfil.data.profileTags"
-                     class="resetAll apercu-tags mt-10"
-                     data-apply-rules="forceApplyRules"
-                     data-show-loader="showProfilLoaderFromLoop($index)"
-                     data-hide-loader="hideLoaderFromLoop($index, detailProfil.profileTags.length)"
-                     preview="true">
+                     class="resetAll apercu-tags mt-10 preview {{detailProfil.data.className}}"
+                     profile-coloration
+                     profile="detailProfil"
+                     text="{{profileTag.texte}}">
 
                 </div>
             </div>

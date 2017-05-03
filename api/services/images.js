@@ -96,7 +96,6 @@ exports.sendPdf = function (req, responce) {
     http.get(url, function (res) {
         var chunks = [];
         if (res.statusCode !== 200) {
-            helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
             responce.jsonp(404, null);
         }
         var len = parseInt(res.headers['content-length'], 10);
@@ -113,11 +112,9 @@ exports.sendPdf = function (req, responce) {
 
         res.on('end', function () {
             var jsfile = new Buffer.concat(chunks).toString('base64');
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
             responce.send(200, jsfile);
         });
     }).on('error', function () {
-        helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
         responce.jsonp(404, null);
     });
 };
@@ -128,7 +125,6 @@ exports.sendPdfHTTPS = function (req, responce) {
     https.get(url, function (res) {
         var chunks = [];
         if (res.statusCode !== 200) {
-            helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
             responce.jsonp(404, null);
         }
 
@@ -147,11 +143,9 @@ exports.sendPdfHTTPS = function (req, responce) {
         res.on('end', function () {
             var jsfile = new Buffer.concat(chunks).toString('base64');
 
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
             responce.send(jsfile);
         });
     }).on('error', function () {
-        helpers.journalisation(-1, req.user, req._parsedUrl.pathname, '');
         responce.jsonp(404, null);
     });
 };

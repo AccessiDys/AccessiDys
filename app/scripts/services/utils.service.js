@@ -184,8 +184,13 @@ cnedApp.service('UtilsService', function ($uibModal) {
             return str.replace(/[^a-z0-9]/gi, ' ');
         },
 
-        splitOnSyllable: function(text){
-            var formattedText = Hyphenator.hyphenate(text, 'fr');
+        replaceLink: function(text){
+            return text.replace(/href="(.*?)"/gi, 'href="/#/apercu?url=$1"');
+        },
+
+        splitOnSyllable: function (text) {
+            var formattedText = text.replace(/&nbsp;/gi, ' ');
+            formattedText = Hyphenator.hyphenate(formattedText, 'fr');
 
             formattedText = formattedText.replace(/(\b(?!<)[a-zA-Z0-9\-\_\|]+(?!>)\b)/gi, "%%$1%%");
             formattedText = formattedText.replace(/(\|)/gi, '</span><span>');
@@ -195,19 +200,23 @@ cnedApp.service('UtilsService', function ($uibModal) {
             return formattedText;
         },
 
-        splitOnWordWithOutSpace: function(text){
-            var formattedText = text.replace(methods.wordRegex,'<span>$1</span> ');
+        splitOnWordWithOutSpace: function (text) {
+            var formattedText = text.replace(/&nbsp;/gi, ' ');
+            formattedText = methods.replaceLink(formattedText);
+            formattedText = formattedText.replace(methods.wordRegex, '<span>$1</span> ');
 
             return formattedText;
         },
 
-        splitOnWordWithSpace: function(text){
-            var formattedText = text.replace(methods.wordRegex,'<span>$1 </span>');
+        splitOnWordWithSpace: function (text) {
+            var formattedText = text.replace(/&nbsp;/gi, ' ');
+            formattedText = methods.replaceLink(formattedText);
+            formattedText = formattedText.replace(methods.wordRegex, '<span>$1 </span>');
 
             return formattedText;
         },
 
-        wordRegex: /([\w,.':\?\-éèêàâ]+)(?![^<]*>)/gi
+        wordRegex: /([\w,.'"«»:\?\-éèêàâôîïö\(\)]+)(?![^<]*>)/gi
 
     };
 

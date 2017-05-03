@@ -27,7 +27,7 @@
 angular.module('cnedApp').controller('BookMarkletModalCtrl', function ($scope, $rootScope, $uibModalInstance, configuration) {
 
 
-    $scope.userDropBoxLink = '\'' + configuration.URL_REQUEST + '/#/apercu?title=\'+document.title+\'&url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
+    $scope.userDropBoxLink = '\'' + 'https://' + window.location.host + '/#/apercu?title=\'+document.title+\'&url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';
 
 
     $scope.dismissModal = function () {

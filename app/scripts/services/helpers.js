@@ -456,7 +456,7 @@ cnedApp.factory('serviceCheck',
                 }
                 return deferred.promise;
             },
-            htmlPreview: function (htmlUrl, token) {
+            htmlPreview: function (htmlUrl) {
                 htmlUrl = protocolToLowerCase(htmlUrl);
                 var deferred = $q.defer();
                 var data = {
@@ -467,7 +467,7 @@ cnedApp.factory('serviceCheck',
                     lien: htmlUrl
                 };
                 var serviceName = '/htmlPage';
-                $http.post(configuration.URL_REQUEST + serviceName, data)
+                $http.post(serviceName, data)
                     .success(function (data) {
                         if (data && data.length > 0) {
                             finalData.documentHtml = data;
@@ -518,29 +518,25 @@ cnedApp.factory('serviceCheck',
                     id: false
                 };
                 var localFilePreview = {};
-                if (localStorage.getItem('compteId')) {
-                    loacalSign = {
-                        id: localStorage.getItem('compteId'),
-                        filechunck: chunck
-                    };
-                    var serviceName = '/generateSign';
-                    $http.post(configuration.URL_REQUEST + serviceName, loacalSign)
-                        .success(function (loacalSign) {
-                            console.log('loacalSign --> ', loacalSign);
-                            if (loacalSign && loacalSign.sign) {
-                                localFilePreview.sign = loacalSign.sign;
-                            }
-                            deferred.resolve(localFilePreview);
-                            return deferred.promise;
-                        }).error(function () {
-                        localFilePreview.erreurIntern = true;
+
+
+                loacalSign = {
+                    filechunck: chunck
+                };
+                var serviceName = '/generateSign';
+                $http.post(configuration.URL_REQUEST + serviceName, loacalSign)
+                    .success(function (loacalSign) {
+                        console.log('loacalSign --> ', loacalSign);
+                        if (loacalSign && loacalSign.sign) {
+                            localFilePreview.sign = loacalSign.sign;
+                        }
                         deferred.resolve(localFilePreview);
-                    });
-                } else {
-                    localFilePreview.loged = false;
-                    localFilePreview.dropboxWarning = true;
+                        return deferred.promise;
+                    }).error(function () {
+                    localFilePreview.erreurIntern = true;
                     deferred.resolve(localFilePreview);
-                }
+                });
+
                 return deferred.promise;
             },
             htmlImage: function (htmlUrl, token) {

@@ -29,7 +29,7 @@
 'use strict';
 var cnedApp = cnedApp;
 
-cnedApp.service('workspaceService', function workspaceService($log, $localForage, configuration) {
+cnedApp.service('workspaceService', function workspaceService($log, $localForage, configuration, $rootScope) {
     var retContent = [],
         urlHost,
         urlPort,
@@ -138,37 +138,27 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
      * Gets the list of notes of localStorage and display them in the overview.
      */
     this.parcourirHtml = function (data, host, port) {
+
         urlHost = host;
         urlPort = port;
         retContent = [];
         retContent[0] = '<h1>Sommaire</h1><br />';
 
-        var removeAllSpan = function (element) {
-            var spans = element.find('span');
-            angular.forEach(spans, function (span) {
-                // span with just content
-                angular.element(span).contents().unwrap(); // replace all
-            });
-            return element.html();
-        };
-
-        data = removeAllSpan(angular.element('<div>' + data + '</div>'));
-
+        data = data.replace(/<span(.*?)>/gi, '');
+        data = data.replace(/<\/span>/gi, '');
 
 
         var pages = self.splitPages(data);
-
-        console.log('pages' , pages);
 
         for (var page = 0; page < pages.length; page++) {
             var block = 0;
 
             retContent.push(pages[page]);
-            /*var element = angular.element(pages[page]);
-            var tags = JSON.parse(localStorage.getItem('listTags'));
-            element.each(function (index, element) {
+            var element = angular.element(pages[page]);
 
-                tags.forEach(function (tag) {
+
+            angular.forEach(element, function (element) {
+                $rootScope.tags.forEach(function (tag) {
                     if (element.localName === tag.balise) {
                         if (tag.balise === 'div') {
                             if (angular.element(element).hasClass(self.cleanString(tag.libelle))) {
@@ -180,7 +170,8 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
 
                     }
                 });
-            });*/
+            });
+
         }
 
         return retContent;

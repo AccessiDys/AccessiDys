@@ -41,19 +41,31 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
 
         $scope.errors = [];
 
-        $log.debug('Title', $scope.document.title);
-
         $scope.errors = documentService.checkFields({
             title: $scope.document.title
         });
 
-        if ($scope.errors.length < 1) {
-            $uibModalInstance.close({
-                title: $scope.document.title
-            });
-        } else {
-            ToasterService.showToaster('#edit-title-error-toaster', $scope.errors[0]);
-        }
+        documentService.isDocumentAlreadyExist({
+            title: $scope.document.title
+        }).then(function (isDocumentAlreadyExist) {
+
+            if ($scope.errors.length < 1) {
+                if(!isDocumentAlreadyExist){
+                    $uibModalInstance.close({
+                        title: $scope.document.title
+                    });
+                } else {
+                    ToasterService.showToaster('#edit-title-error-toaster', 'document.message.save.ko.alreadyexist');
+                }
+
+            } else {
+                ToasterService.showToaster('#edit-title-error-toaster', $scope.errors[0]);
+            }
+
+        });
+
+
+
     };
 
     $scope.dismissModal = function () {

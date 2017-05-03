@@ -21,10 +21,11 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
-<h1 id="titreAddDocument" class="animated fadeInLeft">{{pageTitre}}</h1>
+<h1 class="animated fadeInLeft" data-ng-if="!document.filepath">Ajouter un document</h1>
+<h1 class="animated fadeInLeft" data-ng-if="document.filepath">Editer le document</h1>
 <!-- Header -->
 <!-- End Header -->
-<div class="content">
+<div class="content" data-ng-init="init()">
     <div document-methodes="" class="doc-General">
 
         <div class="alert-block alert-success alert-dismissable" id="document-success-toaster">
@@ -53,9 +54,17 @@
 
         <div class="head_section">
 
-            <input style="margin-top: 15px" type="text" class="input_simple pull-left" placeholder="Entrez le titre du document" data-ng-model="docTitre" data-ng-disabled="existingFile" required>
+            <input style="margin-top: 15px" type="text"
+                   class="input_simple pull-left"
+                   placeholder="Entrez le titre du document"
+                   data-ng-model="document.filename" data-ng-disabled="document.filepath" required>
 
-            <a href="#/listDocument" style="text-decoration: none; color: white;" role="button" type="button" class="grey_btn pull-right btn_annuler" data-ng-click="" title="{{'Fermer' | translate}}">Fermer</a>
+            <a ui-sref="app.list-document" style="text-decoration: none; color: white;"
+               role="button" type="button"
+               class="grey_btn pull-right btn_annuler"
+               title="{{'Fermer' | translate}}">
+                Fermer
+            </a>
             <button id="save_document"
                     data-ng-click="save()"
                     type="button"
@@ -63,7 +72,9 @@
                     title="{{'Enregistrer' | translate}}">
                 Enregistrer
             </button>
-            <button id="resizeDocEditorBtn" type="button" class="grey_btn pull-right resize_doc_editorBtn" style="margin-top: 5px; margin-right: 5px;" data-ng-click="resizeEditor()" title="{{resizeDocEditor}}">&nbsp;</button>
+            <button id="resizeDocEditorBtn" type="button" class="grey_btn pull-right resize_doc_editorBtn"
+                    style="margin-top: 5px; margin-right: 5px;" data-ng-click="resizeEditor()"
+                    title="{{resizeDocEditor}}">&nbsp;</button>
             <button id="add_documentbtn" type="button"
                     class="grey_btn pull-right add_document"
                     style="margin-top: 5px; margin-right: 5px;"
@@ -73,45 +84,15 @@
 
         </div>
 
-        <div id="editorContainer" style="border: 1px solid rgb(203, 203, 203)">
-            <div id="editorToolbar"></div>
-            <div id="editorAdd" class="resetAll" contenteditable="true" style="overflow-x: scroll; min-height: 500px; max-height: 800px; overflow-y: auto;"
-                 apply-rules="applyRules" regle-style="currentData" data-editor-content="true" tags="listTagsByProfil"
-                 data-show-loader="showAdaptationLoader()" data-hide-loader="hideAdaptationLoader()">
-
-            </div>
-            <div id="editorBottom"></div>
-        </div>
 
 
-        <!-- the beginning of modal Save. ? -->
-        <div class="modal fade" id="save-new-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" style="width: 900px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Information</h4>
-                    </div>
-                    <div ng-show="errorMsg" class="alert-block alert-danger">{{msgErrorModal}}</div>
-                    <div class="modal-body adjust-modal-body">
-                        <div style="margin-bottom: 15px;">Vous êtes sur le point d'ouvrir un nouveau document, toute modification non enregistrée sera perdue.</div>
+            <div text-angular
+                 ta-text-editor-setup="textAngularSetup"
+                 ng-model="document.data"
+                 class="{{currentProfile.data.className}}"></div>
 
-                        <div class="row-fluid span6">
-                            <div class="tab-content">
-                                <form id="show_document" name="show_document" class="" role="form" style="overflow: hidden;">
 
-                                    <div class="centering" id="ProfileButtons">
-                                        <button type="button" class="reset_btn" data-dismiss="modal" title="{{'Annuler' | translate}}">Annuler</button>
-                                        <button type="button" class="btn_simple light_blue" ng-disabled="!show_document.$valid" data-ng-click="openDocumentEditorWithData()" data-dismiss="modal" title="{{'Enregistrer' | translate}}">Continuer
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {{document.data}}
 
     </div>
 </div>

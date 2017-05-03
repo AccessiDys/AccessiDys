@@ -25,7 +25,7 @@
 
 /*jshint loopfunc:true*/
 /*global $:false, blocks, ownerId */
-/* global PDFJS ,Promise, CKEDITOR, gapi  */
+/* global PDFJS ,Promise, gapi  */
 /*jshint unused: false, undef:false */
 /* global
  FB
@@ -34,7 +34,7 @@
 
 angular.module('cnedApp')
     .controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location,
-                                        $log, $q, $anchorScroll, serviceCheck, configuration, dropbox,
+                                        $log, $q, serviceCheck, configuration, dropbox,
                                         verifyEmail, generateUniqueId, storageService, htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
@@ -46,11 +46,6 @@ angular.module('cnedApp')
         $scope.urlTitle = $stateParams.title; // Web adapt case
         $scope.annotationURL = $stateParams.annotation;
         $scope.isEnableNoteAdd = false;
-        $scope.showDuplDocModal = false;
-        $scope.showDestination = false;
-        $scope.showEmail = false;
-        $scope.emailMsgSuccess = '';
-        $scope.emailMsgError = '';
         $scope.showPartagerModal = true;
         $scope.printPlan = true;
 
@@ -67,7 +62,7 @@ angular.module('cnedApp')
         $scope.neverShowNoAudioRights = false;
         $scope.neverShowOfflineSynthesisTips = false;
         $scope.resizeDocApercu = 'Agrandir';
-        $scope.forceApplyRules = true;
+
         if (!$stateParams.mode || $stateParams.mode === 'lecture') {
             $scope.modeImpression = true;
         } else if ($stateParams.mode === 'page') {
@@ -75,23 +70,14 @@ angular.module('cnedApp')
         }
         $scope.numeroPageRechercher = 0;
         $scope.applyRulesAfterRender = false;
-        $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
 
         $scope.originalHtml = '';
+
+        $scope.document = null;
 
         /**
          * ---------- Functions -----------
          */
-
-        /**
-         * Force the colorations of the application .
-         */
-        $scope.forceRulesApply = function (popup) {
-            $scope.forceApplyRules = false;
-            $timeout(function () {
-                $scope.forceApplyRules = true;
-            });
-        };
 
         /*
          * Display the title of the document
@@ -109,61 +95,27 @@ angular.module('cnedApp')
             }
         };
 
-        /**
-         * Show loading popup.
-         */
-        $scope.showAdaptationLoader = function () {
-            LoaderService.showLoader('document.message.info.adapt.inprogress', false);
-        };
-
-        /**
-         * Show loading popup.
-         */
-        $scope.hideAdaptationLoader = function () {
-            LoaderService.hideLoader();
-            $rootScope.$emit('redrawLines');
-        };
-
-        /**
-         * Show loading popup.
-         */
-        $scope.showAdaptationLoaderFromLoop = function (indexLoop) {
-            if (indexLoop <= 0) {
-                $scope.showAdaptationLoader();
-            }
-        };
-
-        /**
-         * Hide Adaptation popup.
-         */
-        $scope.hideAdaptationLoaderFromLoop = function (indexLoop, max) {
-            if (indexLoop >= (max - 1)) {
-                LoaderService.hideLoader();
-                $rootScope.$emit('redrawLines');
-            }
-        };
-
         /*
          * Make / Scroll the menu while scrolling.
          */
         // TODO
         /*$(window).scroll(function () {
-            var dif_scroll = 0;
-            if (angular.element('#page-content').offset()) {
-                if ($(window).scrollTop() >= angular.element('#page-content').offset().top) {
-                    if (!$scope.modeImpression) {
-                        dif_scroll = $(window).scrollTop() - 120;
-                    } else {
-                        dif_scroll = $(window).scrollTop() - 70;
-                    }
+         var dif_scroll = 0;
+         if (angular.element('#page-content').offset()) {
+         if ($(window).scrollTop() >= angular.element('#page-content').offset().top) {
+         if (!$scope.modeImpression) {
+         dif_scroll = $(window).scrollTop() - 120;
+         } else {
+         dif_scroll = $(window).scrollTop() - 70;
+         }
 
-                    $('.fixed_menu').css('top', dif_scroll + 'px');
-                } else {
-                    $('.fixed_menu').css('top', 0);
-                }
-            }
+         $('.fixed_menu').css('top', dif_scroll + 'px');
+         } else {
+         $('.fixed_menu').css('top', 0);
+         }
+         }
 
-        });*/
+         });*/
 
 
         /**
@@ -443,7 +395,6 @@ angular.module('cnedApp')
                 $scope.currentContent = $scope.content[$scope.currentPage];
                 $scope.numeroPageRechercher = pageIndex;
                 window.scroll(0, 0);
-                $scope.forceRulesApply();
             }
 
             if (pageIndex > 0) {
@@ -591,21 +542,6 @@ angular.module('cnedApp')
                                         return !!element;
                                     });
                                     resultClean = resultClean.join(' ');
-                                    // Flattening the DOM via CKeditor
-                                    var ckConfig = {};
-                                    ckConfig.on = {
-                                        instanceReady: function () {
-                                            var editor = CKEDITOR.instances.virtualEditor;
-                                            editor.setData(resultClean);
-                                            var html = editor.getData();
-                                            $scope.$apply(function () {
-                                                $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                                                $scope.setPage($scope.currentPage);
-                                            });
-                                        }
-                                    };
-                                    $timeout($scope.destroyCkeditor());
-                                    CKEDITOR.inline('virtualEditor', ckConfig);
                                     window.scrollTo(0, 0);
                                     LoaderService.hideLoader();
                                     $scope.showTitleDoc($scope.urlTitle);
@@ -668,25 +604,11 @@ angular.module('cnedApp')
                 return htmlEpubTool.cleanHTML(htmlFile);
 
             }).then(function (resultClean) {
-                // Flattening the DOM via CKeditor
-                var ckConfig = {};
-                ckConfig.on = {
-                    instanceReady: function () {
-                        var editor = CKEDITOR.instances.virtualEditor;
-                        editor.setData(resultClean);
-                        var html = editor.getData();
-                        $scope.$apply(function () {
 
-                            $scope.originalHtml = html;
-                            $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                            $scope.setPage($scope.currentPage);
-
-                        });
-
-                    }
-                };
-                $timeout($scope.destroyCkeditor());
-                CKEDITOR.inline('virtualEditor', ckConfig);
+                $scope.originalHtml = resultClean;
+                $scope.content = workspaceService.parcourirHtml(resultClean, $scope.urlHost, $scope.urlPort);
+                console.log('content', $scope.content);
+                $scope.setPage($scope.currentPage);
             }, function (err) {
                 $log.error('err transform html', err);
                 UtilsService.showInformationModal('Erreur technique', 'L\'import du document a échoué. Une erreur technique est survenue.', null, true);
@@ -703,7 +625,6 @@ angular.module('cnedApp')
         $scope.getTmpContent = function () {
             return fileStorageService.getTempFile().then(function (data) {
                 $scope.content = workspaceService.parcourirHtml(data);
-                $scope.forceRulesApply();
             });
         };
 
@@ -721,22 +642,9 @@ angular.module('cnedApp')
          */
         $scope.loadPictureByLink = function (url) {
             var resultClean = '<img src="' + url + '">';
-            //  Flattening the DOM via CKeditor
-            var ckConfig = {};
-            ckConfig.on = {
-                instanceReady: function () {
-                    var editor = CKEDITOR.instances.virtualEditor;
-                    editor.setData(resultClean);
-                    var html = editor.getData();
-                    $scope.$apply(function () {
-                        $scope.content = workspaceService.parcourirHtml(html, $scope.urlHost, $scope.urlPort);
-                        $scope.setPage($scope.currentPage);
-                    });
 
-                }
-            };
-            $timeout($scope.destroyCkeditor());
-            CKEDITOR.inline('virtualEditor', ckConfig);
+            $scope.content = workspaceService.parcourirHtml(resultClean, $scope.urlHost, $scope.urlPort);
+            $scope.setPage($scope.currentPage);
             LoaderService.hideLoader();
             $scope.showTitleDoc($scope.urlTitle);
             $scope.restoreNotesStorage();
@@ -767,14 +675,6 @@ angular.module('cnedApp')
             // Recovery of the display choice of the installation trick
             // of the voices in offline mode
             $scope.neverShowOfflineSynthesisTips = localStorage.getItem('neverShowOfflineSynthesisTips') === 'true';
-
-            // Delete editor
-            $scope.destroyCkeditor();
-
-            $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
-
-            // disables the automatic creation of inline editors
-            $scope.disableAutoInline();
 
             $scope.currentPage = 1;
 
@@ -820,8 +720,7 @@ angular.module('cnedApp')
             if ($scope.idDocument) {
                 fileStorageService.get($scope.idDocument, 'document').then(function (file) {
 
-                    $log.debug('get content data', file);
-
+                    $scope.document = file;
                     $scope.content = workspaceService.parcourirHtml(file.data);
 
                     $log.debug('$scope.content', $scope.content);
@@ -860,20 +759,17 @@ angular.module('cnedApp')
                 var text = $scope.getSelectedText();
                 $log.debug('$scope.getSelectedText()', text);
                 if (text && !/^\s*$/.test(text)) {
-                    $scope.checkAudioRights().then(function (audioRights) {
-                        $log.debug('$scope.checkAudioRights()', audioRights);
 
-                        if (audioRights && $scope.checkBrowserSupported()) {
-                            serviceCheck.isOnline().then(function () {
-                                $scope.displayOfflineSynthesisTips = false;
-                                speechService.speech(text, true);
-                                window.document.addEventListener('click', $scope.stopSpeech, false);
-                            }, function () {
-                                $scope.displayOfflineSynthesisTips = !$scope.neverShowOfflineSynthesisTips;
-                                speechService.speech(text, false);
-                            });
-                        }
-                    });
+                    if ($scope.checkBrowserSupported()) {
+                        serviceCheck.isOnline().then(function () {
+                            $scope.displayOfflineSynthesisTips = false;
+                            speechService.speech(text, true);
+                            window.document.addEventListener('click', $scope.stopSpeech, false);
+                        }, function () {
+                            $scope.displayOfflineSynthesisTips = !$scope.neverShowOfflineSynthesisTips;
+                            speechService.speech(text, false);
+                        });
+                    }
                 }
             }, 10);
         };
@@ -996,37 +892,6 @@ angular.module('cnedApp')
             return text;
         };
 
-        /**
-         * Disabling automatic creation of inline editors
-         *
-         * @method $scope.disableAutoInline
-         */
-        $scope.disableAutoInline = function () {
-            CKEDITOR.disableAutoInline = true;
-        };
-
-        /**
-         * Delete the instance of ckeditor used to format HTML
-         *
-         * @method $scope.destroyCkeditor
-         */
-        $scope.destroyCkeditor = function () {
-            for (var name in CKEDITOR.instances) {
-                if (CKEDITOR.instances[name]) {
-                    if (CKEDITOR.instances[name].filter) {
-                        CKEDITOR.instances[name].destroy(true);
-                    } else {
-                        CKEDITOR.remove(CKEDITOR.instances[name]);
-                    }
-                    delete CKEDITOR.instances[name];
-                }
-            }
-        };
-
-        $rootScope.$on('profilChanged', function () {
-            $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
-        });
-
         // reduces or enlarges the overview page of the document
         $scope.resizeApercu = function () {
             if ($scope.resizeDocApercu === 'Agrandir') {
@@ -1114,9 +979,7 @@ angular.module('cnedApp')
          * Save the web document
          */
         $scope.saveWebDocument = function () {
-
             var doc = processLink($scope.originalHtml);
-
 
             documentService.save({
                 title: $rootScope.titreDoc,
@@ -1127,7 +990,11 @@ angular.module('cnedApp')
                 $scope.showSave = false;
                 $scope.showEditer = true;
 
-                ToasterService.showToaster('#overview-success-toaster', 'document.message.save.ok');
+                if (!UserService.getData().token) {
+                    ToasterService.showToaster('#overview-success-toaster', 'document.message.save.cache.ok');
+                } else {
+                    ToasterService.showToaster('#overview-success-toaster', 'document.message.save.storage.ok');
+                }
 
             }, function () {
                 ToasterService.showToaster('#overview-error-toaster', 'document.message.save.ko');
@@ -1144,62 +1011,38 @@ angular.module('cnedApp')
                 UtilsService.showInformationModal('label.offline', 'document.message.info.share.offline');
             } else {
 
-                // TODO changer l'appel
-                fileStorageService.searchFilesInDropbox('_' + $scope.idDocument + '_', $rootScope.currentUser.dropbox.accessToken).then(function (files) {
-                    var file = null;
 
-                    if (files && files.matches.length > 0) {
 
-                        for (var i = 0; i < files.matches.length; i++) {
-                            if (files.matches[i].metadata.name.indexOf('_' + $scope.idDocument + '_') > -1) {
-                                file = files.matches[i].metadata;
-                            }
-                        }
+                var itemToShare = {
+                    linkToShare: '',
+                    name: $scope.document.filename,
+                    annotationsToShare: []
+                };
 
+                if (localStorage.getItem('notes') !== null) {
+                    var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
+                    if (noteList.hasOwnProperty(document.filename)) {
+                        itemToShare.annotationsToShare = noteList[document.filename];
                     }
+                }
 
-                    if (file) {
-                        var document = fileStorageService.transformDropboxFileToStorageFile(file);
+                fileStorageService.shareFile($scope.document.filepath)
+                    .then(function (shareLink) {
+                        itemToShare.linkToShare = 'https://' + window.location.host + '/#/apercu?title=' + encodeURIComponent($scope.document.filename) + '&url=' + encodeURIComponent(shareLink);
 
-                        var itemToShare = {
-                            linkToShare: '',
-                            name: document.filename,
-                            annotationsToShare: []
-                        };
-
-                        if (localStorage.getItem('notes') !== null) {
-                            var noteList = JSON.parse(angular.fromJson(localStorage.getItem('notes')));
-
-                            $log.debug('has notes ', noteList.hasOwnProperty(document.filename));
-                            $log.debug('noteList ', noteList);
-
-                            if (noteList.hasOwnProperty(document.filename)) {
-                                itemToShare.annotationsToShare = noteList[document.filename];
-                            }
-                        }
-
-                        fileStorageService.shareFile(document.filepath, $rootScope.currentUser.dropbox.accessToken)
-                            .then(function (shareLink) {
-                                itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?title=' + encodeURIComponent(document.filename) + '&url=' + encodeURIComponent(shareLink);
-
-                                //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
-                                UtilsService.openSocialShareModal('document', itemToShare)
-                                    .then(function () {
-                                        // Modal close
-                                        ToasterService.showToaster('#overview-success-toaster', 'mail.send.ok');
-                                    }, function () {
-                                        // Modal dismiss
-                                    });
-
+                        //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
+                        UtilsService.openSocialShareModal('document', itemToShare)
+                            .then(function () {
+                                // Modal close
+                                ToasterService.showToaster('#overview-success-toaster', 'mail.send.ok');
+                            }, function () {
+                                // Modal dismiss
                             });
 
-                        // angular-google-analytics tracking pages
-                        Analytics.trackPage('/document/share.html');
+                    });
 
-                    }
-
-
-                });
+                // angular-google-analytics tracking pages
+                Analytics.trackPage('/document/share.html');
 
 
             }

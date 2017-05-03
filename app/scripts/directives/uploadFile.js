@@ -64,7 +64,7 @@ cnedApp.directive('uploadFile', function ($rootScope, ToasterService, $timeout) 
                             $scope.form.title = filename.substring(0, filename.lastIndexOf('.'));
                             $scope.form.files.push(element.files[i]);
                             field_txt += ' ' + element.files[i].name;
-                            angular.element('#filename_show').val(field_txt);
+                            angular.element(document.querySelector('#filename_show')).val(field_txt);
                         }
                     }
                 }, 0);

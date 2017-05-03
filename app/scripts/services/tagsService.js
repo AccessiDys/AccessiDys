@@ -26,18 +26,19 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('tagsService', function($http, configuration, $localForage, $uibModal) {
-    this.getTags = function() {
-        return $http.get(configuration.URL_REQUEST + '/readTags').then(function(result) {
-            return $localForage.setItem('listTags', result.data).then(function() {
+cnedApp.service('tagsService', function ($http, $uibModal, CacheProvider) {
+    this.getTags = function () {
+        return $http.get('/readTags').then(function (result) {
+            return CacheProvider.setItem(result.data, 'listTags').then(function () {
                 return result.data;
             });
-        }, function() {
-            return $localForage.getItem('listTags');
+
+        }, function () {
+            return CacheProvider.getItem('listTags');
         });
     };
 
-    this.openEditModal = function(mode , tag){
+    this.openEditModal = function (mode, tag) {
         return $uibModal.open({
             templateUrl: 'views/tag/edit-tag.modal.html',
             controller: 'EditTagModalCtrl',

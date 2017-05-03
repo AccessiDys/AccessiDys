@@ -296,8 +296,8 @@ module.exports = function (app, passport) {
     //test for manipulating image
     var images = require('../api/services/images');
     app.post('/fileupload', isLoggedIn, images.uploadFiles);
-    app.post('/sendPdf', isLoggedIn, images.sendPdf);
-    app.post('/sendPdfHTTPS', isLoggedIn, images.sendPdfHTTPS);
+    app.post('/sendPdf', images.sendPdf);
+    app.post('/sendPdfHTTPS', images.sendPdfHTTPS);
 
     app.post('/previewPdf', isLoggedIn, images.previewPdf);
     app.post('/previewPdfHTTPS', isLoggedIn, images.previewPdfHTTPS);

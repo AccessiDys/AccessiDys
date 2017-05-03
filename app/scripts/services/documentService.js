@@ -61,7 +61,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             $log.debug('Check if document already exist', document);
 
-            fileStorageService.list('profile').then(function (documents) {
+            fileStorageService.list('document').then(function (documents) {
                 var isFound = false;
                 _.each(documents, function (item) {
                     if (document.title === item.filename) {

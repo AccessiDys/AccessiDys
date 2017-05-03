@@ -68,7 +68,7 @@ angular.module('cnedApp')
          */
         $scope.deleteDocument = function (document) {
 
-            UtilsService.openConfirmModal('document.label.delete.title',
+            UtilsService.openConfirmModal(gettextCatalog.getString('document.label.delete.title'),
                 gettextCatalog.getString('document.label.delete.anwser').replace('document.name', document.filename), true)
                 .then(function () {
                     LoaderService.showLoader('document.message.info.delete.inprogress', true);
@@ -135,9 +135,9 @@ angular.module('cnedApp')
                     }
                 }
 
-                fileStorageService.shareFile(document)
+                fileStorageService.shareFile(document.filepath)
                     .then(function (shareLink) {
-                        itemToShare.linkToShare = configuration.URL_REQUEST + '/#/apercu?title=' + encodeURIComponent(document.filename) + '&url=' + encodeURIComponent(shareLink);
+                        itemToShare.linkToShare = 'https://' + window.location.host + '/#/apercu?title=' + encodeURIComponent(document.filename) + '&url=' + encodeURIComponent(shareLink);
 
                         //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
                         UtilsService.openSocialShareModal('document', itemToShare)
@@ -214,6 +214,8 @@ angular.module('cnedApp')
                     $scope.listDocument = [];
                 }
                 $scope.initialiseShowDocs();
+
+
             }, function () {
                 LoaderService.hideLoader();
             });

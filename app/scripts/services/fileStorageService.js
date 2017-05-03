@@ -288,9 +288,9 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
      *
      * @method shareFile
      */
-    this.shareFile = function (file) {
+    this.shareFile = function (filepath) {
         if (UserService.getData() && UserService.getData().token) {
-            return DropboxProvider.shareLink(file.filepath, UserService.getData().token).then(function (result) {
+            return DropboxProvider.shareLink(filepath, UserService.getData().token).then(function (result) {
                 return result.url;
             });
         } else {

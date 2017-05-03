@@ -30,6 +30,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $log.debug('commonCtrl - userData', userData);
 
     $rootScope.profiles = [];
+    $rootScope.tags = [];
     $rootScope.tmpProfile = null;
     $rootScope.currentProfile = null;
     $rootScope.defaultSystemProfile = {};
@@ -54,6 +55,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             // Init profile list and Tag
 
             tagsService.getTags().then(function (tags) {
+
+                $rootScope.tags = tags;
 
                 profilsService.getProfiles().then(function (res) {
 

@@ -29,7 +29,7 @@ angular.module('cnedApp')
     .controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces,
                                           configuration, $location, serviceCheck, verifyEmail, $window,
                                           profilsService, $uibModal, $timeout, tagsService, $log, _, Analytics,
-                                          gettextCatalog, UtilsService, LoaderService, EmailService, ToasterService, UserService, $stateParams) {
+                                          gettextCatalog, UtilsService, LoaderService, EmailService, ToasterService, UserService, $stateParams, fileStorageService) {
 
         /* Initializations */
         $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
@@ -208,7 +208,7 @@ angular.module('cnedApp')
                             }
                         }
 
-                        if(!isFound){
+                        if (!isFound) {
                             $rootScope.profiles.push($stateParams.file);
                         }
 
@@ -525,7 +525,7 @@ angular.module('cnedApp')
 
                             LoaderService.setLoaderProgress(100);
                             LoaderService.hideLoader();
-                        }, function(){
+                        }, function () {
 
                             LoaderService.setLoaderProgress(100);
                             LoaderService.hideLoader();
@@ -553,10 +553,30 @@ angular.module('cnedApp')
                     name: profile.data.nom
                 };
 
-                if ($location.absUrl().lastIndexOf('detailProfil') > -1) {
-                    itemToShare.linkToShare = decodeURI($location.absUrl());
+                if (profile.provider === 'accessidys') {
+                    itemToShare.linkToShare = 'https://' + window.location.host + '/#/detailProfil?idProfil=' + profile.data._id;
+
+                    UtilsService.openSocialShareModal('profile', itemToShare)
+                        .then(function () {
+                            // Modal close
+                            ToasterService.showToaster('#profile-success-toaster', 'mail.send.ok');
+                        }, function () {
+                            // Modal dismiss
+                        });
                 } else {
-                    itemToShare.linkToShare = decodeURI($location.absUrl().replace('profiles', 'detailProfil?idProfil=' + profile.data._id));
+                    fileStorageService.shareFile(profile.filepath)
+                        .then(function (shareLink) {
+                            itemToShare.linkToShare = 'https://' + window.location.host + '/#/detailProfil?url=' + encodeURIComponent(shareLink);
+
+                            UtilsService.openSocialShareModal('profile', itemToShare)
+                                .then(function () {
+                                    // Modal close
+                                    ToasterService.showToaster('#profile-success-toaster', 'mail.send.ok');
+                                }, function () {
+                                    // Modal dismiss
+                                });
+
+                        });
                 }
 
 
@@ -573,13 +593,6 @@ angular.module('cnedApp')
                 Analytics.trackPage('/profile/share.html');
             }
 
-        };
-
-        $scope.forceRulesApply = function () {
-            $scope.forceApplyRules = false;
-            $timeout(function () {
-                $scope.forceApplyRules = true;
-            });
         };
 
         /**
@@ -794,54 +807,69 @@ angular.module('cnedApp')
          * Initialize the detail of the profile..
          */
         $scope.initDetailProfil = function () {
-            var dataProfile = {};
-            if (localStorage.getItem('compteId')) {
-                dataProfile = {
-                    id: localStorage.getItem('compteId')
-                };
-            }
 
-            var profileId = $location.search().idProfil;
 
-            // TODO get user profile on dropbox
-            profilsService.getUserProfil(profileId)
-                .then(function (data) {
-                    if (data === null || !data) {
-                        UtilsService.showInformationModal('label.offline', 'profile.message.info.display.offline', '/profiles');
-                    } else {
-                        var profile = data;
+            if ($stateParams.idProfil) {
 
-                        tagsService.getTags().then(function (tags) {
+                profilsService.getProfiles().then(function (res) {
 
-                            profilsService.getProfilTags(profile.profilID).then(function (data) {
+                    if (res) {
 
-                                profile.data.profileTags = {};
-                                profile.data.profileTags.idProfil = profile._id;
-                                profile.data.profileTags = data;
+                        _.each(res, function (profile) {
+
+                            if (profile) {
+
+                                profile.data.className = profilsService.generateClassName(profile, false);
 
                                 _.each(profile.data.profileTags, function (item) {
-                                    item.tagDetail = _.find(tags, function (tag) {
+                                    item.tagDetail = _.find($rootScope.tags, function (tag) {
                                         return item.tag === tag._id;
                                     });
 
 
                                     if (typeof item.tagDetail === 'object') {
-                                        item.texte = '<' + item.tagDetail.balise + ' class="' + removeStringsUppercaseSpaces(item.tagDetail.libelle) + '">' + item.tagDetail.libelle + ': ' + $scope.displayTextSimple + '</' + item.tagDetail.balise + '>';
+                                        item.texte = '<' + item.tagDetail.balise + '>' + item.tagDetail.libelle + ': ' + $rootScope.displayTextSimple + '</' + item.tagDetail.balise + '>';
                                     }
 
                                     // Avoid mapping with backend
                                     item.id_tag = item.tag;
                                     item.style = item.texte;
+
                                 });
 
-                                $scope.detailProfil = profile;
-                                $log.debug('$scope.detailProfil', $scope.detailProfil);
-                            });
+                                profile.data.profileTags.sort(function (a, b) {
+                                    return a.tagDetail.position - b.tagDetail.position;
+                                });
 
+                                profile.showed = true;
+
+                                if (profile.data._id === $stateParams.idProfil) {
+                                    $scope.detailProfil = profile;
+                                }
+
+
+                            }
                         });
                     }
 
                 });
+
+
+
+
+
+            } else if ($stateParams.url) {
+
+                $http.get($stateParams.url).then(function (res) {
+                    $scope.detailProfil = {
+                        data: res.data
+                    };
+
+                    $scope.detailProfil.data.className = profilsService.generateClassName($scope.detailProfil, true);
+                    $rootScope.tmpProfile = angular.copy($scope.detailProfil);
+                });
+
+            }
 
 
             // Get back the profile and the current userProfil

@@ -40,7 +40,8 @@ var cnedApp = angular.module('cnedApp', [
     'LocalForageModule',
     'angular-google-analytics',
     '720kb.socialshare',
-    'slick'
+    'slick',
+    'textAngular'
 ]);
 
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
@@ -111,7 +112,7 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
             }
         })
         .state('app.detail-profile', {
-            url: '/detailProfil',
+            url: '/detailProfil?url&idProfil',
             templateUrl: 'views/profiles/detailProfil.html',
             controller: 'ProfilesCtrl',
             pageTrack: '/profile/detail.html'  // angular-google-analytics extension
