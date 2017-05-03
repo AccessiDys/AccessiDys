@@ -184,7 +184,7 @@ cnedApp.service('UtilsService', function ($uibModal) {
             return str.replace(/[^a-z0-9]/gi, ' ');
         },
 
-        replaceLink: function(text){
+        replaceLink: function (text) {
             return text.replace(/href="(.*?)"/gi, 'href="/#/apercu?url=$1"');
         },
 
@@ -211,12 +211,12 @@ cnedApp.service('UtilsService', function ($uibModal) {
         splitOnWordWithSpace: function (text) {
             var formattedText = text.replace(/&nbsp;/gi, ' ');
             formattedText = methods.replaceLink(formattedText);
-            formattedText = formattedText.replace(methods.wordRegex, '<span>$1 </span>');
+            formattedText = formattedText.replace(methods.wordRegex, '<span>$1</span>');
 
             return formattedText;
         },
 
-        wordRegex: /([\w,.'"«»:\?\-éèêàâôîïö\(\)]+)(?![^<]*>)/gi
+        wordRegex: /([\w,.'&;"«»:%\?\-éèêàâôîïö\(\)]+)(?![^<]*>)/gi
 
     };
 

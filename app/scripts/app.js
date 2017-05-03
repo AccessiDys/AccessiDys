@@ -47,7 +47,7 @@ var cnedApp = angular.module('cnedApp', [
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
 
     // Log enable / disable
-    $logProvider.debugEnabled((configuration.ENV === 'dev'));
+    $logProvider.debugEnabled(false);
 
     // Google analytics account settings
     AnalyticsProvider.setAccount(configuration.GOOGLE_ANALYTICS_ID);
@@ -161,7 +161,7 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
                 file: null
             },
             resolve: {
-                auth: function ($state, $stateParams, UserService, OauthService, $log, CacheProvider) {
+                auth: function ($state, $stateParams, UserService, OauthService, $log, CacheProvider, fileStorageService, $q, $rootScope) {
 
                     return CacheProvider.getItem('myBackupRouteData').then(function (routeData) {
 
@@ -170,10 +170,41 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
 
                         if ($stateParams.auth) {
 
-                            return OauthService.token().then(function (res) {
-                                $log.debug('get token ', res.data);
 
+
+                            return OauthService.token().then(function (res) {
                                 return UserService.saveData(res.data).then(function () {
+
+                                    CacheProvider.getItem('documentsToSynchronize').then(function(files){
+
+                                        // Synchronize doc
+                                        if(files){
+                                            var toSend = [];
+                                            for(var i = 0; i < files.length; i++){
+                                                toSend.push(fileStorageService.save(files[i], 'document'));
+                                            }
+                                            $q.all(toSend).then(function(res){
+                                                $log.debug('res from documentsToSynchronize', res);
+                                            });
+                                        }
+                                    });
+
+                                    CacheProvider.getItem('profilesToSynchronize').then(function(files){
+
+                                        // Synchronize doc
+                                        if(files){
+                                            var toSend = [];
+                                            for(var i = 0; i < files.length; i++){
+                                                files[i].data.owner = res.data.email;
+                                                toSend.push(fileStorageService.save(files[i], 'profile'));
+                                                $rootScope.profiles.push(files[i]);
+                                            }
+                                            $q.all(toSend).then(function(res){
+                                                $log.debug('res from profileToSynchronize', res);
+                                            });
+                                        }
+                                    });
+
                                     if (routeData) {
                                         $state.go(routeData.prevState, {file: routeData.file});
                                     } else {

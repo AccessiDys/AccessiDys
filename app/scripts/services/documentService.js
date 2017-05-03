@@ -134,6 +134,9 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                                         .then(function () {
                                             $rootScope.$state.go('app.my-backup', {prevState: 'app.edit-document', file: file});
                                         }, function () {
+
+                                            fileStorageService.addDocumentToSynchronize(file);
+
                                             deferred.resolve(data);
                                         });
                                 } else {

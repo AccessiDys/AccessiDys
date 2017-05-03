@@ -26,7 +26,7 @@
 /* jshint loopfunc:true */
 
 angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $uibModalInstance, $rootScope, profilsService,
-                                                                             ToasterService, UserService, UtilsService, LoaderService, template, profile) {
+                                                                             ToasterService, UserService, UtilsService, LoaderService, fileStorageService, template, profile) {
     $scope.template = template;
     $scope.profile = profile;
     $rootScope.tmpProfile = angular.copy(profile);
@@ -109,6 +109,7 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
                                             });
 
                                         }, function () {
+                                            fileStorageService.addProfileToSynchronize($scope.profile);
                                             $scope.dismissModal('save');
                                         });
                                 } else {

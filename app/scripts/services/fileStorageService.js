@@ -199,10 +199,6 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
      * @method renameFile
      */
     this.rename = function (file, newName, type) {
-        $log.debug('FileStorageService - rename - params file', file);
-        $log.debug('FileStorageService - rename - params newName', newName);
-        $log.debug('FileStorageService - rename - params type', type);
-
         var storageName = '';
         var extension = '';
 
@@ -346,6 +342,32 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         var hash = md5.createHash(fileName);
 
         return '/' + tmpDate + '_' + encodeURIComponent(fileName) + '_' + hash + extension;
+    };
+
+    this.addDocumentToSynchronize = function(file){
+
+        CacheProvider.getItem('documentsToSynchronize').then(function(files){
+            if(!files){
+                files = [];
+            }
+            files.push(file);
+
+            console.log('documents to synchronize', files);
+            CacheProvider.setItem(files, 'documentsToSynchronize');
+        });
+    };
+
+    this.addProfileToSynchronize = function(file){
+
+        CacheProvider.getItem('profilesToSynchronize').then(function(files){
+            if(!files){
+                files = [];
+            }
+            files.push(file);
+
+            console.log('profiles to synchronize', files);
+            CacheProvider.setItem(files, 'profilesToSynchronize');
+        });
     };
 
 
