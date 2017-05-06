@@ -153,7 +153,10 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         for (var page = 0; page < pages.length; page++) {
             var block = 0;
 
-            retContent.push(pages[page]);
+            console.log('Ret content before', retContent);
+
+            //retContent.push(pages[page]);
+            console.log('Ret content after', retContent);
             var element = angular.element(pages[page]);
 
 
@@ -227,6 +230,9 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         if (!retContent[page]) {
             retContent[page] = '';
         }
+
+        console.log('retContent', retContent);
+        console.log('processElement , ', element);
         processChildNode(element);
         retContent[page] += element.outerHTML;
         return (block + 1);

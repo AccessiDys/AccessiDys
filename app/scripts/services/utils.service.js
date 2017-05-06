@@ -161,6 +161,16 @@ cnedApp.service('UtilsService', function ($uibModal) {
         },
 
         /**
+         * Generate a unique key
+         * @returns {number}
+         */
+        generateUniqueId : function () {
+            var date = new Date().getTime();
+            date += (parseInt(Math.random() * 1000)).toString();
+            return date;
+        },
+
+        /**
          * Clean all special chars
          * @param str String to clean
          * @returns {string}

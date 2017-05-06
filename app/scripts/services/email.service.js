@@ -25,16 +25,16 @@
 'use strict';
 
 /*global cnedApp */
-cnedApp.service('EmailService', function ($http, configuration) {
+cnedApp.service('EmailService', function ($http) {
 
     var methods = {
 
         sendMail: function(params){
-            return $http.post(configuration.URL_REQUEST + '/sendMail', params);
+            return $http.post( '/sendMail', params);
         },
 
         sendEMail: function(params){
-            return $http.post(configuration.URL_REQUEST + '/sendEmail', params);
+            return $http.post( '/sendEmail', params);
         },
 
         /**

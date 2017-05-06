@@ -322,13 +322,6 @@ describe(
             }));
 
 
-            it('listDocumentCtrl: localSetting', inject(function() {
-                localStorage.removeItem('listTags');
-                localStorage.removeItem('listTagsByProfil');
-                expect($scope.localSetting).toBeDefined();
-            }));
-
-
             it('listDocumentCtrl:specificFilter', inject(function() {
                 $scope.query = 'plz';
                 $scope.listDocument = [ {

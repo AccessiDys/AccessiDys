@@ -26,8 +26,8 @@
 /* jshint loopfunc:true */
 
 angular.module('cnedApp')
-    .controller('ProfilesCtrl', function ($scope, $http, $rootScope, removeStringsUppercaseSpaces,
-                                          configuration, $location, serviceCheck, verifyEmail, $window,
+    .controller('ProfilesCtrl', function ($scope, $http, $rootScope,
+                                          configuration, $location, serviceCheck, $window,
                                           profilsService, $uibModal, $timeout, tagsService, $log, _, Analytics,
                                           gettextCatalog, UtilsService, LoaderService, EmailService, ToasterService, UserService, $stateParams, fileStorageService) {
 
@@ -622,44 +622,6 @@ angular.module('cnedApp')
             });
         };
 
-        $scope.mettreParDefaut = function (param) {
-            $scope.defaultVar = {
-                userID: param.owner,
-                profilID: param._id,
-                defaultVar: true
-            };
-            param.defautMark = true;
-            param.defaut = true;
-            $scope.token.addedDefaultProfile = $scope.defaultVar;
-            $http.post(configuration.URL_REQUEST + '/setDefaultProfile', $scope.token)
-                .success(function (data) {
-                    $scope.defaultVarFlag = data;
-                    ToasterService.showToaster('#profile-success-toaster', 'profile.message.default.ok');
-                    $scope.getProfiles();
-                });
-        };
-
-        $scope.retirerParDefaut = function (param) {
-            $scope.defaultVar = {
-                userID: param.owner,
-                profilID: param._id,
-                defaultVar: false
-            };
-
-            if ($scope.token && $scope.token.id) {
-                $scope.token.cancelFavs = $scope.defaultVar;
-            } else {
-                $scope.token.id = localStorage.getItem('compteId');
-                $scope.token.cancelFavs = $scope.defaultVar;
-            }
-
-            $http.post(configuration.URL_REQUEST + '/cancelDefaultProfile', $scope.token)
-                .success(function () {
-                    ToasterService.showToaster('#profile-success-toaster', 'profile.message.default.ok');
-                    $scope.getProfiles();
-                });
-        };
-
         $scope.isDefault = function (param) {
             if (param && param.data.state === 'default') {
                 return true;
@@ -744,9 +706,9 @@ angular.module('cnedApp')
              });*/
         };
 
-        /* sending email when duplicating. */
+        /* sending email when duplicating. */ // TODO revoir la fonctionnalité
         $scope.sendEmailDuplique = function () {
-            $http.post(configuration.URL_REQUEST + '/findUserById', {
+            $http.post('/findUserById', {
                 idUser: $scope.oldProfil.owner
             }).success(function (data) {
                 $scope.findUserByIdFlag = data;
@@ -757,7 +719,7 @@ angular.module('cnedApp')
                         content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
                         subject: fullName + ' a dupliqué votre profil'
                     };
-                    $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
+                    $http.post( '/sendEmail', $scope.sendVar)
                         .success(function () {
                         });
                 }
@@ -785,6 +747,9 @@ angular.module('cnedApp')
             }
         };
 
+        /**
+         * Filter profile list by user research
+         */
         $scope.specificFilter = function () {
             // loop of Profiles
             for (var i = 0; i < $rootScope.profiles.length; i++) {

@@ -28,22 +28,19 @@ var FB = FB;
 var gapi = gapi;
 
 angular.module('cnedApp')
-    .controller('listDocumentCtrl', function ($scope, $rootScope, serviceCheck, $http,
-                                              configuration, fileStorageService, tagsService, Analytics,
-                                              gettextCatalog, $timeout, UtilsService, LoaderService, $log, documentService, ToasterService) {
+    .controller('listDocumentCtrl', function ($scope, $rootScope,
+                                              configuration, fileStorageService, Analytics,
+                                              gettextCatalog, UtilsService, LoaderService, $log, documentService, ToasterService) {
 
         $scope.configuration = configuration;
-        $scope.testEnv = false;
-        $scope.requestToSend = {};
         $scope.sortType = 'dateModification';
         $scope.sortReverse = true;
 
-        if (localStorage.getItem('compteId')) {
-            $scope.requestToSend = {
-                id: localStorage.getItem('compteId')
-            };
-        }
 
+        /**
+         * Update document Note
+         * @param operation
+         */
         $scope.updateNote = function (operation) {
             var notes = [];
             var mapNotes = {};
@@ -156,30 +153,6 @@ angular.module('cnedApp')
 
         };
 
-        // verifies the existence of listTags and listTagByProfil and fulfilled if found
-        $scope.localSetting = function () {
-            var profActuId = '';
-            if (localStorage.getItem('profilActuel')) {
-                var tmp = JSON.parse(localStorage.getItem('profilActuel'));
-                profActuId = tmp._id;
-            }
-            tagsService.getTags($scope.requestToSend).then(function (data) {
-                $scope.listTags = data;
-                $scope.flagLocalSettinglistTags = true;
-                localStorage.setItem('listTags', JSON.stringify($scope.listTags));
-
-                $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-                    idProfil: profActuId
-                }).success(function (data) {
-                    $scope.listTagsByProfil = data;
-                    $scope.flagLocalSettinglistTagsByProfil = true;
-                    localStorage.setItem('listTagsByProfil', JSON.stringify($scope.listTagsByProfil));
-                }).error(function () {
-                    console.log('err');
-                });
-            });
-        };
-
         /*
          * Show all the documents at the beginning
          * and creates the menu associated with the document
@@ -220,7 +193,5 @@ angular.module('cnedApp')
                 LoaderService.hideLoader();
             });
         };
-
-        $scope.getListDocument();
 
     });

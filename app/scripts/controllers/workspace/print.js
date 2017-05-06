@@ -32,7 +32,7 @@
 
 angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, $http, $window, $location,
                                                             $stateParams, $q, $log, $timeout, configuration,
-                                                            dropbox, removeHtmlTags, workspaceService, serviceCheck,
+                                                            dropbox, workspaceService, serviceCheck,
                                                             fileStorageService, LoaderService) {
 
     $scope.notes = [];

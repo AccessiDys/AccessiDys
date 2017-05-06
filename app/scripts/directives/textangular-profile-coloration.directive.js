@@ -28,40 +28,81 @@
 
 cnedApp.directive('textAngularProfileColoration',
 
-    function (UtilsService, $timeout, $compile, $rootScope) {
+    function (UtilsService, $timeout, $compile, $rootScope, $log) {
         return {
             restrict: 'A',
             link: function (scope, element) {
 
 
                 var splitByLines = function (balise, maxLines) {
+
                     angular.forEach(element.find(balise), function (elem) {
 
                         var ref = angular.element(elem);
 
-                        var splitText = UtilsService.splitOnWordWithSpace(ref.html());
-                        ref.html(splitText);
+                        var savedSel = rangy.saveSelection();
+                        console.log(savedSel);
+
+                        console.log('balise h1 ', ref.html());
+
+                        var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
+                        var textTransform = ref.html();
+
+                        var rangyCursorResult = textTransform.match(rangyCursorPattern);
+                        var rangyCursors = [];
+
+                        if (rangyCursorResult && rangyCursorResult.length > 0) {
+                            for (var i = 0; i < rangyCursorResult.length; i++) {
+                                rangyCursors.push({
+                                    marker: '%%RG' + i + '%%',
+                                    cursor: rangyCursorResult[i]
+                                });
+                                console.log('cursor', rangyCursorResult[i]);
+
+                                textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
+                            }
+                        }
+
+
+                        textTransform = textTransform.replace(/(<span class(.*?)>|(?!>)<\/span>)/gi, '');
+
+                        console.log('intermediate text transform', textTransform);
+
+                        textTransform = UtilsService.splitOnWordWithSpace(textTransform);
+
+                        // Handle rangy cursor
+                        for(var i = 0; i < rangyCursors.length; i++){
+                            textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
+                        }
+
+                        console.log('DEBUG ', textTransform);
+
+                        ref.html(textTransform);
 
                         var prevTop = -9999;
                         var line = 0;
-                        angular.forEach(element.find('span'), function (word) {
-
+                        angular.forEach(ref.find('span'), function (word) {
                             var wordRef = angular.element(word);
 
-                            var top = wordRef[0].offsetTop;
+                            if (!wordRef[0].id) {
+                                var top = wordRef[0].offsetTop;
 
-                            if (top > prevTop) {
-                                if (line >= maxLines) {
-                                    line = 1;
-                                } else {
-                                    line++;
+                                if (top > prevTop) {
+                                    if (line >= maxLines) {
+                                        line = 1;
+                                    } else {
+                                        line++;
+                                    }
                                 }
+
+                                wordRef.addClass('line' + line);
+
+                                prevTop = top;
                             }
 
-                            wordRef.addClass('line' + line);
-
-                            prevTop = top;
                         });
+
+                        rangy.restoreSelection(savedSel);
                     });
                 };
 
@@ -71,16 +112,9 @@ cnedApp.directive('textAngularProfileColoration',
                         var profile = $rootScope.currentProfile.data;
                         var text = element.html();
 
-                        console.log('avant', text);
-
-                        text = text.replace(/<span.*?>([\w,.':\?\-éèêàâôîïö\s]+)<\/span>/gi, '$1');
-
-                        element.html(text);
-
-                        console.log('profile', profile);
-                        console.log('après', text);
-
                         if (profile && text) {
+
+                            $log.debug(profile.profileTags);
 
                             for (var i = 0; i < profile.profileTags.length; i++) {
 
@@ -119,22 +153,10 @@ cnedApp.directive('textAngularProfileColoration',
                     }, 100);
                 };
 
-
-                /*scope.$watch(function () {
-                    return element.html().length;
-                }, function (newValue, oldValue) {
-
-                    console.log('newValue', newValue);
-                    console.log('oldValue', oldValue);
-
-                    if (newValue !== oldValue) {
+                element.bind('keyup', function (event) {
+                    if (event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode != 40) {
                         generateColoration();
                     }
-                });*/
-
-                element.bind('keyup', function(event){
-                    console.log('keyup', event.keyCode);
-                    generateColoration();
                 });
             }
         };

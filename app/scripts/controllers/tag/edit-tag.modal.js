@@ -144,9 +144,9 @@ angular.module('cnedApp').controller('EditTagModalCtrl', function ($scope, $uibM
         xhr.addEventListener('load', $scope.uploadComplete, false);
         xhr.addEventListener('error', $scope.uploadFailed, false);
         if ($scope.mode === 'create') {
-            xhr.open('POST', configuration.URL_REQUEST + '/addTag');
+            xhr.open('POST', '/addTag');
         } else {
-            xhr.open('POST', configuration.URL_REQUEST + '/updateTag');
+            xhr.open('POST', '/updateTag');
         }
 
         xhr.send(fd);

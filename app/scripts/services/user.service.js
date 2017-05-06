@@ -65,8 +65,9 @@ cnedApp.service('UserService', function ($http, configuration, $localForage, $q)
             return deferred.promise;
         },
 
+        // TODO a supprimer
         findUserByEmail: function (email) {
-            return $http.post(configuration.URL_REQUEST + '/findUserByEmail', {
+            return $http.post('/findUserByEmail', {
                 email: email
             });
         }

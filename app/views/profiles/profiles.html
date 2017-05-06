@@ -126,18 +126,6 @@
                                 Modifier
                             </a>
                         </li>
-                        <li data-ng-if="admin && isDefault(profile) && isOwner(profile)"
-                            class="default_profil">
-                            <a href="" title="Retirer profil par défaut" data-ng-click="retirerParDefaut(profile)">
-                                Retirer profil par défaut
-                            </a>
-                        </li>
-                        <li data-ng-if="admin && !isDefault(profile) && isOwner(profile)"
-                            class="default_profil">
-                            <a href="" title="Profil par défaut" data-ng-click="mettreParDefaut(profile)">
-                                Profil par défaut
-                            </a>
-                        </li>
                         <li class="duplicating_item"
                             data-ng-show="profile.data.state === 'favoris' || profile.data.state === 'delegated' || profile.data.state === 'default'">
                             <a href title="Dupliquer" data-ng-click="duplicate(profile)">

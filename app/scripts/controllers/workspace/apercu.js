@@ -35,7 +35,7 @@
 angular.module('cnedApp')
     .controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location,
                                         $log, $q, serviceCheck, configuration, dropbox,
-                                        verifyEmail, generateUniqueId, storageService, htmlEpubTool, $stateParams,
+                                        storageService, htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
                                         gettextCatalog, $localForage, UtilsService, LoaderService, Analytics, ToasterService) {
@@ -53,7 +53,6 @@ angular.module('cnedApp')
         $scope.content = [];
         $scope.currentContent = '';
         $scope.currentPage = 1;
-        $scope.loader = false;
         $scope.isSummaryActive = false;
         /*
          * display information for the availability of voice synthesis.
@@ -158,7 +157,7 @@ angular.module('cnedApp')
          * Add a note in the position (x, y, xLink, yLink).
          */
         $scope.addNote = function (x, y, xLink, yLink) {
-            var idNote = generateUniqueId();
+            var idNote = UtilsService.generateUniqueId();
 
             var newNote = {
                 idNote: idNote,
@@ -229,7 +228,6 @@ angular.module('cnedApp')
             }
         };
 
-        $scope.styleDefault = 'data-font="" data-size="" data-lineheight="" data-weight="" data-coloration=""';
 
         /*
          * Function activated during the collage of the text in the note.
@@ -486,22 +484,6 @@ angular.module('cnedApp')
          */
 
         /**
-         * Convert base64 in Uint8Array
-         *
-         * @param base64
-         *            The binary to be converted
-         * @method $scope.base64ToUint8Array
-         */
-        $scope.base64ToUint8Array = function (base64) {
-            var raw = atob(base64);
-            var uint8Array = new Uint8Array(new ArrayBuffer(raw.length));
-            for (var i = 0; i < raw.length; i++) {
-                uint8Array[i] = raw.charCodeAt(i);
-            }
-            return uint8Array;
-        };
-
-        /**
          * Load the npages of the pdf as a image in the editor
          *
          * @param pdf
@@ -558,20 +540,20 @@ angular.module('cnedApp')
         };
 
         /**
-         * This function allows to handle a pdf by the bookmarklet.
+         * This function allows to handle a pdf by the bookmarklet. // TODO ajouter à un service
          */
         $scope.loadPdfByLien = function (url) {
             var contains = (url.indexOf('https') > -1); // true
             if (contains === false) {
-                $scope.serviceNode = configuration.URL_REQUEST + '/sendPdf';
+                $scope.serviceNode =  '/sendPdf';
             } else {
-                $scope.serviceNode = configuration.URL_REQUEST + '/sendPdfHTTPS';
+                $scope.serviceNode = '/sendPdfHTTPS';
             }
             $http.post($scope.serviceNode, {
                 lien: url,
                 id: localStorage.getItem('compteId')
             }).success(function (data) {
-                var pdfbinary = $scope.base64ToUint8Array(data);
+                var pdfbinary = UtilsService.base64ToUint8Array(data);
                 PDFJS.getDocument(pdfbinary).then(function (pdf) {
                     $scope.pdfTohtml = [];
                     $scope.loadPdfPage(pdf, 1);
@@ -580,6 +562,52 @@ angular.module('cnedApp')
                 LoaderService.hideLoader();
             });
         };
+
+
+        var test = function (htmlContent) {
+
+            $log.debug('test flattenng web page', htmlContent);
+
+            var root = angular.element('<div>' + htmlContent + '</div>');
+            var newElement = angular.element('<div></div>')[0];
+
+            $log.debug('DOM element ', root);
+            $log.debug('DOM element nextSibling', root.nextSibling);
+            $log.debug('DOM element childNodes', root.childNodes);
+
+            for (var i = 0; i < root.childNodes.length; i++) {
+                $log.debug('DOM element root.childNodes[i]', root.childNodes[i]);
+                extractChild(newElement, newElement, root.childNodes[i]);
+            }
+
+            $log.debug('DOM element AFTER', newElement);
+
+        };
+
+        var extractChild = function (rootElement, prev, node) {
+
+            $log.debug('DEBUG extract childs - length ' + node.childNodes.length + ' type', node.nodeType);
+            $log.debug('DEBUG extract childs - node', node);
+            $log.debug('DEBUG extract childs - node name', node.localName);
+            $log.debug('DEBUG extract childs - prev', prev);
+
+            if (node.childNodes) {
+                for (var i = 0; i < node.childNodes.length; i++) {
+                    extractChild(rootElement, node, node.childNodes[i]);
+                }
+            }
+
+            if (node.nodeType === 1) {
+                rootElement.insertBefore(node, rootElement.lastChild);
+            }
+            if (node.nodeType === 3) {
+                rootElement.insertBefore(node, rootElement.lastChild);
+            }
+
+            prev.removeChild(node);
+
+        };
+
 
         /**
          * Recover the html contents of a page
@@ -595,6 +623,7 @@ angular.module('cnedApp')
             // accents
             return serviceCheck.htmlPreview(encodeURI(url)).then(function (htmlFile) {
 
+
                 if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf('<title>') > -1) {
                     $scope.urlTitle = UtilsService.cleanUpSpecialChars(htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<title>') + 7, htmlFile.documentHtml.indexOf('</title>')));
                 } else if (!$scope.urlTitle) {
@@ -605,9 +634,10 @@ angular.module('cnedApp')
 
             }).then(function (resultClean) {
 
+                test(resultClean);
+
                 $scope.originalHtml = resultClean;
                 $scope.content = workspaceService.parcourirHtml(resultClean, $scope.urlHost, $scope.urlPort);
-                console.log('content', $scope.content);
                 $scope.setPage($scope.currentPage);
             }, function (err) {
                 $log.error('err transform html', err);
@@ -634,7 +664,7 @@ angular.module('cnedApp')
          * @method $scope.editer
          */
         $scope.editer = function () {
-            $window.location.href = configuration.URL_REQUEST + '/#/addDocument?idDocument=' + $scope.idDocument;
+            $window.location.href = '/#/addDocument?idDocument=' + $scope.idDocument;
         };
 
         /**
@@ -703,7 +733,6 @@ angular.module('cnedApp')
                 } else if ($scope.url.indexOf('.png') > 0 || $scope.url.indexOf('.jpg') > 0 || $scope.url.indexOf('.jpeg') > 0) {
                     $scope.loadPictureByLink($scope.url);
                 } else {
-                    $log.debug('get Html content', $scope.url);
 
                     $scope.getHTMLContent($scope.url).then(function () {
                         LoaderService.hideLoader();
@@ -723,7 +752,6 @@ angular.module('cnedApp')
                     $scope.document = file;
                     $scope.content = workspaceService.parcourirHtml(file.data);
 
-                    $log.debug('$scope.content', $scope.content);
                     $scope.showTitleDoc($scope.idDocument);
                     $scope.showEditer = true;
                     $scope.setPage($scope.currentPage);
@@ -732,17 +760,6 @@ angular.module('cnedApp')
                 }, function () {
                     LoaderService.hideLoader();
                     UtilsService.showInformationModal('label.offline', 'document.message.info.display.offline', '/listDocument');
-                });
-            }
-
-            // Temporary overview.
-            if ($scope.tmp) {
-                $scope.getTmpContent().then(function () {
-                    $scope.showTitleDoc('Aperçu Temporaire');
-                    $scope.setPage($scope.currentPage);
-                    LoaderService.hideLoader();
-                }, function () {
-                    LoaderService.hideLoader();
                 });
             }
         };
@@ -806,26 +823,6 @@ angular.module('cnedApp')
 
             $log.debug('$scope.checkBrowserSupported()', browserSupported);
             return browserSupported;
-        };
-
-        /**
-         * Check that the user has the right to use the speech synthesis.
-         *
-         * @method $scope.checkAudioRights
-         */
-        $scope.checkAudioRights = function () {
-            return serviceCheck.getData().then(function (statusInformation) {
-                if (statusInformation.user && statusInformation.user.local && statusInformation.user.local.authorisations) {
-                    $scope.displayNoAudioRights = !statusInformation.user.local.authorisations.audio && !$scope.neverShowNoAudioRights;
-                    return statusInformation.user.local.authorisations.audio;
-                } else {
-                    $scope.displayNoAudioRights = false;
-                    return true;
-                }
-            }, function () {
-                $scope.displayNoAudioRights = false;
-                return true;
-            });
         };
 
         /**
@@ -1010,7 +1007,6 @@ angular.module('cnedApp')
             if (!$rootScope.isAppOnline) {
                 UtilsService.showInformationModal('label.offline', 'document.message.info.share.offline');
             } else {
-
 
 
                 var itemToShare = {

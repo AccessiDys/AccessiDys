@@ -45,9 +45,9 @@ var baseUrl = '';
  * 
  * @class ServiceHtmlEpubTool
  */
-cnedApp.factory('htmlEpubTool', [ '$q', 'generateUniqueId',
+cnedApp.factory('htmlEpubTool', [ '$q',
 
-function($q, generateUniqueId) {
+function($q) {
     return {
         cleanHTML : function(htmlFile) {
             var deferred = $q.defer();

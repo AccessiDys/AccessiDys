@@ -49,11 +49,11 @@ cnedApp.directive('profileStyle',
 
                         for (var i = 0; i < profile.profileTags.length; i++) {
                             profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' {';
-                            profileStyle += 'font-family: ' + profile.profileTags[i].police + ';';
-                            profileStyle += 'font-size: ' + (profile.profileTags[i].taille / 12) + 'em;';
-                            profileStyle += 'line-height: ' + (1.286 + (profile.profileTags[i].interligne - 1) * 0.18) + 'em;';
-                            profileStyle += 'word-spacing: ' + (0 + (profile.profileTags[i].spaceSelected - 1) * 0.18) + 'em;';
-                            profileStyle += 'letter-spacing: ' + (0 + (profile.profileTags[i].spaceCharSelected - 1) * 0.12) + 'em;';
+                            profileStyle += 'font-family: ' + profile.profileTags[i].police + ' !important;';
+                            profileStyle += 'font-size: ' + (profile.profileTags[i].taille / 12) + 'em !important;';
+                            profileStyle += 'line-height: ' + (1.286 + (profile.profileTags[i].interligne - 1) * 0.18) + 'em !important;';
+                            profileStyle += 'word-spacing: ' + (0 + (profile.profileTags[i].spaceSelected - 1) * 0.18) + 'em !important;';
+                            profileStyle += 'letter-spacing: ' + (0 + (profile.profileTags[i].spaceCharSelected - 1) * 0.12) + 'em !important;';
                             profileStyle += 'font-weight: ' + profile.profileTags[i].styleValue + ';';
                             profileStyle += '}';
 

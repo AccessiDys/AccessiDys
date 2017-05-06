@@ -103,7 +103,7 @@ angular.module('cnedApp').controller('TagCtrl', function ($scope, $http, configu
                 .then(function () {
 
                     $scope.requestToSend.deleteTag = tag;
-                    $http.post(configuration.URL_REQUEST + '/deleteTag', $scope.requestToSend)
+                    $http.post('/deleteTag', $scope.requestToSend)
                         .success(function (data) {
                             if (data === 'err') {
                                 console.log('Désolé un problème est survenu lors de la suppression');

@@ -81,7 +81,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
     };
 
     this.delegateProfile = function (params) {
-        return $http.post(configuration.URL_REQUEST + '/delegateProfil', params);
+        return $http.post('/delegateProfil', params);
     };
 
     this.openDelegateProfileModal = function (profile) {

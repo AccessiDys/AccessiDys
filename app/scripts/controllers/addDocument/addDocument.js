@@ -327,8 +327,11 @@ angular
             $scope.loadPdfPage = function (pdf, pageNumber) {
                 return pdf.getPage(pageNumber).then(function (page) {
                     $log.debug('get page pdf');
-                    angular.element(document.querySelector('#canvas')).remove();
-                    angular.element('body').append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
+                    angular.element(document.getElementById('canvas')).remove();
+                    angular.element(document.getElementsByTagName("body")[0]).append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
+
+                    $log.debug('add canvas elemebnt');
+
                     var canvas = document.getElementById('canvas');
                     var context = canvas.getContext('2d');
                     var viewport = page.getViewport(canvas.width / page.getViewport(1.0).width); // page.getViewport(1.5);
@@ -505,7 +508,7 @@ angular
                     var xhr = new XMLHttpRequest();
                     xhr.addEventListener('load', $scope.uploadComplete, false);
                     xhr.addEventListener('error', $scope.uploadFailed, false);
-                    xhr.open('POST', configuration.URL_REQUEST + uploadService + '?id=' + localStorage.getItem('compteId'));
+                    xhr.open('POST', uploadService + '?id=' + localStorage.getItem('compteId'));
                     xhr.send(fd);
                 } else {
                     htmlEpubTool.convertToHtml([file]).then(function (data) {
@@ -571,7 +574,7 @@ angular
             };
 
             $scope.textAngularSetup = function(textEditor){
-                //textEditor.attr('text-angular-profile-coloration', '');
+                textEditor.attr('text-angular-profile-coloration', '');
             };
 
         });
