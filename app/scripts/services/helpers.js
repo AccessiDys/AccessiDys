@@ -99,7 +99,7 @@ cnedApp.factory('canvasToImage', function () {
 
 
 cnedApp.factory('serviceCheck',
-    function ($http, $q, $location, configuration, dropbox, protocolToLowerCase, $rootScope, $localForage, UtilsService, $timeout) {
+    function ($http, $q, $location, configuration, protocolToLowerCase) {
 
         var statusInformation = {};
         return {

@@ -726,11 +726,6 @@ describe('Controller:ProfilesCtrl', function () {
         $httpBackend.flush();
     }));
 
-    it('ProfilesCtrl:getTagsDescription()', function () {
-        var result = $scope.getTagsDescription('52c6cde4f6f46c5a5a000004');
-        expect(result.libelle).toEqual('Exercice');
-    });
-
     it('ProfilesCtrl:generateProfileName()', function () {
         $scope.profiles = profiles;
         var result = $scope.generateProfileName('prenom', 0, 0);

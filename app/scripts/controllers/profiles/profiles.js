@@ -27,16 +27,14 @@
 
 angular.module('cnedApp')
     .controller('ProfilesCtrl', function ($scope, $http, $rootScope,
-                                          configuration, $location, serviceCheck, $window,
-                                          profilsService, $uibModal, $timeout, tagsService, $log, _, Analytics,
-                                          gettextCatalog, UtilsService, LoaderService, EmailService, ToasterService, UserService, $stateParams, fileStorageService) {
+                                          configuration, $location,
+                                          profilsService, $uibModal, $log, _, Analytics,
+                                          gettextCatalog, UtilsService, LoaderService,
+                                          EmailService, ToasterService, UserService, $stateParams, fileStorageService) {
 
         /* Initializations */
         $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
         $scope.weightLists = ['Gras', 'Normal'];
-        $scope.listTag = {};
-        $scope.admin = $rootScope.admin;
-        $scope.testEnv = false;
         $scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman', 'LDFComicSans',
             'HKGrotesk-Regular', 'SignikaNegative-Regular', 'Century Gothic', 'OpenSans-CondensedLight', 'CodeNewRoman',
             'FiraSansCondensed', 'AnonymousPro-Bold', 'AndikaNewBasic', 'TiresiasInfofontItalic'
@@ -914,20 +912,6 @@ angular.module('cnedApp')
          });
          });
          };*/
-
-        /**
-         * This function retrieves the label(description) of a tag.
-         */
-        $scope.getTagsDescription = function (tag) {
-            if (!$scope.listTags || !$scope.listTags.length) {
-                $scope.listTags = JSON.parse(localStorage.getItem('listTags'));
-            }
-            var listTagsMaps = {};
-            angular.forEach($scope.listTags, function (item) {
-                listTagsMaps[item._id] = item;
-            });
-            return listTagsMaps[tag];
-        };
 
         $scope.create = function () {
 

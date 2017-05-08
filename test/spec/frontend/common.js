@@ -248,7 +248,6 @@ describe(
                 type: 'profile'
             }];
 
-            localStorage.setItem('profilActuel', JSON.stringify(profils[0]));
 
             $scope.tagProfil = [{
                 tag: '53359e9c153022351017d757',
@@ -347,11 +346,6 @@ describe(
 
             $scope.$root.$digest();
 
-        }));
-
-        it('CommonCtrl : afficherProfilsParUser ', inject(function () {
-            localStorage.setItem('profilActuel', JSON.stringify(profils[0]));
-            expect($scope.afficherProfilsParUser).toBeDefined();
         }));
 
         it('CommonCtrl : initCommon ', inject(function ($httpBackend, $rootScope) {

@@ -29,7 +29,7 @@
 /*jshint unused: false, undef:false */
 
 /* Directive for detecting the document refresh*/
-cnedApp.directive('historyBrowser', function ($rootScope, configuration, UtilsService, $location, $log) {
+cnedApp.directive('historyBrowser', function ($rootScope, configuration, UtilsService, $location) {
     return {
         restrict: 'EA',
         link: function (scope, element) {

@@ -26,7 +26,8 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('fileStorageService', function ($localForage, configuration, $q, synchronisationStoreService, $log, CacheProvider, DropboxProvider, UserService, $rootScope, md5) {
+cnedApp.service('fileStorageService', function ($localForage, configuration, $q, synchronisationStoreService, $log,
+                                                CacheProvider, DropboxProvider, UserService, $rootScope, md5) {
 
     var self = this;
 

@@ -24,9 +24,6 @@
  */
 'use strict';
 
-var FB = FB;
-var gapi = gapi;
-
 angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope,
                                               configuration, fileStorageService, Analytics,
@@ -136,7 +133,6 @@ angular.module('cnedApp')
                     .then(function (shareLink) {
                         itemToShare.linkToShare = 'https://' + window.location.host + '/#/apercu?title=' + encodeURIComponent(document.filename) + '&url=' + encodeURIComponent(shareLink);
 
-                        //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
                         UtilsService.openSocialShareModal('document', itemToShare)
                             .then(function () {
                                 // Modal close

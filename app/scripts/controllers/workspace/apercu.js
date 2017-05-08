@@ -34,7 +34,7 @@
 
 angular.module('cnedApp')
     .controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location,
-                                        $log, $q, serviceCheck, configuration, dropbox,
+                                        $log, $q, serviceCheck,
                                         storageService, htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,

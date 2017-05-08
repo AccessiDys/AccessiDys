@@ -28,7 +28,7 @@
 
 var FB = FB;
 
-angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScope, $scope, $uibModalInstance, dropbox,
+angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScope, $scope, $uibModalInstance, DropboxProvider,
                                                                        EmailService, ToasterService, LoaderService, $log,
                                                                        $timeout, UserService, mode, itemToShare) {
 
@@ -81,9 +81,10 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
 
             var fileName = $scope.itemToShare.name + '.json';
 
-            dropbox.upload(fileName, $scope.itemToShare.annotationsToShare)
+            // TODO mettre en place le filestorage service
+            DropboxProvider.upload(fileName, $scope.itemToShare.annotationsToShare)
                 .then(function (data) {
-                    dropbox.shareLink(data.path_display)
+                    DropboxProvider.shareLink(data.path_display)
                         .then(function (result) {
                             $scope.itemToShare.linkToShare += '&annotation=' + result.url;
                             $scope.itemToShare.linkToShare = $scope.itemToShare.linkToShare;
@@ -149,6 +150,7 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
         }
     };
 
+    // TODO mettre en place la lib comme Gplus
     $scope.attachFacebook = function () {
         $scope.facebookLink = decodeURIComponent($scope.itemToShare.linkToShare);
 

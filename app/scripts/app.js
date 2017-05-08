@@ -249,7 +249,7 @@ angular.module('cnedApp').config(['$compileProvider',
 ]);
 
 
-angular.module('cnedApp').run(function ($rootScope, $location, $http, dropbox, configuration, $timeout, $window, storageService, $interval, serviceCheck, $localForage) {
+angular.module('cnedApp').run(function ($rootScope, configuration, $timeout, $interval, serviceCheck) {
     //Delay between every check of session.
     $rootScope.sessionTime = 43200000;
     $rootScope.checkIsOnline = function () {

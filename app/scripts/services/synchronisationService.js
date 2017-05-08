@@ -29,7 +29,7 @@ var cnedApp = cnedApp;
 /**
  * the synchronization service when the user becomes connected again.
  */
-cnedApp.service('synchronisationService', function($localForage, fileStorageService, profilsService, configuration, dropbox, $q) {
+cnedApp.service('synchronisationService', function($localForage, fileStorageService, profilsService, configuration, $q) {
 
     var self = this;
 
