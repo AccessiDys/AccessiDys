@@ -229,7 +229,14 @@ cnedApp.directive('textAngularProfileColoration',
                     }
                 });
 
-                generateColoration();
+                var listener = $rootScope.$watch('currentProfile', function (newvalue) {
+
+                    if(newvalue){
+                        generateColoration();
+                        listener();
+                    }
+
+                }, true);
             }
         };
 

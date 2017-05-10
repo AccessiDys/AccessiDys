@@ -219,7 +219,7 @@ cnedApp.service('UtilsService', function ($uibModal) {
 
         splitOnWordWithSpace: function (text) {
             var formattedText = text.replace(/&nbsp;/gi, ' ');
-            formattedText = formattedText.replace(methods.wordRegex, '<span>$1</span>');
+            formattedText = formattedText.replace(methods.wordRegex, '<span>$1 </span>');
 
             return formattedText;
         },

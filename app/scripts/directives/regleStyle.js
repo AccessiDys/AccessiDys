@@ -159,17 +159,17 @@ cnedApp.directive('profileStyle',
 
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #D90629;';
                                     profileStyle += '}';
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line2 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #066ED9;';
                                     profileStyle += '}';
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line3 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #4BD906;';
                                     profileStyle += '}';
 
@@ -177,17 +177,17 @@ cnedApp.directive('profileStyle',
                                 case 'Surligner les lignes RVJ':
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #D90629;';
                                     profileStyle += '}';
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line2 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #4BD906;';
                                     profileStyle += '}';
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line3 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #ECE20F;';
                                     profileStyle += '}';
 
@@ -195,23 +195,31 @@ cnedApp.directive('profileStyle',
                                 case 'Surligner les lignes RBVJ':
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #D90629;';
                                     profileStyle += '}';
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line2 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #066ED9;';
                                     profileStyle += '}';
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line3 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #4BD906;';
                                     profileStyle += '}';
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line4 {';
-                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #ECE20F;';
+                                    profileStyle += '}';
+
+                                    break;
+
+                                default:
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' {';
+                                    profileStyle += 'color: #000 !important;';
                                     profileStyle += '}';
 
                                     break;
