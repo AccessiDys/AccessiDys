@@ -56,28 +56,30 @@
                      class="resetAll apercu-tags mt-10 preview {{detailProfil.data.className}}"
                      profile-coloration
                      profile="detailProfil"
-                     text="{{profileTag.texte}}">
+                     text="{{getDisplayedText(profileTag)}}">
 
                 </div>
             </div>
         </div>
         <div class="detail-profil-actions">
             <button type="button" class="btn_simple light_blue duplicate-btn" data-ng-click="duplicate(detailProfil)"
-                    data-ng-show="detailProfil.data.state == 'favoris' || detailProfil.data.state == 'delegated' || detailProfil.data.state == 'default'"
+                    data-ng-if="!isOwner(detailProfil)"
                     data-toggle="modal" data-target="#dupliqueModal" title="{{'Dupliquer le profl' | translate}}">
                 Dupliquer
             </button>
             <button type="button" class="btn_simple light_blue edit-btn" data-ng-click="update(detailProfil)"
-                    data-ng-show="isOwner(detailProfil)" title="{{'Modifier le profil' | translate}}">Modifier le profil
+                    data-ng-if="isOwner(detailProfil) || isOwnerDelagate(detailProfil)" title="{{'Modifier le profil' | translate}}">
+                Modifier le profil
             </button>
-            <button type="button" class="btn_simple light_blue share-btn" data-ng-click="shareProfile(detailProfil)"
+            <button data-ng-if="userData.provider"
+                    type="button" class="btn_simple light_blue share-btn" data-ng-click="shareProfile(detailProfil)"
                     title="{{'Partager le profil' | translate}}">Partager le profil
             </button>
             <button type="button" class="btn_simple light_blue favourite-btn" data-ng-click="addToFavourite(detailProfil)"
                     data-ng-show="!isFavourite(detailProfil)"
                     title="Ajouter à mes favoris">Ajouter à mes favoris
             </button>
-            <button type="button" class="btn_simple light_blue accepte-delegate" data-ng-click="deleguerUserProfil()"
+            <button type="button" class="btn_simple light_blue accepte-delegate" data-ng-click="acceptProfileDelegation(detailProfil)"
                     data-ng-show="isPreDelegated(detailProfil)"
                     title="{{'AccepterDemandeDelegation' | translate}}">Accepter la demande de délégation
             </button>

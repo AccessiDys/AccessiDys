@@ -137,30 +137,11 @@ exports.sendMail = function (req, res) {
         //smtpTransport.close(); // shut down the connection pool, no more messages
     });
 };
-exports.passwordRestoreEmail = function (emailTo, subject, content) {
 
-    //configuration of email
-    var smtpTransport = nodemailer.createTransport('SMTP', getSmtpOptions());
-
-    var mailOptions = {
-        from: config.EMAIL_FROM,
-        to: emailTo,
-        subject: subject,
-        text: '',
-        html: content
-    };
-    smtpTransport.sendMail(mailOptions, function (error) {
-        if (error) {
-            return false;
-        } else {
-            return true;
-        }
-    });
-};
 
 exports.sendEmail = function (req, res) {
 
-    var smtpTransport = nodemailer.createTransport('SMTP', getSmtpOptions());
+    var smtpTransport = nodemailer.createTransport(getSmtpOptions());
 
     var emailTo = req.body.emailTo;
     var subject = req.body.subject;

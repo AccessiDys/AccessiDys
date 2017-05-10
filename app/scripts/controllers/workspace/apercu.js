@@ -49,7 +49,7 @@ angular.module('cnedApp')
         $scope.showPartagerModal = true;
         $scope.printPlan = true;
 
-        $scope.pageBreakElement = '<div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div>';
+        $scope.pageBreakElement = '<hr/>';
         $scope.content = [];
         $scope.currentContent = '';
         $scope.currentPage = 1;
@@ -928,11 +928,10 @@ angular.module('cnedApp')
          * Save the web document
          */
         $scope.saveWebDocument = function () {
-            var doc = processLink($scope.originalHtml);
 
             documentService.save({
                 title: $rootScope.titreDoc,
-                data: doc
+                data: $scope.originalHtml
             }, 'create').then(function (data) {
                 $rootScope.titreDoc = data.filename;
                 $scope.idDocument = data.filename;

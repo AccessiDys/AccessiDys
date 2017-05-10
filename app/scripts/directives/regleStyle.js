@@ -48,13 +48,15 @@ cnedApp.directive('profileStyle',
                         var profileStyle = '';
 
                         for (var i = 0; i < profile.profileTags.length; i++) {
+                            var fontWeight = profile.profileTags[i].styleValue == 'Gras' ? 'bold': 'normal';
+
                             profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' {';
                             profileStyle += 'font-family: ' + profile.profileTags[i].police + ' !important;';
                             profileStyle += 'font-size: ' + (profile.profileTags[i].taille / 12) + 'em !important;';
                             profileStyle += 'line-height: ' + (1.286 + (profile.profileTags[i].interligne - 1) * 0.18) + 'em !important;';
                             profileStyle += 'word-spacing: ' + (0 + (profile.profileTags[i].spaceSelected - 1) * 0.18) + 'em !important;';
                             profileStyle += 'letter-spacing: ' + (0 + (profile.profileTags[i].spaceCharSelected - 1) * 0.12) + 'em !important;';
-                            profileStyle += 'font-weight: ' + profile.profileTags[i].styleValue + ';';
+                            profileStyle += 'font-weight: ' + fontWeight + ';';
                             profileStyle += '}';
 
                             profileStyle += className + '.preview ' + profile.profileTags[i].tagDetail.balise + ' {';
@@ -117,11 +119,12 @@ cnedApp.directive('profileStyle',
 
                                 case 'Colorer les mots':
                                 case 'Colorer les syllabes':
+
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(1n) {';
                                     profileStyle += 'color: #D90629;';
                                     profileStyle += '}';
 
-                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(2n) {';
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(3n-1) {';
                                     profileStyle += 'color: #066ED9;';
                                     profileStyle += '}';
 
@@ -139,7 +142,7 @@ cnedApp.directive('profileStyle',
                                     profileStyle += 'background-color: #fffd01;';
                                     profileStyle += '}';
 
-                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + 'span:nth-child(2n) {';
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + 'span:nth-child(3n-1) {';
                                     profileStyle += 'color: #000;';
                                     profileStyle += 'background-color: #04ff04;';
                                     profileStyle += '}';

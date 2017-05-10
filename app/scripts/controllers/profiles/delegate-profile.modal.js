@@ -47,12 +47,12 @@ angular.module('cnedApp')
 
 
                 profilsService.delegateProfile(profile, $scope.form.email)
-                    .then(function () {
-                        var profilLink = $location.absUrl().replace('#/profiles', '#/detailProfil?idProfil=' + profile._id);
+                    .then(function (delegatedProfile) {
+                        var profilLink = 'https://' + window.location.host + '/#/detailProfil?idProfil=' + delegatedProfile.data._id;
                         var fullName = UserService.getData().firstName + ' ' + UserService.getData().lastName;
                         var emailParams = {
                             emailTo: $scope.form.email,
-                            content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour vous déléguer son profil : <a href=' + profilLink + '>' + profile.nom + '</a>. </span>',
+                            content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour vous déléguer son profil : <a href=' + profilLink + '>' + profile.data.nom + '</a>. </span>',
                             subject: 'Profil délégué'
                         };
 
@@ -60,13 +60,15 @@ angular.module('cnedApp')
                             LoaderService.hideLoader();
 
                             $uibModalInstance.close({
-                                message: 'mail.send.ok'
+                                message: 'mail.send.ok',
+                                profile: delegatedProfile
                             });
                         }, function () {
                             LoaderService.hideLoader();
 
                             $uibModalInstance.close({
-                                message: 'mail.send.ko'
+                                message: 'mail.send.ko',
+                                profile: delegatedProfile
                             });
                         });
 

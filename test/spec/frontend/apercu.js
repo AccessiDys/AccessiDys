@@ -243,12 +243,7 @@ describe('Controller:ApercuCtrl', function () {
         };
 
         fileStorageService = {
-            getTempFile: function () {
-                deferred = $q.defer();
-                // Place the fake return object here
-                deferred.resolve('<h1>test</h1>');
-                return deferred.promise;
-            },
+
             saveTempFileForPrint: function () {
                 deferred = $q.defer();
                 // Place the fake return object here

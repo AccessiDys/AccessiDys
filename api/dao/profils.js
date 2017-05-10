@@ -46,13 +46,10 @@ var async = require('async');
  */
 exports.getProfiles = function (req, res) {
 
-    /*Profil.remove({
-     owner: {
-     $ne : 'scripted'
-     }
-     }, function (err, item) {
+    var userData = {
+        email: req.get('AccessiDys-user')
+    };
 
-     });*/
 
     async.waterfall([
 
@@ -66,12 +63,6 @@ exports.getProfiles = function (req, res) {
                         },
                         {
                             owner: 'admin'
-                        },
-                        {
-                            preDelegated: {$ne: ''}
-                        },
-                        {
-                            delegated: true
                         }]
                 })
                     .populate('profileTags')
@@ -80,9 +71,39 @@ exports.getProfiles = function (req, res) {
 
                     });
 
+            },
+
+            function (defaultProfiles, callback) {
+
+
+                console.log('get user email', userData.email);
+
+                if (userData.email) {
+                    // Default profiles
+                    Profil.find({
+                        $or: [
+                            {
+                                owner: userData.email
+                            },
+                            {
+                                preDelegated: userData.email
+                            }]
+                    })
+                        .populate('profileTags')
+                        .exec(function (err, profiles) {
+                            callback(err, defaultProfiles, profiles);
+
+                        });
+                } else {
+                    callback(null, defaultProfiles, []);
+                }
+
+
             }
         ],
-        function (err, profiles) {
+        function (err, defaultProfiles, delegatedProfiles) {
+
+            var profiles = defaultProfiles.concat(delegatedProfiles);
 
             if (!err) {
 
@@ -213,8 +234,8 @@ exports.updateProfile = function (req, res) {
 
                 if (_profile && ((helpers.isAdmin(userData.email, userData.provider) && (_profile.owner === 'admin' || 'scripted')) || _profile.owner === userData.email)) {
 
-                    _profile.nom =  profile.data.nom;
-                    _profile.descriptif =profile.data.descriptif;
+                    _profile.nom = profile.data.nom;
+                    _profile.descriptif = profile.data.descriptif;
                     _profile.owner = profile.data.owner;
                     _profile.isFavourite = profile.data.isFavourite;
                     _profile.delegated = profile.data.delegated;
@@ -222,11 +243,21 @@ exports.updateProfile = function (req, res) {
 
                     _profile.save();
 
-                    for(var i = 0; i < profile.data.profileTags.length; i++){
-                        var _profileTag = new ProfilTag(profile.data.profileTags[i]);
-                        _profileTag.save();
+                    for (var i = 0; i < profile.data.profileTags.length; i++) {
 
-                        profile.data.profileTags[i] = _profileTag;
+                        console.log('before save', profile.data.profileTags[i]);
+
+                        ProfilTag.findByIdAndUpdate(profile.data.profileTags[i]._id, {
+                            'police': profile.data.profileTags[i].police,
+                            'taille': profile.data.profileTags[i].taille,
+                            'interligne': profile.data.profileTags[i].interligne,
+                            'styleValue': profile.data.profileTags[i].styleValue,
+                            'coloration': profile.data.profileTags[i].coloration,
+                            'spaceSelected': profile.data.profileTags[i].spaceSelected,
+                            'spaceCharSelected': profile.data.profileTags[i].spaceCharSelected
+                        }, function (err) {
+
+                        });
                     }
 
                     res.send(profile);
@@ -261,7 +292,7 @@ exports.deleteProfile = function (req, res) {
 
                 if (_profile && ((helpers.isAdmin(userData.email, userData.provider) && (_profile.owner === 'admin' || 'scripted')) || _profile.owner === userData.email)) {
 
-                    for(var i = 0; i < _profile.profileTags.length; i++){
+                    for (var i = 0; i < _profile.profileTags.length; i++) {
                         ProfilTag.remove({
                             _id: _profile.profileTags[i]._id
                         }, function () {

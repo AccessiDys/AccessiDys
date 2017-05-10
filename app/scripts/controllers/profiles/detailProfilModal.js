@@ -32,7 +32,7 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
     $scope.profile = profile;
     $rootScope.tmpProfile = angular.copy(profile);
 
-    console.log('$rootScope.tmpProfile', $rootScope.tmpProfile);
+    $log.debug('$rootScope.tmpProfile', $rootScope.tmpProfile);
 
     $scope.currentStyle = {};
 
@@ -69,13 +69,13 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
     };
 
     $scope.dismissModal = function (operation) {
-        reset();
-
         $uibModalInstance.dismiss({
             operation: operation,
             template: $scope.template,
             profile: $scope.profile
         });
+
+        reset();
     };
 
     $scope.save = function () {
@@ -93,9 +93,17 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
                     if ((!res && $scope.template !== 'update') || ($scope.template === 'update')) {
 
                         profilsService.saveProfile($scope.profile)
-                            .then(function () {
+                            .then(function (savedProfile) {
+
+                                $scope.profile.filename = savedProfile.filename;
+                                $scope.profile.provider = savedProfile.provider;
+                                $scope.profile.filepath = savedProfile.filepath;
+                                $scope.profile.data.updated = savedProfile.data.updated;
+                                $scope.profile.data.className = profilsService.generateClassName($scope.profile, false);
+
+
                                 if ($scope.template === 'duplicate') {
-                                    $scope.sendEmailDuplique();
+                                    $scope.sendEmailDuplique($scope.profile);
                                 }
 
                                 LoaderService.hideLoader();
@@ -110,7 +118,6 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
                                             });
 
                                         }, function () {
-                                            fileStorageService.addProfileToSynchronize($scope.profile);
                                             $scope.dismissModal('save');
                                         });
                                 } else {
@@ -124,7 +131,7 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
                         LoaderService.hideLoader();
                         ToasterService.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.alreadyexist');
                     }
-                }, function(){
+                }, function () {
                     LoaderService.hideLoader();
                 });
         }

@@ -52,8 +52,10 @@ cnedApp.service('UserService', function ($http, configuration, $localForage, $q)
                         userData.isAdmin = false;
                         deferred.resolve(userData);
                     });
-
+                } else {
+                    deferred.resolve(userData);
                 }
+
 
             });
 

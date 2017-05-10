@@ -28,7 +28,7 @@
 
 cnedApp.directive('textAngularProfileColoration',
 
-    function (UtilsService, $timeout, $compile, $rootScope, $log) {
+    function (UtilsService, $timeout, $compile, $rootScope) {
         return {
             restrict: 'A',
             link: function (scope, element) {
@@ -108,8 +108,6 @@ cnedApp.directive('textAngularProfileColoration',
 
                         if (profile && text) {
 
-                            $log.debug(profile.profileTags);
-
                             for (var i = 0; i < profile.profileTags.length; i++) {
 
                                 switch (profile.profileTags[i].coloration) {
@@ -136,6 +134,7 @@ cnedApp.directive('textAngularProfileColoration',
                                             var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
                                             var textTransform = ref.html();
 
+
                                             var rangyCursorResult = textTransform.match(rangyCursorPattern);
                                             var rangyCursors = [];
 
@@ -151,10 +150,12 @@ cnedApp.directive('textAngularProfileColoration',
                                             }
 
 
-                                            textTransform = textTransform.replace(/(<span class(.*?)>|(?!>)<\/span>)/gi, '');
+                                            textTransform = textTransform.replace(/(<span>|(?!>)<\/span>)/gi, '');
 
 
-                                            textTransform = UtilsService.splitOnWordWithSpace(textTransform);
+
+                                            textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
+
 
                                             // Handle rangy cursor
                                             for(var i = 0; i < rangyCursors.length; i++){
@@ -163,6 +164,7 @@ cnedApp.directive('textAngularProfileColoration',
 
 
                                             ref.html(textTransform);
+                                            rangy.restoreSelection(savedSel);
                                         });
                                         break;
                                     case 'Colorer les syllabes':
@@ -175,13 +177,15 @@ cnedApp.directive('textAngularProfileColoration',
                                             var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
                                             var textTransform = ref.html();
 
+                                            console.log('html span', textTransform);
+
                                             var rangyCursorResult = textTransform.match(rangyCursorPattern);
                                             var rangyCursors = [];
 
                                             if (rangyCursorResult && rangyCursorResult.length > 0) {
                                                 for (var i = 0; i < rangyCursorResult.length; i++) {
                                                     rangyCursors.push({
-                                                        marker: '%%RG' + i + '%%',
+                                                        marker: '%%<span>RG' + i + '</span>%%',
                                                         cursor: rangyCursorResult[i]
                                                     });
 
@@ -190,10 +194,17 @@ cnedApp.directive('textAngularProfileColoration',
                                             }
 
 
-                                            textTransform = textTransform.replace(/(<span class(.*?)>|(?!>)<\/span>)/gi, '');
+                                            console.log('before span', textTransform);
+
+
+                                            textTransform = textTransform.replace(/(<span>|(?!>)<\/span>)/gi, '');
+
+                                            console.log('split span', textTransform);
 
 
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
+
+                                            console.log('split on syllabe', textTransform);
 
                                             // Handle rangy cursor
                                             for(var i = 0; i < rangyCursors.length; i++){
@@ -202,13 +213,14 @@ cnedApp.directive('textAngularProfileColoration',
 
 
                                             ref.html(textTransform);
+                                            rangy.restoreSelection(savedSel);
                                         });
                                         break;
 
                                 }
                             }
                         }
-                    }, 100);
+                    }, 200);
                 };
 
                 element.bind('keyup', function (event) {
@@ -216,6 +228,8 @@ cnedApp.directive('textAngularProfileColoration',
                         generateColoration();
                     }
                 });
+
+                generateColoration();
             }
         };
 

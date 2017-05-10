@@ -224,7 +224,7 @@ cnedApp.service('UtilsService', function ($uibModal) {
             return formattedText;
         },
 
-        wordRegex: /([\w,.'&;"«»:%\?\-éèêàâôîïö\(\)]+)(?![^<]*>)/gi
+        wordRegex: /([\w,.'&;:"«»:%\?\-éèêàâôîïö\(\)]+)(?![^<]*>)/gi
 
     };
 

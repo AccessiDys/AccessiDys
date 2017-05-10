@@ -52,7 +52,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
 
         $log.debug('Save Profile', profileToSave);
 
-        if (UserService.getData().isAdmin && $rootScope.isAppOnline) {
+        if (profileToSave.data._id && $rootScope.isAppOnline) {
             // send profile to accessidys backend
             if (profileToSave.data._id) {
                 // Update mode
@@ -86,7 +86,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      * @param profile
      * @returns {HttpPromise}
      */
-    this.create = function(profile){
+    this.create = function (profile) {
         return $http.post('/profile', {
             profile: profile
         }, {
@@ -102,7 +102,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      * @param profile
      * @returns {HttpPromise}
      */
-    this.update = function(profile){
+    this.update = function (profile) {
         return $http.put('/profile', {
             profile: profile
         }, {
@@ -119,7 +119,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
      * @returns {HttpPromise|*|{method}}
      */
     this.deleteProfil = function (profile) {
-        if (UserService.getData().isAdmin && $rootScope.isAppOnline) {
+        if (profile.data._id && $rootScope.isAppOnline) {
 
             var deferred = $q.defer();
 
@@ -179,22 +179,22 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
 
         $log.debug('profile to delegate', profileToDelegate);
 
-        if(profileToDelegate.data._id){
+        if (profileToDelegate.data._id) {
 
-            this.update(profileToDelegate).then(function(res){
+            this.update(profileToDelegate).then(function (res) {
                 deferred.resolve(res.data);
-            }, function() {
+            }, function () {
                 deferred.reject();
             });
 
         } else {
-            this.create(profileToDelegate).then(function(res){
+            this.create(profileToDelegate).then(function (res) {
                 fileStorageService.delete(profileToDelegate, 'profile').then(function () {
                     deferred.resolve(res.data);
                 }, function () {
                     deferred.reject();
                 });
-            }, function() {
+            }, function () {
                 deferred.reject();
             })
         }
@@ -220,7 +220,11 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
 
     this.getProfiles = function () {
 
-        return $q.all([$http.get('/profiles').then(function (res) {
+        return $q.all([$http.get('/profiles', {
+            headers: {
+                'AccessiDys-user': UserService.getData().email
+            }
+        }).then(function (res) {
             return res.data;
         }), fileStorageService.list('profile').then(function (files) {
 

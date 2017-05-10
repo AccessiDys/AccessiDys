@@ -239,10 +239,10 @@ module.exports = function (app, passport) {
 
     // Routes for tag manipulating
     var tags = require('../api/dao/tag');
-    app.post('/addTag', isLoggedInAdmin, tags.create);
+    app.post('/addTag', tags.create);
     app.get('/readTags', tags.all);
-    app.post('/updateTag', isLoggedInAdmin, tags.update);
-    app.post('/deleteTag', isLoggedInAdmin, tags.remove);
+    app.post('/updateTag', tags.update);
+    app.post('/deleteTag', tags.remove);
     app.post('/getTagById', tags.findTagById);
 
     //test for manipulating image

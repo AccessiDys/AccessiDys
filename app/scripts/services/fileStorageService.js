@@ -140,17 +140,17 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             return DropboxProvider.download(file.filepath, UserService.getData().token).then(function (fileContent) {
                 file.data = fileContent;
 
-                return CacheProvider.save(file, storageName).then(function(fileSaved){
+                return CacheProvider.save(file, storageName).then(function (fileSaved) {
                     return fileSaved;
                 });
-            }, function(){
-                return CacheProvider.get(file.filename, storageName).then(function(fileFound){
+            }, function () {
+                return CacheProvider.get(file.filename, storageName).then(function (fileFound) {
                     return fileFound;
                 });
             });
 
         } else {
-            return CacheProvider.get(file.filename, storageName).then(function(fileFound){
+            return CacheProvider.get(file.filename, storageName).then(function (fileFound) {
                 return fileFound;
             });
         }
@@ -169,19 +169,22 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             extension = '-profile.json';
         }
 
-        if(!file.filepath){
+        if (!file.filepath) {
             file.filepath = this.generateFilepath(file.filename, extension);
         }
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
 
-            return DropboxProvider.upload(file.filepath, file.data, UserService.getData().token).then(function (file) {
-                return CacheProvider.save(file, storageName);
-            }, function(){
+            return DropboxProvider.upload(file.filepath, file.data, UserService.getData().token).then(function (_file) {
+                _file.data = file.data;
+                return CacheProvider.save(_file, storageName);
+            }, function () {
+                this.addFileToSynchronize(file, type, 'save');
                 return CacheProvider.save(file, storageName);
             });
 
         } else {
+            this.addFileToSynchronize(file, type, 'save');
             return CacheProvider.save(file, storageName);
         }
     };
@@ -223,20 +226,13 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                 });
             }
         } else {
-            /*var d = Date.parse(new Date());
-             var docToSynchronize = {
-             owner: $rootScope.currentUser.local.email,
-             docName: newFilename,
-             filename: shortFilename,
-             newDocName: newFilename,
-             oldDocName: oldFilename,
-             action: 'rename',
-             dateModification: d
-             };
-             synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);*/
+            this.addFileToSynchronize(file, type, 'delete');
+
             return CacheProvider.delete(file, storageName).then(function () {
                 file.filename = newName;
                 file.filepath = newFilePath;
+
+                this.addFileToSynchronize(file, type, 'save');
                 return CacheProvider.save(file, storageName);
             });
         }
@@ -266,15 +262,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
             return DropboxProvider.delete(file.filepath, UserService.getData().token).then(function () {
                 return CacheProvider.delete(file, storageName);
+            }, function () {
+                this.addFileToSynchronize(file, type, 'delete');
+                return CacheProvider.delete(file, storageName);
             });
         } else {
-            /*var docToSynchronize = {
-             owner: $rootScope.currentUser.local.email,
-             docName: filename,
-             action: 'delete',
-             content: null
-             };
-             synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);*/
+            this.addFileToSynchronize(file, type, 'delete');
             return CacheProvider.delete(file, storageName);
         }
 
@@ -345,29 +338,42 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         return '/' + tmpDate + '_' + encodeURIComponent(fileName) + '_' + hash + extension;
     };
 
-    this.addDocumentToSynchronize = function(file){
+    this.addFileToSynchronize = function (file, type, action) {
 
-        CacheProvider.getItem('documentsToSynchronize').then(function(files){
-            if(!files){
-                files = [];
+        var storageName = '';
+
+        if (type === 'document') {
+            storageName = 'documentsToSynchronize';
+        } else if (type === 'profile') {
+            storageName = 'profilesToSynchronize';
+        }
+
+        CacheProvider.getItem(storageName).then(function (items) {
+            if (!items) {
+                items = [];
             }
-            files.push(file);
 
-            console.log('documents to synchronize', files);
-            CacheProvider.setItem(files, 'documentsToSynchronize');
-        });
-    };
-
-    this.addProfileToSynchronize = function(file){
-
-        CacheProvider.getItem('profilesToSynchronize').then(function(files){
-            if(!files){
-                files = [];
+            var isFound = false;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].file.filename == file.filename) {
+                    isFound = true;
+                    items[i] = {
+                        action: action,
+                        file: file
+                    };
+                    break;
+                }
             }
-            files.push(file);
 
-            console.log('profiles to synchronize', files);
-            CacheProvider.setItem(files, 'profilesToSynchronize');
+            if (!isFound) {
+                items.push({
+                    action: action,
+                    file: file
+                });
+            }
+
+            console.log('File to synchronize', items);
+            CacheProvider.setItem(items, storageName);
         });
     };
 

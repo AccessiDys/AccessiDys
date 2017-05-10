@@ -42,7 +42,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $rootScope.apercu = false;
     $rootScope.displayTextSimple = 'AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu\'aux cadres supérieurs trop pressés jusqu\'aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d\'affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d\'attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d\'origine. Qu\'il s\'agisse d\'un fichier PDF numérisé, d\'un document Office, d\'un livre électronique au format ePub ou d\'une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d\'une expérience de lecture totalement personnalisée.';
 
-    $scope.initCommon = function () {
+    $rootScope.initCommon = function () {
 
         CacheProvider.getItem('currentProfile').then(function (currentProfile) {
             // Init profile list and Tag
@@ -51,7 +51,10 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                 $rootScope.tags = tags;
 
+
                 profilsService.getProfiles().then(function (res) {
+
+                    $rootScope.profiles = [];
 
                     if (res) {
 
@@ -145,6 +148,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         return res;
     };
 
-    $scope.initCommon();
+    $rootScope.initCommon();
 
 });

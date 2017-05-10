@@ -84,6 +84,7 @@ cnedApp.directive('profileColoration',
                             var profile = scope.profile.data;
                             var text = element.html();
 
+
                             if (profile && text) {
 
                                 for (var i = 0; i < profile.profileTags.length; i++) {
@@ -136,6 +137,10 @@ cnedApp.directive('profileColoration',
                             generateColoration();
                         }
                     });
+
+                    scope.$watch('profile', function () {
+                        generateColoration();
+                    }, true);
 
                 } else {
                     scope.$watch('profile', function () {

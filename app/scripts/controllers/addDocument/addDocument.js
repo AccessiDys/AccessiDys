@@ -34,7 +34,7 @@ angular
     .controller(
         'AddDocumentCtrl',
         function ($log, $scope, $rootScope, $stateParams, serviceCheck, $http,
-                   htmlEpubTool, fileStorageService,
+                  htmlEpubTool, fileStorageService,
                   canvasToImage, UtilsService, LoaderService, ToasterService, documentService, UserService) {
 
             $scope.document = {
@@ -49,7 +49,7 @@ angular
             // Parameters to initialize
             $scope.files = [];
             $scope.currentData = '';
-            $scope.pageBreakElement = '<div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div><div class="accessidys-break-page"></div>';
+            $scope.pageBreakElement = '<hr/>';
             $scope.resizeDocEditor = 'Agrandir';
             $scope.lien = '';
 
@@ -90,6 +90,12 @@ angular
                             // Retrieving the contents of the body of link by services.
                             serviceCheck.htmlPreview(document.uri)
                                 .then(function (resultHtml) {
+
+                                    if (resultHtml && resultHtml.indexOf('<title>') > -1) {
+                                        $scope.document.filename = UtilsService.cleanUpSpecialChars(resultHtml.substring(resultHtml.indexOf('<title>') + 7, resultHtml.indexOf('</title>')));
+                                    }
+
+
                                     var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
                                     promiseClean.then(function (resultClean) {
                                         // Insertion in the editor
@@ -159,10 +165,13 @@ angular
                             ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
                         }
                         $scope.document.filepath = data.filepath;
+                        $scope.document.filename = data.filename;
 
-                    }, function () {
-                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
-                        LoaderService.hideLoader();
+                    }, function (cause) {
+                        if (cause != 'edit-title') {
+                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
+                            LoaderService.hideLoader();
+                        }
                     });
             };
 
@@ -533,14 +542,14 @@ angular
             };
 
 
-            $scope.init = function(){
+            $scope.init = function () {
 
-                if($stateParams.idDocument){
+                if ($stateParams.idDocument) {
 
                     LoaderService.showLoader('document.message.info.load', true);
                     LoaderService.setLoaderProgress(50);
 
-                    var filename =  $stateParams.idDocument || $stateParams.file.filename;
+                    var filename = $stateParams.idDocument || $stateParams.file.filename;
 
                     fileStorageService.get(filename, 'document').then(function (file) {
                         $log.debug('Init document edit', file);
@@ -553,11 +562,12 @@ angular
 
                 if ($stateParams.file) {
                     $scope.document = $stateParams.file;
+                    ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
                 }
 
             };
 
-            $scope.textAngularSetup = function(textEditor){
+            $scope.textAngularSetup = function (textEditor) {
                 textEditor.attr('text-angular-profile-coloration', '');
             };
 

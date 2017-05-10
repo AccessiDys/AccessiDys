@@ -171,36 +171,45 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
                         if ($stateParams.auth) {
 
 
-
                             return OauthService.token().then(function (res) {
                                 return UserService.saveData(res.data).then(function () {
 
-                                    CacheProvider.getItem('documentsToSynchronize').then(function(files){
+                                    CacheProvider.getItem('documentsToSynchronize').then(function (items) {
 
                                         // Synchronize doc
-                                        if(files){
+                                        if (items) {
                                             var toSend = [];
-                                            for(var i = 0; i < files.length; i++){
-                                                toSend.push(fileStorageService.save(files[i], 'document'));
+                                            for (var i = 0; i < items.length; i++) {
+                                                if (items[i].action === 'save') {
+                                                    toSend.push(fileStorageService.save(items[i].file, 'document'));
+                                                } else if (items[i].action === 'delete') {
+                                                    toSend.push(fileStorageService.delete(items[i].file, 'document'));
+                                                }
                                             }
-                                            $q.all(toSend).then(function(res){
+                                            $q.all(toSend).then(function (res) {
                                                 $log.debug('res from documentsToSynchronize', res);
+                                                CacheProvider.setItem(null, 'documentsToSynchronize');
                                             });
                                         }
                                     });
 
-                                    CacheProvider.getItem('profilesToSynchronize').then(function(files){
+                                    CacheProvider.getItem('profilesToSynchronize').then(function (items) {
 
                                         // Synchronize doc
-                                        if(files){
+                                        if (items) {
                                             var toSend = [];
-                                            for(var i = 0; i < files.length; i++){
-                                                files[i].data.owner = res.data.email;
-                                                toSend.push(fileStorageService.save(files[i], 'profile'));
-                                                $rootScope.profiles.push(files[i]);
+                                            for (var i = 0; i < items.length; i++) {
+                                                items[i].file.data.owner = res.data.email;
+                                                if (items[i].action === 'save') {
+                                                    toSend.push(fileStorageService.save(items[i].file, 'profile'));
+                                                } else if (items[i].action === 'delete') {
+                                                    toSend.push(fileStorageService.delete(items[i].file, 'profile'));
+                                                }
                                             }
-                                            $q.all(toSend).then(function(res){
+                                            $q.all(toSend).then(function (res) {
                                                 $log.debug('res from profileToSynchronize', res);
+                                                CacheProvider.setItem(null, 'profilesToSynchronize');
+                                                $rootScope.initCommon();
                                             });
                                         }
                                     });
@@ -248,13 +257,13 @@ angular.module('cnedApp').config(['$compileProvider',
     }
 ]);
 
-angular.module('cnedApp').config(function($provide){
-    $provide.decorator('taOptions', ['taRegisterTool', '$delegate', function(taRegisterTool, taOptions){
+angular.module('cnedApp').config(function ($provide) {
+    $provide.decorator('taOptions', ['taRegisterTool', '$delegate', function (taRegisterTool, taOptions) {
         // $delegate is the taOptions we are decorating
         // register the tool with textAngular
         taRegisterTool('pageBreak', {
             buttontext: "Saut de page",
-            action: function(){
+            action: function () {
                 this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
             }
         });
