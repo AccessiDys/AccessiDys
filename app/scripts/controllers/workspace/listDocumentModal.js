@@ -25,17 +25,44 @@
 'use strict';
 
 /* jshint loopfunc:true */
-angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, $controller, $uibModalInstance) {
+angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, $controller, $uibModalInstance, LoaderService, fileStorageService) {
 
     $scope.sortType = 'dateModification';
     $scope.sortReverse = true;
 
-    /**
-     * this controller inherits from listDocumentCtrl
-     */
-    $controller('listDocumentCtrl', {
-        $scope: $scope
-    });
+
+
+
+    $scope.getListDocument = function () {
+        LoaderService.showLoader('document.message.info.load', false);
+        LoaderService.setLoaderProgress(20);
+
+        fileStorageService.list('document').then(function (listDocument) {
+            LoaderService.setLoaderProgress(100);
+            LoaderService.hideLoader();
+
+            if (listDocument) {
+
+                $scope.listDocument = listDocument;
+            } else {
+                $scope.listDocument = [];
+            }
+
+            console.log('$scope.listDocument', $scope.listDocument);
+
+            for (var i = 0; i < $scope.listDocument.length; i++) {
+                $scope.listDocument[i].showed = true;
+                $scope.listDocument[i].filenameEncoded = $scope.listDocument[i].filename.replace(/ /g, '_');
+            }
+
+
+        }, function () {
+            LoaderService.hideLoader();
+        });
+    };
+
+    $scope.getListDocument();
+
 
 
     /**
