@@ -41,7 +41,7 @@ cnedApp.directive('draggableNote',
 
                 lineCanvasHtml = '<div id="line-canvas-' + scope.note.idNote + '"></div>';
                 type = attrs.type;
-                container = angular.element('#' + attrs.container);
+                container = angular.element(document.querySelector('#' + attrs.container))[0];
 
                 if (type === 'content') {
                     elm.css({
@@ -64,37 +64,39 @@ cnedApp.directive('draggableNote',
                     var x, y, xLink, yLink;
 
 
-                    if(angular.element( '#line-canvas-' + scope.note.idNote ).length < 1){
-                        angular.element('#canvas-container-' + scope.note.idPage).append(lineCanvasHtml);
+                    if(angular.element( document.querySelector('#line-canvas-' + scope.note.idNote) ).length < 1){
+                        angular.element(document.querySelector('#canvas-container-' + scope.note.idPage)).append(lineCanvasHtml);
                     }
 
-                    lineCanvas = angular.element('#line-canvas-' + scope.note.idNote);
+                    lineCanvas = angular.element(document.querySelector('#line-canvas-' + scope.note.idNote));
                     if (type === 'content') {
                         // set the line canvas to the width and height of the carousel
-                        var carousel = angular.element('#carouselid');
+                        var carousel = angular.element(document.querySelector('#page-content'));
+
 
                         lineCanvas.css({
                             position: 'absolute',
-                            width: carousel.width(),
-                            height: carousel.height()
+                            width: carousel[0].clientWidth + 'px',
+                            height: carousel[0].clientHeight + 'px'
                         });
                     }
 
                     lineCanvas.find('div').remove();
 
 
-                    var contentElm = angular.element('#zone-id-' + scope.note.idNote);
-                    var linkElm = angular.element('#link-id-' + scope.note.idNote);
+                    var contentElm = angular.element(document.querySelector('#zone-id-' + scope.note.idNote))[0];
+                    var linkElm = angular.element(document.querySelector('#link-id-' + scope.note.idNote))[0];
 
-                    if(linkElm.length > 0 && contentElm.length > 0){
+                    if(linkElm  && contentElm ){
                         // invariant whatever the method of consultation.
-                        xLink = linkElm.offset().left - container.offset().left + 60;
-                        x = contentElm.offset().left - container.offset().left + 40;
-                        yLink = linkElm.offset().top - container.offset().top + 25;
-                        y = contentElm.offset().top - container.offset().top + 20;
+                        xLink = linkElm.offsetLeft - container.offsetLeft + 60;
+                        x = contentElm.offsetLeft - container.offsetLeft + 40;
+                        yLink = linkElm.offsetTop - container.offsetTop + 25;
+                        y = contentElm.offsetTop - container.offsetTop + 20;
+
 
                         // déssiner
-                        lineCanvas.line(xLink, yLink, x, y, {
+                        jQuery('#line-canvas-' + scope.note.idNote).line(xLink, yLink, x, y, {
                             color: '#747474',
                             stroke: 1,
                             zindex: 9
@@ -130,8 +132,8 @@ cnedApp.directive('draggableNote',
                     /* If I move the contents of the note in the permitted area */
                     if (tagID.indexOf('note-id-') > -1) {
 
-                        var x = (elm.offset().left - 15 - container.offset().left) / container.width() * 100;
-                        var y = (elm.offset().top - container.offset().top) / container.height() * 100;
+                        var x = (elm[0].offsetLeft - 15 - container.offsetLeft) / container.clientWidth * 100;
+                        var y = (elm[0].offsetTop - container.offsetTop) / container.clientHeight * 100;
 
                         elm.css({
                             top: y + '%',
@@ -143,8 +145,8 @@ cnedApp.directive('draggableNote',
                         /* If I move the arrow annotation */
                     } else if (tagID.indexOf('link-id-') > -1) {
 
-                        var x = (elm.offset().left + 7 - container.offset().left) / container.width() * 100;
-                        var y = (elm.offset().top - container.offset().top) / container.height() * 100;
+                        var x = (elm[0].offsetLeft+ 7 - container.offsetLeft) / container.clientWidth * 100;
+                        var y = (elm[0].offsetTop - container.offsetTop) / container.clientHeight * 100;
 
                         elm.css({
                             top: y + '%',

@@ -63,7 +63,7 @@
                         Menu
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li data-ng-show="admin" class="regles">
+                        <li data-ng-if="userData.isAdmin" class="regles">
                             <a ui-sref="app.list-style"
                                id="regles_submenu" title="Styles" translate>
                                 Styles

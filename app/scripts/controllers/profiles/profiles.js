@@ -268,11 +268,11 @@ angular.module('cnedApp')
                 if (params.operation && params.operation === 'save') {
                     $scope.initProfil();
 
-                    console.log('updated profile', params.profile);
+                    $log.debug('updated profile', params.profile);
                     if (params.template === 'update') {
 
                         for (var i = 0; i < $rootScope.profiles.length; i++) {
-                            if ($rootScope.profiles[i].filepath === params.profile.filepath) {
+                            if ((params.profile.data._id && $rootScope.profiles[i].data._id === params.profile.data._id) || (params.profile.filepath && $rootScope.profiles[i].filepath === params.profile.filepath)) {
                                 $rootScope.profiles[i] = params.profile;
                                 break;
                             }
@@ -337,112 +337,67 @@ angular.module('cnedApp')
             }).result;
         };
 
-        $scope.displayOwner = function (param) {
-            if (UserService.getData().email === param.data.owner) {
+        $scope.displayOwner = function (profile) {
+            if ($scope.isOwner(profile)) {
                 return 'Moi-même';
-            } else if (param.data.state === 'favoris') {
-                return 'Favoris';
-            } else if (param.data.state === 'delegated') {
+            } else if (profile.data.delegated || (profile.data.preDelegated && profile.data.preDelegated !== '' )) {
                 return 'Délégué';
-            } else if (param.data.state === 'default') {
+            } else if (profile.data.state === 'default') {
                 return 'Accessidys';
             }
         };
 
-        $scope.showLoader = function () {
-
-            $scope.loader = true;
-            $scope.loaderMsg = 'Affichage de la liste des profils en cours ...';
-        };
-
-        $scope.hideLoader = function () {
-            console.log('loader hide');
-            $scope.loader = false;
-            $scope.loaderMsg = '';
-        };
-
-
-        $scope.showLoaderFromLoop = function (indexLoop) {
-            //check if first element of the loop
-            if (indexLoop <= 0) {
-                $scope.showLoader();
-            }
-        };
-        $scope.showProfilLoaderFromLoop = function (indexLoop) {
-            //check if first element of the loop
-            if (indexLoop <= 0) {
-                $scope.loader = true;
-                $scope.loaderMsg = 'Affichage du profil en cours ...';
-            }
-        };
-
-        $scope.hideLoaderFromLoop = function (indexLoop, max) {
-            //Get nb listProfilTags length to check if last element of the loop
-            if (indexLoop >= (max - 1)) {
-                $scope.hideLoader();
-            }
-        };
-
-        $scope.isDeletable = function (param) {
-            if (param.favourite && param.delete) {
-                return true;
-            }
-            if (param.favourite && !param.delete) {
-                return false;
-            }
-        };
-
         // TODO
-        /*
-         $scope.cancelDelegateByOwner = function (profile) {
-         if (!$rootScope.isAppOnline) {
-         UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
-         } else {
-         UtilsService.openConfirmModal('Annuler la délégation', 'Voulez-vous annuler votre délégation?', true)
-         .then(function () {
 
-         LoaderService.showLoader('profile.message.info.canceldelegateByOwner.inprogress', false);
+        $scope.cancelDelegateByOwner = function (profile) {
+            if (!$rootScope.isAppOnline) {
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
+            } else {
+                UtilsService.openConfirmModal('Annuler la délégation', 'Voulez-vous annuler votre délégation?', true)
+                    .then(function () {
 
-         var sendParam = {
-         id: $rootScope.currentUser.local.token,
-         sendedVars: {
-         idProfil: profile._id,
-         idUser: $rootScope.currentUser._id
-         }
-         };
+                        LoaderService.showLoader('profile.message.info.canceldelegateByOwner.inprogress', false);
 
-         $http.post(configuration.URL_REQUEST + '/annulerDelegateUserProfil', sendParam)
-         .success(function (data) {
-         if (data) {
-         $http.post(configuration.URL_REQUEST + '/findUserById', {
-         idUser: profile.preDelegated
-         })
-         .success(function (data) {
-         if (data) {
-         var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
-         var emailParams = {
-         emailTo: data.local.email,
-         content: '<span> ' + fullName + ' vient d\'annuler la demande de délégation de son profil : ' + profile.nom + '. </span>',
-         subject: 'Annuler la délégation'
-         };
+                        var sendParam = {
+                            id: $rootScope.currentUser.local.token,
+                            sendedVars: {
+                                idProfil: profile._id,
+                                idUser: $rootScope.currentUser._id
+                            }
+                        };
 
-         EmailService.sendEMail(emailParams).then(function () {
-         ToasterService.showToaster('#profile-success-toaster', 'mail.send.ok');
-         LoaderService.hideLoader();
-         $scope.initProfil();
-         }, function () {
-         ToasterService.showToaster('#profile-error-toaster', 'mail.send.ko');
-         LoaderService.hideLoader();
-         $scope.initProfil();
-         });
-         }
-         });
-         }
-         });
+                        $http.post(configuration.URL_REQUEST + '/annulerDelegateUserProfil', sendParam)
+                            .success(function (data) {
+                                if (data) {
+                                    $http.post(configuration.URL_REQUEST + '/findUserById', {
+                                        idUser: profile.preDelegated
+                                    })
+                                        .success(function (data) {
+                                            if (data) {
+                                                var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
+                                                var emailParams = {
+                                                    emailTo: data.local.email,
+                                                    content: '<span> ' + fullName + ' vient d\'annuler la demande de délégation de son profil : ' + profile.nom + '. </span>',
+                                                    subject: 'Annuler la délégation'
+                                                };
 
-         });
-         }
-         };*/
+                                                EmailService.sendEMail(emailParams).then(function () {
+                                                    ToasterService.showToaster('#profile-success-toaster', 'mail.send.ok');
+                                                    LoaderService.hideLoader();
+                                                    $scope.initProfil();
+                                                }, function () {
+                                                    ToasterService.showToaster('#profile-error-toaster', 'mail.send.ko');
+                                                    LoaderService.hideLoader();
+                                                    $scope.initProfil();
+                                                });
+                                            }
+                                        });
+                                }
+                            });
+
+                    });
+            }
+        };
 
         /**
          * Cancel the profile delegation by owner
@@ -514,8 +469,10 @@ angular.module('cnedApp')
 
                     profilsService.deleteProfil(profile)
                         .then(function () {
+
+                            $log.debug('Delete profile success');
                             for (var i = 0; i < $rootScope.profiles.length; i++) {
-                                if ($rootScope.profiles[i].filepath === profile.filepath) {
+                                if ((profile.data._id && $rootScope.profiles[i].data._id === profile.data._id) || ( profile.filepath && $rootScope.profiles[i].filepath === profile.filepath )) {
                                     $rootScope.profiles.splice(i, 1);
                                     break;
                                 }
@@ -621,21 +578,26 @@ angular.module('cnedApp')
         };
 
         $scope.isDefault = function (param) {
-            if (param && param.data.state === 'default') {
+            if (param && (param.data.owner === 'admin' || param.data.owner === 'scripted')) {
                 return true;
             }
             return false;
         };
 
-        $scope.isOwner = function (param) {
-            if (param && param.data.owner === UserService.getData().email) {
+        /**
+         * Check if the current user is profile owner
+         * @param profile
+         * @returns {boolean}
+         */
+        $scope.isOwner = function (profile) {
+            if (profile && (profile.data.owner === UserService.getData().email || (UserService.getData().isAdmin && (profile.data.owner === 'admin' || profile.data.owner === 'scripted')))) {
                 return true;
             }
             return false;
         };
 
         $scope.isDelegated = function (param) {
-            if (param && param.data.state === 'delegated') {
+            if (param && param.data.delegated) {
                 return true;
             }
             return false;
@@ -649,60 +611,32 @@ angular.module('cnedApp')
             return false;
         };
 
-        $scope.isFavourite = function (param) {
-            if (param && (param.data.state === 'favoris' || param.data.state === 'default')) {
+        /**
+         * Check if profile is favourite
+         * @param profile
+         * @returns {boolean}
+         */
+        $scope.isFavourite = function (profile) {
+            if (profile && (profile.data.isFavourite || profile.data.owner === 'admin' || profile.data.owner === 'scripted')) {
                 return true;
             }
             return false;
         };
 
-        $scope.isOwnerDelagate = function (param) {
-            if (param && param.data.delegated && param.data.owner === UserService.getData().email) {
+        $scope.isOwnerDelagate = function (profile) {
+            if (profile && profile.data.preDelegated !== '' && $scope.isOwner(profile)) {
                 return true;
             }
             return false;
         };
 
-        $scope.isAnnuleDelagate = function (param) {
-            if (param && param.data.preDelegated && param.data.owner === UserService.getData().email) {
+        $scope.canCancelDelegation = function (profile) {
+            if (profile && profile.data.preDelegated !== '' && !$scope.isOwner(profile)) {
                 return true;
             }
             return false;
         };
 
-        $scope.isDelegatedOption = function (param) {
-            if (param && !param.data.delegated && !param.data.preDelegated && param.data.owner === UserService.getData().email) {
-                return true;
-            }
-            return false;
-        };
-
-
-        // TODO
-        $scope.removeFavourite = function (profile) {
-
-            /*UtilsService.openConfirmModal('deleteFavoris', 'messageSuppression', false)
-             .then(function () {
-
-             var params = {
-             profilID: profile._id,
-             userID: $rootScope.currentUser._id,
-             favoris: true
-             };
-
-             if ($scope.token && $scope.token.id) {
-             $scope.token.favProfile = params;
-             } else {
-             $scope.token.id = localStorage.getItem('compteId');
-             $scope.token.favProfile = params;
-             }
-             $http.post(configuration.URL_REQUEST + '/removeUserProfileFavoris', $scope.token)
-             .success(function () {
-             ToasterService.showToaster('#profile-success-toaster', 'profile.message.favorite.delete');
-             $scope.getProfiles();
-             });
-             });*/
-        };
 
         /* sending email when duplicating. */ // TODO revoir la fonctionnalité
         $scope.sendEmailDuplique = function () {
@@ -717,7 +651,7 @@ angular.module('cnedApp')
                         content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour dupliquer votre profil : ' + $scope.oldProfil.nom + '. </span>',
                         subject: fullName + ' a dupliqué votre profil'
                     };
-                    $http.post( '/sendEmail', $scope.sendVar)
+                    $http.post('/sendEmail', $scope.sendVar)
                         .success(function () {
                         });
                 }
@@ -726,7 +660,10 @@ angular.module('cnedApp')
             });
         };
 
-
+        /**
+         * Delegate a profile
+         * @param profile
+         */
         $scope.delegateProfile = function (profile) {
             if (!$rootScope.isAppOnline) {
                 UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
@@ -742,6 +679,118 @@ angular.module('cnedApp')
 
                 // angular-google-analytics tracking pages
                 Analytics.trackPage('/profile/delegate.html');
+            }
+        };
+
+        /**
+         * Accept delegation of a profile
+         * @param profile
+         */
+        $scope.acceptProfileDelegation = function (profile) {
+            if (!$rootScope.isAppOnline) {
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
+            } else {
+                profile.data.delegated = true;
+
+                profilsService.update(profile).then(function () {
+                });
+            }
+        };
+
+        /**
+         * Denied delegation of a profile
+         * @param profile
+         */
+        $scope.deniedProfileDelegation = function (profile) {
+            if (!$rootScope.isAppOnline) {
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
+            } else {
+                profile.data.delegated = false;
+                profile.data.preDelegated = '';
+
+                profilsService.update(profile).then(function () {
+
+                });
+            }
+        };
+
+        /**
+         * Cancel delegation of a profile
+         * @param profile
+         */
+        $scope.cancelProfileDelegation = function (profile) {
+            if (!$rootScope.isAppOnline) {
+                UtilsService.showInformationModal('label.offline', 'profile.message.info.delegate.offline');
+            } else {
+
+                UtilsService.openConfirmModal('Annuler la délégation', 'Voulez-vous annuler votre délégation?', true)
+                    .then(function () {
+
+                        LoaderService.showLoader('profile.message.info.canceldelegateByOwner.inprogress', false);
+
+                        var emailTo = profile.data.preDelegated;
+
+                        if (UserService.getData().isAdmin) {
+                            profile.data.delegated = false;
+                            profile.data.preDelegated = '';
+
+                            profilsService.update(profile).then(function () {
+
+                                var fullName = UserService.getData().firstName + ' ' + UserService.getData().lastName;
+                                var emailParams = {
+                                    emailTo: emailTo,
+                                    content: '<span> ' + fullName + ' vient d\'annuler la demande de délégation de son profil : ' + profile.data.nom + '. </span>',
+                                    subject: 'Annuler la délégation'
+                                };
+
+                                EmailService.sendEMail(emailParams).then(function () {
+                                    ToasterService.showToaster('#profile-success-toaster', 'mail.send.ok');
+                                    LoaderService.hideLoader();
+                                    $scope.initProfil();
+                                }, function () {
+                                    ToasterService.showToaster('#profile-error-toaster', 'mail.send.ko');
+                                    LoaderService.hideLoader();
+                                    $scope.initProfil();
+                                });
+
+                            });
+                        } else {
+                            profilsService.getProfile(profile.data._id).then(function (_profile) {
+
+                                if (_profile) {
+                                    _profile.data.delegated = false;
+                                    _profile.data.preDelegated = '';
+
+                                    profilsService.saveProfile(_profile).then(function (res) {
+                                        profile = res;
+
+                                        var fullName = UserService.getData().firstName + ' ' + UserService.getData().lastName;
+                                        var emailParams = {
+                                            emailTo: emailTo,
+                                            content: '<span> ' + fullName + ' vient d\'annuler la demande de délégation de son profil : ' + profile.data.nom + '. </span>',
+                                            subject: 'Annuler la délégation'
+                                        };
+
+                                        EmailService.sendEMail(emailParams).then(function () {
+                                            ToasterService.showToaster('#profile-success-toaster', 'mail.send.ok');
+                                            LoaderService.hideLoader();
+                                            $scope.initProfil();
+                                        }, function () {
+                                            ToasterService.showToaster('#profile-error-toaster', 'mail.send.ko');
+                                            LoaderService.hideLoader();
+                                            $scope.initProfil();
+                                        });
+
+                                    });
+                                }
+
+                            });
+                        }
+
+
+                    });
+
+
             }
         };
 
@@ -766,61 +815,31 @@ angular.module('cnedApp')
 
         /** **** Begin of the profile detail***** */
 
-        /*
-         * Initialize the detail of the profile..
+        /**
+         * Initialize profile detail
          */
         $scope.initDetailProfil = function () {
-
-
             if ($stateParams.idProfil) {
 
-                profilsService.getProfiles().then(function (res) {
+                profilsService.getProfile($stateParams.idProfil).then(function (profile) {
 
-                    if (res) {
+                    if (profile) {
+                        profile.data.className = profilsService.generateClassName(profile, false);
 
-                        _.each(res, function (profile) {
-
-                            if (profile) {
-
-                                profile.data.className = profilsService.generateClassName(profile, false);
-
-                                _.each(profile.data.profileTags, function (item) {
-                                    item.tagDetail = _.find($rootScope.tags, function (tag) {
-                                        return item.tag === tag._id;
-                                    });
-
-
-                                    if (typeof item.tagDetail === 'object') {
-                                        item.texte = '<' + item.tagDetail.balise + '>' + item.tagDetail.libelle + ': ' + $rootScope.displayTextSimple + '</' + item.tagDetail.balise + '>';
-                                    }
-
-                                    // Avoid mapping with backend
-                                    item.id_tag = item.tag;
-                                    item.style = item.texte;
-
-                                });
-
-                                profile.data.profileTags.sort(function (a, b) {
-                                    return a.tagDetail.position - b.tagDetail.position;
-                                });
-
-                                profile.showed = true;
-
-                                if (profile.data._id === $stateParams.idProfil) {
-                                    $scope.detailProfil = profile;
-                                }
-
-
-                            }
+                        _.each(profile.data.profileTags, function (item) {
+                            item.tagDetail = _.find($rootScope.tags, function (tag) {
+                                return item.tag === tag._id;
+                            });
                         });
+
+                        profile.data.profileTags.sort(function (a, b) {
+                            return a.tagDetail.position - b.tagDetail.position;
+                        });
+
+                        $scope.detailProfil = profile;
                     }
 
                 });
-
-
-
-
-
             } else if ($stateParams.url) {
 
                 $http.get($stateParams.url).then(function (res) {
@@ -833,37 +852,32 @@ angular.module('cnedApp')
                 });
 
             }
-
-
             // Get back the profile and the current userProfil
-
         };
 
-        /*
+        /**
          * Add a profile to his favorites.
+         * @param profile
          */
-        // TODO
-        /*$scope.ajouterAmesFavoris = function () {
+        $scope.addToFavourite = function (profile) {
+            profile.data.isFavourite = true;
 
-         $log.debug('$scope.detailProfil', $scope.detailProfil);
-         if ($rootScope.currentUser && $scope.detailProfil) {
-         var token = {
-         id: $rootScope.currentUser.local.token,
-         newFav: {
-         userID: $rootScope.currentUser._id,
-         profilID: $scope.detailProfil.profilID,
-         favoris: true,
-         actuel: false,
-         default: false
-         }
-         };
-         $http.post(configuration.URL_REQUEST + '/addUserProfilFavoris', token).success(function () {
-         $scope.showFavouri = false;
-         ToasterService.showToaster('#profile-success-toaster', 'profile.message.favorite.ok');
-         $rootScope.$broadcast('initCommon'); // TODO revoir
-         });
-         }
-         };*/
+            profilsService.saveProfile(profile).then(function () {
+
+            });
+        };
+
+        /**
+         * Remove a profile from favourite
+         * @param profile
+         */
+        $scope.removeFavourite = function (profile) {
+            profile.data.isFavourite = false;
+
+            profilsService.saveProfile(profile).then(function () {
+
+            });
+        };
 
         /*
          * Accept the delegation of a profile.
@@ -915,10 +929,9 @@ angular.module('cnedApp')
 
         $scope.create = function () {
 
-            var profileToCreate = angular.copy($rootScope.defaultSystemProfile);
+            var profileToCreate = profileCopy($rootScope.defaultSystemProfile);
             profileToCreate.data.nom = $scope.generateProfileName(UserService.getData().firstName || 'Profil', 0, 0);
             profileToCreate.data.owner = UserService.getData().email;
-            profileToCreate.data.updated = new Date();
             profileToCreate.data.className = profilsService.generateClassName(profileToCreate, true);
 
             $scope.openProfileModal('create', profileToCreate);
@@ -942,17 +955,36 @@ angular.module('cnedApp')
 
             $scope.oldProfil = profile;
 
-            var profileToDuplicate = angular.copy(profile);
+            var profileToDuplicate = profileCopy(profile);
             profileToDuplicate.data.nom += ' Copie';
             profileToDuplicate.data.descriptif += ' Copie';
             profileToDuplicate.data.owner = UserService.getData().email;
-            profileToDuplicate.data.updated = new Date();
             profileToDuplicate.data.className = profilsService.generateClassName(profileToDuplicate, true);
 
             $scope.openProfileModal('duplicate', profileToDuplicate);
 
             // angular-google-analytics tracking pages
             Analytics.trackPage('/profile/duplicate.html');
+        };
+
+        var profileCopy = function (profile) {
+
+            var res = angular.copy(profile);
+
+            delete res.data._id;
+            delete res.data.delegated;
+            delete res.data.preDelegated;
+            delete res.data.state;
+            delete res.data.isFavourite;
+
+            for (var i = 0; i < res.data.profileTags.length; i++) {
+                delete res.data.profileTags[i]._id;
+                delete res.data.profileTags[i].profil;
+            }
+
+            $log.debug('Profile copy', res);
+
+            return res;
         };
 
         /** **** end of the profile detail ***** */

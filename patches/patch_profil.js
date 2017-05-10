@@ -428,7 +428,7 @@ function deleteAllCnedAdaptProfilByDefault() {
 
 function setAccessidysProfil() {
 
-    //Create the new default profile        
+    //Create the new default profile
     newProfilParDefaut();
 
     //Delete the last one (and the link with user profiles too)

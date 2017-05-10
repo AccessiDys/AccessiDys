@@ -114,19 +114,17 @@ app.use(function (req, res, next) {
 });
 
 // Bootstrap models
-//require('./models/DocStructure');
-//require('./models/Document');
 require('./models/Tag');
 require('./models/ProfilTag');
 require('./models/User');
 require('./models/UserProfil');
 require('./models/Profil');
-//require('./models/sysParam');
 
 // Patches
-//require('./patches/version.js');
-//require('./patches/patch_users');
 //require('./patches/patch_profil');
+var patchProd = require('./patches/patch_prod');
+
+//patchProd.updateDb();
 
 // Create HTTP/HTTPS Server
 

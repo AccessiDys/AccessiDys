@@ -35,10 +35,10 @@
 angular.module('cnedApp')
     .controller('ApercuCtrl', function ($scope, $rootScope, $http, $window, $location,
                                         $log, $q, serviceCheck,
-                                        storageService, htmlEpubTool, $stateParams,
+                                        htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
-                                        gettextCatalog, $localForage, UtilsService, LoaderService, Analytics, ToasterService) {
+                                        gettextCatalog, $localForage, UtilsService, LoaderService, Analytics, ToasterService, $state) {
 
         $scope.idDocument = $stateParams.idDocument;
         $scope.tmp = $stateParams.tmp;
@@ -97,24 +97,23 @@ angular.module('cnedApp')
         /*
          * Make / Scroll the menu while scrolling.
          */
-        // TODO
-        /*$(window).scroll(function () {
-         var dif_scroll = 0;
-         if (angular.element('#page-content').offset()) {
-         if ($(window).scrollTop() >= angular.element('#page-content').offset().top) {
-         if (!$scope.modeImpression) {
-         dif_scroll = $(window).scrollTop() - 120;
-         } else {
-         dif_scroll = $(window).scrollTop() - 70;
-         }
+        jQuery(window).scroll(function () {
+            var dif_scroll = 0;
+            if (angular.element(document.querySelector('#page-content'))[0]) {
+                if ($(window).scrollTop() >= angular.element(document.querySelector('#page-content'))[0].offsetTop) {
+                    if (!$scope.modeImpression) {
+                        dif_scroll = jQuery(window).scrollTop() - 120;
+                    } else {
+                        dif_scroll = jQuery(window).scrollTop() - 70;
+                    }
 
-         $('.fixed_menu').css('top', dif_scroll + 'px');
-         } else {
-         $('.fixed_menu').css('top', 0);
-         }
-         }
+                    jQuery('.fixed_menu').css('top', dif_scroll + 'px');
+                } else {
+                    jQuery('.fixed_menu').css('top', 0);
+                }
+            }
 
-         });*/
+        });
 
 
         /**
@@ -182,14 +181,8 @@ angular.module('cnedApp')
             }
             notes.push(newNote);
             mapNotes[$scope.docSignature] = notes;
-            var element = [];
-            element.push({
-                name: 'notes',
-                value: JSON.stringify(angular.toJson(mapNotes))
-            });
-            var t = storageService.writeService(element, 0);
-            t.then(function (data) {
-            });
+
+            localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));
         };
 
         /*
@@ -203,7 +196,7 @@ angular.module('cnedApp')
                     break;
                 }
             }
-            angular.element('#line-canvas-' + $scope.notes[index].idNote).remove();
+            angular.element(document.querySelector('#line-canvas-' + $scope.notes[index].idNote)).remove();
             $scope.notes.splice(index, 1);
 
             var notes = [];
@@ -540,12 +533,12 @@ angular.module('cnedApp')
         };
 
         /**
-         * This function allows to handle a pdf by the bookmarklet. // TODO ajouter à un service
+         * This function allows to handle a pdf by the bookmarklet.
          */
         $scope.loadPdfByLien = function (url) {
             var contains = (url.indexOf('https') > -1); // true
             if (contains === false) {
-                $scope.serviceNode =  '/sendPdf';
+                $scope.serviceNode = '/sendPdf';
             } else {
                 $scope.serviceNode = '/sendPdfHTTPS';
             }
@@ -568,43 +561,17 @@ angular.module('cnedApp')
 
             $log.debug('test flattenng web page', htmlContent);
 
+
             var root = angular.element('<div>' + htmlContent + '</div>');
-            var newElement = angular.element('<div></div>')[0];
 
-            $log.debug('DOM element ', root);
-            $log.debug('DOM element nextSibling', root.nextSibling);
-            $log.debug('DOM element childNodes', root.childNodes);
 
-            for (var i = 0; i < root.childNodes.length; i++) {
-                $log.debug('DOM element root.childNodes[i]', root.childNodes[i]);
-                extractChild(newElement, newElement, root.childNodes[i]);
-            }
+            var test = htmlContent;
 
-            $log.debug('DOM element AFTER', newElement);
+            test = test.replace(/(<div(?:.*?)>)/gi, '');
+            test = test.replace(/(<\/div>)/gi, '');
 
-        };
 
-        var extractChild = function (rootElement, prev, node) {
-
-            $log.debug('DEBUG extract childs - length ' + node.childNodes.length + ' type', node.nodeType);
-            $log.debug('DEBUG extract childs - node', node);
-            $log.debug('DEBUG extract childs - node name', node.localName);
-            $log.debug('DEBUG extract childs - prev', prev);
-
-            if (node.childNodes) {
-                for (var i = 0; i < node.childNodes.length; i++) {
-                    extractChild(rootElement, node, node.childNodes[i]);
-                }
-            }
-
-            if (node.nodeType === 1) {
-                rootElement.insertBefore(node, rootElement.lastChild);
-            }
-            if (node.nodeType === 3) {
-                rootElement.insertBefore(node, rootElement.lastChild);
-            }
-
-            prev.removeChild(node);
+            $log.debug('DOM element AFTER', test);
 
         };
 
@@ -626,6 +593,7 @@ angular.module('cnedApp')
 
                 if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf('<title>') > -1) {
                     $scope.urlTitle = UtilsService.cleanUpSpecialChars(htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<title>') + 7, htmlFile.documentHtml.indexOf('</title>')));
+                    htmlFile.documentHtml = processLink(htmlFile.documentHtml);
                 } else if (!$scope.urlTitle) {
                     $scope.urlTitle = UtilsService.cleanUpSpecialChars(url);
                 }
@@ -634,27 +602,13 @@ angular.module('cnedApp')
 
             }).then(function (resultClean) {
 
-                test(resultClean);
-
                 $scope.originalHtml = resultClean;
+
                 $scope.content = workspaceService.parcourirHtml(resultClean, $scope.urlHost, $scope.urlPort);
                 $scope.setPage($scope.currentPage);
             }, function (err) {
                 $log.error('err transform html', err);
                 UtilsService.showInformationModal('Erreur technique', 'L\'import du document a échoué. Une erreur technique est survenue.', null, true);
-            });
-        };
-
-
-        /**
-         * Recover the tmp html content from the localStorage
-         *
-         * @method $scope.getTmpContent
-         * @return Promise
-         */
-        $scope.getTmpContent = function () {
-            return fileStorageService.getTempFile().then(function (data) {
-                $scope.content = workspaceService.parcourirHtml(data);
             });
         };
 
@@ -950,13 +904,11 @@ angular.module('cnedApp')
          */
         $scope.openEditDocument = function () {
 
-            fileStorageService.saveTempFile({
-                url: $scope.url,
-                html: $scope.originalHtml
-            }).then(function () {
-                $location.path('/addDocument').search({
-                    title: $rootScope.titreDoc
-                });
+            $state.go('app.edit-document', {
+                file: {
+                    filename: $rootScope.titreDoc,
+                    data: $scope.originalHtml
+                }
             });
 
         };

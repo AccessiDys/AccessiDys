@@ -27,34 +27,38 @@
 var mongoose = require('mongoose');
 
 var profilSchema = mongoose.Schema({
-	photo: {
-		type: String
-	},
-	nom: {   // the name
-		type: String,
-		required: true
-	},
-	descriptif: {  // the description
-		type: String
-	},
-	owner: {
-		type: String,
-		required: false
-	},
-	preDelegated: {
-		type: String,
-		required: false
-	},
-	delegated: {
-		type: Boolean,
-		required: false
-	},
-	updated: {
-	    type: Date,
-	    default: Date.now
-	}
+    nom: {   // the name
+        type: String,
+        required: true
+    },
+    descriptif: {  // the description
+        type: String
+    },
+    owner: {
+        type: String,
+        required: true
+    },
+    preDelegated: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    delegated: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    updated: {
+        type: Date,
+        default: Date.now
+    },
+    isFavourite: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    profileTags: [{type: mongoose.Schema.Types.ObjectId, ref: 'ProfilTag'}]
 });
-
 
 
 module.exports = mongoose.model('Profil', profilSchema);

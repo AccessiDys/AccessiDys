@@ -36,61 +36,48 @@ angular.module('cnedApp')
 
         $scope.delegateProfile = function () {
 
-
             if (!$scope.form.email || $scope.form.email.length <= 0) {
                 ToasterService.showToaster('#profile-delegate-success-toaster', 'profile.message.delegate.save.ko.email.mandatory');
             } else if (!EmailService.verifyEmail($scope.form.email)) {
                 ToasterService.showToaster('#profile-delegate-success-toaster', 'profile.message.delegate.save.ko.email.invalid');
-            } else if ($scope.form.email === $rootScope.currentUser.local.email) {
+            } else if ($scope.form.email === UserService.getData().email) {
                 ToasterService.showToaster('#profile-delegate-success-toaster', 'profile.message.delegate.save.ko.yourself');
             } else {
                 LoaderService.showLoader('profile.message.info.delegate.inprogress', false);
 
-                UserService.findUserByEmail($scope.form.email)
-                    .success(function (data) {
-                        if (data) {
 
-                            var sendParam = {
-                                idProfil: profile._id,
-                                idDelegue: data._id
-                            };
+                profilsService.delegateProfile(profile, $scope.form.email)
+                    .then(function () {
+                        var profilLink = $location.absUrl().replace('#/profiles', '#/detailProfil?idProfil=' + profile._id);
+                        var fullName = UserService.getData().firstName + ' ' + UserService.getData().lastName;
+                        var emailParams = {
+                            emailTo: $scope.form.email,
+                            content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour vous déléguer son profil : <a href=' + profilLink + '>' + profile.nom + '</a>. </span>',
+                            subject: 'Profil délégué'
+                        };
 
-                            profilsService.delegateProfile(sendParam)
-                                .then(function () {
-                                    var profilLink = $location.absUrl().replace('#/profiles', '#/detailProfil?idProfil=' + profile._id);
-                                    var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
-                                    var emailParams = {
-                                        emailTo: $scope.form.email,
-                                        content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour vous déléguer son profil : <a href=' + profilLink + '>' + profile.nom + '</a>. </span>',
-                                        subject: 'Profil délégué'
-                                    };
-
-                                    EmailService.sendEMail(emailParams).then(function () {
-                                        LoaderService.hideLoader();
-
-                                        $uibModalInstance.close({
-                                            message: 'mail.send.ok'
-                                        });
-                                    }, function () {
-                                        LoaderService.hideLoader();
-
-                                        $uibModalInstance.close({
-                                            message: 'mail.send.ko'
-                                        });
-                                    });
-
-                                }, function () {
-                                    LoaderService.hideLoader();
-
-                                    $uibModalInstance.close({
-                                        message: 'profile.message.delegate.ko'
-                                    });
-                                });
-                        } else {
-                            ToasterService.showToaster('#profile-delegate-success-toaster', 'profile.message.save.ko.email.unknown');
+                        EmailService.sendEMail(emailParams).then(function () {
                             LoaderService.hideLoader();
-                        }
+
+                            $uibModalInstance.close({
+                                message: 'mail.send.ok'
+                            });
+                        }, function () {
+                            LoaderService.hideLoader();
+
+                            $uibModalInstance.close({
+                                message: 'mail.send.ko'
+                            });
+                        });
+
+                    }, function () {
+                        LoaderService.hideLoader();
+
+                        $uibModalInstance.close({
+                            message: 'profile.message.delegate.ko'
+                        });
                     });
+
             }
 
         };

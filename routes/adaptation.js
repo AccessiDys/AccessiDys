@@ -27,60 +27,14 @@
 var User = require('../models/User');
 
 var socket = require('./socket.js');
+var config = require('../../env/config.json');
+
+var helpers = require('../api/helpers/helpers.js');
+
 module.exports = function (app, passport) {
 
 
-    function populateUser(req, res, next) {
 
-        console.log('------------ populateUser => ' + req._parsedUrl.pathname);
-
-        global.io.sockets.emit('notif', {
-            lastItem: 'newProduct'
-        });
-
-        var errMessage = {};
-        var mydate = new Date();
-        var search = '';
-        var message = '';
-        var param = '';
-        if (req.method === 'GET') {
-            search = req.query.id;
-            message = req._parsedUrl.pathname;
-            param = JSON.stringify(req.query);
-            if (param.length > 100) {
-                param = param.substring(0, 100);
-            }
-        } else if (req.method === 'POST') {
-            message = req._parsedUrl.pathname;
-            if (req._parsedUrl.path.indexOf('/fileupload') > -1) {
-                param = JSON.stringify(req.files.uploadedFile);
-                search = req._parsedUrl.path.substring(req._parsedUrl.path.indexOf('id=') + 3, req._parsedUrl.path.length);
-            } else {
-                param = JSON.stringify(req.body);
-                search = req.body.id;
-                if (param.length > 100) {
-                    param = param.substring(0, 100);
-                }
-            }
-
-        }
-        if (search !== '') {
-            User.findOne({
-                'local.token': search
-            }, function (err, user) {
-                if (err || !user) {
-                    errMessage = {
-                        message: 'le token est introuveble',
-                        code: 1
-                    };
-                    res.send(404, errMessage);
-                } else {
-                    req.user = user;
-                    return next();
-                }
-            });
-        }
-    }
 
     function isLoggedIn(req, res, next) {
 
@@ -283,8 +237,6 @@ module.exports = function (app, passport) {
     }
 
 
-
-
     // Routes for tag manipulating
     var tags = require('../api/dao/tag');
     app.post('/addTag', isLoggedInAdmin, tags.create);
@@ -298,7 +250,6 @@ module.exports = function (app, passport) {
     app.post('/fileupload', isLoggedIn, images.uploadFiles);
     app.post('/sendPdf', images.sendPdf);
     app.post('/sendPdfHTTPS', images.sendPdfHTTPS);
-
     app.post('/previewPdf', isLoggedIn, images.previewPdf);
     app.post('/previewPdfHTTPS', isLoggedIn, images.previewPdfHTTPS);
     app.post('/htmlImage', images.htmlImage);
@@ -316,42 +267,12 @@ module.exports = function (app, passport) {
 
     //route for profile manipulations
     var profils = require('../api/dao/profils');
-    app.post('/deleteProfil', isLoggedIn, profils.supprimer);
-    app.post('/ajouterProfils', isLoggedIn, profils.createProfile);
-    app.post('/updateProfil', isLoggedIn, profils.update);
-    app.post('/profilParUser', profils.allByUser);
-    app.post('/chercherProfil', checkIsLoged, profils.chercherProfil);
-    app.post('/existingProfil', checkIsLoged, profils.existingProfiles);
-    app.post('/getProfilAndUserProfil', profils.getProfilAndUserProfil);
-    app.post('/ajoutDefaultProfil', profils.ajoutDefaultProfil); //terre
-    app.post('/delegateProfil', profils.delegateProfil);
-    app.post('/annulerDelegateUserProfil', profils.annulerDelegateUserProfil);
-    app.get('/listeProfils', populateUser, profils.listeProfils);
-    app.post('/profilActuByToken', isLoggedIn, profils.profilActuByToken);
 
     app.get('/profiles', profils.getProfiles);
-
-    //route for userProfile manipulations
-    var userProfil = require('../api/dao/userProfil');
-    app.post('/ajouterUserProfil', isLoggedIn, userProfil.createUserProfil);
-    app.post('/setDefaultProfile', isLoggedIn, userProfil.setDefaultProfile);
-    app.post('/chercherProfilParDefaut', userProfil.chercherProfilParDefaut); //free
-    app.post('/chercherProfilActuel', isLoggedIn, userProfil.chercherProfilActuel);
-    app.post('/defaultByUserProfilId', isLoggedIn, userProfil.defaultByUserProfilId);
-    app.post('/addUserProfilFavoris', isLoggedIn, userProfil.addUserProfilFavoris);
-    app.post('/findUserProfilFavoris', isLoggedIn, userProfil.findUserProfilFavoris);
-    app.post('/findUserProfilsFavoris', isLoggedIn, userProfil.findUserProfilsFavoris);
-    app.post('/findUserProfilsDelegate', isLoggedIn, userProfil.findUserProfilsDelegate);
-    app.post('/removeUserProfileFavoris', isLoggedIn, userProfil.removeUserProfileFavoris);
-    app.post('/findUsersProfilsFavoris', isLoggedIn, userProfil.findUsersProfilsFavoris);
-    app.post('/cancelDefaultProfile', isLoggedIn, userProfil.cancelDefaultProfile);
-    app.post('/chercherProfilsParDefaut', isLoggedIn, userProfil.chercherProfilsParDefaut);
-    app.post('/delegateUserProfil', userProfil.delegateUserProfil);
-    app.post('/retirerDelegateUserProfil', userProfil.retirerDelegateUserProfil);
-    app.post('/findUserProfil', userProfil.findUserProfil);
-    app.post('/findByUserProfil', userProfil.findByUserProfil);
-    app.post('/setProfilParDefautActuel', checkIsLoged, userProfil.setProfilParDefautActuel);
-
+    app.get('/profile/:profileId', profils.getProfile);
+    app.post('/profile', profils.createProfile);
+    app.put('/profile', profils.updateProfile);
+    app.delete('/profile/:profileId', profils.deleteProfile);
 
 
     //route for ProfileTag manipulations
@@ -365,22 +286,6 @@ module.exports = function (app, passport) {
     app.post('/deleteByProfilID', isLoggedIn, profilsTags.deleteByProfilID);
     app.post('/setProfilTags', isLoggedIn, profilsTags.setProfilTags);
 
-    app.get('/profile', isLoggedIn, function (req, res) {
-        var user = req.user;
-        user.local.password = '';
-        user.local.restoreSecret = '';
-        user.local.secretTime = '';
-        user.local.tokenTime = '';
-
-        user.dropbox.uid = '';
-        user.dropbox.display_name = '';
-        user.dropbox.referral_link = '';
-        user.dropbox.emails = '';
-        user.dropbox.country = '';
-        helpers.journalisation(1, req.user, req._parsedUrl.path, '');
-        res.jsonp(200, user);
-    });
-
 
     app.get('/auth/dropbox', passport.authenticate('dropbox-oauth2'));
 
@@ -391,13 +296,30 @@ module.exports = function (app, passport) {
         res.redirect('/#/ma-sauvegarde.html?auth=true');
     });
 
-    app.get('/auth/token',  function (req, res) {
+    app.get('/auth/token', function (req, res) {
 
-        if(req.session.user){
+        if (req.session.user) {
             res.send(req.session.user);
         } else {
             res.send();
         }
+    });
+
+    app.post('/user/isAdmin', function (req, res) {
+
+        var email = req.body.email;
+        var provider = req.body.provider;
+
+        if (email && provider) {
+
+            res.send({
+                isAdmin: helpers.isAdmin(email , provider)
+            });
+
+        } else {
+            res.send(400);
+        }
+
     });
 
 

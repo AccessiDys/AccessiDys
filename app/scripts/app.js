@@ -248,6 +248,22 @@ angular.module('cnedApp').config(['$compileProvider',
     }
 ]);
 
+angular.module('cnedApp').config(function($provide){
+    $provide.decorator('taOptions', ['taRegisterTool', '$delegate', function(taRegisterTool, taOptions){
+        // $delegate is the taOptions we are decorating
+        // register the tool with textAngular
+        taRegisterTool('pageBreak', {
+            buttontext: "Saut de page",
+            action: function(){
+                this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
+            }
+        });
+        // add the button to the default toolbar definition
+        taOptions.toolbar[1].push('pageBreak');
+        return taOptions;
+    }]);
+});
+
 
 angular.module('cnedApp').run(function ($rootScope, configuration, $timeout, $interval, serviceCheck) {
     //Delay between every check of session.

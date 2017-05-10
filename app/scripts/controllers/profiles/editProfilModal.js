@@ -31,7 +31,6 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
     $scope.requiredFieldErrors = [];
     $scope.profile = profile;
     $rootScope.tmpProfile = angular.copy(profile);
-    $scope.text = angular.copy($rootScope.tmpProfile.data.profileTags[profileTagIndex].texte);
     $scope.profileTagIndex = profileTagIndex;
     $scope.styleName = '';
     $scope.style = {

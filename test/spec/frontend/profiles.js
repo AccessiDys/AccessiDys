@@ -546,19 +546,6 @@ describe('Controller:ProfilesCtrl', function () {
         $scope.isAnnuleDelagate(param);
     }));
 
-    it('ProfilesCtrl:isDelegatedOption()', inject(function () {
-        var param = {
-            delegated: false,
-            preDelegated: false,
-            owner: '123456'
-        };
-        $scope.currentUserData = {
-            _id: '123456'
-        };
-        expect($scope.isDelegatedOption).toBeDefined();
-        $scope.isDelegatedOption(param);
-    }));
-
 
     it('ProfilesCtrl:deleteProfile()', inject(function () {
         expect($scope.deleteProfile).toBeDefined();
@@ -672,14 +659,6 @@ describe('Controller:ProfilesCtrl', function () {
 
         param.state = 'default';
         expect($scope.displayOwner(param)).toBe('Accessidys');
-    }));
-
-    it('ProfilesCtrl:isDeletable()', inject(function () {
-        profil.favourite = true;
-        profil.delete = true;
-        expect($scope.isDeletable(profil)).toBeTruthy();
-        profil.delete = false;
-        expect($scope.isDeletable(profil)).toBeFalsy();
     }));
 
     it('ProfilesCtrl:retirerParDefaut()', inject(function () {

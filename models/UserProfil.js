@@ -29,38 +29,38 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var userProfilSchema = new Schema({
-	userID: {
-		type: String,
-		required: true
-	},
-	profilID: {
-		type: String,
-		required: true
-	},
-	favoris: {// favorites
-		type: Boolean,
-		required: true
-	},
-	actuel: { //current
-		type: Boolean,
-		required: true
-	},
-	default: {
-		type: Boolean,
-		required: true
-	},
-	delegatedID: {
-		type: String,
-		required: false
-	},
-	delegate: {
-		type: Boolean,
-		required: false
-	},
-	actuelDelegate: {
-		type: Boolean,
-		required: false
-	}
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    profilID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Profil'
+    },
+    favoris: {// favorites // TODO a supprimer
+        type: Boolean,
+        required: true
+    },
+    actuel: { //current // TODO a supprimer
+        type: Boolean,
+        required: true
+    },
+    default: { // TODO a supprimer
+        type: Boolean,
+        required: true
+    },
+    delegatedID: { // TODO a supprimer
+        type: String,
+        required: false
+    },
+    delegate: { // TODO a supprimer
+        type: Boolean,
+        required: false
+    },
+    actuelDelegate: { // TODO a supprimer
+        type: Boolean,
+        required: false
+    }
 });
 
 

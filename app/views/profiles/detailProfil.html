@@ -73,8 +73,8 @@
             <button type="button" class="btn_simple light_blue share-btn" data-ng-click="shareProfile(detailProfil)"
                     title="{{'Partager le profil' | translate}}">Partager le profil
             </button>
-            <button type="button" class="btn_simple light_blue favourite-btn" data-ng-click="ajouterAmesFavoris()"
-                    data-ng-show="isOwner(detailProfil)"
+            <button type="button" class="btn_simple light_blue favourite-btn" data-ng-click="addToFavourite(detailProfil)"
+                    data-ng-show="!isFavourite(detailProfil)"
                     title="Ajouter à mes favoris">Ajouter à mes favoris
             </button>
             <button type="button" class="btn_simple light_blue accepte-delegate" data-ng-click="deleguerUserProfil()"

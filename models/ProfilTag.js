@@ -29,23 +29,23 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var profilTagSchema = new Schema({
-    profil: {  // the profile
-        type: String
+    profil: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Profil'
     },
     tag: {
-        type: String
-    },
-    texte: {  // the text
         type: String
     },
     police: {  // the font
         type: String
     },
-    taille: {  // the size
-        type: String
+    taille: {  // the font size
+        type: Number,
+        default: 0
     },
     interligne: { // the line spacing
-        type: String
+        type: Number,
+        default: 0
     },
     styleValue: {
         type: String

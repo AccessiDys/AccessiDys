@@ -212,7 +212,6 @@ cnedApp.service('UtilsService', function ($uibModal) {
 
         splitOnWordWithOutSpace: function (text) {
             var formattedText = text.replace(/&nbsp;/gi, ' ');
-            formattedText = methods.replaceLink(formattedText);
             formattedText = formattedText.replace(methods.wordRegex, '<span>$1</span> ');
 
             return formattedText;
@@ -220,7 +219,6 @@ cnedApp.service('UtilsService', function ($uibModal) {
 
         splitOnWordWithSpace: function (text) {
             var formattedText = text.replace(/&nbsp;/gi, ' ');
-            formattedText = methods.replaceLink(formattedText);
             formattedText = formattedText.replace(methods.wordRegex, '<span>$1</span>');
 
             return formattedText;

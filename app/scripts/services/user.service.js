@@ -32,7 +32,8 @@ cnedApp.service('UserService', function ($http, configuration, $localForage, $q)
         firstName: null,
         lastName: null,
         provider: null,
-        token: null
+        token: null,
+        isAdmin: false
     };
 
     var methods = {
@@ -43,8 +44,17 @@ cnedApp.service('UserService', function ($http, configuration, $localForage, $q)
             $localForage.getItem('userData').then(function (data) {
                 if (data) {
                     userData = data;
+
+                    methods.isAdmin().then(function (res) {
+                        userData.isAdmin = res.data.isAdmin;
+                        deferred.resolve(userData);
+                    }, function () {
+                        userData.isAdmin = false;
+                        deferred.resolve(userData);
+                    });
+
                 }
-                deferred.resolve(userData);
+
             });
 
             return deferred.promise;
@@ -69,6 +79,13 @@ cnedApp.service('UserService', function ($http, configuration, $localForage, $q)
         findUserByEmail: function (email) {
             return $http.post('/findUserByEmail', {
                 email: email
+            });
+        },
+
+        isAdmin: function () {
+            return $http.post('/user/isAdmin', {
+                email: userData.email,
+                provider: userData.provider
             });
         }
 

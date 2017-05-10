@@ -83,7 +83,7 @@
                         <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'updated'"></i>
                     </span>
                 </th>
-                <th data-ng-show="admin">par défaut</th>
+                <th data-ng-show="userData.isAdmin">par défaut</th>
                 <th class="action_zone">action</th>
             </tr>
             </thead>
@@ -106,7 +106,7 @@
                     {{displayOwner(profile)}}
                 </td>
                 <td class="centering">{{ profile.data.updated | date: configuration.DATE_PATTERN}}</td>
-                <td data-ng-show="admin" class="text-center">
+                <td data-ng-show="userData.isAdmin" class="text-center">
                     <div data-ng-if="isDefault(profile)">
                         <i class="fa fa-check"></i>
                     </div>
@@ -120,32 +120,32 @@
                     </button>
                     <ul class="action_list" uib-dropdown-menu>
                         <li class="setting_item"
-                            data-ng-hide="!isOwner(profile) || profile.state === 'favoris' || isOwnerDelagate(profile) || profile.state == 'default'">
+                            data-ng-if="isOwner(profile) || isOwnerDelagate(profile)">
                             <a href="" title="{{'Modifier' | translate}}"
                                data-ng-click="update(profile);" name="edit_profile">
                                 Modifier
                             </a>
                         </li>
                         <li class="duplicating_item"
-                            data-ng-show="profile.data.state === 'favoris' || profile.data.state === 'delegated' || profile.data.state === 'default'">
+                            data-ng-if="!isOwner(profile)">
                             <a href title="Dupliquer" data-ng-click="duplicate(profile)">
                                 Dupliquer
                             </a>
                         </li>
-                        <li class="delegate" data-ng-show="false">
+                        <li class="delegate" data-ng-if="isOwner(profile) && profile.data.owner !== 'scripted' && !profile.data.preDelegated">
                             <a href title="{{'Delegate' | translate}}" data-ng-click="delegateProfile(profile)">
                                 {{'Delegate' | translate}}
                             </a>
                         </li>
-                        <li class="withdraw_delegate" data-ng-show="isAnnuleDelagate(profile)">
+                        <li class="withdraw_delegate" data-ng-show="canCancelDelegation(profile)">
                             <a href title="{{'CancelDeleguation' | translate}}"
-                               data-ng-click="cancelDelegateByOwner(profile)">
+                               data-ng-click="deniedProfileDelegation(profile)">
                                 Annuler la délégation
                             </a>
                         </li>
                         <li class="withdraw_delegate" data-ng-show="isOwnerDelagate(profile)">
                             <a href title="{{'RemoveDeleguation' | translate}}"
-                               data-ng-click="cancelDelegateByUser(profile)">
+                               data-ng-click="cancelProfileDelegation(profile)">
                                 Retirer la délégation
                             </a>
                         </li>
@@ -154,25 +154,28 @@
                                 Partager
                             </a>
                         </li>
-                        <li class="removing_item" data-ng-show="isOwner(profile)">
-                            <a href data-toggle="modal"
-                               data-target="#deleteModal"
-                               data-dismiss="modal"
+                        <li class="removing_item" data-ng-show="isOwner(profile) && profile.data.owner !== 'scripted'">
+                            <a href
                                data-ng-click="deleteProfile(profile)"
                                title="{{'Supprimer' | translate}}"
                                name="delete_profile">
                                 Supprimer
                             </a>
                         </li>
-                        <li class="removing_item" data-ng-show="profile.state == 'favoris'">
+                        <li class="removing_item" data-ng-show="profile.data.isFavourite">
                             <a href
-                               data-toggle="modal"
-                               data-target="#deleteFavouriteModal"
-                               data-dismiss="modal"
                                data-ng-click="removeFavourite(profile)"
                                title="{{'Supprimer le profil' | translate}}"
                                name="delete_profile">
                                 Supprimer le profil des favoris
+                            </a>
+                        </li>
+
+                        <li class="favourite_item" data-ng-if="!isFavourite(profile)">
+                            <a href
+                               data-ng-click="addToFavourite(profile)"
+                               title="Ajouter à mes favoris">
+                                Ajouter à mes favoris
                             </a>
                         </li>
                     </ul>
@@ -184,7 +187,7 @@
                          data-ng-repeat="profileTag in profile.data.profileTags"
                          profile-coloration
                          profile="profile"
-                         text="{{profileTag.texte}}">
+                         text="{{getDisplayedText(profileTag)}}">
                     </div>
                 </td>
             </tr>

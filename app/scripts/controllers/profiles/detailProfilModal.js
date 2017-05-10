@@ -26,7 +26,8 @@
 /* jshint loopfunc:true */
 
 angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($scope, $uibModalInstance, $rootScope, profilsService,
-                                                                             ToasterService, UserService, UtilsService, LoaderService, fileStorageService, template, profile) {
+                                                                             ToasterService, UserService, UtilsService, LoaderService,
+                                                                             fileStorageService, $log, template, profile) {
     $scope.template = template;
     $scope.profile = profile;
     $rootScope.tmpProfile = angular.copy(profile);
@@ -86,10 +87,10 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
             // Check if the profile name does not already exists
             profilsService.lookForExistingProfile(profile)
                 .then(function (res) {
-                    if ((!res && $scope.template !== 'update') || (res && $scope.template === 'update')) {
 
-                        delete $scope.profile._id;
-                        $scope.profile.data.state = 'mine';
+                    $log.debug('lookForExistingProfile', res);
+
+                    if ((!res && $scope.template !== 'update') || ($scope.template === 'update')) {
 
                         profilsService.saveProfile($scope.profile)
                             .then(function () {
@@ -120,8 +121,11 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
 
 
                     } else {
+                        LoaderService.hideLoader();
                         ToasterService.showToaster('#profile-edit-modal-success-toaster', 'profile.message.save.ko.name.alreadyexist');
                     }
+                }, function(){
+                    LoaderService.hideLoader();
                 });
         }
 

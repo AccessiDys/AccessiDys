@@ -45,7 +45,7 @@ function getSmtpOptions() {
 
     // setting smtp config
 
-    if(config.EMAIL_SERVICE && config.EMAIL_SERVICE !== ''){
+    if (config.EMAIL_SERVICE && config.EMAIL_SERVICE !== '') {
         smtpConfig = {
             service: config.EMAIL_SERVICE
         };
@@ -187,29 +187,9 @@ exports.clone = function (a) {
     return JSON.parse(JSON.stringify(a));
 };
 
-exports.getVersion = function (str) {
-    if (str.indexOf('Appversion=') > -1) {
-        var theStart = str.indexOf('Appversion=');
-        var theEnd = str.indexOf("';", theStart) + 1; // jshint ignore:line
-        var extracted = str.substring(theStart, theEnd);
+exports.isAdmin = function (email, provider) {
 
-
-        if (extracted.match(/\d+/)) {
-            return {
-                versionExist: true,
-                version: parseInt(extracted.match(/\d+/)[0]),
-                upgradeType: 1
-            };
-        } else {
-            return {
-                versionExist: false
-            };
-        }
-    } else {
-        return {
-            versionExist: false
-        };
-    }
+    return (email === config.ADMIN_EMAIL && provider === config.ADMIN_PROVIDER);
 };
 
 

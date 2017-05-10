@@ -72,7 +72,6 @@ cnedApp.factory('CacheProvider',
 
                 $localForage.getItem(storageName).then(function (items) {
 
-                    console.log('save in cache provider - items', items);
                     if (items) {
                         var isFound = false;
                         var index = 0;
@@ -84,10 +83,6 @@ cnedApp.factory('CacheProvider',
                             }
                             index++;
                         }
-
-                        console.log('isFound', isFound);
-                        console.log('index', index);
-
 
                         if (isFound) {
                             items[index] = file;

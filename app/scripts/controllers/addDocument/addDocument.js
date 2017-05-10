@@ -552,20 +552,7 @@ angular
                 }
 
                 if ($stateParams.file) {
-
-                    documentService.save({
-                        title: $stateParams.file.filename,
-                        data: $stateParams.file.data,
-                        filePath: null
-                    }, 'create')
-                        .then(function (data) {
-                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
-                            $scope.document = data;
-                            $scope.document.data = $stateParams.file.data;
-
-                        }, function () {
-                            ToasterService.showToaster('#document-error-toaster', 'document.message.save.ko');
-                        });
+                    $scope.document = $stateParams.file;
                 }
 
             };

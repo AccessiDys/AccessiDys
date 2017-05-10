@@ -14,5 +14,7 @@
 	"EMAIL_HOST_UID": "xxxxx",
 	"EMAIL_HOST_PWD": "xxxxxx",
 	"EMAIL_FROM": "noreply@xxxxx.fr",
-	"CATALOGUE_NAME":"adaptation.html"
+	"CATALOGUE_NAME":"adaptation.html",
+	"ADMIN_EMAIL": "xxxxxx",
+	"ADMIN_PROVIDER": "xxxxxx"
 }

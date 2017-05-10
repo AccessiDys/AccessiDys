@@ -34,7 +34,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $rootScope.tmpProfile = null;
     $rootScope.currentProfile = null;
     $rootScope.defaultSystemProfile = {};
-    $rootScope.userData = UserService.getData();
+    $rootScope.userData = userData;
     $rootScope.$state = $state;
 
     $rootScope.isFullsize = true;
@@ -44,11 +44,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     $scope.initCommon = function () {
 
-        UserService.init().then(function (userData) {
-            $rootScope.userData = userData;
-        });
-
-        CacheProvider.getItem('currentProfile').then(function(currentProfile){
+        CacheProvider.getItem('currentProfile').then(function (currentProfile) {
             // Init profile list and Tag
 
             tagsService.getTags().then(function (tags) {
@@ -69,16 +65,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                                     item.tagDetail = _.find(tags, function (tag) {
                                         return item.tag === tag._id;
                                     });
-
-
-                                    if (typeof item.tagDetail === 'object') {
-                                        item.texte = '<' + item.tagDetail.balise + '>' + item.tagDetail.libelle + ': ' + $rootScope.displayTextSimple + '</' + item.tagDetail.balise + '>';
-                                    }
-
-                                    // Avoid mapping with backend
-                                    item.id_tag = item.tag;
-                                    item.style = item.texte;
-
                                 });
 
                                 profile.data.profileTags.sort(function (a, b) {
@@ -91,14 +77,14 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                                 profile.showed = true;
                                 $rootScope.profiles.push(profile);
-                                
-                                if(currentProfile && currentProfile.data.nom === profile.data.nom){
+
+                                if (currentProfile && currentProfile.data.nom === profile.data.nom) {
                                     $rootScope.currentProfile = profile;
                                 }
                             }
                         });
 
-                        if(!$rootScope.currentProfile){
+                        if (!$rootScope.currentProfile) {
                             $rootScope.currentProfile = $rootScope.defaultSystemProfile;
                         }
 
@@ -109,7 +95,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                 });
             });
         });
-
 
 
         var hyphenatorSettings = {
@@ -148,6 +133,16 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
             //
         });
 
+    };
+
+    $rootScope.getDisplayedText = function (profileTag) {
+        var res = '';
+
+        if(profileTag){
+            res = '<' + profileTag.tagDetail.balise + '>' + profileTag.tagDetail.libelle + ' : ' + $rootScope.displayTextSimple + '</' + profileTag.tagDetail.balise + '>';
+        }
+
+        return res;
     };
 
     $scope.initCommon();

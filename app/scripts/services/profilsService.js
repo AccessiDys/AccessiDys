@@ -27,7 +27,7 @@
 var cnedApp = cnedApp;
 
 cnedApp.service('profilsService', function ($http, configuration, fileStorageService,
-                                            $localForage, synchronisationStoreService, $rootScope, $uibModal, $log, $q, UtilsService) {
+                                            $localForage, synchronisationStoreService, $rootScope, $uibModal, $log, $q, UtilsService, UserService) {
 
     var self = this;
 
@@ -37,25 +37,108 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
         *            The profile to be saved.
      */
     this.saveProfile = function (profile) {
-        $log.debug('Save Profile', profile);
+        var deferred = $q.defer();
 
-        profile.data.className = this.generateClassName(profile, false);
-        profile.data.updated = new Date();
-        profile.filename = profile.data.nom;
+        var profileToSave = angular.copy(profile);
 
-        return fileStorageService.save(profile, 'profile');
+
+        profileToSave.data.updated = new Date();
+        profileToSave.filename = profileToSave.data.nom;
+        profileToSave.data.className = this.generateClassName(profileToSave, false);
+
+        for (var i = 0; i < profileToSave.data.profileTags.length; i++) {
+            delete profileToSave.data.profileTags[i].tagDetail;
+        }
+
+        $log.debug('Save Profile', profileToSave);
+
+        if (UserService.getData().isAdmin && $rootScope.isAppOnline) {
+            // send profile to accessidys backend
+            if (profileToSave.data._id) {
+                // Update mode
+                return this.update(profileToSave).then(function (res) {
+                    deferred.resolve(res.data);
+                }, function () {
+                    deferred.reject();
+                });
+            } else {
+                // Create mode
+                return this.create(profileToSave).then(function (res) {
+                    deferred.resolve(res.data);
+                }, function () {
+                    deferred.reject();
+                });
+            }
+        } else {
+            fileStorageService.save(profileToSave, 'profile').then(function (res) {
+                deferred.resolve(res);
+            }, function () {
+                deferred.reject();
+            });
+        }
+
+        return deferred.promise;
+
     };
 
     /**
-     * Delete the given profile.
-     *
-     * @param ownerId :
-        *            The owner of the profile.
-     * @param profilId :
-        *            The profile to be updated.
+     * Create a profile to accessidys backend
+     * @param profile
+     * @returns {HttpPromise}
+     */
+    this.create = function(profile){
+        return $http.post('/profile', {
+            profile: profile
+        }, {
+            headers: {
+                'AccessiDys-user': UserService.getData().email,
+                'AccessiDys-provider': UserService.getData().provider
+            }
+        });
+    };
+
+    /**
+     * Update a profile to accessidys backend
+     * @param profile
+     * @returns {HttpPromise}
+     */
+    this.update = function(profile){
+        return $http.put('/profile', {
+            profile: profile
+        }, {
+            headers: {
+                'AccessiDys-user': UserService.getData().email,
+                'AccessiDys-provider': UserService.getData().provider
+            }
+        });
+    };
+
+    /**
+     * Delete a profile
+     * @param profile
+     * @returns {HttpPromise|*|{method}}
      */
     this.deleteProfil = function (profile) {
-        return fileStorageService.delete(profile, 'profile');
+        if (UserService.getData().isAdmin && $rootScope.isAppOnline) {
+
+            var deferred = $q.defer();
+
+            $http.delete('/profile/' + profile.data._id, {
+                headers: {
+                    'AccessiDys-user': UserService.getData().email,
+                    'AccessiDys-provider': UserService.getData().provider
+                }
+            }).then(function () {
+                deferred.resolve();
+            }, function () {
+                deferred.reject();
+            });
+
+            return deferred.promise;
+
+        } else {
+            return fileStorageService.delete(profile, 'profile');
+        }
     };
 
 
@@ -80,8 +163,43 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
         });
     };
 
-    this.delegateProfile = function (params) {
-        return $http.post('/delegateProfil', params);
+    this.delegateProfile = function (profile, to) {
+
+        var deferred = $q.defer();
+
+        var profileToDelegate = angular.copy(profile);
+
+        for (var i = 0; i < profileToDelegate.data.profileTags.length; i++) {
+            delete profileToDelegate.data.profileTags[i]._id;
+            delete profileToDelegate.data.profileTags[i].profil;
+            delete profileToDelegate.data.profileTags[i].tagDetail;
+        }
+
+        profileToDelegate.data.preDelegated = to;
+
+        $log.debug('profile to delegate', profileToDelegate);
+
+        if(profileToDelegate.data._id){
+
+            this.update(profileToDelegate).then(function(res){
+                deferred.resolve(res.data);
+            }, function() {
+                deferred.reject();
+            });
+
+        } else {
+            this.create(profileToDelegate).then(function(res){
+                fileStorageService.delete(profileToDelegate, 'profile').then(function () {
+                    deferred.resolve(res.data);
+                }, function () {
+                    deferred.reject();
+                });
+            }, function() {
+                deferred.reject();
+            })
+        }
+
+        return deferred.promise;
     };
 
     this.openDelegateProfileModal = function (profile) {
@@ -108,7 +226,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
 
             var userProfiles = [];
 
-            if(files){
+            if (files) {
                 for (var i = 0; i < files.length; i++) {
                     userProfiles.push(fileStorageService.getData(files[i], 'profile').then(function (file) {
                         return file;
@@ -125,17 +243,23 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
         })
     };
 
-    this.generateClassName = function(profile, isTmp){
+    this.getProfile = function (profileId) {
+        return $http.get('/profile/' + profileId).then(function (res) {
+            return res.data;
+        });
+    };
+
+    this.generateClassName = function (profile, isTmp) {
 
         var className = '';
 
-        if(profile && profile.data){
+        if (profile && profile.data) {
 
             var formattedName = UtilsService.cleanUpSpecialChars(profile.data.nom).trim().replace(/ /g, '-');
 
             className = 'profile-' + formattedName;
 
-            if(isTmp){
+            if (isTmp) {
                 className += '-tmp';
             }
 

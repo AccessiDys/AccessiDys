@@ -72,20 +72,19 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
                     var text = document.createTextNode(child.innerHTML);
                     element.replaceChild(text, child);
                 } else {
-                    if (configuration.URL_REQUEST.indexOf(child.host) > -1) {
+                    if (('https://' + window.location.host).indexOf(child.host) > -1) {
                         if (urlHost && urlPort !== 0) {
                             child.hostname = urlHost;
                             child.port = urlPort;
-                            //child.href = child.href.replace(/https:\/\//g, 'http://');
                         }
                     }
                     // replacing "%3A" by ":" .Otherwise the browser makes a rerouting and the page is present twice in the history
-                    child.href = configuration.URL_REQUEST + '/#/apercu?url=' + encodeURIComponent(child.href).replace(/%3A/g, ':');
+                    child.href = 'https://' + window.location.host + '/#/apercu?url=' + encodeURIComponent(child.href).replace(/%3A/g, ':');
                 }
             }
             if (child.localName === 'img') {
-                if (child.src.indexOf(configuration.URL_REQUEST) > -1) {
-                    child.src = child.src.replace(configuration.URL_REQUEST, 'https://' + urlHost);
+                if (child.src.indexOf('https://' + window.location.host) > -1) {
+                    child.src = child.src.replace('https://' + window.location.host, 'https://' + urlHost);
                 }
             }
             if (child.childNodes.length > 0) {
@@ -231,9 +230,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
             retContent[page] = '';
         }
 
-        console.log('retContent', retContent);
-        console.log('processElement , ', element);
-        processChildNode(element);
+        //processChildNode(element);
         retContent[page] += element.outerHTML;
         return (block + 1);
     };
@@ -244,6 +241,6 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
      * @return {String} html
      */
     this.splitPages = function (html) {
-        return html.split('<div class="accessidys-break-page"></div>');
+        return html.split('<hr/>');
     };
 });

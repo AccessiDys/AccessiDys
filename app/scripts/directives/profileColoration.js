@@ -53,7 +53,7 @@ cnedApp.directive('profileColoration',
 
                         var prevTop = -9999;
                         var line = 0;
-                        angular.forEach(element.find('span'), function (word) {
+                        angular.forEach(ref.find('span'), function (word) {
 
                             var wordRef = angular.element(word);
 

@@ -41,9 +41,6 @@ cnedApp.directive('textAngularProfileColoration',
                         var ref = angular.element(elem);
 
                         var savedSel = rangy.saveSelection();
-                        console.log(savedSel);
-
-                        console.log('balise h1 ', ref.html());
 
                         var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
                         var textTransform = ref.html();
@@ -57,7 +54,6 @@ cnedApp.directive('textAngularProfileColoration',
                                     marker: '%%RG' + i + '%%',
                                     cursor: rangyCursorResult[i]
                                 });
-                                console.log('cursor', rangyCursorResult[i]);
 
                                 textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
                             }
@@ -66,7 +62,6 @@ cnedApp.directive('textAngularProfileColoration',
 
                         textTransform = textTransform.replace(/(<span class(.*?)>|(?!>)<\/span>)/gi, '');
 
-                        console.log('intermediate text transform', textTransform);
 
                         textTransform = UtilsService.splitOnWordWithSpace(textTransform);
 
@@ -75,7 +70,6 @@ cnedApp.directive('textAngularProfileColoration',
                             textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
                         }
 
-                        console.log('DEBUG ', textTransform);
 
                         ref.html(textTransform);
 
@@ -134,16 +128,80 @@ cnedApp.directive('textAngularProfileColoration',
                                     case 'Colorer les mots':
                                     case 'Surligner les mots':
                                         angular.forEach(element.find(profile.profileTags[i].tagDetail.balise), function (elem) {
+
                                             var ref = angular.element(elem);
-                                            var splitText = UtilsService.splitOnWordWithOutSpace(ref.html());
-                                            ref.html(splitText);
+
+                                            var savedSel = rangy.saveSelection();
+
+                                            var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
+                                            var textTransform = ref.html();
+
+                                            var rangyCursorResult = textTransform.match(rangyCursorPattern);
+                                            var rangyCursors = [];
+
+                                            if (rangyCursorResult && rangyCursorResult.length > 0) {
+                                                for (var i = 0; i < rangyCursorResult.length; i++) {
+                                                    rangyCursors.push({
+                                                        marker: '%%RG' + i + '%%',
+                                                        cursor: rangyCursorResult[i]
+                                                    });
+
+                                                    textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
+                                                }
+                                            }
+
+
+                                            textTransform = textTransform.replace(/(<span class(.*?)>|(?!>)<\/span>)/gi, '');
+
+
+                                            textTransform = UtilsService.splitOnWordWithSpace(textTransform);
+
+                                            // Handle rangy cursor
+                                            for(var i = 0; i < rangyCursors.length; i++){
+                                                textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
+                                            }
+
+
+                                            ref.html(textTransform);
                                         });
                                         break;
                                     case 'Colorer les syllabes':
                                         angular.forEach(element.find(profile.profileTags[i].tagDetail.balise), function (elem) {
+
                                             var ref = angular.element(elem);
-                                            var splitText = UtilsService.splitOnSyllable(ref.html());
-                                            ref.html(splitText);
+
+                                            var savedSel = rangy.saveSelection();
+
+                                            var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
+                                            var textTransform = ref.html();
+
+                                            var rangyCursorResult = textTransform.match(rangyCursorPattern);
+                                            var rangyCursors = [];
+
+                                            if (rangyCursorResult && rangyCursorResult.length > 0) {
+                                                for (var i = 0; i < rangyCursorResult.length; i++) {
+                                                    rangyCursors.push({
+                                                        marker: '%%RG' + i + '%%',
+                                                        cursor: rangyCursorResult[i]
+                                                    });
+
+                                                    textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
+                                                }
+                                            }
+
+
+                                            textTransform = textTransform.replace(/(<span class(.*?)>|(?!>)<\/span>)/gi, '');
+
+
+                                            textTransform = UtilsService.splitOnSyllable(textTransform);
+
+                                            // Handle rangy cursor
+                                            for(var i = 0; i < rangyCursors.length; i++){
+                                                textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
+                                            }
+
+
+                                            ref.html(textTransform);
                                         });
                                         break;
 

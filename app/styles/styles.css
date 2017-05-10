@@ -545,6 +545,16 @@ table tr td:last-child {
     background-position: 10px -149px;
 }
 
+.action_list li.favourite_item a {
+    background-image: url('images/favourit_icn.png');
+    background-repeat: no-repeat;
+    background-position: 25px 11px;
+}
+
+.action_list li.favourite_item a:hover {
+    background-position: 30px 11px;
+}
+
 .action_list li.removing_item_fav a {
     background-position: 10px -941px;
 }
