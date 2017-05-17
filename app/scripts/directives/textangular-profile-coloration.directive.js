@@ -172,6 +172,9 @@ cnedApp.directive('textAngularProfileColoration',
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
                                             textTransform = textTransform.replace(/\s%%<span>NB<\/span>%%\s/gi, '&nbsp;');
                                             break;
+                                        default:
+                                            textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
+                                            break;
                                     }
 
                                     $log.debug('split ', textTransform);
