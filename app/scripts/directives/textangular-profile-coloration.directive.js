@@ -118,10 +118,10 @@ cnedApp.directive('textAngularProfileColoration',
 
                                     $log.debug('html span', textTransform);
 
-                                    var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
+                                    var rangyCursorPattern = /((&nbsp;)*<span id(.*?)\/span>)/gi;
 
                                     // Save rangy cursor
-                                    textTransform = textTransform.replace(/&nbsp;/gi, ' %%NB%% ');
+
 
                                     var rangyCursorResult = textTransform.match(rangyCursorPattern);
                                     var rangyCursors = [];
@@ -144,6 +144,7 @@ cnedApp.directive('textAngularProfileColoration',
                                             textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
                                         }
                                     }
+                                    textTransform = textTransform.replace(/&nbsp;/gi, ' %%NB%% ');
                                     textTransform = UtilsService.removeSpan(textTransform);
 
                                     $log.debug('remove span ', textTransform);
