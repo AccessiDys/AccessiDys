@@ -35,7 +35,6 @@ cnedApp.factory('CacheProvider',
             get: function (filename, storageName) {
 
                 var deferred = $q.defer();
-
                 $localForage.getItem(storageName).then(function (items) {
                     if (items) {
                         _.each(items, function (item) {
@@ -51,7 +50,32 @@ cnedApp.factory('CacheProvider',
                 return deferred.promise;
             },
             delete: function (file, storageName) {
-                return $localForage.removeItem(storageName, file);
+
+                var deferred = $q.defer();
+
+                return $localForage.getItem(storageName).then(function (items) {
+                    if (items) {
+                        for (var i = 0; i < items.length; i++) {
+                            if (items[i] && items[i].filename === file.filename) {
+
+                                items.splice(i, 1);
+
+
+
+                                break;
+                            }
+                        }
+
+                        $localForage.setItem(storageName, items).then(function () {
+                            deferred.resolve(items);
+                        });
+
+                    } else {
+                        deferred.resolve();
+                    }
+                });
+
+                return deferred.promise;
             },
             saveAll: function (files, storageName) {
                 var deferred = $q.defer();
@@ -76,7 +100,7 @@ cnedApp.factory('CacheProvider',
                         var isFound = false;
                         var index = 0;
 
-                        for(var i= 0; i < items.length ; i++){
+                        for (var i = 0; i < items.length; i++) {
                             if (items[i] && file && items[i].filename === file.filename) {
                                 isFound = true;
                                 break;

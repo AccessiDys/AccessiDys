@@ -143,38 +143,40 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         retContent = [];
         retContent[0] = '<h1>Sommaire</h1><br />';
 
-        data = data.replace(/<span(.*?)>/gi, '');
-        data = data.replace(/<\/span>/gi, '');
+        if(data) {
+            data = data.replace(/<span(.*?)>/gi, '');
+            data = data.replace(/<\/span>/gi, '');
+
+            var pages = self.splitPages(data);
+
+            for (var page = 0; page < pages.length; page++) {
+                var block = 0;
 
 
-        var pages = self.splitPages(data);
-
-        for (var page = 0; page < pages.length; page++) {
-            var block = 0;
-
-            console.log('Ret content before', retContent);
-
-            //retContent.push(pages[page]);
-            console.log('Ret content after', retContent);
-            var element = angular.element(pages[page]);
+                //retContent.push(pages[page]);
+                var element = angular.element(pages[page]);
 
 
-            angular.forEach(element, function (element) {
-                $rootScope.tags.forEach(function (tag) {
-                    if (element.localName === tag.balise) {
-                        if (tag.balise === 'div') {
-                            if (angular.element(element).hasClass(self.cleanString(tag.libelle))) {
+                angular.forEach(element, function (element) {
+                    $rootScope.tags.forEach(function (tag) {
+                        if (element.localName === tag.balise) {
+                            if (tag.balise === 'div') {
+                                if (angular.element(element).hasClass(self.cleanString(tag.libelle))) {
+                                    block = self.processElement(element, tag, page, block);
+                                }
+                            } else {
                                 block = self.processElement(element, tag, page, block);
                             }
-                        } else {
-                            block = self.processElement(element, tag, page, block);
+
                         }
-
-                    }
+                    });
                 });
-            });
 
+            }
         }
+
+
+
 
         return retContent;
     };

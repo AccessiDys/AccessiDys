@@ -62,6 +62,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                             if (profile) {
 
+                                console.log('profile', profile);
                                 profile.data.className = profilsService.generateClassName(profile, false);
 
                                 _.each(profile.data.profileTags, function (item) {
@@ -69,6 +70,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                                         return item.tag === tag._id;
                                     });
                                 });
+
 
                                 profile.data.profileTags.sort(function (a, b) {
                                     return a.tagDetail.position - b.tagDetail.position;

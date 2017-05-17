@@ -91,9 +91,11 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
 
+
             return DropboxProvider.search('_' + filename + '_', UserService.getData().token).then(function (files) {
 
-                if (files) {
+
+                if (files && files.length > 0) {
                     for (var i = 0; i < files.length; i++) {
                         if (files[i].filename === filename) {
                             return DropboxProvider.download(files[i].filepath, UserService.getData().token).then(function (fileContent) {
@@ -103,6 +105,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                             });
                         }
                     }
+                } else {
+                    return CacheProvider.get(filename, storageName);
                 }
 
             }, function () {
@@ -226,13 +230,19 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                 });
             }
         } else {
-            this.addFileToSynchronize(file, type, 'delete');
+
+
+            var tmpFile = file;
+            self.addFileToSynchronize(file, type, 'delete');
+
+            console.log('Rename - addFileToSynchronize', file);
 
             return CacheProvider.delete(file, storageName).then(function () {
                 file.filename = newName;
                 file.filepath = newFilePath;
 
-                this.addFileToSynchronize(file, type, 'save');
+                console.log('Rename - addFileToSynchronize', file);
+                self.addFileToSynchronize(file, type, 'save');
                 return CacheProvider.save(file, storageName);
             });
         }
@@ -357,10 +367,16 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             for (var i = 0; i < items.length; i++) {
                 if (items[i].file.filename == file.filename) {
                     isFound = true;
-                    items[i] = {
-                        action: action,
-                        file: file
-                    };
+
+                    if (items[i].action === 'save' && action === 'delete') {
+                        items.splice(i, 1);
+                    } else {
+                        items[i] = {
+                            action: action,
+                            file: file
+                        };
+                    }
+
                     break;
                 }
             }

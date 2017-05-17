@@ -69,6 +69,9 @@ angular.module('cnedApp').controller('OpenDocumentModalCtrl', function ($rootSco
 
                     doc.type = 'epub';
 
+                } else if (doc.files[0].type === 'application/msword') {
+                    doc.type = 'word';
+
                 } else {
                     errors.push('document.message.save.ko.file.type');
                 }

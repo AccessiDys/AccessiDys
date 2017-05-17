@@ -26,81 +26,77 @@
 /*global cnedApp,Hyphenator, $:false */
 'use strict';
 
+/**
+ * Directive to set coloration with TextAngular
+ */
 cnedApp.directive('textAngularProfileColoration',
 
-    function (UtilsService, $timeout, $compile, $rootScope) {
+    function (UtilsService, $timeout, $compile, $rootScope, $log) {
         return {
             restrict: 'A',
             link: function (scope, element) {
 
+                var htmlWatcher = null;
 
-                var splitByLines = function (balise, maxLines) {
-
-                    angular.forEach(element.find(balise), function (elem) {
-
-                        var ref = angular.element(elem);
-
-                        var savedSel = rangy.saveSelection();
-
-                        var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
-                        var textTransform = ref.html();
-
-                        var rangyCursorResult = textTransform.match(rangyCursorPattern);
-                        var rangyCursors = [];
-
-                        if (rangyCursorResult && rangyCursorResult.length > 0) {
-                            for (var i = 0; i < rangyCursorResult.length; i++) {
-                                rangyCursors.push({
-                                    marker: '%%RG' + i + '%%',
-                                    cursor: rangyCursorResult[i]
-                                });
-
-                                textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
-                            }
-                        }
+                /**
+                 * Bind the watcher to detect change in the editor
+                 */
+                var bindHtmlWatcher = function () {
+                    if (!htmlWatcher) {
+                        $log.debug('bind html watcher');
+                        htmlWatcher = $rootScope.$watch(function () {
+                            return element.html().length;
+                        }, function (newvalue, oldValue) {
 
 
-                        textTransform = textTransform.replace(/(<span class(.*?)>|(?!>)<\/span>)/gi, '');
-
-
-                        textTransform = UtilsService.splitOnWordWithSpace(textTransform);
-
-                        // Handle rangy cursor
-                        for(var i = 0; i < rangyCursors.length; i++){
-                            textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
-                        }
-
-
-                        ref.html(textTransform);
-
-                        var prevTop = -9999;
-                        var line = 0;
-                        angular.forEach(ref.find('span'), function (word) {
-                            var wordRef = angular.element(word);
-
-                            if (!wordRef[0].id) {
-                                var top = wordRef[0].offsetTop;
-
-                                if (top > prevTop) {
-                                    if (line >= maxLines) {
-                                        line = 1;
-                                    } else {
-                                        line++;
-                                    }
-                                }
-
-                                wordRef.addClass('line' + line);
-
-                                prevTop = top;
+                            if (newvalue != oldValue) {
+                                generateColoration();
                             }
 
                         });
+                    }
+                };
 
-                        rangy.restoreSelection(savedSel);
+
+                /**
+                 * Color lines
+                 * @param ref
+                 * @param maxLines
+                 */
+                var colorLines = function (ref, maxLines) {
+                    var prevTop = -9999;
+                    var line = 0;
+                    angular.forEach(ref.find('span'), function (word) {
+                        var wordRef = angular.element(word);
+
+                        if (!wordRef[0].id) {
+                            var top = wordRef[0].offsetTop;
+
+                            if (top > prevTop) {
+                                if (line >= maxLines) {
+                                    line = 1;
+                                } else {
+                                    line++;
+                                }
+                            }
+
+                            wordRef.addClass('line' + line);
+
+                            prevTop = top;
+                        }
+
                     });
                 };
 
                 var generateColoration = function () {
+
+                    if (htmlWatcher) {
+                        htmlWatcher();
+                        htmlWatcher = null;
+
+                        $log.debug('destroy html watcher', htmlWatcher);
+                    }
+
                     $timeout(function () {
 
                         var profile = $rootScope.currentProfile.data;
@@ -108,132 +104,124 @@ cnedApp.directive('textAngularProfileColoration',
 
                         if (profile && text) {
 
+
                             for (var i = 0; i < profile.profileTags.length; i++) {
 
-                                switch (profile.profileTags[i].coloration) {
+                                var coloration = profile.profileTags[i].coloration;
 
-                                    case 'Colorer les lignes RBV':
-                                    case 'Colorer les lignes RVJ':
-                                    case 'Surligner les lignes RBV':
-                                    case 'Surligner les lignes RVJ':
-                                        splitByLines(profile.profileTags[i].tagDetail.balise, 3);
-                                        break;
-                                    case 'Colorer les lignes RBVJ':
-                                    case 'Surligner les lignes RBVJ':
-                                        splitByLines(profile.profileTags[i].tagDetail.balise, 4);
-                                        break;
+                                angular.forEach(element.find(profile.profileTags[i].tagDetail.balise), function (elem) {
 
-                                    case 'Colorer les mots':
-                                    case 'Surligner les mots':
-                                        angular.forEach(element.find(profile.profileTags[i].tagDetail.balise), function (elem) {
+                                    var savedSel = rangy.saveSelection();
 
-                                            var ref = angular.element(elem);
+                                    var ref = angular.element(elem);
+                                    var textTransform = ref.html();
 
-                                            var savedSel = rangy.saveSelection();
+                                    $log.debug('html span', textTransform);
 
-                                            var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
-                                            var textTransform = ref.html();
+                                    var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
 
+                                    // Save rangy cursor
+                                    textTransform = textTransform.replace(/&nbsp;/gi, ' %%NB%% ');
 
-                                            var rangyCursorResult = textTransform.match(rangyCursorPattern);
-                                            var rangyCursors = [];
+                                    var rangyCursorResult = textTransform.match(rangyCursorPattern);
+                                    var rangyCursors = [];
 
-                                            if (rangyCursorResult && rangyCursorResult.length > 0) {
-                                                for (var i = 0; i < rangyCursorResult.length; i++) {
-                                                    rangyCursors.push({
-                                                        marker: '%%RG' + i + '%%',
-                                                        cursor: rangyCursorResult[i]
-                                                    });
+                                    if (rangyCursorResult && rangyCursorResult.length > 0) {
+                                        for (var i = 0; i < rangyCursorResult.length; i++) {
+                                            var marker = '';
 
-                                                    textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
-                                                }
+                                            if (coloration === 'Colorer les syllabes') {
+                                                marker = '%%<span>RG' + i + '</span>%%';
+                                            } else {
+                                                marker = '%%RG' + i + '%%';
                                             }
 
+                                            rangyCursors.push({
+                                                marker: marker,
+                                                cursor: rangyCursorResult[i]
+                                            });
 
-                                            textTransform = textTransform.replace(/(<span>|(?!>)<\/span>)/gi, '');
+                                            textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
+                                        }
+                                    }
+                                    textTransform = UtilsService.removeSpan(textTransform);
 
+                                    $log.debug('remove span ', textTransform);
 
+                                    // Split Text
+                                    switch (coloration) {
+                                        case 'Colorer les lignes RBV':
+                                        case 'Colorer les lignes RVJ':
+                                        case 'Surligner les lignes RBV':
+                                        case 'Surligner les lignes RVJ':
+                                        case 'Colorer les lignes RBVJ':
+                                        case 'Surligner les lignes RBVJ':
+
+                                            textTransform = UtilsService.splitOnWordWithSpace(textTransform);
+                                            textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
+                                            break;
+                                        case 'Colorer les mots':
+                                        case 'Surligner les mots':
 
                                             textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
-
-
-                                            // Handle rangy cursor
-                                            for(var i = 0; i < rangyCursors.length; i++){
-                                                textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
-                                            }
-
-
-                                            ref.html(textTransform);
-                                            rangy.restoreSelection(savedSel);
-                                        });
-                                        break;
-                                    case 'Colorer les syllabes':
-                                        angular.forEach(element.find(profile.profileTags[i].tagDetail.balise), function (elem) {
-
-                                            var ref = angular.element(elem);
-
-                                            var savedSel = rangy.saveSelection();
-
-                                            var rangyCursorPattern = /((&nbsp;.*)*<span id(.*?)\/span>)/gi;
-                                            var textTransform = ref.html();
-
-                                            console.log('html span', textTransform);
-
-                                            var rangyCursorResult = textTransform.match(rangyCursorPattern);
-                                            var rangyCursors = [];
-
-                                            if (rangyCursorResult && rangyCursorResult.length > 0) {
-                                                for (var i = 0; i < rangyCursorResult.length; i++) {
-                                                    rangyCursors.push({
-                                                        marker: '%%<span>RG' + i + '</span>%%',
-                                                        cursor: rangyCursorResult[i]
-                                                    });
-
-                                                    textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
-                                                }
-                                            }
-
-
-                                            console.log('before span', textTransform);
-
-
-                                            textTransform = textTransform.replace(/(<span>|(?!>)<\/span>)/gi, '');
-
-                                            console.log('split span', textTransform);
-
+                                            textTransform = textTransform.replace(/\s\s<span>%%NB%%<\/span>\s\s/gi, '&nbsp;');
+                                            break;
+                                        case 'Colorer les syllabes':
 
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
+                                            textTransform = textTransform.replace(/\s%%<span>NB<\/span>%%\s/gi, '&nbsp;');
+                                            break;
+                                    }
 
-                                            console.log('split on syllabe', textTransform);
-
-                                            // Handle rangy cursor
-                                            for(var i = 0; i < rangyCursors.length; i++){
-                                                textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
-                                            }
+                                    $log.debug('split ', textTransform);
 
 
-                                            ref.html(textTransform);
-                                            rangy.restoreSelection(savedSel);
-                                        });
-                                        break;
+                                    // Restore rangy cursor
+                                    for (var i = 0; i < rangyCursors.length; i++) {
+                                        textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
+                                    }
 
-                                }
+                                    $log.debug('replace nbsp ', textTransform);
+
+                                    ref.html(textTransform);
+
+                                    switch (coloration) {
+                                        case 'Colorer les lignes RBV':
+                                        case 'Colorer les lignes RVJ':
+                                        case 'Surligner les lignes RBV':
+                                        case 'Surligner les lignes RVJ':
+                                            colorLines(ref, 3);
+                                            break;
+                                        case 'Colorer les lignes RBVJ':
+                                        case 'Surligner les lignes RBVJ':
+                                            colorLines(ref, 4);
+                                            break;
+                                    }
+
+                                    rangy.restoreSelection(savedSel);
+
+
+                                });
+
+
                             }
+
+
                         }
+                        bindHtmlWatcher();
+
                     }, 200);
                 };
 
-                element.bind('keyup', function (event) {
-                    if (event.keyCode != 37 && event.keyCode != 38 && event.keyCode != 39 && event.keyCode != 40) {
-                        generateColoration();
-                    }
-                });
+                /**
+                 * Watcher for the current profile
+                 */
+                $rootScope.$watch('currentProfile', function (newvalue) {
 
-                var listener = $rootScope.$watch('currentProfile', function (newvalue) {
+                    $log.debug('change current profile');
 
-                    if(newvalue){
+                    if (newvalue) {
                         generateColoration();
-                        listener();
                     }
 
                 }, true);

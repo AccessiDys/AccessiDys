@@ -24,7 +24,9 @@
  */
 'use strict';
 
-/*global cnedApp */
+/**
+ * Utils service
+ */
 cnedApp.service('UtilsService', function ($uibModal) {
 
     var methods = {
@@ -164,7 +166,7 @@ cnedApp.service('UtilsService', function ($uibModal) {
          * Generate a unique key
          * @returns {number}
          */
-        generateUniqueId : function () {
+        generateUniqueId: function () {
             var date = new Date().getTime();
             date += (parseInt(Math.random() * 1000)).toString();
             return date;
@@ -198,32 +200,75 @@ cnedApp.service('UtilsService', function ($uibModal) {
             return text.replace(/href="(.*?)"/gi, 'href="/#/apercu?url=$1"');
         },
 
+        /**
+         * Remove span in html string
+         * @param html
+         * @returns {*} Html cleaned
+         */
+        removeSpan: function (html) {
+            var cleanedHtml = html;
+
+            if (cleanedHtml) {
+                cleanedHtml = cleanedHtml.replace(/<span(.*?)>/gi, '');
+                cleanedHtml = cleanedHtml.replace(/<\/span>/gi, '');
+            }
+
+            return cleanedHtml;
+        },
+
+        /**
+         * Split text by syllable
+         * @param text
+         */
         splitOnSyllable: function (text) {
-            var formattedText = text.replace(/&nbsp;/gi, ' ');
-            formattedText = Hyphenator.hyphenate(formattedText, 'fr');
+            var formattedText = text;
 
-            formattedText = formattedText.replace(/(\b(?!<)[a-zA-Z0-9\-\_\|]+(?!>)\b)/gi, "%%$1%%");
-            formattedText = formattedText.replace(/(\|)/gi, '</span><span>');
-            formattedText = formattedText.replace(/(%%\b)/gi, '<span>');
-            formattedText = formattedText.replace(/(\b%%)/gi, '</span>');
+            if (formattedText) {
+                formattedText = text.replace(/&nbsp;/gi, ' ');
+                formattedText = Hyphenator.hyphenate(formattedText, 'fr');
+
+                formattedText = formattedText.replace(/(\b(?!<)[a-zA-Z0-9\-\_\|]+(?!>)\b)/gi, "%%$1%%");
+                formattedText = formattedText.replace(/(\|)/gi, '</span><span>');
+                formattedText = formattedText.replace(/(%%\b)/gi, '<span>');
+                formattedText = formattedText.replace(/(\b%%)/gi, '</span>');
+            }
 
             return formattedText;
         },
 
+        /**
+         * Split text by word
+         * @param text
+         */
         splitOnWordWithOutSpace: function (text) {
-            var formattedText = text.replace(/&nbsp;/gi, ' ');
-            formattedText = formattedText.replace(methods.wordRegex, '<span>$1</span> ');
+            var formattedText = text;
+
+            if (formattedText) {
+                formattedText = text.replace(/&nbsp;/gi, ' ');
+                formattedText = formattedText.replace(methods.wordRegex, '<span>$1</span> ');
+            }
 
             return formattedText;
         },
 
+        /**
+         * Split Text by word
+         * @param text
+         */
         splitOnWordWithSpace: function (text) {
-            var formattedText = text.replace(/&nbsp;/gi, ' ');
-            formattedText = formattedText.replace(methods.wordRegex, '<span>$1 </span>');
+            var formattedText = text;
+
+            if (formattedText) {
+                formattedText = text.replace(/&nbsp;/gi, ' ');
+                formattedText = formattedText.replace(methods.wordRegex, '<span>$1 </span>');
+            }
 
             return formattedText;
         },
 
+        /**
+         * Regex to select words in text
+         */
         wordRegex: /([\w,.'&;:"«»:%\?\-éèêàâôîïö\(\)]+)(?![^<]*>)/gi
 
     };

@@ -269,6 +269,18 @@ angular.module('cnedApp').config(function ($provide) {
         });
         // add the button to the default toolbar definition
         taOptions.toolbar[1].push('pageBreak');
+
+
+        /*taRegisterTool('ocr', {
+            buttontext: "Océrisation",
+            action: function () {
+                this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
+            }
+        });
+        // add the button to the default toolbar definition
+        taOptions.toolbar[1].push('pageBreak');*/
+
+
         return taOptions;
     }]);
 });

@@ -27,7 +27,8 @@
 var cnedApp = cnedApp;
 
 cnedApp.service('profilsService', function ($http, configuration, fileStorageService,
-                                            $localForage, synchronisationStoreService, $rootScope, $uibModal, $log, $q, UtilsService, UserService) {
+                                            $localForage, synchronisationStoreService, $rootScope,
+                                            $uibModal, $log, $q, UtilsService, UserService, CacheProvider) {
 
     var self = this;
 
@@ -40,7 +41,6 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
         var deferred = $q.defer();
 
         var profileToSave = angular.copy(profile);
-
 
         profileToSave.data.updated = new Date();
         profileToSave.filename = profileToSave.data.nom;
@@ -153,8 +153,6 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
         return fileStorageService.list('profile').then(function (profiles) {
             var isFound = false;
             _.each(profiles, function (item) {
-                console.log('item', item);
-                console.log('profile', profile);
                 if (profile.data.nom === item.filename) {
                     isFound = true;
                 }
@@ -225,7 +223,9 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
                 'AccessiDys-user': UserService.getData().email
             }
         }).then(function (res) {
+
             return res.data;
+
         }), fileStorageService.list('profile').then(function (files) {
 
             var userProfiles = [];
@@ -243,7 +243,12 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
 
         })]).then(function (res) {
 
-            return res[0].concat(res[1]);
+            var result = res[0].concat(res[1]);
+
+            CacheProvider.saveAll(result, 'listProfile').then(function () {
+            });
+
+            return result;
         })
     };
 

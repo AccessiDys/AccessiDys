@@ -42,7 +42,8 @@ cnedApp.directive('uploadFile', function ($rootScope, ToasterService, $timeout) 
                 $timeout(function () {
                     for (var i = 0; i < element.files.length; i++) {
                         var filename = '';
-                        if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip') {
+
+                        if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip' && element.files[i].type !== 'application/msword') {
                             if (element.files[i].type === '' && element.files[i].name.indexOf('.epub') > -1) {
                                 filename = element.files[i].name;
 

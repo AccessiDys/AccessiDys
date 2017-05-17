@@ -73,6 +73,8 @@ angular
                             $scope.loadImage(file);
                         } else if (document.type === 'epub') {
                             $scope.uploadFile(file);
+                        } else if (document.type === 'word') {
+                            $scope.uploadWordFile(file);
                         }
 
                     } else if (document.uri) {
@@ -91,10 +93,9 @@ angular
                             serviceCheck.htmlPreview(document.uri)
                                 .then(function (resultHtml) {
 
-                                    if (resultHtml && resultHtml.indexOf('<title>') > -1) {
-                                        $scope.document.filename = UtilsService.cleanUpSpecialChars(resultHtml.substring(resultHtml.indexOf('<title>') + 7, resultHtml.indexOf('</title>')));
+                                    if (resultHtml.documentHtml && resultHtml.documentHtml.indexOf('<title>') > -1) {
+                                        $scope.document.filename = UtilsService.cleanUpSpecialChars(resultHtml.documentHtml.substring(resultHtml.documentHtml.indexOf('<title>') + 7, resultHtml.documentHtml.indexOf('</title>')));
                                     }
-
 
                                     var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
                                     promiseClean.then(function (resultClean) {
@@ -485,6 +486,52 @@ angular
                 fd.append('uploadedFile', file);
                 if (file.type === 'application/epub+zip') {
                     uploadService = '/epubUpload';
+
+                    LoaderService.showLoader('document.message.info.save.analyze', true);
+
+                } else {
+                    if (file.type === '' && file.name.indexOf('.epub')) {
+
+                        uploadService = '/epubUpload';
+                        LoaderService.showLoader('document.message.info.save.analyze', true);
+
+
+                    } else if (file.type.indexOf('image/') > -1) {
+                        // call image conversion service
+                        // -> base64
+                        uploadService = '/fileupload';
+
+                        LoaderService.show('document.message.info.load.image', true);
+                    } else {
+                        //call pdf conversion service ->
+                        // base64
+                        uploadService = '/fileupload';
+                        LoaderService.show('document.message.info.load.pdf', true);
+                    }
+                }
+
+                LoaderService.setLoaderProgress(10);
+                if ($rootScope.isAppOnline) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.addEventListener('load', $scope.uploadComplete, false);
+                    xhr.addEventListener('error', $scope.uploadFailed, false);
+                    xhr.open('POST', uploadService + '?id=' + localStorage.getItem('compteId'));
+                    xhr.send(fd);
+                } else {
+                    htmlEpubTool.convertToHtml([file]).then(function (data) {
+                        $scope.epubDataToEditor(data);
+                    });
+                }
+
+
+            };
+
+            $scope.uploadWordFile = function (file) {
+                var uploadService = '';
+                var fd = new FormData();
+                fd.append('uploadedFile', file);
+                if (file.type === 'application/epub+zip') {
+                    uploadService = '/wordUpload';
 
                     LoaderService.showLoader('document.message.info.save.analyze', true);
 

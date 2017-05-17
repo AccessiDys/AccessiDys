@@ -711,6 +711,8 @@ angular.module('cnedApp')
                     $scope.setPage($scope.currentPage);
                     LoaderService.hideLoader();
                     $scope.restoreNotesStorage();
+
+
                 }, function () {
                     LoaderService.hideLoader();
                     UtilsService.showInformationModal('label.offline', 'document.message.info.display.offline', '/listDocument');
