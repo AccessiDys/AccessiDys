@@ -23,9 +23,11 @@
  *
  */
 
+/* global Hyphenator  */
 'use strict';
 
-angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, profilsService, $uibModal, tagsService, $log, UserService, $state, userData, CacheProvider) {
+angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, profilsService, $uibModal,
+                                                             tagsService, $log, UserService, $state, userData, CacheProvider, _) {
 
     $log.debug('commonCtrl - userData', userData);
 
@@ -103,10 +105,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
 
         var hyphenatorSettings = {
-            'onhyphenationdonecallback': function () {
-                // console.log('done ... ');
-                syllabeAction(currentParam, currentElementAction);
-            },
             hyphenchar: '|',
             defaultlanguage: 'fr',
             useCSS3hyphenation: true,

@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, auth) {
+angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider) {
     $scope.storages = [{
         provider: 'dropbox',
         img: 'https://pbs.twimg.com/profile_images/662300942335737857/vJbiuGpn.png',

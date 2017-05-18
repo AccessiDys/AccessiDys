@@ -23,15 +23,14 @@
  *
  */
 
-/*global cnedApp,Hyphenator, $:false */
 'use strict';
 
 /*
  * Directive to apply a rule of style to a paragraph.
  */
-cnedApp.directive('profileStyle',
+angular.module('cnedApp').directive('profileStyle',
 
-    function (UtilsService) {
+    function () {
         return {
             restrict: 'A',
             scope: {
@@ -48,7 +47,7 @@ cnedApp.directive('profileStyle',
                         var profileStyle = '';
 
                         for (var i = 0; i < profile.profileTags.length; i++) {
-                            var fontWeight = profile.profileTags[i].styleValue == 'Gras' ? 'bold': 'normal';
+                            var fontWeight = profile.profileTags[i].styleValue === 'Gras' ? 'bold': 'normal';
 
                             profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' {';
                             profileStyle += 'font-family: ' + profile.profileTags[i].police + ' !important;';
@@ -142,7 +141,7 @@ cnedApp.directive('profileStyle',
                                     profileStyle += 'background-color: #fffd01;';
                                     profileStyle += '}';
 
-                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + 'span:nth-child(3n-1) {';
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(3n-1) {';
                                     profileStyle += 'color: #000;';
                                     profileStyle += 'background-color: #04ff04;';
                                     profileStyle += '}';

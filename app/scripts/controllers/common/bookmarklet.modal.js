@@ -24,7 +24,7 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('BookMarkletModalCtrl', function ($scope, $rootScope, $uibModalInstance, configuration) {
+angular.module('cnedApp').controller('BookMarkletModalCtrl', function ($scope, $rootScope, $uibModalInstance) {
 
 
     $scope.userDropBoxLink = '\'' + 'https://' + window.location.host + '/#/apercu?title=\'+document.title+\'&url=\'+encodeURIComponent(document.URL).replace(/%3A/g,":")';

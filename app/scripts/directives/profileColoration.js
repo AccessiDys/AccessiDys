@@ -23,13 +23,12 @@
  *
  */
 
-/*global cnedApp,Hyphenator, $:false */
 'use strict';
 
 /*
  * Directive to apply a rule of style to a paragraph.
  */
-cnedApp.directive('profileColoration',
+angular.module('cnedApp').directive('profileColoration',
 
     function (UtilsService, $timeout, $compile) {
         return {

@@ -169,7 +169,7 @@ angular
                         $scope.document.filename = data.filename;
 
                     }, function (cause) {
-                        if (cause != 'edit-title') {
+                        if (cause !== 'edit-title') {
                             ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
                             LoaderService.hideLoader();
                         }
@@ -335,7 +335,7 @@ angular
                 return pdf.getPage(pageNumber).then(function (page) {
                     $log.debug('get page pdf');
                     angular.element(document.getElementById('canvas')).remove();
-                    angular.element(document.getElementsByTagName("body")[0]).append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
+                    angular.element(document.getElementsByTagName('body')[0]).append('<canvas class="hidden" id="canvas" width="790px" height="830px"></canvas>');
 
                     $log.debug('add canvas elemebnt');
 

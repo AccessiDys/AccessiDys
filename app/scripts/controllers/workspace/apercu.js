@@ -24,7 +24,7 @@
  */
 
 /*jshint loopfunc:true*/
-/*global $:false, blocks, ownerId */
+/*global jQuery:false, $:false, blocks, ownerId */
 /* global PDFJS ,Promise, gapi  */
 /*jshint unused: false, undef:false */
 /* global
@@ -38,7 +38,7 @@ angular.module('cnedApp')
                                         htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
-                                        gettextCatalog, $localForage, UtilsService, LoaderService, Analytics, ToasterService, $state) {
+                                        gettextCatalog, $localForage, UtilsService, LoaderService, Analytics, ToasterService, $state, UserService) {
 
         $scope.idDocument = $stateParams.idDocument;
         $scope.tmp = $stateParams.tmp;
@@ -370,7 +370,7 @@ angular.module('cnedApp')
         };
 
         $scope.resetLines = function () {
-            angular.element(document.getElementsByClassName("canvas-container")).find('div').find('div').remove();
+            angular.element(document.getElementsByClassName('canvas-container')).find('div').find('div').remove();
             $scope.$emit('redrawLines');
         };
 

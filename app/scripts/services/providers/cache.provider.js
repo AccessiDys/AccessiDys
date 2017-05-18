@@ -25,7 +25,7 @@
 
 'use strict';
 
-cnedApp.factory('CacheProvider',
+angular.module('cnedApp').factory('CacheProvider',
     function ($q, $localForage, _) {
 
         return {

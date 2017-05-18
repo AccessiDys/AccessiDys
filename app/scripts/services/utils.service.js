@@ -1,4 +1,4 @@
-/*File: loaderServices.js
+/*File: utils.service.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -22,12 +22,15 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+/* global Hyphenator  */
+
 'use strict';
 
 /**
  * Utils service
  */
-cnedApp.service('UtilsService', function ($uibModal) {
+angular.module('cnedApp').service('UtilsService', function ($uibModal) {
 
     var methods = {
 
@@ -227,7 +230,7 @@ cnedApp.service('UtilsService', function ($uibModal) {
                 formattedText = text.replace(/&nbsp;/gi, ' ');
                 formattedText = Hyphenator.hyphenate(formattedText, 'fr');
 
-                formattedText = formattedText.replace(/(\b(?!<)[a-zA-Z0-9\-\_\|]+(?!>)\b)/gi, "%%$1%%");
+                formattedText = formattedText.replace(/(\b(?!<)[a-zA-Z0-9\-\_\|]+(?!>)\b)/gi, '%%$1%%');
                 formattedText = formattedText.replace(/(\|)/gi, '</span><span>');
                 formattedText = formattedText.replace(/(%%\b)/gi, '<span>');
                 formattedText = formattedText.replace(/(\b%%)/gi, '</span>');

@@ -24,13 +24,9 @@
  */
 'use strict';
 
-var cnedApp = cnedApp;
-
-cnedApp.service('profilsService', function ($http, configuration, fileStorageService,
+angular.module('cnedApp').service('profilsService', function ($http, configuration, fileStorageService,
                                             $localForage, synchronisationStoreService, $rootScope,
-                                            $uibModal, $log, $q, UtilsService, UserService, CacheProvider) {
-
-    var self = this;
+                                            $uibModal, $log, $q, UtilsService, UserService, CacheProvider, _) {
 
     /**
      * Add the given profile.
@@ -194,7 +190,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
                 });
             }, function () {
                 deferred.reject();
-            })
+            });
         }
 
         return deferred.promise;
@@ -249,7 +245,7 @@ cnedApp.service('profilsService', function ($http, configuration, fileStorageSer
             });
 
             return result;
-        })
+        });
     };
 
     this.getProfile = function (profileId) {

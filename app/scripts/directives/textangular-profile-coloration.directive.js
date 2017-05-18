@@ -1,4 +1,4 @@
-/* File: profileColoration.js
+/* File: textangular-profile-coloration.directive.js
  *
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
@@ -23,13 +23,13 @@
  *
  */
 
-/*global cnedApp,Hyphenator, $:false */
+/*global rangy */
 'use strict';
 
 /**
  * Directive to set coloration with TextAngular
  */
-cnedApp.directive('textAngularProfileColoration',
+angular.module('cnedApp').directive('textAngularProfileColoration',
 
     function (UtilsService, $timeout, $compile, $rootScope, $log) {
         return {
@@ -46,17 +46,13 @@ cnedApp.directive('textAngularProfileColoration',
                         $log.debug('bind html watcher');
                         htmlWatcher = $rootScope.$watch(function () {
                             return element.html().length;
-                        }, function (newvalue, oldValue) {
-
-
-                            if (newvalue != oldValue) {
+                        }, function (newValue, oldValue) {
+                            if (newValue !== oldValue) {
                                 generateColoration();
                             }
-
                         });
                     }
                 };
-
 
                 /**
                  * Color lines
@@ -79,12 +75,9 @@ cnedApp.directive('textAngularProfileColoration',
                                     line++;
                                 }
                             }
-
                             wordRef.addClass('line' + line);
-
                             prevTop = top;
                         }
-
                     });
                 };
 
@@ -103,8 +96,6 @@ cnedApp.directive('textAngularProfileColoration',
                         var text = element.html();
 
                         if (profile && text) {
-
-
                             for (var i = 0; i < profile.profileTags.length; i++) {
 
                                 var coloration = profile.profileTags[i].coloration;
@@ -153,9 +144,9 @@ cnedApp.directive('textAngularProfileColoration',
                                     switch (coloration) {
                                         case 'Colorer les lignes RBV':
                                         case 'Colorer les lignes RVJ':
+                                        case 'Colorer les lignes RBVJ':
                                         case 'Surligner les lignes RBV':
                                         case 'Surligner les lignes RVJ':
-                                        case 'Colorer les lignes RBVJ':
                                         case 'Surligner les lignes RBVJ':
 
                                             textTransform = UtilsService.splitOnWordWithSpace(textTransform);
@@ -185,8 +176,6 @@ cnedApp.directive('textAngularProfileColoration',
                                         textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
                                     }
 
-                                    $log.debug('replace nbsp ', textTransform);
-
                                     ref.html(textTransform);
 
                                     switch (coloration) {
@@ -206,10 +195,7 @@ cnedApp.directive('textAngularProfileColoration',
 
 
                                 });
-
-
                             }
-
 
                         }
                         bindHtmlWatcher();
@@ -221,7 +207,6 @@ cnedApp.directive('textAngularProfileColoration',
                  * Watcher for the current profile
                  */
                 $rootScope.$watch('currentProfile', function (newvalue) {
-
                     $log.debug('change current profile');
 
                     if (newvalue) {

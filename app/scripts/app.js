@@ -23,7 +23,7 @@
  *
  */
 'use strict';
-/* global io */
+/* global io  */
 
 var testEnv = false;
 var cnedApp = angular.module('cnedApp', [
@@ -262,7 +262,7 @@ angular.module('cnedApp').config(function ($provide) {
         // $delegate is the taOptions we are decorating
         // register the tool with textAngular
         taRegisterTool('pageBreak', {
-            buttontext: "Saut de page",
+            buttontext: 'Saut de page',
             action: function () {
                 this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
             }

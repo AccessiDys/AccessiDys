@@ -25,8 +25,48 @@
 
 'use strict';
 
-cnedApp.factory('DropboxProvider',
+angular.module('cnedApp').factory('DropboxProvider',
     function ($http, $q) {
+
+        /**
+         * Converts the format of dropbox files  in an internal file format
+         *
+         * @param dropboxFiles
+         *            The dropbox files
+         * @method transformDropboxFilesToStorageFiles
+         */
+        var transformDropboxFilesToStorageFiles = function (dropboxFiles) {
+            var files = [];
+            for (var i = 0; i < dropboxFiles.matches.length; i++) {
+                var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
+                if (file !== null) {
+                    files.push(file);
+                }
+            }
+            return files;
+        };
+
+        /**
+         * Converts the format of a dropbox file  in an internal file format
+         * @param dropboxFiles
+         *            a dropbox file
+         * @method transformDropboxFileToStorageFile
+         */
+        var transformDropboxFileToStorageFile = function (dropboxFile) {
+            var filepath = dropboxFile.path_display;
+            var filenameStartIndex = filepath.indexOf('_') + 1;
+            var filenameEndIndex = filepath.lastIndexOf('_');
+            var filename = filepath.substring(filenameStartIndex, filenameEndIndex);
+            var dateModification = Date.parse(dropboxFile.server_modified);
+            var file = {
+                filepath: filepath,
+                filename: filename,
+                dateModification: dateModification,
+                provider: 'dropbox'
+            };
+
+            return file;
+        };
 
         var downloadService = function (path, access_token) {
             var deferred = $q.defer();
@@ -133,7 +173,7 @@ cnedApp.factory('DropboxProvider',
                     deferred.resolve(null);
                 }
 
-            }).error(function (data, status) {
+            }).error(function (data) {
                 deferred.reject(data);
             });
 
@@ -209,45 +249,7 @@ cnedApp.factory('DropboxProvider',
             return $http.get('/auth/token');
         };
 
-        /**
-         * Converts the format of dropbox files  in an internal file format
-         *
-         * @param dropboxFiles
-         *            The dropbox files
-         * @method transformDropboxFilesToStorageFiles
-         */
-        var transformDropboxFilesToStorageFiles = function (dropboxFiles) {
-            var files = [];
-            for (var i = 0; i < dropboxFiles.matches.length; i++) {
-                var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
-                if (file !== null) {
-                    files.push(file);
-                }
-            }
-            return files;
-        };
 
-        /**
-         * Converts the format of a dropbox file  in an internal file format
-         * @param dropboxFiles
-         *            a dropbox file
-         * @method transformDropboxFileToStorageFile
-         */
-        var transformDropboxFileToStorageFile = function (dropboxFile) {
-            var filepath = dropboxFile.path_display;
-            var filenameStartIndex = filepath.indexOf('_') + 1;
-            var filenameEndIndex = filepath.lastIndexOf('_');
-            var filename = filepath.substring(filenameStartIndex, filenameEndIndex);
-            var dateModification = Date.parse(dropboxFile.server_modified);
-            var file = {
-                filepath: filepath,
-                filename: filename,
-                dateModification: dateModification,
-                provider: 'dropbox'
-            };
-
-            return file;
-        };
 
 
         return {
