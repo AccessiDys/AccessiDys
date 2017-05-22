@@ -145,7 +145,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
 
         $log.debug('parcourirHtml data = ', data);
 
-        if(data) {
+        if (data) {
             var pages = self.splitPages(data);
 
             $log.debug('parcourirHtml splitPages = ', pages);
@@ -156,26 +156,27 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
 
 
                 angular.forEach(element, function (element) {
-
                     $rootScope.tags.forEach(function (tag) {
                         if (element.localName === tag.balise) {
-                            if (tag.balise === 'div') {
-                                if (angular.element(element).hasClass(self.cleanString(tag.libelle))) {
-                                    block = self.processElement(element, tag, page, block);
-                                }
-                            } else {
-                                block = self.processElement(element, tag, page, block);
-                            }
-
+                            generatePlan(element, tag, page, block);
                         }
                     });
+
+                    //element.id = block;
+                    if (!retContent[(page + 1)]) {
+                        retContent[(page + 1)] = '';
+                    }
+
+
+                    if (element.outerHTML) {
+                        retContent[(page + 1)] += element.outerHTML;
+                    }
+
+                    block++;
                 });
 
             }
         }
-
-
-
 
         return retContent;
     };
@@ -233,6 +234,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         }
 
         //processChildNode(element);
+        console.log('element.outerHTML', element.outerHTML);
         retContent[page] += element.outerHTML;
         return (block + 1);
     };

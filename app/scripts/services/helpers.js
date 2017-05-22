@@ -54,8 +54,15 @@ cnedApp.factory('protocolToLowerCase', function () {
      * @return {string} the url with lowercased protocol
      */
     return function (url) {
-        var match = new RegExp('http(s)?', 'ig').exec(url);
-        return url.replace(match[0], match[0].toLowerCase());
+        var res = url;
+
+        if (res) {
+            var match = new RegExp('http(s)?', 'ig').exec(url);
+            if (match && match.length > 0) {
+                res = url.replace(match[0], match[0].toLowerCase());
+            }
+        }
+        return res;
     };
 });
 
@@ -111,6 +118,7 @@ cnedApp.factory('serviceCheck',
                 };
                 var finalData = {};
                 var serviceName = '/htmlPage';
+
                 $http.post(serviceName, data)
                     .success(function (data) {
                         if (data && data.length > 0) {
@@ -121,9 +129,10 @@ cnedApp.factory('serviceCheck',
                         }
                         deferred.resolve(finalData);
                         return deferred.promise;
-                    }).error(function (err) {
-                    deferred.reject(err);
-                });
+                    })
+                    .error(function (err) {
+                        deferred.reject(err);
+                    });
                 return deferred.promise;
             },
             getSign: function (chunck) {
@@ -213,7 +222,7 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                     'images/add_document.png',
                     'images/parcourir.png',
                     'images/clear_uploadpdf.png'
-                    ];
+                ];
                 if (config.method == 'GET') { // jshint ignore:line
                     if (!_.contains(exeptionUrl, config.url)) {
                         var separator = config.url.indexOf('?') === -1 ? '?' : '&';

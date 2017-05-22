@@ -74,7 +74,7 @@ angular
                         } else if (document.type === 'epub') {
                             $scope.uploadFile(file);
                         } else if (document.type === 'word') {
-                            $scope.uploadWordFile(file);
+                            $scope.loadWordFile(file);
                         }
 
                     } else if (document.uri) {
@@ -153,34 +153,28 @@ angular
                     mode = 'create';
                 }
 
-                htmlEpubTool.cleanHTML({
-                    documentHtml : $scope.document.data
-                }).then(function (resultClean) {
 
-                    $log.debug('resultClean before saving', resultClean);
+                documentService.save({
+                    title: $scope.document.filename,
+                    data: $scope.document.data,
+                    filePath: $scope.document.filepath
+                }, mode)
+                    .then(function (data) {
+                        $log.debug('Save - data', data);
+                        if (!UserService.getData().token) {
+                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.cache.ok');
+                        } else {
+                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
+                        }
+                        $scope.document.filepath = data.filepath;
+                        $scope.document.filename = data.filename;
 
-                    documentService.save({
-                        title: $scope.document.filename,
-                        data: resultClean,
-                        filePath: $scope.document.filepath
-                    }, mode)
-                        .then(function (data) {
-                            $log.debug('Save - data', data);
-                            if (!UserService.getData().token) {
-                                ToasterService.showToaster('#document-success-toaster', 'document.message.save.cache.ok');
-                            } else {
-                                ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
-                            }
-                            $scope.document.filepath = data.filepath;
-                            $scope.document.filename = data.filename;
-
-                        }, function (cause) {
-                            if (cause !== 'edit-title') {
-                                ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
-                                LoaderService.hideLoader();
-                            }
-                        });
-                });
+                    }, function (cause) {
+                        if (cause !== 'edit-title') {
+                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
+                            LoaderService.hideLoader();
+                        }
+                    });
 
 
             };
@@ -537,48 +531,25 @@ angular
 
             };
 
-            $scope.uploadWordFile = function (file) {
-                var uploadService = '';
-                var fd = new FormData();
-                fd.append('uploadedFile', file);
-                if (file.type === 'application/epub+zip') {
-                    uploadService = '/wordUpload';
+            $scope.loadWordFile = function (file) {
+                var reader = new FileReader();
+                // Read the word file
+                reader.onload = function (e) {
 
-                    LoaderService.showLoader('document.message.info.save.analyze', true);
+                    var zip = new JSZip(event.target.result);
 
-                } else {
-                    if (file.type === '' && file.name.indexOf('.epub')) {
-
-                        uploadService = '/epubUpload';
-                        LoaderService.showLoader('document.message.info.save.analyze', true);
-
-
-                    } else if (file.type.indexOf('image/') > -1) {
-                        // call image conversion service
-                        // -> base64
-                        uploadService = '/fileupload';
-
-                        LoaderService.show('document.message.info.load.image', true);
-                    } else {
-                        //call pdf conversion service ->
-                        // base64
-                        uploadService = '/fileupload';
-                        LoaderService.show('document.message.info.load.pdf', true);
+                    try {
+                        var doc = new Docxtemplater();
+                        doc.loadZip(zip);
+                        $scope.document.data = doc.getFullText();
+                    } catch (e) {
+                        console.log('error', e);
                     }
-                }
 
-                LoaderService.setLoaderProgress(10);
-                if ($rootScope.isAppOnline) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.addEventListener('load', $scope.uploadComplete, false);
-                    xhr.addEventListener('error', $scope.uploadFailed, false);
-                    xhr.open('POST', uploadService + '?id=' + localStorage.getItem('compteId'));
-                    xhr.send(fd);
-                } else {
-                    htmlEpubTool.convertToHtml([file]).then(function (data) {
-                        $scope.epubDataToEditor(data);
-                    });
-                }
+
+                };
+
+                reader.readAsBinaryString(file);
 
 
             };
@@ -620,7 +591,11 @@ angular
 
                 if ($stateParams.file) {
                     $scope.document = $stateParams.file;
-                    ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
+
+                    if (!$stateParams.file.toBeSaved) {
+                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
+
+                    }
                 }
 
             };

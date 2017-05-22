@@ -200,7 +200,14 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         },
 
         replaceLink: function (text) {
-            return text.replace(/href="(.*?)"/gi, 'href="/#/apercu?url=$1"');
+            var res = text;
+            if (res) {
+                res = res.replace(/href="#(?:.*?)"/gi, '');
+                res = res.replace(/href="\/{2}(?:.*?)"/gi, '');
+                res = res.replace(/href="null(?:.*?)"/gi, '');
+                res = res.replace(/href="(.*?)"/gi, 'href="/#/apercu?url=$1"');
+            }
+            return res;
         },
 
         /**

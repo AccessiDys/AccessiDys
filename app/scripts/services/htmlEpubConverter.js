@@ -78,8 +78,6 @@ cnedApp.factory('htmlEpubTool',
                 }
                 htmlFile = htmlFilePure;
 
-
-
                 if (htmlFile !== null && htmlFile) {
                     for (i = 0; i < dictionnaireHtml.tag.length; i++) {
                         htmlFile = removeElements(htmlFile, dictionnaireHtml.tag[i]);
@@ -91,6 +89,7 @@ cnedApp.factory('htmlEpubTool',
                         deferred.reject('Les sites web à contenu dynamique ne sont pas adaptables.');
                     } else {
                         // Flatten DOM
+                        $log.debug('htmlFilePure without span', htmlFile);
                         htmlFile = htmlFile.replace(/(<div(?:.*?)>)/gi, '');
                         htmlFile = htmlFile.replace(/(<\/div>)/gi, '');
 
@@ -99,9 +98,10 @@ cnedApp.factory('htmlEpubTool',
 
                         htmlFile = htmlFile.replace(/(class="(?:.*?)")/gi, '');
 
+                        $log.debug('htmlFilePure without après', htmlFile);
+
                         htmlFile = UtilsService.replaceLink(htmlFile);
 
-                        $log.debug('htmlFilePure without span', htmlFile);
                         deferred.resolve(htmlFile);
                     }
                 } else {
@@ -124,8 +124,6 @@ cnedApp.factory('htmlEpubTool',
                     $log.debug('zip.files', zip.files);
 
                     for (var name in zip.files) {
-
-
 
                         if (name.indexOf('.ncx') !== -1) {
                             var directory = name.substring(0, name.lastIndexOf('/'));

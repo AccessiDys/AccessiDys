@@ -287,6 +287,8 @@ var removeParent = function (domObject) {
 };
 
 exports.htmlPage = function (req, responce) {
+
+
     var donneRecu = req.body;
     var url = donneRecu['lien']; // jshint ignore:line
     var protocole;
@@ -295,13 +297,17 @@ exports.htmlPage = function (req, responce) {
     } else {
         protocole = http;
     }
+
+
     protocole.get(url, function (res) {
+
         var chunks = [];
         res.on('data', function (chunk) {
             chunks.push(chunk);
         });
 
         res.on('end', function () {
+            console.log('chunks', chunks);
             var jsfile = new Buffer.concat(chunks);
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
             if (jsfile.length > 0) {
@@ -315,9 +321,9 @@ exports.htmlPage = function (req, responce) {
                 var charset = res.headers['content-type'];
                 if (charset.indexOf('UTF-8') <= -1 && charset.indexOf('utf-8') <= -1 && charset.indexOf('utf8') <= -1) {
                     var html = iconv.decode(jsfile, enc);
-                    responce.send(res.statusCode, html);
+                    responce.send(200, html);
                 } else {
-                    responce.send(res.statusCode, jsfile.toString('utf-8'));
+                    responce.send(200, jsfile.toString('utf-8'));
                 }
             } else {
                 console.log('e***************');

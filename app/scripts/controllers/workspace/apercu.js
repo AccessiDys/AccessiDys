@@ -573,6 +573,8 @@ angular.module('cnedApp')
             // accents
             return serviceCheck.htmlPreview(encodeURI(url)).then(function (htmlFile) {
 
+                $log.debug('html preview');
+
                 if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf('<title>') > -1) {
                     $scope.urlTitle = UtilsService.cleanUpSpecialChars(htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<title>') + 7, htmlFile.documentHtml.indexOf('</title>')));
                     htmlFile.documentHtml = processLink(htmlFile.documentHtml);
@@ -588,7 +590,7 @@ angular.module('cnedApp')
 
                 $scope.originalHtml = resultClean;
 
-                $scope.content = ['', resultClean];//workspaceService.parcourirHtml(resultClean, $scope.urlHost, $scope.urlPort);
+                $scope.content = workspaceService.parcourirHtml(resultClean, $scope.urlHost, $scope.urlPort);
                 $scope.setPage($scope.currentPage);
             }, function (err) {
                 $log.error('err transform html', err);
@@ -690,6 +692,8 @@ angular.module('cnedApp')
                     $log.debug('get document by id', file);
                     $scope.document = file;
                     $scope.content = workspaceService.parcourirHtml(file.data);
+
+                    console.log('content', $scope.content[1]);
 
                     $scope.showTitleDoc($scope.idDocument);
                     $scope.showEditer = true;
@@ -894,7 +898,8 @@ angular.module('cnedApp')
             $state.go('app.edit-document', {
                 file: {
                     filename: $rootScope.titreDoc,
-                    data: $scope.originalHtml
+                    data: $scope.originalHtml,
+                    toBeSaved: true
                 }
             });
 
