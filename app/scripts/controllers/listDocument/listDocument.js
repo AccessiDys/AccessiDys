@@ -131,7 +131,7 @@ angular.module('cnedApp')
 
                 fileStorageService.shareFile(document.filepath)
                     .then(function (shareLink) {
-                        itemToShare.linkToShare = 'https://' + window.location.host + '/#/apercu?title=' + encodeURIComponent(document.filename) + '&url=' + encodeURIComponent(shareLink);
+                        itemToShare.linkToShare = 'https://' + window.location.host + '/#/apercu?title=' + encodeURIComponent(document.filename) + '&url=' + encodeURIComponent(shareLink.url);
 
                         UtilsService.openSocialShareModal('document', itemToShare)
                             .then(function () {
@@ -140,6 +140,13 @@ angular.module('cnedApp')
                             }, function () {
                                 // Modal dismiss
                             });
+
+                    }, function(res){
+                        if(res.error === 'email_not_verified'){
+                            ToasterService.showToaster('#list-document-error-toaster', 'dropbox.message.error.share.emailnotverified');
+                        } else {
+                            ToasterService.showToaster('#list-document-error-toaster', 'dropbox.message.error.share.ko');
+                        }
 
                     });
 

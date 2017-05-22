@@ -50,7 +50,6 @@ exports.getProfiles = function (req, res) {
         email: req.get('AccessiDys-user')
     };
 
-
     async.waterfall([
 
             function (callback) {

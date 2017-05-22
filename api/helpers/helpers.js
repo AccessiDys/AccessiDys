@@ -107,7 +107,7 @@ exports.sendMail = function (req, res) {
         getSmtpOptions());
     // setup e-mail data with unicode symbols
 
-    if (sentMailInfos.doc && sentMailInfos.doc.indexOf('idProfil') !== -1) {
+    if (sentMailInfos.doc && sentMailInfos.doc.indexOf('detailProfil') !== -1) {
         mailOptions = {
             from: config.EMAIL_FROM,
             to: sentMailInfos.to,

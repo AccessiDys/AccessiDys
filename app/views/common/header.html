@@ -44,7 +44,7 @@
                             style="-webkit-appearance: menulist-button; width: 215px; position: absolute; opacity: 0; height: 43px; font-size: 18px;"
                             data-ng-model="currentProfile"
                             data-ng-change="onChangeCurrentProfile(currentProfile)"
-                            ng-options="profile as profile.data.nom for profile in profiles track by profile.data.nom">
+                            ng-options="profile as profile.data.nom for profile in profiles track by $index">
 
                     </select>
 

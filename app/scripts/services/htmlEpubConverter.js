@@ -47,7 +47,7 @@ var baseUrl = '';
  */
 cnedApp.factory('htmlEpubTool',
 
-    function ($q, UtilsService) {
+    function ($q, UtilsService, $log) {
         return {
             cleanHTML: function (htmlFile) {
                 var deferred = $q.defer();
@@ -57,6 +57,7 @@ cnedApp.factory('htmlEpubTool',
                     tag: ['objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header']
                 };
                 var removeElements = function (text, selector) {
+                    $log.debug('remove element ' + selector);
                     var wrapped = angular.element('<div>' + text + '</div>');
                     wrapped.find(selector).remove();
                     return wrapped.html();
@@ -77,14 +78,7 @@ cnedApp.factory('htmlEpubTool',
                 }
                 htmlFile = htmlFilePure;
 
-                // Flatten DOM
-                htmlFile = htmlFile.replace(/(<div(?:.*?)>)/gi, '');
-                htmlFile = htmlFile.replace(/(<\/div>)/gi, '');
 
-                htmlFile = htmlFile.replace(/<span(.*?)>/gi, '');
-                htmlFile = htmlFile.replace(/<\/span>/gi, '');
-
-                htmlFile = UtilsService.replaceLink(htmlFile);
 
                 if (htmlFile !== null && htmlFile) {
                     for (i = 0; i < dictionnaireHtml.tag.length; i++) {
@@ -96,11 +90,24 @@ cnedApp.factory('htmlEpubTool',
                     if (typeof htmlFile === 'string' && !(htmlFile.trim()).length) {
                         deferred.reject('Les sites web à contenu dynamique ne sont pas adaptables.');
                     } else {
+                        // Flatten DOM
+                        htmlFile = htmlFile.replace(/(<div(?:.*?)>)/gi, '');
+                        htmlFile = htmlFile.replace(/(<\/div>)/gi, '');
+
+                        htmlFile = htmlFile.replace(/<span(.*?)>/gi, '');
+                        htmlFile = htmlFile.replace(/<\/span>/gi, '');
+
+                        htmlFile = htmlFile.replace(/(class="(?:.*?)")/gi, '');
+
+                        htmlFile = UtilsService.replaceLink(htmlFile);
+
+                        $log.debug('htmlFilePure without span', htmlFile);
                         deferred.resolve(htmlFile);
                     }
                 } else {
                     deferred.reject('No html');
                 }
+
                 return deferred.promise;
             },
             convertToHtml: function (files) {
@@ -110,9 +117,16 @@ cnedApp.factory('htmlEpubTool',
                 }, reader = new FileReader(), deffered = $q.defer();
 
                 reader.onload = function (event) {
+                    $log.debug('event.target.result', event.target.result);
+
                     var zip = new JSZip(event.target.result);
 
+                    $log.debug('zip.files', zip.files);
+
                     for (var name in zip.files) {
+
+
+
                         if (name.indexOf('.ncx') !== -1) {
                             var directory = name.substring(0, name.lastIndexOf('/'));
                             var indexFileName = name;

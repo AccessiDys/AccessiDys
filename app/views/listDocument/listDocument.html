@@ -28,9 +28,16 @@
             <i class="fa fa-check" aria-hidden="true"></i>
             <strong profile-coloration
                     profile="currentProfile"
-                    text-livereload="true"
-                    parent="#list-document-success-toaster"
-                    text="{{toasterMsg}}"
+                    text="toasterMsg"
+                    class="{{currentProfile.data.className}}">
+            </strong>
+        </div>
+
+        <div class="alert-block alert-danger alert-dismissable" id="list-document-error-toaster">
+            <i class="fa fa-times" aria-hidden="true"></i>
+            <strong profile-coloration
+                    profile="currentProfile"
+                    text="toasterMsg"
                     class="{{currentProfile.data.className}}">
             </strong>
         </div>
@@ -99,7 +106,7 @@
                                 Modifier
                             </a>
                         </li>
-                        <li class="share_item">
+                        <li class="share_item" data-ng-if="userData.provider">
                             <a id="share_document" title="Partager le document"
                                data-ng-click="shareDocument(document)">
                                 Partager

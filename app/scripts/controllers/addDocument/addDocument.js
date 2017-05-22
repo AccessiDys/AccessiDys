@@ -153,27 +153,36 @@ angular
                     mode = 'create';
                 }
 
-                documentService.save({
-                    title: $scope.document.filename,
-                    data: $scope.processLink($scope.document.data),
-                    filePath: $scope.document.filepath
-                }, mode)
-                    .then(function (data) {
-                        $log.debug('Save - data', data);
-                        if (!UserService.getData().token) {
-                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.cache.ok');
-                        } else {
-                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
-                        }
-                        $scope.document.filepath = data.filepath;
-                        $scope.document.filename = data.filename;
+                htmlEpubTool.cleanHTML({
+                    documentHtml : $scope.document.data
+                }).then(function (resultClean) {
 
-                    }, function (cause) {
-                        if (cause !== 'edit-title') {
-                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
-                            LoaderService.hideLoader();
-                        }
-                    });
+                    $log.debug('resultClean before saving', resultClean);
+
+                    documentService.save({
+                        title: $scope.document.filename,
+                        data: resultClean,
+                        filePath: $scope.document.filepath
+                    }, mode)
+                        .then(function (data) {
+                            $log.debug('Save - data', data);
+                            if (!UserService.getData().token) {
+                                ToasterService.showToaster('#document-success-toaster', 'document.message.save.cache.ok');
+                            } else {
+                                ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
+                            }
+                            $scope.document.filepath = data.filepath;
+                            $scope.document.filename = data.filename;
+
+                        }, function (cause) {
+                            if (cause !== 'edit-title') {
+                                ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
+                                LoaderService.hideLoader();
+                            }
+                        });
+                });
+
+
             };
 
             /**
@@ -203,6 +212,8 @@ angular
              * cleans and puts the epub content in the editor
              */
             $scope.epubDataToEditor = function (epubContent) {
+
+                $log.debug('epubDataToEditor');
 
                 if (epubContent.html.length > 1) {
                     var tabHtml = [];

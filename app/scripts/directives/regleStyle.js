@@ -63,6 +63,10 @@ angular.module('cnedApp').directive('profileStyle',
                                 profileStyle += 'height: ' + ((1.286 + (profile.profileTags[i].interligne - 1) * 0.18) * 4) + 'em' + ';';
                             } else {
                                 profileStyle += 'height: ' + (1.286 + (profile.profileTags[i].interligne - 1) * 0.18) + 'em' + ';';
+
+                                if( profile.profileTags[i].tagDetail.balise === 'mark'){
+                                    profileStyle += 'display: inline-block !important;';
+                                }
                             }
                             profileStyle += 'overflow: hidden;';
                             profileStyle += '}';

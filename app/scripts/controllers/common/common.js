@@ -27,12 +27,12 @@
 'use strict';
 
 angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, profilsService, $uibModal,
-                                                             tagsService, $log, UserService, $state, userData, CacheProvider, _) {
+                                                             tagsService, $log, UserService, $state, CacheProvider, _, tags, userData) {
 
     $log.debug('commonCtrl - userData', userData);
 
     $rootScope.profiles = [];
-    $rootScope.tags = [];
+    $rootScope.tags = tags;
     $rootScope.tmpProfile = null;
     $rootScope.currentProfile = null;
     $rootScope.defaultSystemProfile = {};
@@ -40,66 +40,56 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $rootScope.$state = $state;
 
     $rootScope.isFullsize = true;
-    $scope.admin = $rootScope.admin;
-    $rootScope.apercu = false;
     $rootScope.displayTextSimple = 'AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu\'aux cadres supérieurs trop pressés jusqu\'aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d\'affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d\'attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d\'origine. Qu\'il s\'agisse d\'un fichier PDF numérisé, d\'un document Office, d\'un livre électronique au format ePub ou d\'une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d\'une expérience de lecture totalement personnalisée.';
 
     $rootScope.initCommon = function () {
 
         CacheProvider.getItem('currentProfile').then(function (currentProfile) {
             // Init profile list and Tag
+            profilsService.getProfiles().then(function (res) {
 
-            tagsService.getTags().then(function (tags) {
+                $rootScope.profiles = [];
 
-                $rootScope.tags = tags;
+                if (res) {
 
+                    _.each(res, function (profile) {
 
-                profilsService.getProfiles().then(function (res) {
+                        if (profile) {
 
-                    $rootScope.profiles = [];
+                            $log.debug('profile', profile);
+                            profile.data.className = profilsService.generateClassName(profile, false);
 
-                    if (res) {
-
-                        _.each(res, function (profile) {
-
-                            if (profile) {
-
-                                console.log('profile', profile);
-                                profile.data.className = profilsService.generateClassName(profile, false);
-
-                                _.each(profile.data.profileTags, function (item) {
-                                    item.tagDetail = _.find(tags, function (tag) {
-                                        return item.tag === tag._id;
-                                    });
+                            _.each(profile.data.profileTags, function (item) {
+                                item.tagDetail = _.find(tags, function (tag) {
+                                    return item.tag === tag._id;
                                 });
+                            });
 
+                            profile.data.profileTags.sort(function (a, b) {
+                                return a.tagDetail.position - b.tagDetail.position;
+                            });
 
-                                profile.data.profileTags.sort(function (a, b) {
-                                    return a.tagDetail.position - b.tagDetail.position;
-                                });
-
-                                if (profile.data.nom === 'Accessidys par défaut' || profile.data.owner === 'scripted') {
-                                    $rootScope.defaultSystemProfile = profile;
-                                }
-
-                                profile.showed = true;
-                                $rootScope.profiles.push(profile);
-
-                                if (currentProfile && currentProfile.data.nom === profile.data.nom) {
-                                    $rootScope.currentProfile = profile;
-                                }
+                            if (profile.data.nom === 'Accessidys par défaut' || profile.data.owner === 'scripted') {
+                                $rootScope.defaultSystemProfile = profile;
                             }
-                        });
 
-                        if (!$rootScope.currentProfile) {
-                            $rootScope.currentProfile = $rootScope.defaultSystemProfile;
+                            profile.showed = true;
+                            $rootScope.profiles.push(profile);
+
+                            if (currentProfile && currentProfile.data.nom === profile.data.nom) {
+                                $rootScope.currentProfile = profile;
+                            }
                         }
+                    });
 
-
-                        $log.debug('getProfiles.getProfilsByUser() - $scope.profiles :', $scope.profiles);
+                    if (!$rootScope.currentProfile) {
+                        $rootScope.currentProfile = $rootScope.defaultSystemProfile;
                     }
 
-                });
+
+                    $log.debug('getProfiles.getProfilsByUser() - $scope.profiles :', $scope.profiles);
+                }
+
             });
         });
 
@@ -141,7 +131,7 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     $rootScope.getDisplayedText = function (profileTag) {
         var res = '';
 
-        if(profileTag){
+        if (profileTag) {
             res = '<' + profileTag.tagDetail.balise + '>' + profileTag.tagDetail.libelle + ' : ' + $rootScope.displayTextSimple + '</' + profileTag.tagDetail.balise + '>';
         }
 

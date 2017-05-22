@@ -66,7 +66,6 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'Valider' : 'Submit',
         'Voir un aperçu' : 'Preview',
         'messageSuppression' : 'Do you really want deleting the profile ?',
-        'modifie avec succes' : 'successfully changed',
         'style avec succes' : 'successfully styled',
         'Profil Ajoute avec succes !' : 'Profile successfully added !',
         'Enregistrer le profil' : 'Save profile',
@@ -153,7 +152,6 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'Partager le profil' : 'Partager le profil',
         'AccepterDemandeDelegation' : 'Accepter la demande de délégation',
         'Modifier les informations' : 'Modifier les informations',
-        'modifie avec succes' : 'modifié avec succès',
         'Niveau scolaire' : 'Niveau scolaire',
         'Nom' : 'Nom',
         'Partager' : 'Partager',
@@ -288,6 +286,7 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'profile.label.delete.anwser': 'Voulez-vous supprimer le profil " <b>profile.name</b> " ?',
         'profile.label.delete.title': 'Supprimer le profil',
         'profile.message.info.delete.inprogress': 'Suppression du profil en cours. Veuillez patienter.',
+        'profile.message.info.delete.ok': 'Profil supprimé avec succès.',
         'profile.message.info.delegate.inprogress': 'Délégation du profil en cours. Veuillez patienter.',
         'profile.message.info.canceldelegateByUser.inprogress': 'Retrait de la délégation du profil en cours. Veuillez patienter.',
         'profile.message.info.canceldelegateByOwner.inprogress': 'Annulation de la délégation du profil en cours. Veuillez patienter.',
@@ -299,7 +298,6 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'style.label.delete.anwser': 'Voulez-vous supprimer le style " <b>style.label</b> " ?',
         'style.label.delete.title': 'Supprimer le style',
         'label.share.inprogress': 'Partage en cours. Veuillez patienter.',
-        'label.upgrade.ok': 'Version mise à jour avec succès',
         'useraccount.message.save.ko.password.length': 'L\'ancien mot de passe doit contenir de 6 à 20 caractères.',
         'useraccount.message.save.ko.password.mandatory': 'Le champs Ancien mot de passe est vide.',
         'useraccount.message.save.ko.password.spacialchar': 'Le champs ancien mot de passe contient des caractères spéciaux.',
@@ -312,7 +310,9 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'document.label.save.no-storage.message': 'Voulez-vous choisir un espace de sauvegarde pour retrouver vos documents sur tous vos appareils ?',
         'profile.label.save.no-storage.title': 'Sauvegarde de votre profil',
         'profile.label.save.no-storage.message': 'Voulez-vous choisir un espace de sauvegarde pour retrouver vos profils sur tous vos appareils ?',
-        'profile.message.info.save.inprogress': 'Sauvegarde du profil en cours veuillez patienter.'
+        'profile.message.info.save.inprogress': 'Sauvegarde du profil en cours veuillez patienter.',
+        'dropbox.message.error.share.emailnotverified': 'L\'email de votre compte dropbox n\'a pas été vérifié.',
+        'dropbox.message.error.share.ko': 'Erreur lors du partage. Veuillez contacter votre administrateur'
     });
 
 } ]);

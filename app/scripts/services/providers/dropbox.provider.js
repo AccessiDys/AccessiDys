@@ -207,6 +207,12 @@ angular.module('cnedApp').factory('DropboxProvider',
                         deferred.resolve(data);
                     });
 
+                } else if (data.error && data.error['.tag'] === 'email_not_verified') {
+
+                    deferred.reject({
+                        error: 'email_not_verified'
+                    });
+
                 } else {
                     deferred.reject(data);
                 }
@@ -241,15 +247,13 @@ angular.module('cnedApp').factory('DropboxProvider',
             return deferred.promise;
         };
         var authService = function () {
-             window.location.href = '/auth/dropbox';
+            window.location.href = '/auth/dropbox';
         };
 
         var tokenService = function () {
 
             return $http.get('/auth/token');
         };
-
-
 
 
         return {

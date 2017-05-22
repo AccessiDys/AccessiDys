@@ -220,28 +220,32 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
         var newFilePath = this.generateFilepath(newName, extension);
 
-
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
             if (UserService.getData().provider === 'dropbox') {
                 return DropboxProvider.rename(file.filepath, newFilePath, UserService.getData().token).then(function (data) {
                     return CacheProvider.delete(file, storageName).then(function () {
                         return CacheProvider.save(data, storageName);
                     });
+                }, function(){
+                    self.addFileToSynchronize(file, type, 'delete');
+                    return CacheProvider.delete(file, storageName).then(function () {
+                        file.filename = newName;
+                        file.filepath = newFilePath;
+                        self.addFileToSynchronize(file, type, 'save');
+                        return CacheProvider.save(file, storageName);
+                    });
                 });
             }
         } else {
-
-
-            var tmpFile = file;
             self.addFileToSynchronize(file, type, 'delete');
 
-            console.log('Rename - addFileToSynchronize', file);
+            $log.debug('Rename - addFileToSynchronize', file);
 
             return CacheProvider.delete(file, storageName).then(function () {
                 file.filename = newName;
                 file.filepath = newFilePath;
 
-                console.log('Rename - addFileToSynchronize', file);
+                $log.debug('Rename - addFileToSynchronize', file);
                 self.addFileToSynchronize(file, type, 'save');
                 return CacheProvider.save(file, storageName);
             });
@@ -290,9 +294,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
      */
     this.shareFile = function (filepath) {
         if (UserService.getData() && UserService.getData().token) {
-            return DropboxProvider.shareLink(filepath, UserService.getData().token).then(function (result) {
-                return result.url;
-            });
+            return DropboxProvider.shareLink(filepath, UserService.getData().token);
         } else {
             return null;
         }

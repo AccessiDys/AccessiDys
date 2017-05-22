@@ -27,9 +27,7 @@
 
     <strong profile-coloration
             profile="currentProfile"
-            text-livereload="true"
-            parent="#overview-success-toaster"
-            text="{{toasterMsg}}"
+            text="toasterMsg"
             class="{{currentProfile.data.className}}">
     </strong>
 </div>
@@ -39,9 +37,7 @@
 
     <strong profile-coloration
             profile="currentProfile"
-            text-livereload="true"
-            parent="#overview-error-toaster"
-            text="{{toasterMsg}}"
+            text="toasterMsg"
             class="{{currentProfile.data.className}}">
     </strong>
 </div>
@@ -201,13 +197,13 @@
                         <!-- Text -->
                         <div id="{{'adapt-content-' + currentPage }}"
                              tabindex="0" vocal-synthesis
-                             text="{{currentContent}}"
                              profile-coloration
                              profile="currentProfile"
+                             text="currentContent"
                              class="resetAll doc-apercu {{currentProfile.data.className}}"
                              data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
                              data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
-                             style="outline: none !important; z-index: 1; position: relative;">
+                             style="outline: none !important; z-index: 1; position: relative; word-break: break-all;">
                         </div>
 
                         <!-- Note link -->
@@ -258,10 +254,10 @@
                              vocal-synthesis
                              regle-style="page" tags="listTagsByProfil" apply-rules="forceApplyRules"
                              class="resetAll doc-apercu {{currentProfile.data.className}}"
-                             style="outline: none !important; z-index: 1; position: relative;"
-                             text="{{currentContent}}"
+                             style="outline: none !important; z-index: 1; position: relative; word-break: break-all;"
                              profile-coloration
                              profile="currentProfile"
+                             text="currentContent"
                              data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)"
                              data-show-loader="showAdaptationLoaderFromLoop($index)"
                              data-hide-loader="hideAdaptationLoaderFromLoop($index, content.length)"

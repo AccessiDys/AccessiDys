@@ -53,9 +53,7 @@
 
             <strong profile-coloration
                     profile="currentProfile"
-                    text-livereload="true"
-                    parent="#profile-edit-modal-success-toaster"
-                    text="{{toasterMsg}}"
+                    text="toasterMsg"
                     class="{{currentProfile.data.className}}">
             </strong>
         </div>
@@ -84,7 +82,7 @@
                         <div class="resetAll {{tmpProfile.data.className}} preview"
                              profile-coloration
                              profile="tmpProfile"
-                             text="{{getDisplayedText(profileTag)}}" >
+                             text="getDisplayedText(profileTag)" >
                         </div>
                     </td>
                     <td style="width: 20px;">

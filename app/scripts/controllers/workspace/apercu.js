@@ -381,6 +381,8 @@ angular.module('cnedApp')
 
             $scope.resetLines();
 
+            $log.debug('set page', $scope.content);
+
             if (pageIndex >= 0 && pageIndex < $scope.content.length) {
                 $scope.currentPage = pageIndex;
                 $scope.currentContent = $scope.content[$scope.currentPage];
@@ -476,7 +478,7 @@ angular.module('cnedApp')
          * ---------- Process of populating -----------
          */
 
-        /**
+        /** // TODO a mutualiser
          * Load the npages of the pdf as a image in the editor
          *
          * @param pdf
@@ -532,7 +534,7 @@ angular.module('cnedApp')
             });
         };
 
-        /**
+        /** // TODO a mutualiser
          * This function allows to handle a pdf by the bookmarklet.
          */
         $scope.loadPdfByLien = function (url) {
@@ -557,25 +559,6 @@ angular.module('cnedApp')
         };
 
 
-        var test = function (htmlContent) {
-
-            $log.debug('test flattenng web page', htmlContent);
-
-
-            var root = angular.element('<div>' + htmlContent + '</div>');
-
-
-            var test = htmlContent;
-
-            test = test.replace(/(<div(?:.*?)>)/gi, '');
-            test = test.replace(/(<\/div>)/gi, '');
-
-
-            $log.debug('DOM element AFTER', test);
-
-        };
-
-
         /**
          * Recover the html contents of a page
          *
@@ -590,7 +573,6 @@ angular.module('cnedApp')
             // accents
             return serviceCheck.htmlPreview(encodeURI(url)).then(function (htmlFile) {
 
-
                 if (htmlFile && htmlFile.documentHtml && htmlFile.documentHtml.indexOf('<title>') > -1) {
                     $scope.urlTitle = UtilsService.cleanUpSpecialChars(htmlFile.documentHtml.substring(htmlFile.documentHtml.indexOf('<title>') + 7, htmlFile.documentHtml.indexOf('</title>')));
                     htmlFile.documentHtml = processLink(htmlFile.documentHtml);
@@ -602,9 +584,11 @@ angular.module('cnedApp')
 
             }).then(function (resultClean) {
 
+                $log.debug('result clean', resultClean);
+
                 $scope.originalHtml = resultClean;
 
-                $scope.content = workspaceService.parcourirHtml(resultClean, $scope.urlHost, $scope.urlPort);
+                $scope.content = ['', resultClean];//workspaceService.parcourirHtml(resultClean, $scope.urlHost, $scope.urlPort);
                 $scope.setPage($scope.currentPage);
             }, function (err) {
                 $log.error('err transform html', err);
@@ -703,6 +687,7 @@ angular.module('cnedApp')
             if ($scope.idDocument) {
                 fileStorageService.get($scope.idDocument, 'document').then(function (file) {
 
+                    $log.debug('get document by id', file);
                     $scope.document = file;
                     $scope.content = workspaceService.parcourirHtml(file.data);
 
@@ -977,9 +962,8 @@ angular.module('cnedApp')
 
                 fileStorageService.shareFile($scope.document.filepath)
                     .then(function (shareLink) {
-                        itemToShare.linkToShare = 'https://' + window.location.host + '/#/apercu?title=' + encodeURIComponent($scope.document.filename) + '&url=' + encodeURIComponent(shareLink);
+                        itemToShare.linkToShare = 'https://' + window.location.host + '/#/apercu?title=' + encodeURIComponent($scope.document.filename) + '&url=' + encodeURIComponent(shareLink.url);
 
-                        //$scope.encodedLinkFb = $scope.docApartager.lienApercu.replace('#', '%23');
                         UtilsService.openSocialShareModal('document', itemToShare)
                             .then(function () {
                                 // Modal close
@@ -987,6 +971,13 @@ angular.module('cnedApp')
                             }, function () {
                                 // Modal dismiss
                             });
+
+                    }, function(res){
+                        if(res.error === 'email_not_verified'){
+                            ToasterService.showToaster('#overview-error-toaster', 'dropbox.message.error.share.emailnotverified');
+                        } else {
+                            ToasterService.showToaster('#overview-error-toaster', 'dropbox.message.error.share.ko');
+                        }
 
                     });
 

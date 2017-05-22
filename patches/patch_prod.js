@@ -91,5 +91,9 @@ function updateProfiles(cb) {
         });
 }
 
+function updateTags () {
+
+}
+
 
 

@@ -43,7 +43,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                  */
                 var bindHtmlWatcher = function () {
                     if (!htmlWatcher) {
-                        $log.debug('bind html watcher');
                         htmlWatcher = $rootScope.$watch(function () {
                             return element.html().length;
                         }, function (newValue, oldValue) {
@@ -86,8 +85,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                     if (htmlWatcher) {
                         htmlWatcher();
                         htmlWatcher = null;
-
-                        $log.debug('destroy html watcher', htmlWatcher);
                     }
 
                     $timeout(function () {
@@ -107,7 +104,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                     var ref = angular.element(elem);
                                     var textTransform = ref.html();
 
-                                    $log.debug('html span', textTransform);
 
                                     var rangyCursorPattern = /((&nbsp;)*<span id(.*?)\/span>)/gi;
 
@@ -138,7 +134,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                     textTransform = textTransform.replace(/&nbsp;/gi, ' %%NB%% ');
                                     textTransform = UtilsService.removeSpan(textTransform);
 
-                                    $log.debug('remove span ', textTransform);
 
                                     // Split Text
                                     switch (coloration) {
@@ -167,8 +162,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
                                             break;
                                     }
-
-                                    $log.debug('split ', textTransform);
 
 
                                     // Restore rangy cursor

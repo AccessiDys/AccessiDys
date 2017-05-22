@@ -141,23 +141,22 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         urlHost = host;
         urlPort = port;
         retContent = [];
-        retContent[0] = '<h1>Sommaire</h1><br />';
+        retContent[0] = '<h1>Sommaire</h1><br/>';
+
+        $log.debug('parcourirHtml data = ', data);
 
         if(data) {
-            data = data.replace(/<span(.*?)>/gi, '');
-            data = data.replace(/<\/span>/gi, '');
-
             var pages = self.splitPages(data);
+
+            $log.debug('parcourirHtml splitPages = ', pages);
 
             for (var page = 0; page < pages.length; page++) {
                 var block = 0;
-
-
-                //retContent.push(pages[page]);
                 var element = angular.element(pages[page]);
 
 
                 angular.forEach(element, function (element) {
+
                     $rootScope.tags.forEach(function (tag) {
                         if (element.localName === tag.balise) {
                             if (tag.balise === 'div') {
@@ -225,6 +224,7 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
      * @method $scope.processElement
      */
     this.processElement = function (element, tag, page, block) {
+
         page++;
         generatePlan(element, tag, page, block);
         element.id = block;

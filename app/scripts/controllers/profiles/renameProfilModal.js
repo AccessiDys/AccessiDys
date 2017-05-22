@@ -25,8 +25,8 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $uibModalInstance, ToasterService, profilsService, profile) {
-    $scope.profile = profile;
+angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $uibModalInstance, ToasterService, profilsService, $log, profile) {
+    $scope.profile = angular.copy(profile);
     $scope.profileName = profile.data.nom;
 
     /**
@@ -34,14 +34,18 @@ angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($sc
      */
     $scope.closeModal = function () {
 
-        if (!$scope.profile.data.nom || $scope.profile.data.nom.length < 1) {
 
+        if (!$scope.profile.data.nom || $scope.profile.data.nom.length < 1) {
+            // Check if the name is valid
             ToasterService.showToaster('#rename-profile-success-toaster', 'profile.message.save.ko.name.mandatory');
 
-        } else {
-
-            profilsService.lookForExistingProfile(profile)
+        } else if ($scope.profile.data.nom.trim() !== $scope.profileName.trim() && $scope.profile.data.nom.trim() !== $scope.profile.filename.trim()) {
+            // If a change is detected on profile name check if already exist
+            profilsService.lookForExistingProfile($scope.profile)
                 .then(function (res) {
+
+                    $log.debug('lookForExistingProfile', res);
+
                     if (!res) {
                         $uibModalInstance.close({
                             profile: $scope.profile
@@ -50,6 +54,11 @@ angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($sc
                         ToasterService.showToaster('#rename-profile-success-toaster', 'profile.message.save.ko.name.alreadyexist');
                     }
                 });
+        } else {
+            // if there is no change
+            $uibModalInstance.close({
+                profile: $scope.profile
+            });
         }
     };
 

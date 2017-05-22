@@ -59,6 +59,7 @@
                     <div class="storage-container" data-ng-class="{'active': selectedStorage.provider === storage.provider}">
                         <i class="fa fa-dropbox" aria-hidden="true" data-ng-if="storage.provider === 'dropbox'"
                            data-ng-click="selectStorage(storage)"></i>
+                        <div>{{storage.name}}</div>
                     </div>
                 </div>
             </slick>
@@ -72,6 +73,7 @@
 
             <div class="selected-storage col-md-12 text-center mb-25">
                 <i class="fa fa-dropbox" aria-hidden="true" data-ng-if="selectedStorage.provider === 'dropbox'"></i>
+                <div>{{selectedStorage.name}}</div>
             </div>
 
         </div>

@@ -30,16 +30,19 @@
  */
 angular.module('cnedApp').directive('profileColoration',
 
-    function (UtilsService, $timeout, $compile) {
+    function (UtilsService, $timeout, $compile, $log) {
         return {
             restrict: 'A',
             scope: {
-                profile: '=profile',
-                textLivereload: '=textLivereload',
-                text: '@',
-                parent: '@'
+                profile: '=',
+                text: '='
             },
             link: function (scope, element) {
+
+                //$log.debug('bind directive ', scope.text);
+
+                var profileWatcher = null;
+                var textWatcher = null;
 
 
                 var splitByLines = function (balise, maxLines) {
@@ -74,14 +77,16 @@ angular.module('cnedApp').directive('profileColoration',
                 };
 
                 var generateColoration = function () {
-                    $timeout(function () {
 
-                        if(scope.profile){
+                    //$log.debug('generateColoration - scope.profile', scope.profile);
+                    //$log.debug('generateColoration - scope.text', scope.text);
+
+                    $timeout(function(){
+                        if (scope.profile) {
                             element.html(scope.text);
-                            $compile(element.contents())(scope);
 
                             var profile = scope.profile.data;
-                            var text = element.html();
+                            var text = scope.text;
 
 
                             if (profile && text) {
@@ -122,34 +127,30 @@ angular.module('cnedApp').directive('profileColoration',
                             }
                         }
 
+                        if (!textWatcher) {
+                            textWatcher = scope.$watch('text', function (newValue, oldValue) {
+                                if (newValue !== oldValue) {
+                                    generateColoration();
+                                }
+                            }, true);
+                        }
 
+                        if (!profileWatcher) {
+                            profileWatcher = scope.$watch('profile.data', function (newValue, oldValue) {
+                                if (newValue !== oldValue) {
+                                    generateColoration();
+                                }
+                            }, true);
+                        }
                     }, 100);
+
+
+
+
                 };
 
+                generateColoration();
 
-                if (scope.textLivereload) {
-
-                    scope.$watch(function () {
-                        return angular.element(document.querySelector(scope.parent)).css('display');
-                    }, function (newValue) {
-                        if (newValue === 'block') {
-                            generateColoration();
-                        }
-                    });
-
-                    scope.$watch('profile', function () {
-                        generateColoration();
-                    }, true);
-
-                } else {
-                    scope.$watch('profile', function () {
-                        generateColoration();
-                    }, true);
-
-                    scope.$watch('text', function () {
-                        generateColoration();
-                    }, true);
-                }
 
             }
         };

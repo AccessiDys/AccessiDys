@@ -1563,21 +1563,21 @@ a.navbar-brand {
 
 .my-backup-page .storage-container{
     width: 70px;
-    height: 70px;
     cursor: pointer;
     text-align: center;
     padding: 5px;
+    font-weight: bold;
 }
 
 .my-backup-page .selected-storage{
-    height: 70px;
-    cursor: pointer;
+    min-height: 70px;
     text-align: center;
     padding: 5px;
 }
 
 .storage-container.active{
     background-color: #086e80;
+    color: #fff;
 }
 
 .storage-container.active i{
@@ -1603,5 +1603,15 @@ a.navbar-brand {
     font-family: inherit;
     font-size: 100%;
     margin: 20px 0;
+}
+
+mark {
+    background: none !important;
+    padding: 0;
+    margin: 0;
+}
+
+blockquote {
+    padding-top: 0;
 }
 

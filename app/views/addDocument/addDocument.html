@@ -33,9 +33,7 @@
 
             <strong profile-coloration
                     profile="currentProfile"
-                    text-livereload="true"
-                    parent="#document-success-toaster"
-                    text="{{toasterMsg}}"
+                    text="toasterMsg"
                     class="{{currentProfile.data.className}}">
             </strong>
         </div>
@@ -45,9 +43,7 @@
 
             <strong profile-coloration
                     profile="currentProfile"
-                    text-livereload="true"
-                    parent="#document-error-toaster"
-                    text="{{toasterMsg}}"
+                    text="toasterMsg"
                     class="{{currentProfile.data.className}}">
             </strong>
         </div>
@@ -87,7 +83,7 @@
 
 
             <div text-angular
-                 ta-toolbar="[['h1','h2','h3', 'h4', 'h5', 'h6', 'p'],['bold','italics', 'underline', 'strikeThrough', 'ul', 'ol'], ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'pageBreak', 'insertImage']]"
+                 ta-toolbar="[['h1','h2','h3', 'h4', 'h5', 'h6', 'p'],['bold','italics', 'underline', 'strikeThrough', 'ul', 'ol'], ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'pageBreak',  'insertImage', 'ocr']]"
                  ta-text-editor-setup="textAngularSetup"
                  ng-model="document.data"
                  class="{{currentProfile.data.className}}"></div>

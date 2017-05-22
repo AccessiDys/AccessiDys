@@ -71,6 +71,9 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
             abstract: true,
             controller: 'CommonCtrl',
             resolve: {
+                tags: function (tagsService) {
+                    return tagsService.getTags();
+                },
                 userData: function (UserService, $log) {
                     $log.debug('Init user data');
                     return UserService.init();
@@ -166,13 +169,15 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
                     return CacheProvider.getItem('myBackupRouteData').then(function (routeData) {
 
                         CacheProvider.setItem(null, 'myBackupRouteData');
-
-
                         if ($stateParams.auth) {
 
 
                             return OauthService.token().then(function (res) {
                                 return UserService.saveData(res.data).then(function () {
+
+                                    UserService.init().then(function(userData){
+                                        $rootScope.userData = userData;
+                                    });
 
                                     CacheProvider.getItem('documentsToSynchronize').then(function (items) {
 
@@ -258,31 +263,51 @@ angular.module('cnedApp').config(['$compileProvider',
 ]);
 
 angular.module('cnedApp').config(function ($provide) {
-    $provide.decorator('taOptions', ['taRegisterTool', '$delegate', function (taRegisterTool, taOptions) {
-        // $delegate is the taOptions we are decorating
-        // register the tool with textAngular
-        taRegisterTool('pageBreak', {
-            buttontext: 'Saut de page',
-            action: function () {
-                this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
-            }
-        });
-        // add the button to the default toolbar definition
-        taOptions.toolbar[1].push('pageBreak');
+    $provide.decorator('taOptions', ['taRegisterTool', 'taSelection', 'taBrowserTag', 'taTranslations',
+        'taToolFunctions', '$delegate',
+        function (taRegisterTool, taSelection, taBrowserTag, taTranslations,
+                  taToolFunctions, taOptions) {
+            // $delegate is the taOptions we are decorating
+            // register the tool with textAngular
+            taRegisterTool('pageBreak', {
+                buttontext: 'Saut de page',
+                action: function () {
+                    this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
+                }
+            });
+            // add the button to the default toolbar definition
+            taOptions.toolbar[1].push('pageBreak');
 
 
-        /*taRegisterTool('ocr', {
-            buttontext: "Océrisation",
-            action: function () {
-                this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
-            }
-        });
-        // add the button to the default toolbar definition
-        taOptions.toolbar[1].push('pageBreak');*/
+            /*taRegisterTool('ocr', {
+                buttontext: 'Océrisation',
+                action: function () {
+                    this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
+                },
+                disabled: function () {
+                    console.log('selection =', taSelection.getSelection());
+
+                    var selection = taSelection.getSelection();
+
+                    if(selection && selection.container && selection.container.children){
 
 
-        return taOptions;
-    }]);
+                        for(var i = 0 ; i < selection.container.children.length ; i++){
+                            console.log('children', selection.container.children[i]);
+                        }
+
+                    }
+
+                    return true;
+
+                }
+            });
+            // add the button to the default toolbar definition
+            taOptions.toolbar[1].push('ocr');*/
+
+
+            return taOptions;
+        }]);
 });
 
 

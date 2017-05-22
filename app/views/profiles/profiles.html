@@ -24,17 +24,14 @@
 
 <h1 id="titreProfile" class="animated fadeInLeft" translate>Profils</h1>
 <div class="content" id="global_container">
-    <div id="profilePage" data-ng-init="initProfil()" document-methodes=""
-         class="doc-General">
+    <div id="profilePage" data-ng-init="initProfil()" document-methodes="" class="doc-General">
 
         <div class="alert-block alert-success alert-dismissable " id="profile-success-toaster">
             <i class="fa fa-check" aria-hidden="true"></i>
 
             <strong profile-coloration
                     profile="currentProfile"
-                    text-livereload="true"
-                    parent="#profile-success-toaster"
-                    text="{{toasterMsg}}"
+                    text="toasterMsg"
                     class="{{currentProfile.data.className}}">
             </strong>
         </div>
@@ -45,9 +42,7 @@
 
             <strong profile-coloration
                     profile="currentProfile"
-                    text-livereload="true"
-                    parent="#profile-error-toaster"
-                    text="{{toasterMsg}}"
+                    text="toasterMsg"
                     class="{{currentProfile.data.className}}">
             </strong>
         </div>
@@ -188,7 +183,7 @@
                          data-ng-repeat="profileTag in profile.data.profileTags"
                          profile-coloration
                          profile="profile"
-                         text="{{getDisplayedText(profileTag)}}">
+                         text="getDisplayedText(profileTag)">
                     </div>
                 </td>
             </tr>

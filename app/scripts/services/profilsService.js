@@ -25,8 +25,8 @@
 'use strict';
 
 angular.module('cnedApp').service('profilsService', function ($http, configuration, fileStorageService,
-                                            $localForage, synchronisationStoreService, $rootScope,
-                                            $uibModal, $log, $q, UtilsService, UserService, CacheProvider, _) {
+                                                              $localForage, synchronisationStoreService, $rootScope,
+                                                              $uibModal, $log, $q, UtilsService, UserService, CacheProvider, _) {
 
     /**
      * Add the given profile.
@@ -38,39 +38,63 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
 
         var profileToSave = angular.copy(profile);
 
-        profileToSave.data.updated = new Date();
-        profileToSave.filename = profileToSave.data.nom;
-        profileToSave.data.className = this.generateClassName(profileToSave, false);
-
-        for (var i = 0; i < profileToSave.data.profileTags.length; i++) {
-            delete profileToSave.data.profileTags[i].tagDetail;
+        if (profileToSave.data.profileTags) {
+            for (var i = 0; i < profileToSave.data.profileTags.length; i++) {
+                delete profileToSave.data.profileTags[i].tagDetail;
+            }
         }
 
         $log.debug('Save Profile', profileToSave);
 
-        if (profileToSave.data._id && $rootScope.isAppOnline) {
-            // send profile to accessidys backend
-            if (profileToSave.data._id) {
-                // Update mode
-                return this.update(profileToSave).then(function (res) {
-                    deferred.resolve(res.data);
-                }, function () {
-                    deferred.reject();
-                });
+        if (profileToSave.data._id) {
+
+            profileToSave.filename = profileToSave.data.nom;
+
+            // Profile stored in accessidys backend
+            if ($rootScope.isAppOnline) {
+                // send profile to accessidys backend
+                if (profileToSave.data._id) {
+                    // Update mode
+                    this.update(profileToSave).then(function (res) {
+
+                        deferred.resolve(res.data);
+                    }, function () {
+                        deferred.reject();
+                    });
+                } else {
+                    // Create mode
+                    this.create(profileToSave).then(function (res) {
+                        deferred.resolve(res.data);
+                    }, function () {
+                        deferred.reject();
+                    });
+                }
             } else {
-                // Create mode
-                return this.create(profileToSave).then(function (res) {
-                    deferred.resolve(res.data);
+                fileStorageService.save(profileToSave, 'profile').then(function (res) {
+                    deferred.resolve(res);
                 }, function () {
                     deferred.reject();
                 });
             }
+
         } else {
-            fileStorageService.save(profileToSave, 'profile').then(function (res) {
-                deferred.resolve(res);
-            }, function () {
-                deferred.reject();
-            });
+            // profile stored in external storage
+
+            if (profileToSave.filename !== profileToSave.data.nom) {
+
+                fileStorageService.rename(profileToSave, profileToSave.data.nom, 'profile').then(function (res) {
+                    deferred.resolve(res);
+                }, function () {
+                    deferred.reject();
+                });
+
+            } else {
+                fileStorageService.save(profileToSave, 'profile').then(function (res) {
+                    deferred.resolve(res);
+                }, function () {
+                    deferred.reject();
+                });
+            }
         }
 
         return deferred.promise;
@@ -139,17 +163,19 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
 
 
     /**
-     * Look for a profile of the same name.
-     *
-     * @param profil
-     *            le profil
+     * Looking for a profile which have the same name
+     * @param profile
+     * @returns {*|Promise}
      */
     this.lookForExistingProfile = function (profile) {
 
         return fileStorageService.list('profile').then(function (profiles) {
+            $log.debug('lookForExistingProfile - profiles', profiles);
+            $log.debug('lookForExistingProfile - profile', profile);
+
             var isFound = false;
             _.each(profiles, function (item) {
-                if (profile.data.nom === item.filename) {
+                if (profile.data.nom === item.data.nom) {
                     isFound = true;
                 }
             });
@@ -218,12 +244,7 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
             headers: {
                 'AccessiDys-user': UserService.getData().email
             }
-        }).then(function (res) {
-
-            return res.data;
-
         }), fileStorageService.list('profile').then(function (files) {
-
             var userProfiles = [];
 
             if (files) {
@@ -234,17 +255,37 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
                 }
             }
 
-
             return $q.all(userProfiles);
 
         })]).then(function (res) {
+            var defaultProfiles = res[0].data;
 
-            var result = res[0].concat(res[1]);
+            var result = res[1];
 
-            CacheProvider.saveAll(result, 'listProfile').then(function () {
-            });
+            for (var i = 0; i < defaultProfiles.length; i++) {
+                var isFound = false;
+
+                for (var v = 0; v < result.length; v++) {
+
+                    if (result[v].filename === defaultProfiles[i].filename) {
+                        isFound = true;
+                        break;
+                    }
+                }
+
+                if (isFound) {
+                    result[v] = defaultProfiles[i];
+                } else {
+                    result.push(defaultProfiles[i]);
+                }
+            }
+            CacheProvider.saveAll(result, 'listProfile');
+
+            $log.debug('ProfilesService - getProfiles - result', result);
 
             return result;
+        }, function () {
+            return fileStorageService.list('profile');
         });
     };
 

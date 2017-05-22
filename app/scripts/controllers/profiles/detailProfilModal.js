@@ -29,13 +29,15 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
                                                                              ToasterService, UserService, UtilsService, LoaderService,
                                                                              fileStorageService, $log, template, profile) {
     $scope.template = template;
-    $scope.profile = profile;
-    $rootScope.tmpProfile = angular.copy(profile);
+    $scope.profile = angular.copy(profile);
+    $rootScope.tmpProfile = $scope.profile;
 
     $log.debug('$rootScope.tmpProfile', $rootScope.tmpProfile);
 
-    $scope.currentStyle = {};
-
+    /**
+     * Checking required fields before saving
+     * @returns {boolean} Return true if is valid
+     */
     var checkRequiredFields = function () {
         var isValid = true;
 
@@ -47,10 +49,10 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
         return isValid;
     };
 
-    var reset = function () {
-        $scope.profile = profile;
-    };
-
+    /**
+     * Edit a tag of the current profile
+     * @param index
+     */
     $scope.editTag = function (index) {
         $uibModalInstance.close({
             operation: 'edit-tag',
@@ -60,6 +62,9 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
         });
     };
 
+    /**
+     * Edit the name of the current profile
+     */
     $scope.editName = function () {
         $uibModalInstance.close({
             operation: 'rename',
@@ -68,16 +73,22 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
         });
     };
 
+    /**
+     * Dismiss the current modal
+     * @param operation
+     */
     $scope.dismissModal = function (operation) {
         $uibModalInstance.dismiss({
             operation: operation,
             template: $scope.template,
-            profile: $scope.profile
+            profile: $scope.profile,
+            oldProfile: profile
         });
-
-        reset();
     };
 
+    /**
+     * Save the current profile
+     */
     $scope.save = function () {
 
         if (checkRequiredFields()) {
@@ -92,9 +103,15 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
 
                     if ((!res && $scope.template !== 'update') || ($scope.template === 'update')) {
 
+                        $scope.profile.data.updated = new Date();
+                        $scope.profile.data.className = profilsService.generateClassName($scope.profile, false);
+
+                        if($scope.template === 'duplicate' || $scope.template === 'create'){
+                            $scope.profile.filename = $scope.profile.data.nom;
+                        }
+
                         profilsService.saveProfile($scope.profile)
                             .then(function (savedProfile) {
-
                                 $scope.profile.filename = savedProfile.filename;
                                 $scope.profile.provider = savedProfile.provider;
                                 $scope.profile.filepath = savedProfile.filepath;

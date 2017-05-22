@@ -51,7 +51,7 @@ angular.module('cnedApp').controller('EditTagModalCtrl', function ($scope, $uibM
             'libelle': 'Titre4'
         },
         {
-            'balise': 'h3',
+            'balise': 'h5',
             'libelle': 'Titre5'
         },
         {
@@ -79,8 +79,24 @@ angular.module('cnedApp').controller('EditTagModalCtrl', function ($scope, $uibM
             'libelle': 'Indice'
         },
         {
-            'balise': 'div',
-            'libelle': 'Autre'
+            'balise': 'mark',
+            'libelle': 'Annotation'
+        },
+        {
+            'balise': 'summary',
+            'libelle': 'Légende'
+        },
+        {
+            'balise': 'blockquote',
+            'libelle': 'Citation'
+        },
+        {
+            'balise': 'footer',
+            'libelle': 'Pied de page'
+        },
+        {
+            'balise': 'header',
+            'libelle': 'Entête de page'
         }
     ];
 

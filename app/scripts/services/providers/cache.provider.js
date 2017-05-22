@@ -26,7 +26,7 @@
 'use strict';
 
 angular.module('cnedApp').factory('CacheProvider',
-    function ($q, $localForage, _) {
+    function ($q, $localForage, _, $log) {
 
         return {
             list: function (storageName) {
@@ -79,6 +79,8 @@ angular.module('cnedApp').factory('CacheProvider',
             },
             saveAll: function (files, storageName) {
                 var deferred = $q.defer();
+
+                $log.debug('Save all profiles', files);
 
                 $localForage.setItem(storageName, files).then(function () {
                     deferred.resolve(files);

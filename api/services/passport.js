@@ -79,7 +79,8 @@ module.exports = function (passport) {
             clientID: DROPBOX_CLIENT_ID,
             clientSecret: DROPBOX_CLIENT_SECRET,
             callbackURL: URL_REQUEST + '/auth/dropbox/callback',
-            passReqToCallback: true
+            passReqToCallback: true,
+            authorizationURL: 'https://www.dropbox.com/oauth2/authorize?force_reauthentication=true'
         },
 
         function (req, accessToken, refreshToken, profile, done) {

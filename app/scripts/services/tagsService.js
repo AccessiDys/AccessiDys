@@ -24,9 +24,8 @@
  */
 'use strict';
 
-var cnedApp = cnedApp;
 
-cnedApp.service('tagsService', function ($http, $uibModal, CacheProvider) {
+angular.module('cnedApp').service('tagsService', function ($http, $uibModal, CacheProvider) {
     this.getTags = function () {
         return $http.get('/readTags').then(function (result) {
             return CacheProvider.setItem(result.data, 'listTags').then(function () {

@@ -192,6 +192,7 @@ angular.module('cnedApp')
                 $scope.initDetailProfil();
             }
 
+            // TODO to be reviewed
             if ($stateParams.file) {
                 $log.debug('save profile storage ok', $stateParams.file);
                 $timeout(function () {
@@ -210,7 +211,7 @@ angular.module('cnedApp')
          */
         $scope.openProfileModal = function (template, profile) {
             var modalInstance = $uibModal.open({
-                templateUrl: 'views/profiles/profilAffichageModal.html',
+                templateUrl: 'views/profiles/profilAffichageModal.html', // TODO change the file name
                 controller: 'profilesAffichageModalCtrl',
                 windowClass: 'profil-lg',
                 backdrop: true,
@@ -251,13 +252,12 @@ angular.module('cnedApp')
             }, function (params) {
                 // Modal dismissed
                 if (params.operation && params.operation === 'save') {
-                    $scope.initProfil();
-
                     $log.debug('updated profile', params.profile);
-                    if (params.template === 'update') {
+                    params.profile.showed = true;
 
+                    if (params.template === 'update') {
                         for (var i = 0; i < $rootScope.profiles.length; i++) {
-                            if ((params.profile.data._id && $rootScope.profiles[i].data._id === params.profile.data._id) || (params.profile.filepath && $rootScope.profiles[i].filepath === params.profile.filepath)) {
+                            if ((params.profile.data._id && $rootScope.profiles[i].data._id === params.profile.data._id) || (params.oldProfile.filename && $rootScope.profiles[i].filename === params.oldProfile.filename)) {
                                 $rootScope.profiles[i] = params.profile;
                                 break;
                             }
@@ -265,6 +265,7 @@ angular.module('cnedApp')
                     } else {
                         $rootScope.profiles.push(params.profile);
                     }
+
 
                     if (!UserService.getData().token) {
                         ToasterService.showToaster('#profile-success-toaster', 'profile.message.save.cache.ok');
@@ -342,13 +343,10 @@ angular.module('cnedApp')
             UtilsService.openConfirmModal(gettextCatalog.getString('profile.label.delete.title'),
                 gettextCatalog.getString('profile.label.delete.anwser').replace('profile.name', profile.data.nom), true)
                 .then(function () {
-                    LoaderService.showLoader('profile.message.info.delete.inprogress', true);
-                    LoaderService.setLoaderProgress(30);
+                    LoaderService.showLoader('profile.message.info.delete.inprogress', false);
 
                     profilsService.deleteProfil(profile)
                         .then(function () {
-
-                            $log.debug('Delete profile success');
                             for (var i = 0; i < $rootScope.profiles.length; i++) {
                                 if ((profile.data._id && $rootScope.profiles[i].data._id === profile.data._id) || ( profile.filepath && $rootScope.profiles[i].filepath === profile.filepath )) {
                                     $rootScope.profiles.splice(i, 1);
@@ -360,12 +358,9 @@ angular.module('cnedApp')
                                 $rootScope.currentProfile = $rootScope.profiles[0];
                                 CacheProvider.setItem($rootScope.profiles[0], 'currentProfile');
                             }
-
-                            LoaderService.setLoaderProgress(100);
                             LoaderService.hideLoader();
+                            ToasterService.showToaster('#profile-success-toaster', 'profile.message.info.delete.ok');
                         }, function () {
-
-                            LoaderService.setLoaderProgress(100);
                             LoaderService.hideLoader();
                         });
                 });
@@ -404,7 +399,7 @@ angular.module('cnedApp')
                 } else {
                     fileStorageService.shareFile(profile.filepath)
                         .then(function (shareLink) {
-                            itemToShare.linkToShare = 'https://' + window.location.host + '/#/detailProfil?url=' + encodeURIComponent(shareLink);
+                            itemToShare.linkToShare = 'https://' + window.location.host + '/#/detailProfil?url=' + encodeURIComponent(shareLink.url);
 
                             UtilsService.openSocialShareModal('profile', itemToShare)
                                 .then(function () {
@@ -414,6 +409,12 @@ angular.module('cnedApp')
                                     // Modal dismiss
                                 });
 
+                        }, function (res) {
+                            if (res.error === 'email_not_verified') {
+                                ToasterService.showToaster('#profile-error-toaster', 'dropbox.message.error.share.emailnotverified');
+                            } else {
+                                ToasterService.showToaster('#profile-error-toaster', 'dropbox.message.error.share.ko');
+                            }
                         });
                 }
 
@@ -683,28 +684,28 @@ angular.module('cnedApp')
         $scope.initDetailProfil = function () {
             if ($stateParams.idProfil) {
 
-                tagsService.getTags().then(function (tags) {
-                    $rootScope.tags = tags;
+                profilsService.getProfile($stateParams.idProfil).then(function (profile) {
 
-                    profilsService.getProfile($stateParams.idProfil).then(function (profile) {
+                    if (profile) {
+                        profile.data.className = profilsService.generateClassName(profile, false);
 
-                        if (profile) {
-                            profile.data.className = profilsService.generateClassName(profile, false);
-
-                            _.each(profile.data.profileTags, function (item) {
-                                item.tagDetail = _.find($rootScope.tags, function (tag) {
-                                    return item.tag === tag._id;
-                                });
+                        _.each(profile.data.profileTags, function (item) {
+                            item.tagDetail = _.find($rootScope.tags, function (tag) {
+                                return item.tag === tag._id;
                             });
+                        });
 
-                            profile.data.profileTags.sort(function (a, b) {
-                                return a.tagDetail.position - b.tagDetail.position;
-                            });
+                        profile.data.profileTags.sort(function (a, b) {
+                            return a.tagDetail.position - b.tagDetail.position;
+                        });
 
-                            $scope.detailProfil = profile;
-                        }
+                        $log.debug('detailProfil', profile);
 
-                    });
+                        $scope.detailProfil = profile;
+                        $scope.detailProfil.data.className = profilsService.generateClassName($scope.detailProfil, true);
+                        $rootScope.tmpProfile = angular.copy($scope.detailProfil);
+                    }
+
                 });
             } else if ($stateParams.url) {
 
@@ -712,6 +713,16 @@ angular.module('cnedApp')
                     $scope.detailProfil = {
                         data: res.data
                     };
+
+                    _.each($scope.detailProfil.data.profileTags, function (item) {
+                        item.tagDetail = _.find($rootScope.tags, function (tag) {
+                            return item.tag === tag._id;
+                        });
+                    });
+
+                    $scope.detailProfil.data.profileTags.sort(function (a, b) {
+                        return a.tagDetail.position - b.tagDetail.position;
+                    });
 
                     $scope.detailProfil.data.className = profilsService.generateClassName($scope.detailProfil, true);
                     $rootScope.tmpProfile = angular.copy($scope.detailProfil);
@@ -795,10 +806,9 @@ angular.module('cnedApp')
 
         $scope.create = function () {
 
-            var profileToCreate = profileCopy($rootScope.defaultSystemProfile);
+            var profileToCreate = copyProfileForCreation($rootScope.defaultSystemProfile);
+
             profileToCreate.data.nom = $scope.generateProfileName(UserService.getData().firstName || 'Profil', 0, 0);
-            profileToCreate.data.owner = UserService.getData().email;
-            profileToCreate.data.className = profilsService.generateClassName(profileToCreate, true);
 
             $scope.openProfileModal('create', profileToCreate);
 
@@ -817,15 +827,16 @@ angular.module('cnedApp')
             Analytics.trackPage('/profile/update.html');
         };
 
+        /**
+         * Duplicate a profile
+         * @param profile The profile to be duplicate
+         */
         $scope.duplicate = function (profile) {
-
             $scope.oldProfil = profile;
 
-            var profileToDuplicate = profileCopy(profile);
+            var profileToDuplicate = copyProfileForCreation(profile);
             profileToDuplicate.data.nom += ' Copie';
             profileToDuplicate.data.descriptif += ' Copie';
-            profileToDuplicate.data.owner = UserService.getData().email;
-            profileToDuplicate.data.className = profilsService.generateClassName(profileToDuplicate, true);
 
             $scope.openProfileModal('duplicate', profileToDuplicate);
 
@@ -833,22 +844,37 @@ angular.module('cnedApp')
             Analytics.trackPage('/profile/duplicate.html');
         };
 
-        var profileCopy = function (profile) {
+        /**
+         * Create new profile object based another profile
+         * @param profile
+         * @returns {*}
+         */
+        var copyProfileForCreation = function (profile) {
 
-            var res = angular.copy(profile);
+            var res = {
+                filename: null,
+                filepath: null,
+                data: null
+            };
 
-            delete res.data._id;
-            delete res.data.delegated;
-            delete res.data.preDelegated;
-            delete res.data.state;
-            delete res.data.isFavourite;
+            if (profile && profile.data) {
+                res.data = angular.copy(profile.data);
+                res.data.owner = UserService.getData().email;
+                res.data.className = profilsService.generateClassName(res, true);
 
-            for (var i = 0; i < res.data.profileTags.length; i++) {
-                delete res.data.profileTags[i]._id;
-                delete res.data.profileTags[i].profil;
+                delete res.data._id;
+                delete res.data.delegated;
+                delete res.data.preDelegated;
+                delete res.data.state;
+                delete res.data.isFavourite;
+
+                for (var i = 0; i < res.data.profileTags.length; i++) {
+                    delete res.data.profileTags[i]._id;
+                    delete res.data.profileTags[i].profil;
+                }
+
+                $log.debug('Profile copy', res);
             }
-
-            $log.debug('Profile copy', res);
 
             return res;
         };
