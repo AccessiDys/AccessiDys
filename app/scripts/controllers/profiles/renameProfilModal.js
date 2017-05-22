@@ -34,12 +34,11 @@ angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($sc
      */
     $scope.closeModal = function () {
 
-
         if (!$scope.profile.data.nom || $scope.profile.data.nom.length < 1) {
             // Check if the name is valid
             ToasterService.showToaster('#rename-profile-success-toaster', 'profile.message.save.ko.name.mandatory');
 
-        } else if ($scope.profile.data.nom.trim() !== $scope.profileName.trim() && $scope.profile.data.nom.trim() !== $scope.profile.filename.trim()) {
+        } else if ($scope.profile.data.nom.trim() !== $scope.profileName.trim() && $scope.profile.data.nom.trim() !== $scope.profile.filename) {
             // If a change is detected on profile name check if already exist
             profilsService.lookForExistingProfile($scope.profile)
                 .then(function (res) {

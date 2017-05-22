@@ -86,7 +86,7 @@
                 Annuler
             </button>
 
-            <button class="btn_simple light_blue" title="S'identifier" name="login_btn" data-ng-click="login()"
+            <button data-ng-class="{'btn_simple': selectedStorage.provider, 'light_blue': selectedStorage.provider, 'reset_btn': !selectedStorage.provider}" title="S'identifier" name="login_btn" data-ng-click="login()"
                     data-ng-disabled="!selectedStorage">
                 S'identifier
             </button>

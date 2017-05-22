@@ -44,7 +44,7 @@
                             style="-webkit-appearance: menulist-button; width: 215px; position: absolute; opacity: 0; height: 43px; font-size: 18px;"
                             data-ng-model="currentProfile"
                             data-ng-change="onChangeCurrentProfile(currentProfile)"
-                            ng-options="profile as profile.data.nom for profile in profiles track by $index">
+                            ng-options="profile as profile.data.nom for profile in profiles track by profile.data.nom">
 
                     </select>
 
@@ -63,18 +63,18 @@
                         Menu
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li data-ng-if="userData.isAdmin" class="regles">
+                        <li data-ng-if="userData.isAdmin" class="regles" ui-sref-active="active">
                             <a ui-sref="app.list-style"
                                id="regles_submenu" title="Styles" translate>
                                 Styles
                             </a>
                         </li>
-                        <li class="my_profils">
+                        <li class="my_profils" ui-sref-active="active">
                             <a ui-sref="app.list-profile" id="profiles_submenu" title="Mes profils" translate>
                                 Profils
                             </a>
                         </li>
-                        <li class="my_docs">
+                        <li class="my_docs" ui-sref-active="active">
                             <a ui-sref="app.list-document" id="documents_submenu" title="Mes documents" translate>
                                 Documents
                             </a>
@@ -86,7 +86,7 @@
                                 Web adapté
                             </a>
                         </li>
-                        <li class="my-backup" ui-sref-active="app.my-backup">
+                        <li class="my-backup" ui-sref-active="active">
                             <a ui-sref="app.my-backup" title="Ma sauvegarde">
                                 <i class="fa fa-floppy-o left" aria-hidden="true"></i>
                                 Ma sauvegarde

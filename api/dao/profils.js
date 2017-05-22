@@ -191,11 +191,23 @@ exports.createProfile = function (req, res) {
                     newProfile.save();
                 }
 
-                profile.data = newProfile;
-                profile.data.profileTags = profileTags;
+                Profil.findOne({
+                    _id: newProfile._id
+                })
+                    .populate('profileTags')
+                    .exec(function (err, profile) {
 
-                res.send(200, profile);
+                        if (profile) {
+                            res.send({
+                                filename: profile.nom,
+                                data: profile,
+                                provider: 'accessidys'
+                            });
+                        } else {
+                            res.send();
+                        }
 
+                    });
             } else {
                 console.log('err', err);
                 res.send({

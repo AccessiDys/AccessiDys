@@ -63,6 +63,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                                 item.tagDetail = _.find(tags, function (tag) {
                                     return item.tag === tag._id;
                                 });
+
+                                item.sampleText = '<' + item.tagDetail.balise + '>' + item.tagDetail.libelle + ' : ' + $rootScope.displayTextSimple + '</' + item.tagDetail.balise + '>';
                             });
 
                             profile.data.profileTags.sort(function (a, b) {
@@ -71,6 +73,10 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
                             if (profile.data.nom === 'Accessidys par défaut' || profile.data.owner === 'scripted') {
                                 $rootScope.defaultSystemProfile = profile;
+                            }
+
+                            if(profile.data.updated){
+                                profile.data.updated = new Date(profile.data.updated);
                             }
 
                             profile.showed = true;

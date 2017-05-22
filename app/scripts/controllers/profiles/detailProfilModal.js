@@ -112,12 +112,7 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
 
                         profilsService.saveProfile($scope.profile)
                             .then(function (savedProfile) {
-                                $scope.profile.filename = savedProfile.filename;
-                                $scope.profile.provider = savedProfile.provider;
-                                $scope.profile.filepath = savedProfile.filepath;
-                                $scope.profile.data.updated = savedProfile.data.updated;
-                                $scope.profile.data.className = profilsService.generateClassName($scope.profile, false);
-
+                                $scope.profile = savedProfile;
 
                                 if ($scope.template === 'duplicate') {
                                     $scope.sendEmailDuplique($scope.profile);

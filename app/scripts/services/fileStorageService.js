@@ -215,7 +215,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             extension = '.html';
         } else if (type === 'profile') {
             storageName = 'listProfile';
-            extension = '.json';
+            extension = '-profile.json';
         }
 
         var newFilePath = this.generateFilepath(newName, extension);

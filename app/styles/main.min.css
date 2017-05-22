@@ -159,3 +159,7 @@
  blockquote {
      padding-top: 0;
  }
+
+ .navbar-default .navbar-nav .dropdown .active a {
+     background-color: #075968;
+ }

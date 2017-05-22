@@ -28,6 +28,40 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
                                                               $localForage, synchronisationStoreService, $rootScope,
                                                               $uibModal, $log, $q, UtilsService, UserService, CacheProvider, _) {
 
+
+    var self = this;
+
+    /**
+     * Map new data after saving
+     * @param profile
+     * @param savedProfile
+     * @returns {*}
+     */
+    var mapProfileAfterSave = function (profile, savedProfile) {
+
+        profile.filename = savedProfile.filename;
+        profile.provider = savedProfile.provider;
+        profile.filepath = savedProfile.filepath;
+        if (savedProfile.data.delegated) {
+            profile.data.delegated = savedProfile.data.delegated;
+        }
+        if (savedProfile.data.isFavourite) {
+            profile.data.isFavourite = savedProfile.data.isFavourite;
+        }
+        profile.data.owner = savedProfile.data.owner;
+        if (savedProfile.data.preDelegated) {
+            profile.data.preDelegated = savedProfile.data.preDelegated;
+        }
+        profile.data.updated = new Date(savedProfile.data.updated);
+        profile.data.className = self.generateClassName(profile, false);
+        if (savedProfile.data._id) {
+            profile.data._id = savedProfile.data._id;
+        }
+
+
+        return profile;
+    };
+
     /**
      * Add the given profile.
      * @param profile :
@@ -46,7 +80,7 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
 
         $log.debug('Save Profile', profileToSave);
 
-        if (profileToSave.data._id) {
+        if (profileToSave.data._id || UserService.getData().isAdmin) {
 
             profileToSave.filename = profileToSave.data.nom;
 
@@ -56,17 +90,24 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
                 if (profileToSave.data._id) {
                     // Update mode
                     this.update(profileToSave).then(function (res) {
+                        profile = mapProfileAfterSave(profile, res.data);
+                        CacheProvider.save(profile, 'listProfile');
 
-                        deferred.resolve(res.data);
+                        deferred.resolve(profile);
                     }, function () {
-                        deferred.reject();
+                        fileStorageService.addFileToSynchronize(profileToSave, 'profile', 'save');
+                        deferred.resolve(profile);
                     });
                 } else {
                     // Create mode
                     this.create(profileToSave).then(function (res) {
-                        deferred.resolve(res.data);
+                        profile = mapProfileAfterSave(profile, res.data);
+                        CacheProvider.save(profile, 'listProfile');
+
+                        deferred.resolve(profile);
                     }, function () {
-                        deferred.reject();
+                        fileStorageService.addFileToSynchronize(profileToSave, 'profile', 'save');
+                        deferred.resolve(profile);
                     });
                 }
             } else {
@@ -83,14 +124,23 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
             if (profileToSave.filename !== profileToSave.data.nom) {
 
                 fileStorageService.rename(profileToSave, profileToSave.data.nom, 'profile').then(function (res) {
-                    deferred.resolve(res);
+                    profileToSave.filename = res.filename;
+                    profileToSave.filepath = res.filepath;
+
+                    fileStorageService.save(profileToSave, 'profile').then(function (res) {
+                        profile = mapProfileAfterSave(profile, res);
+                        deferred.resolve(profile);
+                    }, function () {
+                        deferred.reject();
+                    });
                 }, function () {
                     deferred.reject();
                 });
 
             } else {
                 fileStorageService.save(profileToSave, 'profile').then(function (res) {
-                    deferred.resolve(res);
+                    profile = mapProfileAfterSave(profile, res);
+                    deferred.resolve(profile);
                 }, function () {
                     deferred.reject();
                 });
@@ -149,7 +199,9 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
                     'AccessiDys-provider': UserService.getData().provider
                 }
             }).then(function () {
-                deferred.resolve();
+                CacheProvider.delete(profile, 'listProfile').then(function () {
+                    deferred.resolve();
+                });
             }, function () {
                 deferred.reject();
             });
@@ -169,7 +221,7 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
      */
     this.lookForExistingProfile = function (profile) {
 
-        return fileStorageService.list('profile').then(function (profiles) {
+        return CacheProvider.list('listProfile').then(function (profiles) {
             $log.debug('lookForExistingProfile - profiles', profiles);
             $log.debug('lookForExistingProfile - profile', profile);
 

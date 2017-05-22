@@ -237,7 +237,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                 formattedText = text.replace(/&nbsp;/gi, ' ');
                 formattedText = Hyphenator.hyphenate(formattedText, 'fr');
 
-                formattedText = formattedText.replace(/(\b(?!<)[a-zA-Z0-9éèëêàâôîïö\?\-\_\|]+(?!>)\b)/gi, '%%$1%%');
+                formattedText = formattedText.replace(/(\b(?!<)[a-zA-Z0-9éèëêœçàâùôîïö\?\-\_\|]+(?!>)\b)/gi, '%%$1%%');
                 formattedText = formattedText.replace(/(\|)/gi, '</span><span>');
                 formattedText = formattedText.replace(/(%%\b)/gi, '<span>');
                 formattedText = formattedText.replace(/(\b%%)/gi, '</span>');
@@ -279,7 +279,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         /**
          * Regex to select words in text
          */
-        wordRegex: /([\w,.'&;:"«»:%\?\-éèëêàâôîïö\(\)]+)(?![^<]*>)/gi
+        wordRegex: /([\w,.'&;:"«»:%\?\-éèœëêçàâôîùïö\(\)]+)(?![^<]*>)/gi
 
     };
 
