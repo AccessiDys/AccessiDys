@@ -48,7 +48,6 @@ angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, 
                 $scope.listDocument = [];
             }
 
-            console.log('$scope.listDocument', $scope.listDocument);
 
             for (var i = 0; i < $scope.listDocument.length; i++) {
                 $scope.listDocument[i].showed = true;

@@ -504,7 +504,6 @@ angular.module('cnedApp')
                     if (error) {
                         LoaderService.hideLoader();
                         $scope.$apply();
-                        console.log(error);
                     } else {
                         new Promise(function (resolve) {
                             var dataURL = canvasToImage(canvas, context, '#FFFFFF');
@@ -693,7 +692,6 @@ angular.module('cnedApp')
                     $scope.document = file;
                     $scope.content = workspaceService.parcourirHtml(file.data);
 
-                    console.log('content', $scope.content[1]);
 
                     $scope.showTitleDoc($scope.idDocument);
                     $scope.showEditer = true;

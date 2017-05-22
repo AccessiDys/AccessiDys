@@ -173,9 +173,6 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
 
     $scope.editStyleChange = function (operation, value) {
 
-        console.log('Edit style change');
-
-
         switch (operation) {
             case 'police':
                 $scope.style.police = value;

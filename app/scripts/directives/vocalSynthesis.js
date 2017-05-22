@@ -62,7 +62,9 @@ cnedApp.directive('vocalSynthesis',
                         $log.debug('$scope.getSelectedText()', text);
                         if (text && !/^\s*$/.test(text)) {
 
-                            if (checkBrowserSupported()) {
+                            speechService.speech(text, true);
+
+                            /*if (checkBrowserSupported()) {
                                 serviceCheck.isOnline().then(function () {
                                     scope.displayOfflineSynthesisTips = false;
                                     speechService.speech(text, true);
@@ -71,7 +73,7 @@ cnedApp.directive('vocalSynthesis',
                                     scope.displayOfflineSynthesisTips = !scope.neverShowOfflineSynthesisTips;
                                     speechService.speech(text, false);
                                 });
-                            }
+                            }*/
                         }
                     }, 10);
                 }
