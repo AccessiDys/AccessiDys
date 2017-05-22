@@ -35,9 +35,19 @@ var mongoose = require('mongoose'),
 
 exports.updateDb = function () {
 
-    updateProfiles(function () {
+    /*updateProfiles(function () {
         updateUsers();
+    });*/
+
+    Profil.find().exec(function (err, profiles) {
+        if(profiles){
+            for (var i = 0; i < profiles.length; i++) {
+                console.log('profiles[i].owner', profiles[i].owner);
+            }
+        }
     });
+
+
 
 };
 
