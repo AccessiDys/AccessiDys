@@ -104,6 +104,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
     };
 
     $rootScope.onChangeCurrentProfile = function (currentProfile) {
+        $log.debug('on change current profile', currentProfile);
+
         $rootScope.currentProfile = currentProfile;
 
         CacheProvider.setItem(currentProfile, 'currentProfile');

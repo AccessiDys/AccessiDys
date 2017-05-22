@@ -390,7 +390,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                 });
             }
 
-            console.log('File to synchronize', items);
+            $log.debug('File to synchronize', items);
             CacheProvider.setItem(items, storageName);
         });
     };

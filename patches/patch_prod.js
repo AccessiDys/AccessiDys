@@ -51,10 +51,16 @@ function updateUsers() {
             if (_userProfils) {
                 for (var i = 0; i < _userProfils.length; i++) {
 
-                    if(_userProfils[i].profilID.owner !== 'scripted'){
-                        _userProfils[i].profilID.owner = _userProfils[i].userID.local.email;
+                    if (_userProfils[i].profilID.owner !== 'scripted') {
+                        if (_userProfils[i].userID && _userProfils[i].userID.local) {
+                            _userProfils[i].profilID.owner = _userProfils[i].userID.local.email;
+                            try {
+                                _userProfils[i].profilID.save();
+                            } catch (e) {
+                                console.log('Error on user update');
+                            }
+                        }
 
-                        _userProfils[i].profilID.save();
                     }
 
                 }
@@ -62,6 +68,10 @@ function updateUsers() {
         });
 }
 
+/**
+ * Update profiles tags
+ * @param cb
+ */
 function updateProfiles(cb) {
 
     ProfilTag.find()
@@ -91,7 +101,7 @@ function updateProfiles(cb) {
         });
 }
 
-function updateTags () {
+function updateTags() {
 
 }
 

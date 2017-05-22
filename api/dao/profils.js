@@ -75,8 +75,6 @@ exports.getProfiles = function (req, res) {
             function (defaultProfiles, callback) {
 
 
-                console.log('get user email', userData.email);
-
                 if (userData.email) {
                     // Default profiles
                     Profil.find({
@@ -166,7 +164,6 @@ exports.createProfile = function (req, res) {
         provider: req.get('AccessiDys-provider')
     };
 
-    console.log('Create profile', userData);
 
     if (profile && profile.data) {
 

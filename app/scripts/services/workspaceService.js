@@ -143,12 +143,8 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
         retContent = [];
         retContent[0] = '<h1>Sommaire</h1><br/>';
 
-        $log.debug('parcourirHtml data = ', data);
-
         if (data) {
             var pages = self.splitPages(data);
-
-            $log.debug('parcourirHtml splitPages = ', pages);
 
             for (var page = 0; page < pages.length; page++) {
                 var block = 0;
@@ -233,8 +229,6 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
             retContent[page] = '';
         }
 
-        //processChildNode(element);
-        console.log('element.outerHTML', element.outerHTML);
         retContent[page] += element.outerHTML;
         return (block + 1);
     };
