@@ -81,17 +81,21 @@ function updateProfiles(cb) {
             if (_profilsTag) {
                 for (var i = 0; i < _profilsTag.length; i++) {
 
-                    if (_profilsTag[i].profil.profileTags.indexOf(_profilsTag[i]._id) < 0) {
-                        _profilsTag[i].profil.profileTags.push(_profilsTag[i]._id);
-                    }
+                    if(_profilsTag[i].profil){
+                        if (_profilsTag[i].profil.profileTags.indexOf(_profilsTag[i]._id) < 0) {
+                            _profilsTag[i].profil.profileTags.push(_profilsTag[i]._id);
+                        }
 
-                    // Clean profile
-                    _profilsTag[i].profil.photo = undefined;
-                    _profilsTag[i].profil.save();
+                        // Clean profile
+                        _profilsTag[i].profil.photo = undefined;
+                        _profilsTag[i].profil.save();
+                    }
 
                     // Clean profile Tag
                     _profilsTag[i].texte = undefined;
                     _profilsTag[i].save();
+
+
                 }
             }
 
