@@ -81,6 +81,8 @@ angular.module('cnedApp').controller('OpenDocumentModalCtrl', function ($rootSco
             if (errors.length > 0) {
                 ToasterService.showToaster('#open-document-modal-error-toaster', errors[0]);
             } else {
+
+                console.log('doc', doc);
                 documentService.isDocumentAlreadyExist(doc)
                     .then(function (isDocumentExist) {
 

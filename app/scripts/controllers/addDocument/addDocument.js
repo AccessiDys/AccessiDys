@@ -264,7 +264,6 @@ angular
                 reader.onload = function (e) {
                     // Insert the image
                     $scope.document.data = '<p><img src="' + e.target.result + '"/></p>';
-                    $scope.$apply();
                 };
 
                 // Read in the image file as a data URL.
