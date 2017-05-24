@@ -203,7 +203,7 @@
                              class="resetAll doc-apercu {{currentProfile.data.className}}"
                              data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
                              data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
-                             style="outline: none !important; z-index: 1; position: relative; word-break: break-all;">
+                             style="outline: none !important; z-index: 1; position: relative; word-wrap: break-word; white-space: pre-line;">
                         </div>
 
                         <!-- Note link -->
@@ -254,7 +254,7 @@
                              vocal-synthesis
                              regle-style="page" tags="listTagsByProfil" apply-rules="forceApplyRules"
                              class="resetAll doc-apercu {{currentProfile.data.className}}"
-                             style="outline: none !important; z-index: 1; position: relative; word-break: break-all;"
+                             style="outline: none !important; z-index: 1; position: relative; word-wrap: break-word; white-space: pre-line;"
                              profile-coloration
                              profile="currentProfile"
                              text="currentContent"

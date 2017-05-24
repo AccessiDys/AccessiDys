@@ -30,18 +30,22 @@
  */
 angular.module('cnedApp').directive('profileColoration',
 
-    function (UtilsService, $timeout, $compile, $log) {
+    function (UtilsService, $timeout, _) {
         return {
             restrict: 'A',
             scope: {
                 profile: '=',
-                text: '='
+                text: '=',
+                preview: '@'
             },
-            link: function (scope, element) {
+            link: function ($scope, $element) {
 
                 var profileWatcher = null;
                 var textWatcher = null;
-
+                var windowScroll = 0;
+                var prevScroll = -1;
+                var windowWidth = window.innerWidth;
+                var adaptIndex = 0;
 
                 /**
                  * Color lines
@@ -52,69 +56,76 @@ angular.module('cnedApp').directive('profileColoration',
                     var prevTop = -9999;
                     var line = 0;
 
-                    var spanFound = ref.querySelectorAll('span');
+                    var documentFragment = document.createDocumentFragment();
+                    documentFragment.appendChild(ref.cloneNode(true));
+                    documentFragment.children[0].innerHTML = '';
 
-                    for (var i = 0; i < spanFound.length; i++) {
-                        var word = spanFound[i];
+                    for (var i = 0; i < ref.children.length; i++) {
 
-                        if (!word.id) {
+                        var child = ref.children[i];
+                        var clone = child.cloneNode(true);
 
-                            console.log('word.offsetTop', word.offsetTop);
-                            var top = word.offsetTop;
+                        if (child.tagName !== 'SPAN' && child.hasChildNodes()) {
+                            clone = colorLines(child, maxLines);
+                        } else if (child.tagName === 'SPAN') {
+                            if (!child.id) {
+                                var top = child.offsetTop;
 
-                            if (top > prevTop) {
-                                if (line >= maxLines) {
-                                    line = 1;
-                                } else {
-                                    line++;
+                                if (top > prevTop) {
+                                    if (line >= maxLines) {
+                                        line = 1;
+                                    } else {
+                                        line++;
+                                    }
                                 }
+                                clone.className = 'line' + line;
+                                prevTop = top;
                             }
-                            word.className = 'line' + line;
-                            prevTop = top;
                         }
+                        documentFragment.children[0].appendChild(clone);
                     }
+
+                    return documentFragment;
+
+
                 };
 
-                var generateColoration = function () {
 
+                if (!$scope.preview) {
+                    window.addEventListener('scroll', function () {
+                        windowScroll = window.pageYOffset;
 
-                    console.log('scope.text', scope.text);
-                    element[0].innerHTML = UtilsService.removeSpan(scope.text);
+                        if (windowScroll >= prevScroll) {
+                            prevScroll = windowScroll;
+                            generateColoration($element[0]);
+                        }
+                    });
+                }
 
+                var generateColoration = function (element) {
 
                     $timeout(function () {
-                        if (scope.profile && scope.profile.data && scope.text) {
+                        if ($scope.profile && $scope.profile.data && $scope.text) {
 
-                            var profile = scope.profile.data;
-
-                            console.log('element[0]', element[0].children.length);
-
-                            var documentFragment = document.createDocumentFragment();
-                            documentFragment.appendChild(element[0].cloneNode(true));
+                            var profile = $scope.profile.data;
 
                             console.time('adaptation');
 
-                            var splitOnWordWithSpace = UtilsService.splitOnWordWithSpace;
-                            var splitOnWordWithOutSpace = UtilsService.splitOnWordWithOutSpace;
-                            var splitOnSyllable = UtilsService.splitOnSyllable;
+                            var documentFragment = document.createDocumentFragment();
+                            documentFragment.appendChild(element.cloneNode(true));
 
-                            console.log('profilsTags', profile.profileTags);
+                            for (adaptIndex; adaptIndex < element.children.length; adaptIndex++) {
+                                var child = element.children[adaptIndex];
+                                // Adapt child which are displayed on the screen
+                                if (child.offsetTop < ((windowScroll + windowWidth) * 2)) {
+                                    var profileTag = _.find(profile.profileTags, function (_profileTag) {
+                                        return _profileTag.tagDetail.balise === child.tagName.toLowerCase();
+                                    });
 
-                            for (var i = 0; i < profile.profileTags.length; i++) {
+                                    if (profileTag) {
 
-                                var coloration = profile.profileTags[i].coloration;
-                                var balise = profile.profileTags[i].tagDetail.balise;
-                                var regexp = new RegExp('</' + balise + '>', 'gi');
-
-                                if (regexp.test(scope.text)) {
-
-                                    var tagsFound = documentFragment.querySelectorAll(balise);
-
-
-                                    for (var j = 0; j < 100; j++) {
-
-                                        var elem = tagsFound[j];
-                                        var textTransform = elem.innerHTML;
+                                        var coloration = profileTag.coloration;
+                                        var textTransform = child.innerHTML;
 
                                         // Split Text
                                         if (coloration === 'Colorer les lignes RBV'
@@ -124,59 +135,66 @@ angular.module('cnedApp').directive('profileColoration',
                                             || coloration === 'Colorer les lignes RBVJ'
                                             || coloration === 'Surligner les lignes RBVJ') {
 
-                                            textTransform = splitOnWordWithSpace(textTransform);
+                                            textTransform = UtilsService.splitOnWordWithSpace(textTransform);
                                         } else if (coloration === 'Colorer les mots'
                                             || coloration === 'Surligner les mots') {
 
-                                            //console.log('textTransform', textTransform);
-                                            //console.time('mots');
-                                            textTransform = splitOnWordWithOutSpace(textTransform);
-                                            //console.timeEnd('mots');
+                                            textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
 
                                         } else if (coloration === 'Colorer les syllabes') {
 
-                                            textTransform = splitOnSyllable(textTransform);
+                                            textTransform = UtilsService.splitOnSyllable(textTransform);
                                         }
 
-                                        elem.innerHTML = textTransform;
+                                        child.innerHTML = textTransform;
 
                                         if (coloration === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
                                             || coloration === 'Surligner les lignes RBV'
                                             || coloration === 'Surligner les lignes RVJ') {
 
-                                            colorLines(elem, 3);
+                                            var childFragment = colorLines(child, 3);
+
+                                            var parent = child.parentNode;
+                                            var nextElement = child.nextSibling;
+                                            parent.removeChild(child);
+                                            parent.insertBefore(childFragment, nextElement);
 
                                         } else if (
                                             coloration === 'Colorer les lignes RBVJ'
                                             || coloration === 'Surligner les lignes RBVJ') {
 
-                                            colorLines(elem, 4);
+                                            colorLines(child, 4);
                                         }
+
+                                    } else {
+                                        continue;
                                     }
+                                } else {
+                                    console.log('index', adaptIndex);
+                                    break;
                                 }
                             }
 
                             console.timeEnd('adaptation');
-
-                            var parent = element[0].parentNode;
-                            parent.removeChild(element[0]);
-                            parent.appendChild(documentFragment);
-
                         }
 
                         if (!textWatcher) {
-                            textWatcher = scope.$watch('text', function (newValue, oldValue) {
+                            textWatcher = $scope.$watch('text', function (newValue, oldValue) {
                                 if (newValue !== oldValue) {
-                                    generateColoration();
+                                    adaptIndex = 0;
+                                    $element[0].innerHTML = UtilsService.removeSpan($scope.text);
+                                    generateColoration(element);
                                 }
                             }, true);
                         }
 
                         if (!profileWatcher) {
-                            profileWatcher = scope.$watch('profile.data', function (newValue, oldValue) {
+                            profileWatcher = $scope.$watch('profile.data', function (newValue, oldValue) {
                                 if (newValue !== oldValue) {
-                                    generateColoration();
+                                    adaptIndex = 0;
+                                    $element[0].innerHTML = UtilsService.removeSpan($scope.text);
+                                    generateColoration(element);
                                 }
                             }, true);
                         }
@@ -185,7 +203,8 @@ angular.module('cnedApp').directive('profileColoration',
 
                 };
 
-                generateColoration();
+                $element[0].innerHTML = UtilsService.removeSpan($scope.text);
+                generateColoration($element[0]);
 
 
             }
