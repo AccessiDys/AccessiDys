@@ -52,12 +52,14 @@ angular.module('cnedApp').directive('profileColoration',
                     var prevTop = -9999;
                     var line = 0;
 
-                    var spanFound = ref.find('span');
+                    var spanFound = ref.querySelectorAll('span');
 
                     for (var i = 0; i < spanFound.length; i++) {
                         var word = spanFound[i];
 
                         if (!word.id) {
+
+                            console.log('word.offsetTop', word.offsetTop);
                             var top = word.offsetTop;
 
                             if (top > prevTop) {
@@ -76,12 +78,27 @@ angular.module('cnedApp').directive('profileColoration',
                 var generateColoration = function () {
 
 
+                    console.log('scope.text', scope.text);
                     element[0].innerHTML = UtilsService.removeSpan(scope.text);
+
 
                     $timeout(function () {
                         if (scope.profile && scope.profile.data && scope.text) {
 
                             var profile = scope.profile.data;
+
+                            console.log('element[0]', element[0].children.length);
+
+                            var documentFragment = document.createDocumentFragment();
+                            documentFragment.appendChild(element[0].cloneNode(true));
+
+                            console.time('adaptation');
+
+                            var splitOnWordWithSpace = UtilsService.splitOnWordWithSpace;
+                            var splitOnWordWithOutSpace = UtilsService.splitOnWordWithOutSpace;
+                            var splitOnSyllable = UtilsService.splitOnSyllable;
+
+                            console.log('profilsTags', profile.profileTags);
 
                             for (var i = 0; i < profile.profileTags.length; i++) {
 
@@ -91,54 +108,60 @@ angular.module('cnedApp').directive('profileColoration',
 
                                 if (regexp.test(scope.text)) {
 
-                                    var tagsFound = element.find(balise);
+                                    var tagsFound = documentFragment.querySelectorAll(balise);
 
-                                    for (var j = 0; j < tagsFound.length; j++) {
+
+                                    for (var j = 0; j < 100; j++) {
 
                                         var elem = tagsFound[j];
                                         var textTransform = elem.innerHTML;
 
                                         // Split Text
-                                        switch (coloration) {
-                                            case 'Colorer les lignes RBV':
-                                            case 'Colorer les lignes RVJ':
-                                            case 'Colorer les lignes RBVJ':
-                                            case 'Surligner les lignes RBV':
-                                            case 'Surligner les lignes RVJ':
-                                            case 'Surligner les lignes RBVJ':
+                                        if (coloration === 'Colorer les lignes RBV'
+                                            || coloration === 'Colorer les lignes RVJ'
+                                            || coloration === 'Surligner les lignes RVJ'
+                                            || coloration === 'Surligner les lignes RBV'
+                                            || coloration === 'Colorer les lignes RBVJ'
+                                            || coloration === 'Surligner les lignes RBVJ') {
 
-                                                textTransform = UtilsService.splitOnWordWithSpace(textTransform);
-                                                break;
-                                            case 'Colorer les mots':
-                                            case 'Surligner les mots':
+                                            textTransform = splitOnWordWithSpace(textTransform);
+                                        } else if (coloration === 'Colorer les mots'
+                                            || coloration === 'Surligner les mots') {
 
-                                                textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
-                                                break;
-                                            case 'Colorer les syllabes':
+                                            //console.log('textTransform', textTransform);
+                                            //console.time('mots');
+                                            textTransform = splitOnWordWithOutSpace(textTransform);
+                                            //console.timeEnd('mots');
 
-                                                textTransform = UtilsService.splitOnSyllable(textTransform);
-                                                break;
+                                        } else if (coloration === 'Colorer les syllabes') {
+
+                                            textTransform = splitOnSyllable(textTransform);
                                         }
 
                                         elem.innerHTML = textTransform;
 
+                                        if (coloration === 'Colorer les lignes RBV'
+                                            || coloration === 'Colorer les lignes RVJ'
+                                            || coloration === 'Surligner les lignes RBV'
+                                            || coloration === 'Surligner les lignes RVJ') {
 
-                                        switch (coloration) {
-                                            case 'Colorer les lignes RBV':
-                                            case 'Colorer les lignes RVJ':
-                                            case 'Surligner les lignes RBV':
-                                            case 'Surligner les lignes RVJ':
-                                                colorLines(angular.element(elem), 3);
-                                                break;
-                                            case 'Colorer les lignes RBVJ':
-                                            case 'Surligner les lignes RBVJ':
-                                                colorLines(angular.element(elem), 4);
-                                                break;
+                                            colorLines(elem, 3);
+
+                                        } else if (
+                                            coloration === 'Colorer les lignes RBVJ'
+                                            || coloration === 'Surligner les lignes RBVJ') {
+
+                                            colorLines(elem, 4);
                                         }
                                     }
                                 }
                             }
 
+                            console.timeEnd('adaptation');
+
+                            var parent = element[0].parentNode;
+                            parent.removeChild(element[0]);
+                            parent.appendChild(documentFragment);
 
                         }
 

@@ -92,7 +92,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                         var profile = $rootScope.currentProfile.data;
                         var text = element.html();
 
-                        if (profile && text) {
+                        /*if (profile && text) {
                             for (var i = 0; i < profile.profileTags.length; i++) {
 
                                 var coloration = profile.profileTags[i].coloration;
@@ -189,8 +189,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                                 });
                             }
-
-                        }
+                        }*/
                         bindHtmlWatcher();
 
                     }, 200);

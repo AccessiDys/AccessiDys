@@ -55,14 +55,15 @@ angular.module('cnedApp').controller('OcrModalCtrl', function ($scope, $rootScop
         var cropped = document.getElementById('cropped-image');
 
         if (Tesseract) {
-
+            $scope.ocrBarProgress.display = true;
             Tesseract.recognize(cropped, {
                 lang: 'fra'
             })
                 .progress(function (packet) {
-                    $scope.ocrBarProgress.display = true;
-                    $scope.ocrBarProgress.progress = parseInt(packet.progress * 100);
-                    $scope.$apply();
+                    if (packet.status === 'recognizing text') {
+                        $scope.ocrBarProgress.progress = parseInt(packet.progress * 100);
+                        $scope.$apply();
+                    }
                 })
 
                 .then(function (result) {
