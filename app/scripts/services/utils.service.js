@@ -279,8 +279,50 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         /**
          * Regex to select words in text
          */
-        wordRegex: /([\w,.'&;:"«»:%\?\-éèœëêçàâôîùïö\(\)]+)(?![^<]*>)/gi
+        wordRegex: /([\w,.'&;:"«»:%\?\-éèœëêçàâôîùïö\(\)]+)(?![^<]*>)/gi,
         // /([\w,.'&;:"«»:%\?\-é!èœëêç—àâôîù’ïö\(\)]+)(?![^<]*>)/gi
+
+        /**
+         * Color lines of Node element
+         * @param ref Node element
+         * @param maxLines
+         * @returns {DocumentFragment}
+         */
+        colorLines: function (ref, maxLines) {
+            var prevTop = -9999;
+            var line = 0;
+
+            var documentFragment = document.createDocumentFragment();
+            documentFragment.appendChild(ref.cloneNode(true));
+            documentFragment.children[0].innerHTML = '';
+
+            for (var i = 0; i < ref.children.length; i++) {
+
+                var child = ref.children[i];
+                var clone = child.cloneNode(true);
+
+                if (child.tagName !== 'SPAN' && child.hasChildNodes()) {
+                    clone = methods.colorLines(child, maxLines);
+                } else if (child.tagName === 'SPAN') {
+                    if (!child.id) {
+                        var top = child.offsetTop;
+
+                        if (top > prevTop) {
+                            if (line >= maxLines) {
+                                line = 1;
+                            } else {
+                                line++;
+                            }
+                        }
+                        clone.className = 'line' + line;
+                        prevTop = top;
+                    }
+                }
+                documentFragment.children[0].appendChild(clone);
+            }
+
+            return documentFragment;
+        }
 
     };
 

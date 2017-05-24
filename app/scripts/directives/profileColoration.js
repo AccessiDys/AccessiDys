@@ -47,50 +47,6 @@ angular.module('cnedApp').directive('profileColoration',
                 var windowWidth = window.innerWidth;
                 var adaptIndex = 0;
 
-                /**
-                 * Color lines
-                 * @param ref
-                 * @param maxLines
-                 */
-                var colorLines = function (ref, maxLines) {
-                    var prevTop = -9999;
-                    var line = 0;
-
-                    var documentFragment = document.createDocumentFragment();
-                    documentFragment.appendChild(ref.cloneNode(true));
-                    documentFragment.children[0].innerHTML = '';
-
-                    for (var i = 0; i < ref.children.length; i++) {
-
-                        var child = ref.children[i];
-                        var clone = child.cloneNode(true);
-
-                        if (child.tagName !== 'SPAN' && child.hasChildNodes()) {
-                            clone = colorLines(child, maxLines);
-                        } else if (child.tagName === 'SPAN') {
-                            if (!child.id) {
-                                var top = child.offsetTop;
-
-                                if (top > prevTop) {
-                                    if (line >= maxLines) {
-                                        line = 1;
-                                    } else {
-                                        line++;
-                                    }
-                                }
-                                clone.className = 'line' + line;
-                                prevTop = top;
-                            }
-                        }
-                        documentFragment.children[0].appendChild(clone);
-                    }
-
-                    return documentFragment;
-
-
-                };
-
-
                 if (!$scope.preview) {
                     window.addEventListener('scroll', function () {
                         windowScroll = window.pageYOffset;
@@ -108,11 +64,6 @@ angular.module('cnedApp').directive('profileColoration',
                         if ($scope.profile && $scope.profile.data && $scope.text) {
 
                             var profile = $scope.profile.data;
-
-                            console.time('adaptation');
-
-                            var documentFragment = document.createDocumentFragment();
-                            documentFragment.appendChild(element.cloneNode(true));
 
                             for (adaptIndex; adaptIndex < element.children.length; adaptIndex++) {
                                 var child = element.children[adaptIndex];
@@ -153,7 +104,7 @@ angular.module('cnedApp').directive('profileColoration',
                                             || coloration === 'Surligner les lignes RBV'
                                             || coloration === 'Surligner les lignes RVJ') {
 
-                                            var childFragment = colorLines(child, 3);
+                                            var childFragment = UtilsService.colorLines(child, 3);
 
                                             var parent = child.parentNode;
                                             var nextElement = child.nextSibling;
@@ -164,19 +115,22 @@ angular.module('cnedApp').directive('profileColoration',
                                             coloration === 'Colorer les lignes RBVJ'
                                             || coloration === 'Surligner les lignes RBVJ') {
 
-                                            colorLines(child, 4);
+                                            var childFragment = UtilsService.colorLines(child, 4);
+
+                                            var parent = child.parentNode;
+                                            var nextElement = child.nextSibling;
+                                            parent.removeChild(child);
+                                            parent.insertBefore(childFragment, nextElement);
                                         }
 
                                     } else {
                                         continue;
                                     }
                                 } else {
-                                    console.log('index', adaptIndex);
                                     break;
                                 }
                             }
 
-                            console.timeEnd('adaptation');
                         }
 
                         if (!textWatcher) {
@@ -199,8 +153,6 @@ angular.module('cnedApp').directive('profileColoration',
                             }, true);
                         }
                     }, 100);
-
-
                 };
 
                 $element[0].innerHTML = UtilsService.removeSpan($scope.text);

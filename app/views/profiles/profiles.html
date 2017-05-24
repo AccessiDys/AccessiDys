@@ -127,7 +127,8 @@
                                 Dupliquer
                             </a>
                         </li>
-                        <li class="delegate" data-ng-if="isOwner(profile) && profile.data.owner !== 'scripted' && !profile.data.preDelegated && userData.provider">
+                        <li class="delegate"
+                            data-ng-if="isOwner(profile) && profile.data.owner !== 'scripted' && !profile.data.preDelegated && userData.provider">
                             <a href title="{{'Delegate' | translate}}" data-ng-click="delegateProfile(profile)">
                                 {{'Delegate' | translate}}
                             </a>
@@ -183,7 +184,8 @@
                          data-ng-repeat="profileTag in profile.data.profileTags"
                          profile-coloration
                          profile="profile"
-                         text="profileTag.sampleText">
+                         text="profileTag.sampleText"
+                         preview="true">
                     </div>
                 </td>
             </tr>

@@ -31,168 +31,116 @@
  */
 angular.module('cnedApp').directive('textAngularProfileColoration',
 
-    function (UtilsService, $timeout, $compile, $rootScope, $log) {
+    function (UtilsService, $timeout, $rootScope, $log, _) {
         return {
             restrict: 'A',
-            link: function (scope, element) {
+            link: function ($scope, $element) {
 
                 var htmlWatcher = null;
+                var windowScroll = 0;
+                var prevScroll = -1;
+                var windowWidth = window.innerWidth;
+                var adaptIndex = 0;
 
                 /**
                  * Bind the watcher to detect change in the editor
                  */
                 var bindHtmlWatcher = function () {
                     if (!htmlWatcher) {
-                        htmlWatcher = $rootScope.$watch(function () {
-                            return element.html().length;
+                        htmlWatcher = $scope.$watch(function () {
+                            return $element[0].innerHTML.length;
                         }, function (newValue, oldValue) {
                             if (newValue !== oldValue) {
-                                generateColoration();
+                                console.log('html watcher generateColoration');
+                                generateColoration($element[0]);
                             }
                         });
                     }
                 };
 
-                /**
-                 * Color lines
-                 * @param ref
-                 * @param maxLines
-                 */
-                var colorLines = function (ref, maxLines) {
-                    var prevTop = -9999;
-                    var line = 0;
-                    angular.forEach(ref.find('span'), function (word) {
-                        var wordRef = angular.element(word);
-
-                        if (!wordRef[0].id) {
-                            var top = wordRef[0].offsetTop;
-
-                            if (top > prevTop) {
-                                if (line >= maxLines) {
-                                    line = 1;
-                                } else {
-                                    line++;
-                                }
-                            }
-                            wordRef.addClass('line' + line);
-                            prevTop = top;
-                        }
-                    });
-                };
-
-                var generateColoration = function () {
+                var generateColoration = function (element) {
 
                     if (htmlWatcher) {
                         htmlWatcher();
                         htmlWatcher = null;
                     }
 
+                    console.log('generateColoration');
+
                     $timeout(function () {
 
                         var profile = $rootScope.currentProfile.data;
-                        var text = element.html();
-
-                        /*if (profile && text) {
-                            for (var i = 0; i < profile.profileTags.length; i++) {
-
-                                var coloration = profile.profileTags[i].coloration;
-
-                                angular.forEach(element.find(profile.profileTags[i].tagDetail.balise), function (elem) {
-
-                                    var savedSel = rangy.saveSelection();
-
-                                    var ref = angular.element(elem);
-                                    var textTransform = ref.html();
+                        var text = element.innerHTML;
 
 
-                                    var rangyCursorPattern = /((&nbsp;)*<span id(.*?)\/span>)/gi;
 
-                                    // Save rangy cursor
-
-
-                                    var rangyCursorResult = textTransform.match(rangyCursorPattern);
-                                    var rangyCursors = [];
-
-                                    if (rangyCursorResult && rangyCursorResult.length > 0) {
-                                        for (var i = 0; i < rangyCursorResult.length; i++) {
-                                            var marker = '';
-
-                                            if (coloration === 'Colorer les syllabes') {
-                                                marker = '%%<span>RG' + i + '</span>%%';
-                                            } else {
-                                                marker = '%%RG' + i + '%%';
-                                            }
-
-                                            rangyCursors.push({
-                                                marker: marker,
-                                                cursor: rangyCursorResult[i]
-                                            });
-
-                                            textTransform = textTransform.replace(rangyCursorResult[i], '%%RG' + i + '%%');
-                                        }
-                                    }
-                                    textTransform = textTransform.replace(/&nbsp;/gi, ' %%NB%% ');
-                                    textTransform = UtilsService.removeSpan(textTransform);
+                        console.log('end generation');
 
 
-                                    // Split Text
-                                    switch (coloration) {
-                                        case 'Colorer les lignes RBV':
-                                        case 'Colorer les lignes RVJ':
-                                        case 'Colorer les lignes RBVJ':
-                                        case 'Surligner les lignes RBV':
-                                        case 'Surligner les lignes RVJ':
-                                        case 'Surligner les lignes RBVJ':
-
-                                            textTransform = UtilsService.splitOnWordWithSpace(textTransform);
-                                            textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
-                                            break;
-                                        case 'Colorer les mots':
-                                        case 'Surligner les mots':
-
-                                            textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
-                                            textTransform = textTransform.replace(/\s\s<span>%%NB%%<\/span>\s\s/gi, '&nbsp;');
-                                            break;
-                                        case 'Colorer les syllabes':
-
-                                            textTransform = UtilsService.splitOnSyllable(textTransform);
-                                            textTransform = textTransform.replace(/\s%%<span>NB<\/span>%%\s/gi, '&nbsp;');
-                                            break;
-                                        default:
-                                            textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
-                                            break;
-                                    }
-
-
-                                    // Restore rangy cursor
-                                    for (var i = 0; i < rangyCursors.length; i++) {
-                                        textTransform = textTransform.replace(new RegExp(rangyCursors[i].marker, 'gi'), rangyCursors[i].cursor);
-                                    }
-
-                                    ref.html(textTransform);
-
-                                    switch (coloration) {
-                                        case 'Colorer les lignes RBV':
-                                        case 'Colorer les lignes RVJ':
-                                        case 'Surligner les lignes RBV':
-                                        case 'Surligner les lignes RVJ':
-                                            colorLines(ref, 3);
-                                            break;
-                                        case 'Colorer les lignes RBVJ':
-                                        case 'Surligner les lignes RBVJ':
-                                            colorLines(ref, 4);
-                                            break;
-                                    }
-
-                                    rangy.restoreSelection(savedSel);
-
-
-                                });
-                            }
-                        }*/
                         bindHtmlWatcher();
 
                     }, 200);
+                };
+
+
+                var splitElement = function (element, coloration) {
+
+                    var documentFragment = document.createDocumentFragment();
+                    documentFragment.appendChild(element.cloneNode(true));
+                    documentFragment.children[0].innerHTML = '';
+
+                    console.log(element.children);
+
+                    if (element.children.length > 0) {
+                        for (var i = 0; i < element.children.length; i++) {
+
+                            var child = element.children[i];
+                            var clone = child.cloneNode(true);
+
+                            if (clone.hasChildNodes()) {
+                                clone = splitElement(child, coloration);
+                            } else {
+                                clone.innerHTML = splitText(clone.innerHTML, coloration);
+                            }
+                            documentFragment.children[0].appendChild(clone);
+                        }
+                    } else {
+                        documentFragment.children[0].innerHTML = splitText(element.innerHTML, coloration);
+                    }
+
+                    console.log('documentFragment.children[0]', documentFragment.children[0].innerHTML);
+
+                    return documentFragment;
+                };
+
+                var splitText = function(text, coloration){
+
+                    var textTransform = text;
+                    // Split Text
+                    if (coloration === 'Colorer les lignes RBV'
+                        || coloration === 'Colorer les lignes RVJ'
+                        || coloration === 'Surligner les lignes RVJ'
+                        || coloration === 'Surligner les lignes RBV'
+                        || coloration === 'Colorer les lignes RBVJ'
+                        || coloration === 'Surligner les lignes RBVJ') {
+
+                        textTransform = UtilsService.splitOnWordWithSpace(textTransform);
+                        textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
+                    } else if (coloration === 'Colorer les mots'
+                        || coloration === 'Surligner les mots') {
+
+                        textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
+                        textTransform = textTransform.replace(/\s\s<span>%%NB%%<\/span>\s\s/gi, '&nbsp;');
+
+                    } else if (coloration === 'Colorer les syllabes') {
+
+                        textTransform = UtilsService.splitOnSyllable(textTransform);
+                        textTransform = textTransform.replace(/\s%%<span>NB<\/span>%%\s/gi, '&nbsp;');
+                    } else {
+                        textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
+                    }
+
+                    return textTransform;
                 };
 
                 /**
@@ -202,7 +150,8 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                     $log.debug('change current profile');
 
                     if (newvalue) {
-                        generateColoration();
+                        generateColoration($element[0]);
+                        console.log('html watcher currentProfile');
                     }
 
                 }, true);
