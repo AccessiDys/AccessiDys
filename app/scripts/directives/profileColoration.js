@@ -78,6 +78,21 @@ angular.module('cnedApp').directive('profileColoration',
                                         var coloration = profileTag.coloration;
                                         var textTransform = child.innerHTML;
 
+                                        // Handle img
+                                        var imgPattern = /<img.*>/gi;
+                                        var imgResult = textTransform.match(imgPattern);
+                                        var imgList = [];
+
+                                        if (imgResult && imgResult.length > 0) {
+                                            for (var v = 0; v < imgResult.length; v++) {
+                                                imgList.push({
+                                                    img: imgResult[v]
+                                                });
+
+                                                textTransform = textTransform.replace(imgResult[v], '%%IMG' + v + '%%');
+                                            }
+                                        }
+
                                         // Split Text
                                         if (coloration === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
@@ -95,6 +110,11 @@ angular.module('cnedApp').directive('profileColoration',
                                         } else if (coloration === 'Colorer les syllabes') {
 
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
+                                        }
+
+                                        // Restore images
+                                        for (var v = 0; v < imgList.length; v++) {
+                                            textTransform = textTransform.replace(new RegExp('%%IMG' + v + '%%', 'gi'), imgList[v].img);
                                         }
 
                                         child.innerHTML = textTransform;

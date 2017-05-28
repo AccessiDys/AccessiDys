@@ -65,16 +65,146 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                         htmlWatcher = null;
                     }
 
-                    console.log('generateColoration');
-
                     $timeout(function () {
 
                         var profile = $rootScope.currentProfile.data;
                         var text = element.innerHTML;
 
+                        if (profile && text) {
+
+                            var documentFragment = document.createDocumentFragment();
+                            documentFragment.appendChild(element.cloneNode(true));
 
 
-                        console.log('end generation');
+                            for (var i = 0; i < element.children.length; i++) {
+                                var child = element.children[i];
+                                // Adapt child which are displayed on the screen
+                                if (child.offsetTop < (windowScroll + windowWidth)) {
+                                    var profileTag = _.find(profile.profileTags, function (_profileTag) {
+                                        return _profileTag.tagDetail.balise === child.tagName.toLowerCase();
+                                    });
+
+                                    if (profileTag) {
+                                        var savedSel = rangy.saveSelection();
+
+                                        var coloration = profileTag.coloration;
+                                        var textTransform = child.innerHTML;
+
+                                        // Save rangy cursor
+                                        var rangyCursorPattern = /((&nbsp;)*<span id(.*?)\/span>)/gi;
+                                        var rangyCursorResult = textTransform.match(rangyCursorPattern);
+                                        var rangyCursors = [];
+
+                                        if (rangyCursorResult && rangyCursorResult.length > 0) {
+                                            for (var v = 0; v < rangyCursorResult.length; v++) {
+                                                var marker = '';
+
+                                                if (coloration === 'Colorer les syllabes') {
+                                                    marker = '%%<span>RG' + v + '</span>%%';
+                                                } else {
+                                                    marker = '%%RG' + v + '%%';
+                                                }
+
+                                                rangyCursors.push({
+                                                    marker: marker,
+                                                    cursor: rangyCursorResult[v]
+                                                });
+
+                                                textTransform = textTransform.replace(rangyCursorResult[v], '%%RG' + v + '%%');
+                                            }
+                                        }
+                                        textTransform = textTransform.replace(/&nbsp;/gi, ' %%NB%% ');
+                                        textTransform = UtilsService.removeSpan(textTransform);
+
+                                        // Handle img
+                                        var imgPattern = /<img.*>/gi;
+                                        var imgResult = textTransform.match(imgPattern);
+                                        var imgList = [];
+
+                                        if (imgResult && imgResult.length > 0) {
+                                            for (var v = 0; v < imgResult.length; v++) {
+                                                imgList.push({
+                                                    img: imgResult[v]
+                                                });
+
+                                                textTransform = textTransform.replace(imgResult[v], '%%IMG' + v + '%%');
+                                            }
+                                        }
+
+
+                                        // Split Text
+                                        if (coloration === 'Colorer les lignes RBV'
+                                            || coloration === 'Colorer les lignes RVJ'
+                                            || coloration === 'Surligner les lignes RVJ'
+                                            || coloration === 'Surligner les lignes RBV'
+                                            || coloration === 'Colorer les lignes RBVJ'
+                                            || coloration === 'Surligner les lignes RBVJ') {
+
+                                            textTransform = UtilsService.splitOnWordWithSpace(textTransform);
+                                            textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
+
+                                        } else if (coloration === 'Colorer les mots'
+                                            || coloration === 'Surligner les mots') {
+
+                                            textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
+                                            textTransform = textTransform.replace(/\s\s<span>%%NB%%<\/span>\s\s/gi, '&nbsp;');
+
+                                        } else if (coloration === 'Colorer les syllabes') {
+
+                                            textTransform = UtilsService.splitOnSyllable(textTransform);
+                                            textTransform = textTransform.replace(/\s%%<span>NB<\/span>%%\s/gi, '&nbsp;');
+                                        } else {
+                                            textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
+                                        }
+
+                                        // Restore images
+                                        for (var v = 0; v < imgList.length; v++) {
+                                            textTransform = textTransform.replace(new RegExp('%%IMG' + v + '%%', 'gi'), imgList[v].img);
+                                        }
+
+                                        // Restore rangy cursor
+                                        for (var v = 0; v < rangyCursors.length; v++) {
+                                            textTransform = textTransform.replace(new RegExp(rangyCursors[v].marker, 'gi'), rangyCursors[v].cursor);
+                                        }
+
+                                        child.innerHTML = textTransform;
+
+                                        if (coloration === 'Colorer les lignes RBV'
+                                            || coloration === 'Colorer les lignes RVJ'
+                                            || coloration === 'Surligner les lignes RBV'
+                                            || coloration === 'Surligner les lignes RVJ') {
+
+                                            var childFragment = UtilsService.colorLines(child, 3);
+
+                                            var parent = child.parentNode;
+                                            var nextElement = child.nextSibling;
+                                            parent.removeChild(child);
+                                            parent.insertBefore(childFragment, nextElement);
+
+                                        } else if (
+                                            coloration === 'Colorer les lignes RBVJ'
+                                            || coloration === 'Surligner les lignes RBVJ') {
+
+                                            var childFragment = UtilsService.colorLines(child, 4);
+
+                                            var parent = child.parentNode;
+                                            var nextElement = child.nextSibling;
+                                            parent.removeChild(child);
+                                            parent.insertBefore(childFragment, nextElement);
+                                        }
+
+                                        console.log('restore rangy end');
+
+                                        rangy.restoreSelection(savedSel);
+
+                                    } else {
+                                        continue;
+                                    }
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
 
 
                         bindHtmlWatcher();
@@ -87,33 +217,29 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                     var documentFragment = document.createDocumentFragment();
                     documentFragment.appendChild(element.cloneNode(true));
-                    documentFragment.children[0].innerHTML = '';
-
-                    console.log(element.children);
 
                     if (element.children.length > 0) {
+
                         for (var i = 0; i < element.children.length; i++) {
 
                             var child = element.children[i];
                             var clone = child.cloneNode(true);
 
-                            if (clone.hasChildNodes()) {
+                            if (child.hasChildNodes()) {
                                 clone = splitElement(child, coloration);
                             } else {
-                                clone.innerHTML = splitText(clone.innerHTML, coloration);
+                                clone.textContent = splitText(child.textContent, coloration);
                             }
                             documentFragment.children[0].appendChild(clone);
                         }
-                    } else {
-                        documentFragment.children[0].innerHTML = splitText(element.innerHTML, coloration);
                     }
 
-                    console.log('documentFragment.children[0]', documentFragment.children[0].innerHTML);
+                    documentFragment.children[0].textContent = splitText(element.textContent, coloration);
 
                     return documentFragment;
                 };
 
-                var splitText = function(text, coloration){
+                var splitText = function (text, coloration) {
 
                     var textTransform = text;
                     // Split Text
