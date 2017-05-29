@@ -45,7 +45,7 @@ cnedApp.directive('uploadFile', function ($rootScope, ToasterService, $timeout) 
 
                         console.log('element.files[i].type', element.files[i].type);
 
-                        if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip' && element.files[i].type !== 'application/msword' && element.files[i].type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                        if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip' && element.files[i].type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
                             if (element.files[i].type === '' && element.files[i].name.indexOf('.epub') > -1) {
                                 filename = element.files[i].name;
 

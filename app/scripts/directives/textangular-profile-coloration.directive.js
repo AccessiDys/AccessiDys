@@ -42,6 +42,15 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                 var windowWidth = window.innerWidth;
                 var adaptIndex = 0;
 
+                window.addEventListener('scroll', function () {
+                    windowScroll = window.pageYOffset;
+
+                    if (windowScroll >= prevScroll) {
+                        prevScroll = windowScroll;
+                        generateColoration($element[0]);
+                    }
+                });
+
                 /**
                  * Bind the watcher to detect change in the editor
                  */
@@ -51,7 +60,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                             return $element[0].innerHTML.length;
                         }, function (newValue, oldValue) {
                             if (newValue !== oldValue) {
-                                console.log('html watcher generateColoration');
                                 generateColoration($element[0]);
                             }
                         });
@@ -67,10 +75,12 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                     $timeout(function () {
 
-                        var profile = $rootScope.currentProfile.data;
+                        var profile = $rootScope.currentProfile;
                         var text = element.innerHTML;
 
                         if (profile && text) {
+
+                            profile = profile.data;
 
                             var documentFragment = document.createDocumentFragment();
                             documentFragment.appendChild(element.cloneNode(true));
@@ -157,6 +167,8 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
                                         }
 
+                                        textTransform = textTransform.replace(/%%NB%%/gi, ' ');
+
                                         // Restore images
                                         for (var v = 0; v < imgList.length; v++) {
                                             textTransform = textTransform.replace(new RegExp('%%IMG' + v + '%%', 'gi'), imgList[v].img);
@@ -193,7 +205,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             parent.insertBefore(childFragment, nextElement);
                                         }
 
-                                        console.log('restore rangy end');
+
 
                                         rangy.restoreSelection(savedSel);
 
@@ -273,11 +285,11 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                  * Watcher for the current profile
                  */
                 $rootScope.$watch('currentProfile', function (newvalue) {
-                    $log.debug('change current profile');
+
 
                     if (newvalue) {
                         generateColoration($element[0]);
-                        console.log('html watcher currentProfile');
+
                     }
 
                 }, true);

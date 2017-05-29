@@ -264,9 +264,17 @@ angular.module('cnedApp').config(['$compileProvider',
 
 angular.module('cnedApp').config(function ($provide) {
     $provide.decorator('taOptions', ['taRegisterTool', 'taSelection', 'taBrowserTag', 'taTranslations',
-        'taToolFunctions', '$delegate',
+        'taToolFunctions', '$delegate', '$window', 'UtilsService',
         function (taRegisterTool, taSelection, taBrowserTag, taTranslations,
-                  taToolFunctions, taOptions) {
+                  taToolFunctions, taOptions, $window, UtilsService) {
+
+            var blockJavascript = function (link) {
+                if (link.toLowerCase().indexOf('javascript')!==-1) {
+                    return true;
+                }
+                return false;
+            };
+
             // $delegate is the taOptions we are decorating
             // register the tool with textAngular
             taRegisterTool('pageBreak', {
@@ -278,32 +286,43 @@ angular.module('cnedApp').config(function ($provide) {
             // add the button to the default toolbar definition
             taOptions.toolbar[1].push('pageBreak');
 
+            taTranslations.insertLink.dialogPrompt = 'Veuillez insérer votre url';
+            taTranslations.insertLink.tooltip = 'Insérer / éditer un lien';
+            taTranslations.editLink.unLinkButton.tooltip = 'Supprimer le lien';
+            taTranslations.editLink.reLinkButton.tooltip = 'Editer';
+            taTranslations.editLink.targetToggle.buttontext = 'Ouvrir dans une nouvelle fenêtre';
 
-            /*taRegisterTool('ocr', {
-                buttontext: 'Océrisation',
-                action: function () {
-                    this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
-                },
-                disabled: function () {
-                    console.log('selection =', taSelection.getSelection());
-
-                    var selection = taSelection.getSelection();
-
-                    if(selection && selection.container && selection.container.children){
-
-
-                        for(var i = 0 ; i < selection.container.children.length ; i++){
-                            console.log('children', selection.container.children[i]);
-                        }
-
+            taRegisterTool('insertLinkCustom', {
+                tooltiptext: taTranslations.insertLink.tooltip,
+                iconclass: 'fa fa-link',
+                action: function(){
+                    var urlLink;
+                    // if this link has already been set, we need to just edit the existing link
+                    /* istanbul ignore if: we do not test this */
+                    if (taSelection.getSelectionElement().tagName && taSelection.getSelectionElement().tagName.toLowerCase() === 'a') {
+                        urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, taSelection.getSelectionElement().href);
+                    } else {
+                        urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, 'http://');
                     }
-
-                    return true;
-
+                    if(urlLink && urlLink !== '' && urlLink !== 'http://' && urlLink !== 'https://'){
+                        // block javascript here
+                        /* istanbul ignore else: if it's javascript don't worry - though probably should show some kind of error message */
+                        if (!blockJavascript(urlLink)) {
+                            return this.$editor().wrapSelection('createLink', urlLink, true);
+                        }
+                    }
+                },
+                activeState: function(commonElement){
+                    if(commonElement) return commonElement[0].tagName === 'A';
+                    return false;
+                },
+                onElementSelect: {
+                    element: 'a',
+                    action: taToolFunctions.aOnSelectAction
                 }
             });
-            // add the button to the default toolbar definition
-            taOptions.toolbar[1].push('ocr');*/
+
+            taOptions.toolbar[1].push('insertLinkCustom');
 
 
             return taOptions;

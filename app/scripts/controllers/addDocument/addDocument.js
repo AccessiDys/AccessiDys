@@ -35,7 +35,7 @@ angular
         'AddDocumentCtrl',
         function ($log, $scope, $rootScope, $stateParams, serviceCheck, $http,
                   htmlEpubTool, fileStorageService,
-                  canvasToImage, UtilsService, LoaderService, ToasterService, documentService, UserService) {
+                  canvasToImage, UtilsService, LoaderService, ToasterService, documentService, UserService, textAngularManager, $state) {
 
             $scope.document = {
                 filename: null,
@@ -43,8 +43,10 @@ angular
                 data: null
             };
 
+            $scope.initDocumentData = null;
+
             $scope.idDocument = $stateParams.idDocument;
-            $scope.docTitleTmp = $stateParams.title; // TODO refractor
+            $scope.docTitleTmp = $stateParams.title;
             $scope.url = $stateParams.url;
             // Parameters to initialize
             $scope.files = [];
@@ -54,66 +56,85 @@ angular
             $scope.lien = '';
 
 
+            $scope.confirmDocumentEdit = function (cb) {
+
+                if ($scope.document.data !== $scope.initDocumentData) {
+                    UtilsService.openConfirmModal('INFORMATION', 'Vous risquez de perdre le document en cours d\'enregistrement, êtes-vous sûr de vouloir quitter cette page ?', true)
+                        .then(function () {
+                            cb();
+                        });
+                } else {
+                    cb();
+                }
+            };
+
             $scope.openDocument = function () {
-                documentService.openDocument().then(function (document) {
 
-                    $log.debug('Open Document - ', document);
+                $scope.confirmDocumentEdit(function () {
+                    documentService.openDocument().then(function (document) {
 
-                    if (document.title) {
-                        $scope.document.filename = UtilsService.cleanUpSpecialChars(document.title);
-                    }
-
-                    // Presence of a file with the browse button
-                    if (document.files.length > 0) {
-                        var file = document.files[0];
-
-                        if (document.type === 'pdf') {
-                            $scope.loadPdf(file);
-                        } else if (document.type === 'image') {
-                            $scope.loadImage(file);
-                        } else if (document.type === 'epub') {
-                            $scope.uploadFile(file);
-                        } else if (document.type === 'word') {
-                            $scope.loadWordFile(file);
+                        if (document.title) {
+                            $scope.document.filename = UtilsService.cleanUpSpecialChars(document.title);
                         }
 
-                    } else if (document.uri) {
+                        $scope.document.filepath = null;
 
-                        $scope.lien = document.uri;
+                        // Presence of a file with the browse button
+                        if (document.files.length > 0) {
+                            var file = document.files[0];
 
-                        if (document.uri.indexOf('.epub') > -1) {
-                            $scope.getEpubLink();
-                        } else if (document.uri.indexOf('.pdf') > -1) {
-                            $scope.loadPdfByLien(document.uri);
-                        } else {
-                            LoaderService.showLoader('document.message.info.treatment.inprogress', true);
-                            LoaderService.setLoaderProgress(10);
+                            if (document.type === 'pdf') {
+                                $scope.loadPdf(file);
+                            } else if (document.type === 'image') {
+                                $scope.loadImage(file);
+                            } else if (document.type === 'epub') {
+                                $scope.uploadFile(file);
+                            } else if (document.type === 'word') {
+                                $scope.loadWordFile(file);
+                            }
 
-                            // Retrieving the contents of the body of link by services.
-                            serviceCheck.htmlPreview(document.uri)
-                                .then(function (resultHtml) {
+                        } else if (document.uri) {
 
-                                    if (resultHtml.documentHtml && resultHtml.documentHtml.indexOf('<title>') > -1) {
-                                        $scope.document.filename = UtilsService.cleanUpSpecialChars(resultHtml.documentHtml.substring(resultHtml.documentHtml.indexOf('<title>') + 7, resultHtml.documentHtml.indexOf('</title>')));
-                                    }
+                            $scope.lien = document.uri;
 
-                                    var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
-                                    promiseClean.then(function (resultClean) {
-                                        // Insertion in the editor
-                                        $scope.document.data = resultClean;
+                            if (document.uri.indexOf('.epub') > -1) {
+                                $scope.getEpubLink();
+                            } else if (document.uri.indexOf('.pdf') > -1) {
+                                $scope.loadPdfByLien(document.uri);
+                            } else {
+                                LoaderService.showLoader('document.message.info.treatment.inprogress', true);
+                                LoaderService.setLoaderProgress(10);
+
+                                // Retrieving the contents of the body of link by services.
+                                serviceCheck.htmlPreview(document.uri)
+                                    .then(function (resultHtml) {
+
+                                        if (resultHtml.documentHtml && resultHtml.documentHtml.indexOf('<title>') > -1) {
+                                            $scope.document.filename = UtilsService.cleanUpSpecialChars(resultHtml.documentHtml.substring(resultHtml.documentHtml.indexOf('<title>') + 7, resultHtml.documentHtml.indexOf('</title>')));
+                                        }
+
+                                        var promiseClean = htmlEpubTool.cleanHTML(resultHtml);
+                                        promiseClean.then(function (resultClean) {
+
+                                            // Insertion in the editor
+                                            $scope.document.data = resultClean;
+                                            $scope.initDocumentData = resultClean;
+                                            LoaderService.hideLoader();
+                                        });
+                                    }, function () {
+
                                         LoaderService.hideLoader();
+
+                                        UtilsService.showInformationModal('information',
+                                            'L\'import du document a échoué. Une erreur technique est survenue.<br><br>Veuillez réessayer ultérieurement.', null, true);
                                     });
-                                }, function () {
-
-                                    LoaderService.hideLoader();
-
-                                    UtilsService.showInformationModal('information',
-                                        'L\'import du document a échoué. Une erreur technique est survenue.<br><br>Veuillez réessayer ultérieurement.', null, true);
-                                });
+                            }
                         }
-                    }
 
+                    });
                 });
+
+
             };
 
             // TODO
@@ -153,10 +174,14 @@ angular
                     mode = 'create';
                 }
 
+                var documentData = $scope.document.data;
+                documentData = documentData.replace(/&nbsp;/gi, ' ');
+                documentData = documentData.replace(/href="(http.*?)"/gi, 'href="/#/apercu?url=$1"');
+
 
                 documentService.save({
                     title: $scope.document.filename,
-                    data: $scope.document.data,
+                    data: documentData,
                     filePath: $scope.document.filepath
                 }, mode)
                     .then(function (data) {
@@ -168,6 +193,8 @@ angular
                         }
                         $scope.document.filepath = data.filepath;
                         $scope.document.filename = data.filename;
+
+                        $scope.initDocumentData = angular.copy($scope.document.data);
 
                     }, function (cause) {
                         if (cause !== 'edit-title') {
@@ -202,6 +229,12 @@ angular
                 });
             };
 
+            $scope.close = function () {
+                $scope.confirmDocumentEdit(function () {
+                    $state.go('app.list-document');
+                });
+            };
+
             /**
              * cleans and puts the epub content in the editor
              */
@@ -233,6 +266,7 @@ angular
                         } else {
                             var html = tabHtml.join($scope.pageBreakElement);
                             $scope.document.data = html;
+                            $scope.initDocumentData = html;
                         }
                     };
 
@@ -248,6 +282,7 @@ angular
                             }
                         }
                         $scope.document.data = resultClean;
+                        $scope.initDocumentData = resultClean;
                     });
                 }
                 LoaderService.hideLoader();
@@ -264,6 +299,7 @@ angular
                 reader.onload = function (e) {
                     // Insert the image
                     $scope.document.data = '<p><img src="' + e.target.result + '"/></p>';
+                    $scope.initDocumentData = angular.copy($scope.document.data);
                 };
 
                 // Read in the image file as a data URL.
@@ -435,6 +471,7 @@ angular
                                             } else {
                                                 var html = tabHtml.join($scope.pageBreakElement);
                                                 $scope.document.data = html;
+                                                $scope.initDocumentData = html;
                                             }
                                         };
 
@@ -448,6 +485,7 @@ angular
                                                 }
                                             }
                                             $scope.document.data = resultClean;
+                                            $scope.initDocumentData = resultClean;
                                         }, function () {
                                             ToasterService.showToaster('#document-error-toaster', 'document.message.save.ko.epud.download');
                                             LoaderService.hideLoader();
@@ -542,6 +580,7 @@ angular
                         var doc = new Docxtemplater();
                         doc.loadZip(zip);
                         $scope.document.data = doc.getFullText();
+                        $scope.initDocumentData = doc.getFullText();
                     } catch (e) {
                         console.log('error', e);
                     }
@@ -584,6 +623,7 @@ angular
                         $log.debug('Init document edit', file);
 
                         $scope.document = file;
+                        $scope.initDocumentData = angular.copy($scope.document.data);
                         LoaderService.hideLoader();
                     });
 
@@ -592,16 +632,64 @@ angular
                 if ($stateParams.file) {
                     $scope.document = $stateParams.file;
 
+
+                    $scope.initDocumentData = angular.copy($scope.document.data);
+
                     if (!$stateParams.file.toBeSaved) {
                         ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
 
                     }
                 }
 
+
             };
 
             $scope.textAngularSetup = function (textEditor) {
                 textEditor.attr('text-angular-profile-coloration', '');
+
+                textAngularManager.updateToolbarToolDisplay('toolbar', 'h1', {
+                    buttontext: 'Titre 1',
+                    tooltiptext: 'Titre 1'
+                });
+
+                textAngularManager.updateToolbarToolDisplay('toolbar', 'h2', {
+                    buttontext: 'Titre 2',
+                    tooltiptext: 'Titre 2'
+                });
+
+                textAngularManager.updateToolbarToolDisplay('toolbar', 'h3', {
+                    buttontext: 'Titre 3',
+                    tooltiptext: 'Titre 3'
+                });
+
+                textAngularManager.updateToolbarToolDisplay('toolbar', 'h4', {
+                    buttontext: 'Titre 4',
+                    tooltiptext: 'Titre 4'
+                });
+
+                textAngularManager.updateToolbarToolDisplay('toolbar', 'h5', {
+                    buttontext: 'Sous-titre 1',
+                    tooltiptext: 'Sous-titre 1'
+                });
+
+                textAngularManager.updateToolbarToolDisplay('toolbar', 'h6', {
+                    buttontext: 'Sous-titre 2',
+                    tooltiptext: 'Sous-titre 2'
+                });
+
+                textAngularManager.updateToolbarToolDisplay('toolbar', 'p', {
+                    buttontext: 'Paragraphe',
+                    tooltiptext: 'Paragraphe'
+                });
+
+                textAngularManager.updateToolbarToolDisplay('toolbar', 'ul', {
+                    buttontext: 'Liste de niveau 1',
+                    tooltiptext: 'Liste de niveau 1',
+                    iconclass: ''
+                });
+
+
             };
+
 
         });

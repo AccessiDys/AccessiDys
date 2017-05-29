@@ -69,7 +69,7 @@ angular.module('cnedApp').controller('OpenDocumentModalCtrl', function ($rootSco
 
                     doc.type = 'epub';
 
-                } else if (doc.files[0].type === 'application/msword'  || doc.files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                } else if (doc.files[0].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
                     doc.type = 'word';
 
                 } else {
@@ -82,16 +82,7 @@ angular.module('cnedApp').controller('OpenDocumentModalCtrl', function ($rootSco
                 ToasterService.showToaster('#open-document-modal-error-toaster', errors[0]);
             } else {
 
-                console.log('doc', doc);
-                documentService.isDocumentAlreadyExist(doc)
-                    .then(function (isDocumentExist) {
-
-                        if (isDocumentExist) {
-                            ToasterService.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.alreadyexist');
-                        } else {
-                            $uibModalInstance.close(doc);
-                        }
-                    });
+                $uibModalInstance.close(doc);
 
             }
         }

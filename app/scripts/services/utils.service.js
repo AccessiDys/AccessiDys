@@ -279,7 +279,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         /**
          * Regex to select words in text
          */
-        wordRegex: /([\w,.'&;:"«»:%\?\-éèœëêçàâôîùïö\(\)]+)(?![^<]*>)/gi,
+        wordRegex: /([\w,.'&;:"«»:%\?\-éèœëêçàâôîùïö\(\)\/]+)(?![^<]*>)/gi,
         // /([\w,.'&;:"«»:%\?\-é!èœëêç—àâôîù’ïö\(\)]+)(?![^<]*>)/gi
 
         /**

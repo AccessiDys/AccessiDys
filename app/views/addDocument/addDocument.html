@@ -55,7 +55,8 @@
                    placeholder="Entrez le titre du document"
                    data-ng-model="document.filename" data-ng-disabled="document.filepath" required>
 
-            <a ui-sref="app.list-document" style="text-decoration: none; color: white;"
+            <a style="text-decoration: none; color: white;"
+               ng-click="close()"
                role="button" type="button"
                class="grey_btn pull-right btn_annuler"
                title="{{'Fermer' | translate}}">
@@ -82,8 +83,11 @@
 
 <div image-menu-container>
 
+    <text-angular-toolbar ta-toolbar="[['h1','h2','h3', 'h4', 'h5', 'h6', 'p', 'ul'],  [ 'pageBreak', 'insertLinkCustom']]" name="toolbar"></text-angular-toolbar>
+
             <div text-angular
-                 ta-toolbar="[['h1','h2','h3', 'h4', 'h5', 'h6', 'p', 'ul'],  ['insertLink', 'pageBreak']]"
+                 name="document-editor"
+                 ta-target-toolbars="toolbar"
                  ta-text-editor-setup="textAngularSetup"
                  ng-model="document.data"
                  class="{{currentProfile.data.className}}"></div>

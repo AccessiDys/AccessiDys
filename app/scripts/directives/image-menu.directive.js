@@ -41,19 +41,22 @@ angular.module('cnedApp').directive('imageMenuContainer',
 
 
                     var html =
-                        '<div class="popover fade bottom in">'
+                        '<div class="popover fade bottom in" style="max-width: 300px;">'
                         + '<div class="arrow" style="margin-left: -87px;"></div>'
                         + '<div class="popover-content" style="line-height: 28px;">'
                         + '<div class="btn-group" role="group" aria-label="...">'
-                        + '<button type="button" class="btn btn-default" data-ng-click="align(\'left\')"><i class="fa fa-align-left" aria-hidden="true"></i></button>'
-                        + '<button type="button" class="btn btn-default" data-ng-click="align(\'center\')"><i class="fa fa-align-center" aria-hidden="true"></i></button>'
-                        + '<button type="button" class="btn btn-default" data-ng-click="align(\'right\')"><i class="fa fa-align-right" aria-hidden="true"></i></button>'
+                        + '<button type="button" class="btn btn-default" data-ng-click="resize(25)">25%</button>'
+                        + '<button type="button" class="btn btn-default" data-ng-click="resize(50)">50%</button>'
+                        + '<button type="button" class="btn btn-default" data-ng-click="resize(75)">75%</button>'
+                        + '<button type="button" class="btn btn-default" data-ng-click="resize(100)">100%</button>'
+                        + '<button type="button" class="btn btn-default" data-ng-click="reset()" title="Réinitialiser"><i class="fa fa-times" aria-hidden="true"></i></button>'
+                        + '</div>'
+                        + '<div class="btn-group mt-10" role="group" aria-label="...">'
                         + '<button type="button" class="btn btn-default" ng-click="openOcrModal()">Océriser</button>'
                         + '</div>'
                         + '</div>'
                         + '</div>';
 
-                    console.log('$scope.image', image.offsetTop);
 
                     var $template = $compile(html)($scope);
 
@@ -115,9 +118,13 @@ angular.module('cnedApp').directive('imageMenuContainer',
                     });
                 };
 
-                $scope.align = function(position){
+                $scope.reset = function(){
+                    $scope.image.style['width'] = '';
+                };
 
-                    $scope.image.parentNode.style['text-align'] = position;
+                $scope.resize = function(size){
+
+                    $scope.image.style['width'] = size + '%';
 
                 }
             }

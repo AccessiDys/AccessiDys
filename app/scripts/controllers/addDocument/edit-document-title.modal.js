@@ -26,7 +26,7 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $uibModalInstance, documentService, $log, ToasterService, title, errors, mode) {
+angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, $uibModalInstance, documentService, $log, ToasterService, $timeout, title, errors, mode) {
     $scope.document = {
         title: title
     };
@@ -50,7 +50,7 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
         }).then(function (isDocumentAlreadyExist) {
 
             if ($scope.errors.length < 1) {
-                if(!isDocumentAlreadyExist){
+                if (!isDocumentAlreadyExist) {
                     $uibModalInstance.close({
                         title: $scope.document.title
                     });
@@ -65,7 +65,6 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
         });
 
 
-
     };
 
     $scope.dismissModal = function () {
@@ -74,8 +73,13 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
 
     $uibModalInstance.opened.then(function () {
 
+        console.log('errors', $scope.errors);
+
         if ($scope.errors.length > 0) {
-            ToasterService.showToaster('#edit-title-error-toaster', $scope.errors[0]);
+            console.log('$scope.errors[0]', $scope.errors[0]);
+            $timeout(function () {
+                ToasterService.showToaster('#edit-title-error-toaster', $scope.errors[0]);
+            }, 200);
         }
 
     });

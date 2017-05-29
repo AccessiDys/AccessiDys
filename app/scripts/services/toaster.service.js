@@ -40,7 +40,6 @@ cnedApp.service('ToasterService', function ($rootScope, $timeout, gettextCatalog
          */
         showToaster: function (id, msg) {
             $rootScope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
-
             angular.element(document.querySelector(id)).css('display', 'block');
 
             $timeout(function () {

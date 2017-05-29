@@ -57,7 +57,6 @@ cnedApp.factory('htmlEpubTool',
                     tag: ['objet', 'object', 'script', 'link', 'meta', 'button', 'embed', 'form', 'frame', 'iframe', 'noscript', 'nav', 'footer', 'aside', 'header']
                 };
                 var removeElements = function (text, selector) {
-                    $log.debug('remove element ' + selector);
                     var wrapped = angular.element('<div>' + text + '</div>');
                     wrapped.find(selector).remove();
                     return wrapped.html();
@@ -89,7 +88,6 @@ cnedApp.factory('htmlEpubTool',
                         deferred.reject('Les sites web à contenu dynamique ne sont pas adaptables.');
                     } else {
                         // Flatten DOM
-                        $log.debug('htmlFilePure without span', htmlFile);
                         htmlFile = htmlFile.replace(/(<div(?:.*?)>)/gi, '');
                         htmlFile = htmlFile.replace(/(<\/div>)/gi, '');
 
@@ -98,7 +96,6 @@ cnedApp.factory('htmlEpubTool',
 
                         htmlFile = htmlFile.replace(/(class="(?:.*?)")/gi, '');
 
-                        $log.debug('htmlFilePure without après', htmlFile);
 
                         htmlFile = UtilsService.replaceLink(htmlFile);
 
