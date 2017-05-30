@@ -172,7 +172,7 @@ angular.module('cnedApp').directive('profileColoration',
                                 }
                             }, true);
                         }
-                    }, 100);
+                    }, 200);
                 };
 
                 $element[0].innerHTML = UtilsService.removeSpan($scope.text);

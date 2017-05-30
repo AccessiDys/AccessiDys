@@ -27,7 +27,7 @@
 'use strict';
 
 angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope, profilsService, $uibModal,
-                                                             tagsService, $log, UserService, $state, CacheProvider, _, tags, userData) {
+                                                             tagsService, $log, UserService, $state, CacheProvider, fileStorageService, _, tags, userData) {
 
     $log.debug('commonCtrl - userData', userData);
 
@@ -41,6 +41,19 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     $rootScope.isFullsize = true;
     $rootScope.displayTextSimple = 'AccessiDys facilite la lecture des documents, livres et pages web. AccessiDys vise les personnes en situation de handicap mais aussi toute personne ayant des difficultés pour lire des documents longs ou complexes. Depuis les élèves et étudiants avec une dyslexie jusqu\'aux cadres supérieurs trop pressés jusqu\'aux personnes âgées, AccessiDys facilite la compréhension des documents administratifs ou juridiques, des manuels scolaires traditionnels, des magazines ou journaux à la mise en page complexe, avec des petits caractères ou sans synthèse vocale. AccessiDys est une plateforme Web avec deux fonctions principales. Les pages Web ou documents à lire sont affichées en utilisant un profil de lecture sur mesure qui comprend un large choix de paramètres d\'affichage adaptés aux besoins individuels de chaque lecteur. AccessiDys vise les lecteurs qui ont trop peu de temps ou d\'attention, qui ont une dyslexie, une dyspraxie, un autisme ou des déficiences visuelles. AccessiDys sait également lire les pages Web à haute voix. AccessiDys rend vos documents ou pages accessibles aux lecteurs en les important de manière simple et rapide quel que soit le format du fichier d\'origine. Qu\'il s\'agisse d\'un fichier PDF numérisé, d\'un document Office, d\'un livre électronique au format ePub ou d\'une page Web traditionnelle, AccessiDys vous permet de transformer votre document pour que les lecteurs bénéficient d\'une expérience de lecture totalement personnalisée.';
+
+    $rootScope.$watch('isAppOnline', function (newvalue) {
+        if (newvalue) {
+
+            console.log('isAppOnline watcher');
+
+            fileStorageService.synchronizeFiles().then(function(res){
+                if (res && res.profilesCount > 0) {
+                    $rootScope.initCommon();
+                }
+            });
+        }
+    }, true);
 
     $rootScope.initCommon = function () {
 
@@ -63,8 +76,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
                                 item.tagDetail = _.find(tags, function (tag) {
                                     return item.tag === tag._id;
                                 });
-
-                                item.sampleText = '<' + item.tagDetail.balise + '>' + item.tagDetail.libelle + ' : ' + $rootScope.displayTextSimple + '</' + item.tagDetail.balise + '>';
                             });
 
                             profile.data.profileTags.sort(function (a, b) {

@@ -175,48 +175,15 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
                             return OauthService.token().then(function (res) {
                                 return UserService.saveData(res.data).then(function () {
 
-                                    UserService.init().then(function(userData){
+                                    UserService.init().then(function (userData) {
                                         $rootScope.userData = userData;
-                                    });
 
-                                    CacheProvider.getItem('documentsToSynchronize').then(function (items) {
-
-                                        // Synchronize doc
-                                        if (items) {
-                                            var toSend = [];
-                                            for (var i = 0; i < items.length; i++) {
-                                                if (items[i].action === 'save') {
-                                                    toSend.push(fileStorageService.save(items[i].file, 'document'));
-                                                } else if (items[i].action === 'delete') {
-                                                    toSend.push(fileStorageService.delete(items[i].file, 'document'));
-                                                }
-                                            }
-                                            $q.all(toSend).then(function (res) {
-                                                $log.debug('res from documentsToSynchronize', res);
-                                                CacheProvider.setItem(null, 'documentsToSynchronize');
-                                            });
-                                        }
-                                    });
-
-                                    CacheProvider.getItem('profilesToSynchronize').then(function (items) {
-
-                                        // Synchronize doc
-                                        if (items) {
-                                            var toSend = [];
-                                            for (var i = 0; i < items.length; i++) {
-                                                items[i].file.data.owner = res.data.email;
-                                                if (items[i].action === 'save') {
-                                                    toSend.push(fileStorageService.save(items[i].file, 'profile'));
-                                                } else if (items[i].action === 'delete') {
-                                                    toSend.push(fileStorageService.delete(items[i].file, 'profile'));
-                                                }
-                                            }
-                                            $q.all(toSend).then(function (res) {
-                                                $log.debug('res from profileToSynchronize', res);
-                                                CacheProvider.setItem(null, 'profilesToSynchronize');
+                                        fileStorageService.synchronizeFiles().then(function (res) {
+                                            if (res && res.profilesCount > 0) {
                                                 $rootScope.initCommon();
-                                            });
-                                        }
+                                            }
+                                        });
+
                                     });
 
                                     if (routeData) {
@@ -269,7 +236,7 @@ angular.module('cnedApp').config(function ($provide) {
                   taToolFunctions, taOptions, $window, UtilsService) {
 
             var blockJavascript = function (link) {
-                if (link.toLowerCase().indexOf('javascript')!==-1) {
+                if (link.toLowerCase().indexOf('javascript') !== -1) {
                     return true;
                 }
                 return false;
@@ -295,7 +262,7 @@ angular.module('cnedApp').config(function ($provide) {
             taRegisterTool('insertLinkCustom', {
                 tooltiptext: taTranslations.insertLink.tooltip,
                 iconclass: 'fa fa-link',
-                action: function(){
+                action: function () {
                     var urlLink;
                     // if this link has already been set, we need to just edit the existing link
                     /* istanbul ignore if: we do not test this */
@@ -304,7 +271,7 @@ angular.module('cnedApp').config(function ($provide) {
                     } else {
                         urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, 'http://');
                     }
-                    if(urlLink && urlLink !== '' && urlLink !== 'http://' && urlLink !== 'https://'){
+                    if (urlLink && urlLink !== '' && urlLink !== 'http://' && urlLink !== 'https://') {
                         // block javascript here
                         /* istanbul ignore else: if it's javascript don't worry - though probably should show some kind of error message */
                         if (!blockJavascript(urlLink)) {
@@ -312,8 +279,8 @@ angular.module('cnedApp').config(function ($provide) {
                         }
                     }
                 },
-                activeState: function(commonElement){
-                    if(commonElement) return commonElement[0].tagName === 'A';
+                activeState: function (commonElement) {
+                    if (commonElement) return commonElement[0].tagName === 'A';
                     return false;
                 },
                 onElementSelect: {
@@ -336,15 +303,10 @@ angular.module('cnedApp').run(function ($rootScope, configuration, $timeout, $in
     $rootScope.checkIsOnline = function () {
         return serviceCheck.isOnline().then(function () {
             //Useful test for the need for the preservation of the disconnected mode, once we have entered this mode.
-            if ($rootScope.isAppOnline !== false) {
+            if (!$rootScope.isAppOnline) {
                 $rootScope.isAppOnline = true;
             }
         }, function () {
-            if ($rootScope.isAppOnline === true) {
-                //For the need for the preservation of the offline mode, from the first time the user switches to offline mode
-                localStorage.setItem('wasOffline', true);
-                //We warn the user that he passed in offline mode.
-            }
             $rootScope.isAppOnline = false;
         });
     };

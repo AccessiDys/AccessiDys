@@ -183,12 +183,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                 _file.data = file.data;
                 return CacheProvider.save(_file, storageName);
             }, function () {
-                this.addFileToSynchronize(file, type, 'save');
+                self.addFileToSynchronize(file, type, 'save');
                 return CacheProvider.save(file, storageName);
             });
 
         } else {
-            this.addFileToSynchronize(file, type, 'save');
+            self.addFileToSynchronize(file, type, 'save');
             return CacheProvider.save(file, storageName);
         }
     };
@@ -226,7 +226,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     return CacheProvider.delete(file, storageName).then(function () {
                         return CacheProvider.save(data, storageName);
                     });
-                }, function(){
+                }, function () {
                     self.addFileToSynchronize(file, type, 'delete');
                     return CacheProvider.delete(file, storageName).then(function () {
                         file.filename = newName;
@@ -277,11 +277,11 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             return DropboxProvider.delete(file.filepath, UserService.getData().token).then(function () {
                 return CacheProvider.delete(file, storageName);
             }, function () {
-                this.addFileToSynchronize(file, type, 'delete');
+                self.addFileToSynchronize(file, type, 'delete');
                 return CacheProvider.delete(file, storageName);
             });
         } else {
-            this.addFileToSynchronize(file, type, 'delete');
+            self.addFileToSynchronize(file, type, 'delete');
             return CacheProvider.delete(file, storageName);
         }
 
@@ -395,5 +395,62 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         });
     };
 
+    /**
+     * Synchronize files in cache
+     */
+    this.synchronizeFiles = function () {
+        var deferred = $q.defer();
+
+        CacheProvider.getItem('documentsToSynchronize').then(function (documents) {
+
+            CacheProvider.getItem('profilesToSynchronize').then(function (profiles) {
+
+                var toSend = [];
+
+                // Synchronize doc
+                if (documents) {
+                    for (var i = 0; i < documents.length; i++) {
+                        if (documents[i].action === 'save') {
+                            toSend.push(self.save(documents[i].file, 'document'));
+                        } else if (documents[i].action === 'delete') {
+                            toSend.push(self.delete(documents[i].file, 'document'));
+                        }
+                    }
+                }
+
+                // Synchronize profiles
+                if (profiles) {
+
+                    for (var i = 0; i < profiles.length; i++) {
+                        profiles[i].file.data.owner = UserService.getData().email;
+                        if (profiles[i].action === 'save') {
+                            toSend.push(self.save(profiles[i].file, 'profile'));
+                        } else if (profiles[i].action === 'delete') {
+                            toSend.push(self.delete(profiles[i].file, 'profile'));
+                        }
+                    }
+                }
+
+                if (toSend.length > 0) {
+                    $q.all(toSend).then(function (res) {
+                        $log.debug('res from documentsToSynchronize', res);
+                        CacheProvider.setItem(null, 'documentsToSynchronize');
+                        CacheProvider.setItem(null, 'profilesToSynchronize');
+
+                        deferred.resolve({
+                            documentCount: documents ? documents.length : 0,
+                            profilesCount: profiles ? profiles.length : 0
+                        });
+                    });
+                } else {
+                    deferred.resolve();
+                }
+
+            });
+        });
+
+
+        return deferred.promise;
+    };
 
 });
