@@ -124,7 +124,7 @@ require('./models/Profil');
 //require('./patches/patch_profil');
 var patchProd = require('./patches/patch_prod');
 
-//patchProd.updateDb();
+patchProd.updateDb();
 
 // Create HTTP/HTTPS Server
 

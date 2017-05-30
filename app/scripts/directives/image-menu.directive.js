@@ -39,7 +39,6 @@ angular.module('cnedApp').directive('imageMenuContainer',
                 var renderMenu = function (image) {
 
 
-
                     var html =
                         '<div class="popover fade bottom in" style="max-width: 300px;">'
                         + '<div class="arrow" style="margin-left: -87px;"></div>'
@@ -52,7 +51,7 @@ angular.module('cnedApp').directive('imageMenuContainer',
                         + '<button type="button" class="btn btn-default" data-ng-click="reset()" title="Réinitialiser"><i class="fa fa-times" aria-hidden="true"></i></button>'
                         + '</div>'
                         + '<div class="btn-group mt-10" role="group" aria-label="...">'
-                        + '<button type="button" class="btn btn-default" ng-click="openOcrModal()">Océriser</button>'
+                        + '<button type="button" class="btn btn-default" ng-click="openOcrModal()">{{"label.ocr"| translate}}</button>'
                         + '</div>'
                         + '</div>'
                         + '</div>';
@@ -118,11 +117,11 @@ angular.module('cnedApp').directive('imageMenuContainer',
                     });
                 };
 
-                $scope.reset = function(){
+                $scope.reset = function () {
                     $scope.image.style['width'] = '';
                 };
 
-                $scope.resize = function(size){
+                $scope.resize = function (size) {
 
                     $scope.image.style['width'] = size + '%';
 

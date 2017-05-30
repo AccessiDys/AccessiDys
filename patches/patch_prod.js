@@ -35,18 +35,25 @@ var mongoose = require('mongoose'),
 
 exports.updateDb = function () {
 
-    /*updateProfiles(function () {
+    updateProfiles(function () {
         updateUsers();
-    });*/
-
-    Profil.find().exec(function (err, profiles) {
-        if(profiles){
-            for (var i = 0; i < profiles.length; i++) {
-                console.log('profiles[i].owner', profiles[i].owner);
-            }
-        }
     });
 
+    /*UserAccount.find().exec(function (err, profiles) {
+     if(profiles){
+     for (var i = 0; i < profiles.length; i++) {
+     console.log('profiles[i].owner', profiles[i]);
+     }
+     }
+     });*/
+
+    /*Profil.find().exec(function (err, profiles) {
+     if(profiles){
+     for (var i = 0; i < profiles.length; i++) {
+     console.log('profiles[i].owner', profiles[i].owner);
+     }
+     }
+     });*/
 
 
 };
@@ -63,11 +70,16 @@ function updateUsers() {
 
                     if (_userProfils[i].profilID.owner !== 'scripted') {
                         if (_userProfils[i].userID && _userProfils[i].userID.local) {
-                            _userProfils[i].profilID.owner = _userProfils[i].userID.local.email;
+                            if (_userProfils[i].userID.local.role === 'admin') {
+                                _userProfils[i].profilID.owner = 'admin';
+                            } else {
+                                _userProfils[i].profilID.owner = _userProfils[i].userID.local.email;
+
+                            }
                             try {
                                 _userProfils[i].profilID.save();
                             } catch (e) {
-                                console.log('Error on user update');
+                                console.log('Error on user update', _userProfils);
                             }
                         }
 
@@ -91,7 +103,7 @@ function updateProfiles(cb) {
             if (_profilsTag) {
                 for (var i = 0; i < _profilsTag.length; i++) {
 
-                    if(_profilsTag[i].profil){
+                    if (_profilsTag[i].profil) {
                         if (_profilsTag[i].profil.profileTags.indexOf(_profilsTag[i]._id) < 0) {
                             _profilsTag[i].profil.profileTags.push(_profilsTag[i]._id);
                         }
@@ -113,10 +125,6 @@ function updateProfiles(cb) {
 
 
         });
-}
-
-function updateTags() {
-
 }
 
 

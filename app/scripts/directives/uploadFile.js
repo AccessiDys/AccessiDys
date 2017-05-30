@@ -43,8 +43,6 @@ cnedApp.directive('uploadFile', function ($rootScope, ToasterService, $timeout) 
                     for (var i = 0; i < element.files.length; i++) {
                         var filename = '';
 
-                        console.log('element.files[i].type', element.files[i].type);
-
                         if (element.files[i].type !== 'image/jpeg' && element.files[i].type !== 'image/png' && element.files[i].type !== 'application/pdf' && element.files[i].type !== 'application/epub+zip' && element.files[i].type !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
                             if (element.files[i].type === '' && element.files[i].name.indexOf('.epub') > -1) {
                                 filename = element.files[i].name;
@@ -52,14 +50,16 @@ cnedApp.directive('uploadFile', function ($rootScope, ToasterService, $timeout) 
                                 $scope.form.title = filename.substring(0, filename.lastIndexOf('.'));
                                 $scope.form.files.push(element.files[i]);
                                 field_txt += ' ' + element.files[i].name;
-                                angular.element('#filename_show').val(field_txt);
+                                angular.element(document.querySelector('#filename_show')).val(field_txt);
                             } else if (element.files[i].type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || element.files[i].type === 'application/msword' || element.files[i].type === 'application/vnd.oasis.opendocument.text' || element.files[i].type === 'text/plain') {
                                 $scope.form.files = [];
                                 ToasterService.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.file.copypaste');
+                                angular.element(document.querySelector('#filename_show')).val('');
                                 break;
                             } else {
                                 ToasterService.showToaster('#open-document-modal-error-toaster', 'document.message.save.ko.file.type');
                                 $scope.form.files = [];
+                                angular.element(document.querySelector('#filename_show')).val('');
                                 break;
                             }
                         } else {

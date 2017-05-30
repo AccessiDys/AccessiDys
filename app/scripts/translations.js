@@ -217,8 +217,8 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'Ouvrir' : 'Ouvrir',
         'Ouvrir un document' : 'Ouvrir un document',
         'Fermer' : 'Fermer',
-        'document.message.save.storage.ok': 'Document enregistré avec succès dans votre espace de sauvegarde.',
-        'document.message.save.cache.ok': 'Document enregistré uniquement dans votre navigateur.',
+        'document.message.save.storage.ok': 'Votre document a bien été enregistré.<br>Désormais à chaque enregistrement vos documents seront sauvegardés sur votre espace %%PROVIDER%%',
+        'document.message.save.ok': 'Votre document a bien été enregistré.',
         'document.message.save.ko': 'Erreur lors de l\'enregistrement de votre document : erreur technique.',
         'document.message.save.ko.title.mandatory': 'Le titre est obligatoire.',
         'document.message.save.ko.title.size': 'Le titre ne doit pas dépasser 200 caractères.',
@@ -247,8 +247,8 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'style.message.save.ko.file.type': 'Le type de fichier n\'est pas supporté. Merci de ne rattacher que des images.',
         'document.message.save.ko.connexion': 'Veuillez-vous connecter pour pouvoir enregistrer votre document.',
         'mail.send.ok' : 'Email envoyé avec succès.',
-        'profile.message.save.storage.ok' : 'Profil enregistré avec succès dans votre espace de sauvegarde.',
-        'profile.message.save.cache.ok' : 'Profil enregistré uniquement dans votre navigateur.',
+        'profile.message.save.storage.ok' : 'Votre profil a bien été enregistré.<br>Désormais à chaque enregistrement vos profils seront sauvegardés sur votre espace %%PROVIDER%%',
+        'profile.message.save.ok' : 'Votre profil a bien été enregistré.',
         'profile.message.favorite.ok' : 'Profil ajouté aux profils favoris.',
         'profile.message.favorite.delete' : 'Profil supprimé de vos profils favoris.',
         'profile.message.default.ok' : 'Profil par défaut selectionné avec succès.',
@@ -312,7 +312,10 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'profile.label.save.no-storage.message': 'Voulez-vous choisir un espace de sauvegarde pour retrouver vos profils sur tous vos appareils ?',
         'profile.message.info.save.inprogress': 'Sauvegarde du profil en cours veuillez patienter.',
         'dropbox.message.error.share.emailnotverified': 'L\'email de votre compte dropbox n\'a pas été vérifié.',
-        'dropbox.message.error.share.ko': 'Erreur lors du partage. Veuillez contacter votre administrateur'
+        'dropbox.message.error.share.ko': 'Erreur lors du partage. Veuillez contacter votre administrateur',
+        'label.ocr': 'Reconnaissance optique de caractères',
+        'label.ocr.launch': 'Lancer la reconnaissance optique de caractères',
+        'label.ocr.inprogress': 'Reconnaissance optique de caractères en cours...'
     });
 
 } ]);

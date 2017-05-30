@@ -38,8 +38,18 @@ cnedApp.service('ToasterService', function ($rootScope, $timeout, gettextCatalog
          * Show success toaster
          * @param msg
          */
-        showToaster: function (id, msg) {
-            $rootScope.toasterMsg = '<h1>' + gettextCatalog.getString(msg) + '</h1>';
+        showToaster: function (id, msg, params) {
+
+            var message = gettextCatalog.getString(msg)
+
+            if(params){
+                for(var keyName in params){
+                    message = message.replace(keyName, params[keyName]);
+                }
+            }
+
+            $rootScope.toasterMsg = '<h1>' + message + '</h1>';
+
             angular.element(document.querySelector(id)).css('display', 'block');
 
             $timeout(function () {

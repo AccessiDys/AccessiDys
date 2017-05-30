@@ -186,11 +186,8 @@ angular
                 }, mode)
                     .then(function (data) {
                         $log.debug('Save - data', data);
-                        if (!UserService.getData().token) {
-                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.cache.ok');
-                        } else {
-                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
-                        }
+                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.ok');
+
                         $scope.document.filepath = data.filepath;
                         $scope.document.filename = data.filename;
 
@@ -636,7 +633,9 @@ angular
                     $scope.initDocumentData = angular.copy($scope.document.data);
 
                     if (!$stateParams.file.toBeSaved) {
-                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok');
+                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.storage.ok', {
+                            '%%PROVIDER%%': UserService.getData().provider
+                        });
 
                     }
                 }

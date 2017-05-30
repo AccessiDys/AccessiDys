@@ -23,7 +23,7 @@
  -->
 <div class="modal-header">
     <button type="button" class="close" aria-hidden="true" data-ng-click="dismissModal()">×</button>
-    <h3 class="modal-title">Océrisation d'une image</h3>
+    <h3 class="modal-title">{{'label.ocr'| translate}}</h3>
 </div>
 <div class="modal-body">
 
@@ -46,12 +46,12 @@
 
     <div class="row mt-20" data-ng-if="ocrBarProgress.display">
         <div class="col-md-12">
-            <p>Océrisation en cours...</p>
+            <p>{{'label.ocr.inprogress'| translate}}</p>
             <uib-progressbar max="ocrBarProgress.max" value="ocrBarProgress.progress" type="success"><b>{{ocrBarProgress.progress}}%</b></uib-progressbar>
         </div>
     </div>
 </div>
 
 <div class="modal-footer text-center">
-    <button type="button" class="btn_simple light_blue" title="Lancer" data-ng-click="launchOcr()" data-ng-disabled="ocrBarProgress.display">Lancer l'océrisation</button>
+    <button type="button" class="btn_simple light_blue" title="{{'label.ocr.launch'| translate}}" data-ng-click="launchOcr()" data-ng-disabled="ocrBarProgress.display">{{'label.ocr.launch'| translate}}</button>
 </div>

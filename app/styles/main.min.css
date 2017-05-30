@@ -21,7 +21,6 @@
 
  .slick-list {
      border: 1px solid #086e80;
-     border-radius: 30px;
      padding: 15px;
  }
 
@@ -50,11 +49,8 @@
      position: relative;
      text-align: center;
      border: 1px solid #086e80;
-     border-radius: 30px;
      display: inline-block;
      padding: 15px;
-     /*background-color: #086e80;
-     color: white;*/
  }
 
  .my-backup-page .form_container {
@@ -162,4 +158,8 @@
 
  .navbar-default .navbar-nav .dropdown .active a {
      background-color: #075968;
+ }
+
+ .popover {
+     z-index: 900 !important;
  }

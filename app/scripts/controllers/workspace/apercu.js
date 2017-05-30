@@ -928,11 +928,7 @@ angular.module('cnedApp')
                 $scope.showSave = false;
                 $scope.showEditer = true;
 
-                if (!UserService.getData().token) {
-                    ToasterService.showToaster('#overview-success-toaster', 'document.message.save.cache.ok');
-                } else {
-                    ToasterService.showToaster('#overview-success-toaster', 'document.message.save.storage.ok');
-                }
+                ToasterService.showToaster('#document-success-toaster', 'document.message.save.ok');
 
             }, function () {
                 ToasterService.showToaster('#overview-error-toaster', 'document.message.save.ko');

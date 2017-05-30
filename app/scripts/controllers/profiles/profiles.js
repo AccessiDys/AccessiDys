@@ -192,11 +192,12 @@ angular.module('cnedApp')
                 $scope.initDetailProfil();
             }
 
-            // TODO to be reviewed
             if ($stateParams.file) {
                 $log.debug('save profile storage ok', $stateParams.file);
                 $timeout(function () {
-                    ToasterService.showToaster('#profile-success-toaster', 'profile.message.save.storage.ok');
+                    ToasterService.showToaster('#profile-success-toaster', 'profile.message.save.storage.ok', {
+                        '%%PROVIDER%%': UserService.getData().provider
+                    });
                 }, 200);
             }
         };
@@ -266,12 +267,8 @@ angular.module('cnedApp')
                         $rootScope.profiles.push(params.profile);
                     }
 
+                    ToasterService.showToaster('#profile-success-toaster', 'profile.message.save.ok');
 
-                    if (!UserService.getData().token) {
-                        ToasterService.showToaster('#profile-success-toaster', 'profile.message.save.cache.ok');
-                    } else {
-                        ToasterService.showToaster('#profile-success-toaster', 'profile.message.save.storage.ok');
-                    }
                 }
             });
         };

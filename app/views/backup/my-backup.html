@@ -35,12 +35,14 @@
 
             <div class="info mt-10" data-ng-if="userData.token">
                 <h4 class="content">
-                    <!--<img data-ng-src="{{selectedStorage.img}}" height="40"/>-->
-                    Sauvegardé sur le compte {{userData.provider}} de {{userData.email}}</h4>
+                    Vos documents sont sauvegardés sur le compte {{userData.provider}} {{userData.email}}
+                </h4>
             </div>
 
-            <p class="mt-10" data-ng-if="userData.token"><strong>Votre espace de sauvegarde vous permets de retrouver
-                vos documents sur tous vos appareils.</strong></p>
+            <p class="mt-10" data-ng-if="userData.token">
+                <strong>Votre espace de sauvegarde vous permet de retrouver
+                vos documents sur tous vos appareils.</strong>
+            </p>
         </div>
     </div>
 
@@ -49,7 +51,7 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <h3 class="mb-25" data-ng-if="!userData.token">Se connecter à un espace de sauvegarde</h3>
-            <h3 class="mb-25" data-ng-if="userData.token">Déplacer ma sauvegarde</h3>
+            <h3 class="mb-25" data-ng-if="userData.token">Changer d'espace de stockage</h3>
 
 
             <h4 class="mb-25 mt-10">1 - Sélectionner</h4>
