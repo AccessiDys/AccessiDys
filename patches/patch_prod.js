@@ -77,7 +77,11 @@ function updateUsers() {
 
                             }
                             try {
-                                _userProfils[i].profilID.save();
+                                _userProfils[i].profilID.save(function(err){
+                                    if(err){
+                                        console.log('Error on user update', _userProfils);
+                                    }
+                                });
                             } catch (e) {
                                 console.log('Error on user update', _userProfils);
                             }
@@ -113,7 +117,11 @@ function updateProfiles(cb) {
                         try {
                             // Clean profile
                             _profilsTag[i].profil.photo = undefined;
-                            _profilsTag[i].profil.save();
+                            _profilsTag[i].profil.save(function(err){
+                                if(err){
+                                    console.log('updateProfiles - Error on profil update', _profilsTag[i].profil);
+                                }
+                            });
                         } catch (e) {
                             console.log('updateProfiles - Error on profil update', _profilsTag[i].profil);
                         }
@@ -124,7 +132,11 @@ function updateProfiles(cb) {
                     try {
                         // Clean profile Tag
                         _profilsTag[i].texte = undefined;
-                        _profilsTag[i].save();
+                        _profilsTag[i].save(function(err){
+                            if(err){
+                                console.log('updateProfiles - Error on profilTag update', _profilsTag[i]);
+                            }
+                        });
                     } catch (e) {
                         console.log('updateProfiles - Error on profilTag update', _profilsTag[i]);
                     }
