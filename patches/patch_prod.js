@@ -72,6 +72,7 @@ function updateUsers() {
                         if (_userProfils[i].userID && _userProfils[i].userID.local) {
                             if (_userProfils[i].userID.local.role === 'admin') {
                                 _userProfils[i].profilID.owner = 'admin';
+                                console.log('profil admin', _userProfils[i].profilID);
                             } else {
                                 _userProfils[i].profilID.owner = _userProfils[i].userID.local.email;
 
