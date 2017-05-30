@@ -108,14 +108,26 @@ function updateProfiles(cb) {
                             _profilsTag[i].profil.profileTags.push(_profilsTag[i]._id);
                         }
 
-                        // Clean profile
-                        _profilsTag[i].profil.photo = undefined;
-                        _profilsTag[i].profil.save();
+
+
+                        try {
+                            // Clean profile
+                            _profilsTag[i].profil.photo = undefined;
+                            _profilsTag[i].profil.save();
+                        } catch (e) {
+                            console.log('updateProfiles - Error on profil update', _profilsTag[i].profil);
+                        }
                     }
 
-                    // Clean profile Tag
-                    _profilsTag[i].texte = undefined;
-                    _profilsTag[i].save();
+
+
+                    try {
+                        // Clean profile Tag
+                        _profilsTag[i].texte = undefined;
+                        _profilsTag[i].save();
+                    } catch (e) {
+                        console.log('updateProfiles - Error on profilTag update', _profilsTag[i]);
+                    }
 
 
                 }
