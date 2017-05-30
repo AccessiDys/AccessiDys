@@ -30,69 +30,155 @@ var mongoose = require('mongoose'),
     Profil = mongoose.model('Profil'),
     UserProfil = mongoose.model('UserProfil'),
     Tags = mongoose.model('Tag'),
-    UserAccount = mongoose.model('User');
+    UserAccount = mongoose.model('User'),
+    fs = require('fs');
 
 
 exports.updateDb = function () {
 
-    updateProfiles(function () {
-        updateUsers();
+
+    saveData(function () {
+        cleanProfiles(function () {
+            updateProfiles(function () {
+                updateUsers(function () {
+                    console.log('---------END-------');
+
+
+                    Profil.find({})
+                        .populate('profileTags')
+                        .exec(function (err, profiles) {
+                            if (profiles) {
+                                var countNoOwner = 0;
+                                var countWithOwner = 0;
+
+                                for (var i = 0; i < profiles.length; i++) {
+                                    if (profiles[i].owner === '' || typeof profiles[i].owner == 'undefined') {
+                                        countNoOwner++;
+                                    } else {
+                                        console.log('profiles[i].owner', profiles[i].owner);
+                                        countWithOwner++;
+                                    }
+                                }
+
+                                console.log('countNoOwner = ', countNoOwner);
+                                console.log('countWithOwner = ', countWithOwner);
+                                console.log('total = ', profiles.length);
+                            }
+                        });
+                });
+            });
+        });
     });
-
-    /*UserAccount.find().exec(function (err, profiles) {
-     if(profiles){
-     for (var i = 0; i < profiles.length; i++) {
-     console.log('profiles[i].owner', profiles[i]);
-     }
-     }
-     });
-
-     Profil.find().exec(function (err, profiles) {
-     if (profiles) {
-     for (var i = 0; i < profiles.length; i++) {
-     console.log('profiles[i].owner', profiles[i].owner);
-     }
-     }
-     });*/
-
-
 };
 
-function updateUsers() {
+function saveData(cb) {
+
+
     UserProfil.find()
-        .populate('userID')
-        .populate('profilID')
-        .exec(function (err, _userProfils) {
+        .exec(function (err, userProfil) {
 
+            if (userProfil) {
+                fs.writeFile('./userProfil_prod.json', JSON.stringify(userProfil), 'utf8', function () {
+                    console.log('userProfil writed');
+                });
+            }
 
-            if (_userProfils) {
-                for (var i = 0; i < _userProfils.length; i++) {
+            UserAccount.find().exec(function (err, accounts) {
+                if (accounts) {
+                    fs.writeFile('./Accounts_prod.json', JSON.stringify(accounts), 'utf8', function () {
+                        console.log('Accounts writed');
+                    });
+                }
 
-                    console.log('_userProfils[i].profilID.owner', _userProfils[i].profilID.owner);
+                ProfilTag.find().exec(function (err, profilTags) {
+                    if (profilTags) {
+                        fs.writeFile('./ProfilTag_prod.json', JSON.stringify(profilTags), 'utf8', function () {
+                            console.log('ProfilTag writed');
+                        });
+                    }
 
-                    if (_userProfils[i].profilID.owner && _userProfils[i].profilID.owner !== 'scripted') {
-                        if (_userProfils[i].userID && _userProfils[i].userID.local) {
-                            if (_userProfils[i].userID.local.role === 'admin') {
-                                _userProfils[i].profilID.owner = 'admin';
-                                console.log('profil admin', _userProfils[i].profilID);
-                            } else {
-                                _userProfils[i].profilID.owner = _userProfils[i].userID.local.email;
-                            }
-                            try {
-                                _userProfils[i].profilID.save(function (err) {
-                                    if (err) {
-                                        console.log('Error on user update', err);
-                                    }
-                                });
-                            } catch (e) {
-                                console.log('Error on user update', _userProfils);
-                            }
+                    Profil.find().exec(function (err, profiles) {
+                        if (profiles) {
+                            fs.writeFile('./Profiles_prod.json', JSON.stringify(profiles), 'utf8', function () {
+                                console.log('ProfilTag writed');
+                            });
                         }
 
+                        cb();
+                    });
+                });
+
+
+            });
+
+
+        });
+}
+
+
+function cleanProfiles(cb) {
+
+    Profil.find({
+        $or: [
+            {
+                owner: ''
+            },
+            {
+                owner: undefined
+            }]
+    })
+        .populate('profileTags')
+        .exec(function (err, profiles) {
+            if (profiles) {
+
+                for (var i = 0; i < profiles.length; i++) {
+                    profiles[i].remove();
+                }
+
+                fs.writeFile('./Profiles_noOwner_prod.json', JSON.stringify(profiles), 'utf8', function () {
+                    console.log('Profiles_noOwner writed');
+                });
+            }
+
+            cb();
+        });
+
+}
+
+function updateUsers(cb) {
+
+    console.log('updateUsers');
+
+    UserAccount.find()
+        .exec(function (err, _user) {
+
+            if (_user) {
+
+                for (var i = 0; i < _user.length; i++) {
+
+                    var owner = '';
+
+                    if (_user[i].local.role == 'admin') {
+                        owner = 'admin';
+                    } else {
+                        owner = _user[i].dropbox.emails ? _user[i].dropbox.emails : _user[i].local.email;
                     }
+
+
+                    Profil.update({owner: _user[i]._id}, {
+                        $set: {owner: owner}
+                    }, {
+                        multi: true
+                    }, function (err) {
+                        if (err) {
+                            console.log('Error on user update', err);
+                        }
+                    });
 
                 }
             }
+
+            cb();
         });
 }
 
@@ -101,6 +187,8 @@ function updateUsers() {
  * @param cb
  */
 function updateProfiles(cb) {
+
+    console.log('updateProfiles');
 
     ProfilTag.find()
         .populate('profil')
@@ -115,33 +203,30 @@ function updateProfiles(cb) {
                         }
 
 
-                        try {
-                            // Clean profile
-                            _profilsTag[i].profil.photo = undefined;
-                            _profilsTag[i].profil.save(function (err) {
-                                if (err) {
-                                    console.log('updateProfiles - Error on profil update', err);
-                                }
-                            });
-                        } catch (e) {
-                            console.log('updateProfiles - Error on profil update', _profilsTag[i].profil);
-                        }
-                    }
+                        // Clean profile
+                        /*if (_profilsTag[i].profil.photo) {
+                         _profilsTag[i].profil.photo = undefined;
+                         }*/
+                        _profilsTag[i].profil.save(function (err) {
+                            if (err) {
+                                console.log('updateProfiles - Error on profil update', err);
+                            }
+                        });
 
 
-                    try {
                         // Clean profile Tag
-                        _profilsTag[i].texte = undefined;
+                        /*if (_profilsTag[i].texte) {
+                         _profilsTag[i].texte = undefined;
+                         }*/
                         _profilsTag[i].save(function (err) {
                             if (err) {
                                 console.log('updateProfiles - Error on profilTag update', err);
                             }
                         });
-                    } catch (e) {
-                        console.log('updateProfiles - Error on profilTag update', _profilsTag[i]);
+
+                    } else {
+                        _profilsTag[i].remove();
                     }
-
-
                 }
             }
 
