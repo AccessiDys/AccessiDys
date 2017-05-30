@@ -68,6 +68,8 @@ function updateUsers() {
             if (_userProfils) {
                 for (var i = 0; i < _userProfils.length; i++) {
 
+                    console.log('_userProfils[i].profilID.owner', _userProfils[i].profilID.owner);
+
                     if (_userProfils[i].profilID.owner && _userProfils[i].profilID.owner !== 'scripted') {
                         if (_userProfils[i].userID && _userProfils[i].userID.local) {
                             if (_userProfils[i].userID.local.role === 'admin') {
@@ -75,7 +77,6 @@ function updateUsers() {
                                 console.log('profil admin', _userProfils[i].profilID);
                             } else {
                                 _userProfils[i].profilID.owner = _userProfils[i].userID.local.email;
-
                             }
                             try {
                                 _userProfils[i].profilID.save(function (err) {
