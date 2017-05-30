@@ -35,9 +35,9 @@ var mongoose = require('mongoose'),
 
 exports.updateDb = function () {
 
-    /*updateProfiles(function () {
-     updateUsers();
-     });*/
+    updateProfiles(function () {
+        updateUsers();
+    });
 
     /*UserAccount.find().exec(function (err, profiles) {
      if(profiles){
@@ -45,15 +45,15 @@ exports.updateDb = function () {
      console.log('profiles[i].owner', profiles[i]);
      }
      }
-     });*/
+     });
 
-    Profil.find().exec(function (err, profiles) {
-        if (profiles) {
-            for (var i = 0; i < profiles.length; i++) {
-                console.log('profiles[i].owner', profiles[i].owner);
-            }
-        }
-    });
+     Profil.find().exec(function (err, profiles) {
+     if (profiles) {
+     for (var i = 0; i < profiles.length; i++) {
+     console.log('profiles[i].owner', profiles[i].owner);
+     }
+     }
+     });*/
 
 
 };
@@ -68,7 +68,7 @@ function updateUsers() {
             if (_userProfils) {
                 for (var i = 0; i < _userProfils.length; i++) {
 
-                    if (_userProfils[i].profilID.owner !== 'scripted') {
+                    if (_userProfils[i].profilID.owner && _userProfils[i].profilID.owner !== 'scripted') {
                         if (_userProfils[i].userID && _userProfils[i].userID.local) {
                             if (_userProfils[i].userID.local.role === 'admin') {
                                 _userProfils[i].profilID.owner = 'admin';
@@ -107,7 +107,7 @@ function updateProfiles(cb) {
             if (_profilsTag) {
                 for (var i = 0; i < _profilsTag.length; i++) {
 
-                    if (_profilsTag[i].profil) {
+                    if (_profilsTag[i].profil && _profilsTag[i].profil.owner) {
                         if (_profilsTag[i].profil.profileTags.indexOf(_profilsTag[i]._id) < 0) {
                             _profilsTag[i].profil.profileTags.push(_profilsTag[i]._id);
                         }
