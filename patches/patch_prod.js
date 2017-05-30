@@ -35,9 +35,9 @@ var mongoose = require('mongoose'),
 
 exports.updateDb = function () {
 
-    updateProfiles(function () {
-        updateUsers();
-    });
+    /*updateProfiles(function () {
+     updateUsers();
+     });*/
 
     /*UserAccount.find().exec(function (err, profiles) {
      if(profiles){
@@ -47,13 +47,13 @@ exports.updateDb = function () {
      }
      });*/
 
-    /*Profil.find().exec(function (err, profiles) {
-     if(profiles){
-     for (var i = 0; i < profiles.length; i++) {
-     console.log('profiles[i].owner', profiles[i].owner);
-     }
-     }
-     });*/
+    Profil.find().exec(function (err, profiles) {
+        if (profiles) {
+            for (var i = 0; i < profiles.length; i++) {
+                console.log('profiles[i].owner', profiles[i].owner);
+            }
+        }
+    });
 
 
 };
@@ -77,8 +77,8 @@ function updateUsers() {
 
                             }
                             try {
-                                _userProfils[i].profilID.save(function(err){
-                                    if(err){
+                                _userProfils[i].profilID.save(function (err) {
+                                    if (err) {
                                         console.log('Error on user update', err);
                                     }
                                 });
@@ -113,12 +113,11 @@ function updateProfiles(cb) {
                         }
 
 
-
                         try {
                             // Clean profile
                             _profilsTag[i].profil.photo = undefined;
-                            _profilsTag[i].profil.save(function(err){
-                                if(err){
+                            _profilsTag[i].profil.save(function (err) {
+                                if (err) {
                                     console.log('updateProfiles - Error on profil update', err);
                                 }
                             });
@@ -128,12 +127,11 @@ function updateProfiles(cb) {
                     }
 
 
-
                     try {
                         // Clean profile Tag
                         _profilsTag[i].texte = undefined;
-                        _profilsTag[i].save(function(err){
-                            if(err){
+                        _profilsTag[i].save(function (err) {
+                            if (err) {
                                 console.log('updateProfiles - Error on profilTag update', err);
                             }
                         });
