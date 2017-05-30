@@ -79,7 +79,7 @@ function updateUsers() {
                             try {
                                 _userProfils[i].profilID.save(function(err){
                                     if(err){
-                                        console.log('Error on user update', _userProfils);
+                                        console.log('Error on user update', err);
                                     }
                                 });
                             } catch (e) {
@@ -119,7 +119,7 @@ function updateProfiles(cb) {
                             _profilsTag[i].profil.photo = undefined;
                             _profilsTag[i].profil.save(function(err){
                                 if(err){
-                                    console.log('updateProfiles - Error on profil update', _profilsTag[i].profil);
+                                    console.log('updateProfiles - Error on profil update', err);
                                 }
                             });
                         } catch (e) {
@@ -134,7 +134,7 @@ function updateProfiles(cb) {
                         _profilsTag[i].texte = undefined;
                         _profilsTag[i].save(function(err){
                             if(err){
-                                console.log('updateProfiles - Error on profilTag update', _profilsTag[i]);
+                                console.log('updateProfiles - Error on profilTag update', err);
                             }
                         });
                     } catch (e) {
