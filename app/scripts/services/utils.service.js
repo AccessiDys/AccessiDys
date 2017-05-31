@@ -234,13 +234,10 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
             var formattedText = text;
 
             if (formattedText) {
-                formattedText = text.replace(/&nbsp;/gi, ' ');
                 formattedText = Hyphenator.hyphenate(formattedText, 'fr');
 
-                formattedText = formattedText.replace(/(\b(?!<)[a-zA-Z0-9éèëêœçàâùôîïö\?\-\_\|]+(?!>)\b)/gi, '%%$1%%');
+                formattedText = formattedText.replace(methods.wordRegex, '<span>$1</span>');
                 formattedText = formattedText.replace(/(\|)/gi, '</span><span>');
-                formattedText = formattedText.replace(/(%%\b)/gi, '<span>');
-                formattedText = formattedText.replace(/(\b%%)/gi, '</span>');
             }
 
             return formattedText;
@@ -279,8 +276,8 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         /**
          * Regex to select words in text
          */
-        wordRegex: /([\w,.'&;:"«»:%\?\-éèœëêçàâôîùïö\(\)\/]+)(?![^<]*>)/gi,
-        // /([\w,.'&;:"«»:%\?\-é!èœëêç—àâôîù’ïö\(\)]+)(?![^<]*>)/gi
+        wordRegex: /([^><\s]+)(?![^<]*>)/gi,
+        // /([\w,.'&;:"«»:%\?\-éèœëêçàâôîùïö\(\)\/]+)(?![^<]*>)/gi
 
         /**
          * Color lines of Node element
@@ -322,7 +319,19 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
             }
 
             return documentFragment;
+        },
+
+        decodeHtmlEntities: function (html) {
+            return html.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);/gi,
+                function (str) {
+                    var temp = document.createElement('p');
+                    temp.innerHTML = str;
+                    str = temp.textContent || temp.innerText;
+                    return str;
+                }
+            );
         }
+
 
     };
 

@@ -954,14 +954,6 @@ describe('Controller:ApercuCtrl', function () {
 
     }));
 
-    it('ApercuCtrl:fermerApercu', inject(function ($location) {
-        // Close the overview for a nontemporary document.
-        spyOn($location, 'path').and.callThrough();
-        scope.tmp = false;
-        scope.fermerApercu();
-        expect($location.path).toHaveBeenCalled();
-    }));
-
     it('ApercuCtrl:loadPdfPage', inject(function ($q, $rootScope) {
         var q = $q;
         var pdfPage = {

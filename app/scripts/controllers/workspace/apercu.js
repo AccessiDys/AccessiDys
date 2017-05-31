@@ -62,11 +62,7 @@ angular.module('cnedApp')
         $scope.neverShowOfflineSynthesisTips = false;
         $scope.resizeDocApercu = 'Agrandir';
 
-        if (!$stateParams.mode || $stateParams.mode === 'lecture') {
-            $scope.modeImpression = true;
-        } else if ($stateParams.mode === 'page') {
-            $scope.modeImpression = false;
-        }
+        $scope.modeImpression = false;
         $scope.numeroPageRechercher = 0;
         $scope.applyRulesAfterRender = false;
 
@@ -385,7 +381,9 @@ angular.module('cnedApp')
 
             if (pageIndex >= 0 && pageIndex < $scope.content.length) {
                 $scope.currentPage = pageIndex;
-                $scope.currentContent = $scope.content[$scope.currentPage];
+                $timeout(function () {
+                    $scope.currentContent = $scope.content[$scope.currentPage];
+                }, 10);
                 $scope.numeroPageRechercher = pageIndex;
                 window.scroll(0, 0);
             }
@@ -628,6 +626,8 @@ angular.module('cnedApp')
         $scope.init = function () {
             LoaderService.showLoader('document.message.info.load', false);
 
+            $log.debug('init overview');
+
             $scope.originalHtml = '';
             $scope.isSummaryActive = false;
 
@@ -655,6 +655,7 @@ angular.module('cnedApp')
 
             // Overview of Url.
             if ($scope.url) {
+                $scope.modeImpression = true;
                 $scope.showSave = true;
                 var parser = document.createElement('a');
                 parser.href = decodeURIComponent($scope.url);
@@ -691,8 +692,6 @@ angular.module('cnedApp')
                     $log.debug('get document by id', file);
                     $scope.document = file;
                     $scope.content = workspaceService.parcourirHtml(file.data);
-
-
                     $scope.showTitleDoc($scope.idDocument);
                     $scope.showEditer = true;
                     $scope.setPage($scope.currentPage);
@@ -859,33 +858,16 @@ angular.module('cnedApp')
         $scope.switchModeAffichage = function () {
             $scope.resetLines();
             $scope.isSummaryActive = false;
-            var tmp = $location.url().indexOf('&mode');
-            var refresh;
-            if (tmp !== -1) {
-                refresh = $location.url().substring(0, tmp);
-            } else {
-                refresh = $location.url();
-            }
+
             if (!$scope.modeImpression) {
                 $stateParams.mode = 'lecture';
-                refresh += '&mode=lecture';
                 $scope.modeImpression = true;
             } else {
                 $stateParams.mode = 'page';
-                refresh += '&mode=page';
                 $scope.modeImpression = false;
+                $scope.setPage(1);
             }
-            if (!$scope.testEnv) {
-                $location.url(refresh);
-            }
-        };
 
-        $scope.fermerApercu = function () {
-            if (!$scope.tmp) {
-                $location.path('/listDocument');
-            } else {
-                UtilsService.showInformationModal('label.close', 'document-overview.message.info.close');
-            }
         };
 
         /**
@@ -971,8 +953,8 @@ angular.module('cnedApp')
                                 // Modal dismiss
                             });
 
-                    }, function(res){
-                        if(res.error === 'email_not_verified'){
+                    }, function (res) {
+                        if (res.error === 'email_not_verified') {
                             ToasterService.showToaster('#overview-error-toaster', 'dropbox.message.error.share.emailnotverified');
                         } else {
                             ToasterService.showToaster('#overview-error-toaster', 'dropbox.message.error.share.ko');

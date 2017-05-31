@@ -47,7 +47,7 @@ var cnedApp = angular.module('cnedApp', [
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
 
     // Log enable / disable
-    $logProvider.debugEnabled(true);
+    $logProvider.debugEnabled(false);
 
     // Google analytics account settings
     AnalyticsProvider.setAccount(configuration.GOOGLE_ANALYTICS_ID);
@@ -85,7 +85,7 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
             templateUrl: 'views/index/home.html'
         })
         .state('app.overview', {
-            url: '/apercu?idDocument&tmp&url&title&annotation&mode',
+            url: '/apercu?idDocument&tmp&url&title&annotation',
             templateUrl: 'views/workspace/apercu.html',
             controller: 'ApercuCtrl',
             pageTrack: '/overview.html'  // angular-google-analytics extension

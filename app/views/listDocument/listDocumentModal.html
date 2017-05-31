@@ -36,13 +36,13 @@
         <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse"
             data-ng-show="document.showed">
             <td class="profil_desc">
-                <a href="#/apercu?idDocument={{document.filename}}&mode=page" data-ng-click="closeModal()">
+                <a href="#/apercu?idDocument={{document.filename}}" data-ng-click="closeModal()">
                     {{ document.filename }}
                 </a>
             </td>
             <td class="profil_desc centering">{{ document.dateModification| date: configuration.DATE_PATTERN}}</td>
             <td class="centering"><a
-                    ng-href="#/apercu?idDocument={{document.filename}}&mode=page"
+                    ng-href="#/apercu?idDocument={{document.filename}}"
                     id="show_document" data-ng-click="closeModal()" title="Afficher">
                 <img src="styles/images/action_show.png"/>
             </a></td>

@@ -107,13 +107,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                                         if (rangyCursorResult && rangyCursorResult.length > 0) {
                                             for (var v = 0; v < rangyCursorResult.length; v++) {
-                                                var marker = '';
-
-                                                if (coloration === 'Colorer les syllabes') {
-                                                    marker = '%%<span>RG' + v + '</span>%%';
-                                                } else {
-                                                    marker = '%%RG' + v + '%%';
-                                                }
+                                                var marker = '%%RG' + v + '%%';
 
                                                 rangyCursors.push({
                                                     marker: marker,
@@ -133,11 +127,14 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                                         if (imgResult && imgResult.length > 0) {
                                             for (var v = 0; v < imgResult.length; v++) {
+                                                var marker = '%%IMG' + v + '%%';
+
                                                 imgList.push({
+                                                    marker: marker,
                                                     img: imgResult[v]
                                                 });
 
-                                                textTransform = textTransform.replace(imgResult[v], '%%IMG' + v + '%%');
+                                                textTransform = textTransform.replace(imgResult[v], marker);
                                             }
                                         }
 
@@ -162,7 +159,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                         } else if (coloration === 'Colorer les syllabes') {
 
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
-                                            textTransform = textTransform.replace(/\s%%<span>NB<\/span>%%\s/gi, '&nbsp;');
+                                            textTransform = textTransform.replace(/\s<span>%%NB%%<\/span>\s/gi, '&nbsp;');
                                         } else {
                                             textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
                                         }
@@ -171,13 +168,14 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                                         // Restore images
                                         for (var v = 0; v < imgList.length; v++) {
-                                            textTransform = textTransform.replace(new RegExp('%%IMG' + v + '%%', 'gi'), imgList[v].img);
+                                            textTransform = textTransform.replace(new RegExp(imgList[v].marker, 'gi'), imgList[v].img);
                                         }
 
                                         // Restore rangy cursor
                                         for (var v = 0; v < rangyCursors.length; v++) {
                                             textTransform = textTransform.replace(new RegExp(rangyCursors[v].marker, 'gi'), rangyCursors[v].cursor);
                                         }
+
 
                                         child.innerHTML = textTransform;
 

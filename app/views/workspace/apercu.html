@@ -257,7 +257,7 @@
                              style="outline: none !important; z-index: 1; position: relative; word-wrap: break-word; white-space: pre-line;"
                              profile-coloration
                              profile="currentProfile"
-                             text="currentContent"
+                             text="page"
                              data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)"
                              data-show-loader="showAdaptationLoaderFromLoop($index)"
                              data-hide-loader="hideAdaptationLoaderFromLoop($index, content.length)"
@@ -400,7 +400,7 @@
                             </li>
 
                             <li>
-                                <a href data-ng-click="fermerApercu()" title="{{'Fermer' | translate}}">
+                                <a href ui-sref="app.list-document" title="{{'Fermer' | translate}}">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                     Fermer
                                 </a>

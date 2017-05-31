@@ -75,7 +75,7 @@
             <tbody>
             <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" data-ng-show="document.showed">
                 <td class="profil_desc">
-                    <a href="#/apercu?idDocument={{document.filename}}&mode=page">
+                    <a href="#/apercu?idDocument={{document.filename}}">
                         {{ document.filename }}
                     </a>
                 </td>
@@ -86,7 +86,7 @@
                     </button>
                     <ul class="action_list" uib-dropdown-menu aria-labelledby="document-actions">
                         <li class="show_item">
-                            <a ng-href="#/apercu?idDocument={{document.filename}}&mode=page" id="show_document"
+                            <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document"
                                title="Afficher">
                                 Afficher
                             </a>
