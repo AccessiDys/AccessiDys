@@ -81,8 +81,8 @@ angular.module('cnedApp').directive('profileColoration',
                                         line = 0;
                                     }
 
-                                    //child.setAttribute("prevtop", prevTop);
-                                    //child.setAttribute("currenttop", child.offsetTop);
+                                    child.setAttribute("prevtop", prevTop);
+                                    child.setAttribute("currenttop", child.offsetTop);
 
                                     if (profileTag) {
 
@@ -163,6 +163,10 @@ angular.module('cnedApp').directive('profileColoration',
                                             var nextElement = child.nextSibling;
                                             parent.removeChild(child);
                                             parent.insertBefore(res.documentFragment, nextElement);
+                                        }
+
+                                        if(prevTop > child.offsetTop){
+                                            prevTop = child.offsetTop;
                                         }
 
                                         prevTag = child.tagName;

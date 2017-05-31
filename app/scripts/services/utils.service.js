@@ -311,11 +311,14 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                             } else {
                                 line++;
                             }
+                            prevTop = top;
                         }
                         clone.className = 'line' + line;
-                        //clone.setAttribute("prevtop", prevTop);
-                        //clone.setAttribute("currenttop", top);
-                        prevTop = top;
+                        clone.setAttribute("prevtop", prevTop);
+                        clone.setAttribute("currenttop", top);
+
+
+
                     }
                 }
                 documentFragment.children[0].appendChild(clone);

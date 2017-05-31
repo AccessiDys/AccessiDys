@@ -214,6 +214,10 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             parent.insertBefore(res.documentFragment, nextElement);
                                         }
 
+                                        if(prevTop > child.offsetTop){
+                                            prevTop = child.offsetTop;
+                                        }
+
                                         prevTag = child.tagName;
 
                                         rangy.restoreSelection(savedSel);
@@ -232,6 +236,8 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                     }, 200);
                 };
+
+
 
                 /**
                  * Watcher for the current profile
