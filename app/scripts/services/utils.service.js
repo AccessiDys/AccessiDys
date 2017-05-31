@@ -285,9 +285,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
          * @param maxLines
          * @returns {DocumentFragment}
          */
-        colorLines: function (ref, maxLines) {
-            var prevTop = -9999;
-            var line = 0;
+        colorLines: function (ref, maxLines, prevTop, line) {
 
             var documentFragment = document.createDocumentFragment();
             documentFragment.appendChild(ref.cloneNode(true));
@@ -299,7 +297,10 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                 var clone = child.cloneNode(true);
 
                 if (child.tagName !== 'SPAN' && child.hasChildNodes()) {
-                    clone = methods.colorLines(child, maxLines);
+                    var res = methods.colorLines(child, maxLines, prevTop, line);
+                    clone = res.documentFragment;
+                    line = res.line;
+                    prevTop = res.prevTop;
                 } else if (child.tagName === 'SPAN') {
                     if (!child.id) {
                         var top = child.offsetTop;
@@ -312,13 +313,19 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                             }
                         }
                         clone.className = 'line' + line;
+                        //clone.setAttribute("prevtop", prevTop);
+                        //clone.setAttribute("currenttop", top);
                         prevTop = top;
                     }
                 }
                 documentFragment.children[0].appendChild(clone);
             }
 
-            return documentFragment;
+            return {
+                documentFragment : documentFragment,
+                prevTop: prevTop,
+                line: line
+            };
         },
 
         decodeHtmlEntities: function (html) {

@@ -67,7 +67,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                 };
 
                 var generateColoration = function (element) {
-
                     if (htmlWatcher) {
                         htmlWatcher();
                         htmlWatcher = null;
@@ -86,6 +85,10 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                             documentFragment.appendChild(element.cloneNode(true));
 
 
+                            var line = 0;
+                            var prevTop = -9999;
+                            var prevTag = '';
+
                             for (var i = 0; i < element.children.length; i++) {
                                 var child = element.children[i];
                                 // Adapt child which are displayed on the screen
@@ -93,6 +96,10 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                     var profileTag = _.find(profile.profileTags, function (_profileTag) {
                                         return _profileTag.tagDetail.balise === child.tagName.toLowerCase();
                                     });
+
+                                    if (child.tagName !== prevTag) {
+                                        line = 0;
+                                    }
 
                                     if (profileTag) {
                                         var savedSel = rangy.saveSelection();
@@ -184,26 +191,30 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             || coloration === 'Surligner les lignes RBV'
                                             || coloration === 'Surligner les lignes RVJ') {
 
-                                            var childFragment = UtilsService.colorLines(child, 3);
+                                            var res = UtilsService.colorLines(child, 3, prevTop, line);
+                                            line = res.line;
+                                            prevTop = res.prevTop;
 
                                             var parent = child.parentNode;
                                             var nextElement = child.nextSibling;
                                             parent.removeChild(child);
-                                            parent.insertBefore(childFragment, nextElement);
+                                            parent.insertBefore(res.documentFragment, nextElement);
 
                                         } else if (
                                             coloration === 'Colorer les lignes RBVJ'
                                             || coloration === 'Surligner les lignes RBVJ') {
 
-                                            var childFragment = UtilsService.colorLines(child, 4);
+                                            var res = UtilsService.colorLines(child, 4, prevTop, line);
+                                            line = res.line;
+                                            prevTop = res.prevTop;
 
                                             var parent = child.parentNode;
                                             var nextElement = child.nextSibling;
                                             parent.removeChild(child);
-                                            parent.insertBefore(childFragment, nextElement);
+                                            parent.insertBefore(res.documentFragment, nextElement);
                                         }
 
-
+                                        prevTag = child.tagName;
 
                                         rangy.restoreSelection(savedSel);
 
@@ -220,63 +231,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                         bindHtmlWatcher();
 
                     }, 200);
-                };
-
-
-                var splitElement = function (element, coloration) {
-
-                    var documentFragment = document.createDocumentFragment();
-                    documentFragment.appendChild(element.cloneNode(true));
-
-                    if (element.children.length > 0) {
-
-                        for (var i = 0; i < element.children.length; i++) {
-
-                            var child = element.children[i];
-                            var clone = child.cloneNode(true);
-
-                            if (child.hasChildNodes()) {
-                                clone = splitElement(child, coloration);
-                            } else {
-                                clone.textContent = splitText(child.textContent, coloration);
-                            }
-                            documentFragment.children[0].appendChild(clone);
-                        }
-                    }
-
-                    documentFragment.children[0].textContent = splitText(element.textContent, coloration);
-
-                    return documentFragment;
-                };
-
-                var splitText = function (text, coloration) {
-
-                    var textTransform = text;
-                    // Split Text
-                    if (coloration === 'Colorer les lignes RBV'
-                        || coloration === 'Colorer les lignes RVJ'
-                        || coloration === 'Surligner les lignes RVJ'
-                        || coloration === 'Surligner les lignes RBV'
-                        || coloration === 'Colorer les lignes RBVJ'
-                        || coloration === 'Surligner les lignes RBVJ') {
-
-                        textTransform = UtilsService.splitOnWordWithSpace(textTransform);
-                        textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
-                    } else if (coloration === 'Colorer les mots'
-                        || coloration === 'Surligner les mots') {
-
-                        textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
-                        textTransform = textTransform.replace(/\s\s<span>%%NB%%<\/span>\s\s/gi, '&nbsp;');
-
-                    } else if (coloration === 'Colorer les syllabes') {
-
-                        textTransform = UtilsService.splitOnSyllable(textTransform);
-                        textTransform = textTransform.replace(/\s%%<span>NB<\/span>%%\s/gi, '&nbsp;');
-                    } else {
-                        textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
-                    }
-
-                    return textTransform;
                 };
 
                 /**

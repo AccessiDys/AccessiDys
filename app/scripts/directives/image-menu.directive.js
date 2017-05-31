@@ -40,7 +40,7 @@ angular.module('cnedApp').directive('imageMenuContainer',
 
 
                     var html =
-                        '<div class="popover fade bottom in" style="max-width: 300px;">'
+                        '<div class="popover fade bottom in" style="max-width: 350px;">'
                         + '<div class="arrow" style="margin-left: -87px;"></div>'
                         + '<div class="popover-content" style="line-height: 28px;">'
                         + '<div class="btn-group" role="group" aria-label="...">'

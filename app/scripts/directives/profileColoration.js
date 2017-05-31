@@ -65,6 +65,10 @@ angular.module('cnedApp').directive('profileColoration',
 
                             var profile = $scope.profile.data;
 
+                            var line = 0;
+                            var prevTop = -9999;
+                            var prevTag = '';
+
                             for (adaptIndex; adaptIndex < element.children.length; adaptIndex++) {
                                 var child = element.children[adaptIndex];
                                 // Adapt child which are displayed on the screen
@@ -72,6 +76,13 @@ angular.module('cnedApp').directive('profileColoration',
                                     var profileTag = _.find(profile.profileTags, function (_profileTag) {
                                         return _profileTag.tagDetail.balise === child.tagName.toLowerCase();
                                     });
+
+                                    if (child.tagName !== prevTag) {
+                                        line = 0;
+                                    }
+
+                                    //child.setAttribute("prevtop", prevTop);
+                                    //child.setAttribute("currenttop", child.offsetTop);
 
                                     if (profileTag) {
 
@@ -111,10 +122,12 @@ angular.module('cnedApp').directive('profileColoration',
                                             textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
 
                                         } else if (coloration === 'Colorer les syllabes') {
-
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
+                                        }
 
-                                                console.log('after split', textTransform);
+
+                                        if (textTransform.trim() === '') {
+                                            textTransform = '<br>';
                                         }
 
                                         // Restore images
@@ -129,24 +142,30 @@ angular.module('cnedApp').directive('profileColoration',
                                             || coloration === 'Surligner les lignes RBV'
                                             || coloration === 'Surligner les lignes RVJ') {
 
-                                            var childFragment = UtilsService.colorLines(child, 3);
+                                            var res = UtilsService.colorLines(child, 3, prevTop, line);
+                                            line = res.line;
+                                            prevTop = res.prevTop;
 
                                             var parent = child.parentNode;
                                             var nextElement = child.nextSibling;
                                             parent.removeChild(child);
-                                            parent.insertBefore(childFragment, nextElement);
-
+                                            parent.insertBefore(res.documentFragment, nextElement);
                                         } else if (
                                             coloration === 'Colorer les lignes RBVJ'
                                             || coloration === 'Surligner les lignes RBVJ') {
 
-                                            var childFragment = UtilsService.colorLines(child, 4);
+                                            var res = UtilsService.colorLines(child, 4, prevTop, line);
+
+                                            line = res.line;
+                                            prevTop = res.prevTop;
 
                                             var parent = child.parentNode;
                                             var nextElement = child.nextSibling;
                                             parent.removeChild(child);
-                                            parent.insertBefore(childFragment, nextElement);
+                                            parent.insertBefore(res.documentFragment, nextElement);
                                         }
+
+                                        prevTag = child.tagName;
 
                                     } else {
                                         continue;
@@ -159,8 +178,6 @@ angular.module('cnedApp').directive('profileColoration',
                         }
                     }, 200);
                 };
-
-                console.log('init text', $scope.text);
 
                 $element[0].innerHTML = UtilsService.removeSpan(UtilsService.decodeHtmlEntities($scope.text));
                 generateColoration($element[0]);
