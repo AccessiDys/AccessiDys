@@ -326,6 +326,7 @@ angular
                     // Clear editor content
                     var pdfbinary = UtilsService.base64ToUint8Array(data);
                     PDFJS.getDocument(pdfbinary).then(function (pdf) {
+                        $scope.document.data = '';
                         $scope.loadPdfPage(pdf, 1);
                     });
                 }).error(function () {
@@ -351,6 +352,7 @@ angular
 
                     // Step 5:PDFJS should be able to read this
                     PDFJS.getDocument(typedarray).then(function (pdf) {
+                        $scope.document.data = '';
                         $scope.loadPdfPage(pdf, 1);
                     });
                 };
@@ -396,11 +398,10 @@ angular
                                 var dataURL = canvasToImage(canvas, context, '#FFFFFF');
                                 if (dataURL) {
                                     $scope.document.data += '<img src="' + dataURL + '" />';
-
                                     pageNumber++;
                                     if (pageNumber <= pdf.numPages) {
                                         LoaderService.setLoaderProgress((pageNumber / pdf.numPages) * 100);
-                                        //$scope.insertPageBreak(); // TODO replace page break
+                                        $scope.document.data += $scope.pageBreakElement;
                                         $scope.loadPdfPage(pdf, pageNumber);
                                     } else {
                                         window.scrollTo(0, 0);

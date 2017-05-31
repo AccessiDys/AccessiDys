@@ -105,8 +105,6 @@ describe('Controller:DetailProfilModalCtrl', function () {
         expect($scope.profile).toBeDefined();
         expect($scope.profile.nom).toEqual('test');
 
-        expect($scope.forceApplyRules).toBeDefined();
-        expect($scope.forceApplyRules).toEqual(true);
     });
 
     it('DetailProfilModalCtrl:editTag', function () {
