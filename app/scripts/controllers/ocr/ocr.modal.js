@@ -41,6 +41,7 @@ angular.module('cnedApp').controller('OcrModalCtrl', function ($scope, $rootScop
             var image = document.getElementById('image');
             var cropper = new Cropper(image, {
                 zoomable: false,
+                autoCropArea: 1,
                 crop: function (e) {
                     $scope.croppedImageSrc = cropper.getCroppedCanvas().toDataURL();
                     $scope.$apply();
