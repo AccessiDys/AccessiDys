@@ -139,7 +139,7 @@ var httpsServer = https.createServer(credentials, app);
 // Bootstrap routes
 require('./routes/adaptation')(app, passport);
 
-httpsServer.listen(3000);
+httpsServer.listen(3000, '0.0.0.0');
 
 var io = require('socket.io').listen(httpsServer);
 
@@ -159,59 +159,5 @@ global.io.on('connection', function (socket) {
 // app.listen(3000);
 console.log('Express https server started on port 3000');
 console.log('ENV = ' + env);
-
-
-/*var Profil = mongoose.model('Profil'), UserProfil = mongoose.model('UserProfil'), User = mongoose.model('User'), ProfilTag = mongoose.model('ProfilTag');
-(function executeFindUser() {
-    Profil.find({
-        '_id': '57f366fc19fb10172dce8f36'
-    }).remove(function (err) {
-        if (err) {
-            console.log("erreur remove Profil: " + err);
-        } else {
-            console.log("Profile deleted ");
-        }
-    });
-
-    ProfilTag.find({
-        'profil': '57f366fc19fb10172dce8f36'
-    }).remove(function (err) {
-        if (err) {
-            console.log("erreur remove ProfilTag: " + err);
-        } else {
-            console.log("ProfilTag deleted ");
-        }
-    });
-
-    UserProfil.find({
-        'profilID': '57f366fc19fb10172dce8f36'
-    }).remove(function (err) {
-        if (err) {
-            console.log("erreur remove UserProfil: " + err);
-        } else {
-            console.log("UserProfil deleted ");
-        }
-    });
-
-    User.find().exec(function (err, users) {
-        if (!err) {
-
-            var result = [];
-
-            for (var i = 0; i < users.length; i++) {
-                result.push({
-                    nom: users[i].local.nom,
-                    prenom: users[i].local.prenom,
-                    email: users[i].local.email
-                });
-            }
-
-            fs.writeFile('./users_prod.json', JSON.stringify(result), 'utf8', function () {
-                console.log('Users writed');
-            });
-        }
-    });
-
-})();*/
 
 module.exports = app;

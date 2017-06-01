@@ -74,6 +74,8 @@ angular.module('cnedApp')
                         /* Removing notes of the document on localStorage */
                         $scope.updateNote('DELETE');
                         $scope.getListDocument();
+
+                        ToasterService.showToaster('#list-document-success-toaster', 'document.message.info.delete.ok');
                     });
                 });
 
