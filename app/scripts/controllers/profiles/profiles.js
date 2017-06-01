@@ -215,7 +215,7 @@ angular.module('cnedApp')
                 templateUrl: 'views/profiles/profilAffichageModal.html', // TODO change the file name
                 controller: 'profilesAffichageModalCtrl',
                 windowClass: 'profil-lg',
-                backdrop: true,
+                backdrop: 'static',
                 scope: $scope,
                 resolve: {
                     template: function () {
@@ -286,7 +286,7 @@ angular.module('cnedApp')
                 templateUrl: 'views/profiles/editProfilStyleModal.html',
                 controller: 'styleEditModalCtrl',
                 windowClass: 'profil-lg',
-                backdrop: true,
+                backdrop: 'static',
                 scope: $scope,
                 resolve: {
                     profile: function () {
@@ -311,6 +311,7 @@ angular.module('cnedApp')
                 templateUrl: 'views/profiles/renameProfilModal.html',
                 controller: 'profilesRenommageModalCtrl',
                 scope: $scope,
+                backdrop: 'static',
                 size: 'md',
                 resolve: {
                     profile: function () {
@@ -752,54 +753,6 @@ angular.module('cnedApp')
 
             });
         };
-
-        /*
-         * Accept the delegation of a profile.
-         */
-
-        //TODO
-        /*$scope.deleguerUserProfil = function () {
-         $scope.loader = true;
-         $scope.varToSend = {
-         profilID: $scope.detailProfil.profilID,
-         userID: $scope.detailProfil.owner,
-         delegatedID: $rootScope.currentUser._id
-         };
-         var tmpToSend = {
-         id: $rootScope.currentUser.local.token,
-         sendedVars: $scope.varToSend
-         };
-         $http.post(configuration.URL_REQUEST + '/delegateUserProfil', tmpToSend)
-         .success(function () {
-
-         $http.post(configuration.URL_REQUEST + '/findUserById', {
-         idUser: $scope.detailProfil.owner
-         })
-         .success(function (data) {
-         if (data) {
-         var emailTo = data.local.email;
-         var fullName = $rootScope.currentUser.local.prenom + ' ' + $rootScope.currentUser.local.nom;
-         $scope.sendVar = {
-         emailTo: emailTo,
-         content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour accepter la délégation de votre profil : ' + $scope.detailProfil.nom + '. </span>',
-         subject: 'Confirmer la délégation'
-         };
-         $http.post(configuration.URL_REQUEST + '/sendEmail', $scope.sendVar)
-         .success(function () {
-         $scope.loader = false;
-         $rootScope.updateListProfile = !$rootScope.updateListProfile;
-         var profilLink = $location.absUrl();
-         profilLink = profilLink.substring(0, profilLink.lastIndexOf('#/detailProfil?idProfil'));
-         profilLink = profilLink + '#/profiles';
-         $window.location.href = profilLink;
-         })
-         .error(function () {
-         $scope.loader = false;
-         });
-         }
-         });
-         });
-         };*/
 
         $scope.create = function () {
 
