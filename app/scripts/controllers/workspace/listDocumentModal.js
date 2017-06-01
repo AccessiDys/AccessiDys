@@ -25,12 +25,11 @@
 'use strict';
 
 /* jshint loopfunc:true */
-angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, $controller, $uibModalInstance, LoaderService, fileStorageService) {
+angular.module('cnedApp').controller('listDocumentModalCtrl', function ($scope, $controller, $uibModalInstance, LoaderService, fileStorageService, configuration) {
 
     $scope.sortType = 'dateModification';
     $scope.sortReverse = true;
-
-
+    $scope.configuration = configuration;
 
 
     $scope.getListDocument = function () {

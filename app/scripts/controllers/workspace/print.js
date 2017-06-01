@@ -30,13 +30,11 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, $http, $window, $location,
-                                                            $stateParams, $q, $log, $timeout, configuration,
-                                                            workspaceService, serviceCheck,
-                                                            fileStorageService, LoaderService) {
+angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, $window, $location,
+                                                            $stateParams, $log, $timeout,
+                                                            workspaceService, fileStorageService, LoaderService) {
 
     $scope.notes = [];
-    $scope.forceApplyRules = true;
 
     var offset = 0,
         summaryOffset = 0;
@@ -58,48 +56,10 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
         'margin-right': 'auto'
     };
 
-    /**
-     * Shows the title of the document.
-     */
-    function showTitleDoc(title) {
-        $scope.docName = title;
-    }
-
-    //fix for printing images
-    function correctImg() {
-        var links = angular.element('a');
-        angular.forEach(links, function (a) {
-            var linkEl = angular.element(a);
-            linkEl.replaceWith('<span>' + linkEl.html() + '</span>');
-        });
-    }
-
-    /**
-     * Shows loading popup.
-     */
-    $scope.showAdaptationLoader = function () {
-        LoaderService.showLoader('document.message.info.adapt.inprogress', false);
-    };
 
     $scope.hideLoaderAndPrint = function () {
         LoaderService.hideLoader();
-        $timeout(function () {
-            $window.print();
-        }, 1000);
-    };
 
-    $scope.showAdaptationLoaderFromLoop = function (indexLoop) {
-        //check if first element of the loop
-        if (indexLoop <= 0) {
-            $scope.showAdaptationLoader();
-        }
-    };
-
-    $scope.hideLoaderFromLoopAndPrint = function (indexLoop, max) {
-        //Get nb listProfilTags length to check if last element of the loop
-        if (indexLoop >= (max - 1)) {
-            $scope.hideLoaderAndPrint();
-        }
     };
 
     /**
@@ -108,7 +68,6 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
      */
     $scope.init = function () {
         LoaderService.showLoader('document.message.info.load', false);
-        $scope.listTagsByProfil = JSON.parse(localStorage.getItem('listTagsByProfil'));
         $scope.currentPage = 0;
         $scope.content = [];
 
@@ -122,8 +81,9 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
             },
             notes = [];
 
-        showTitleDoc($stateParams.documentId);
+        $scope.docName = $stateParams.documentId;
         fileStorageService.getTempFileForPrint().then(function (data) {
+
             $scope.content = data;
             //delete the plan if it is disabled
             if (parseInt($stateParams.plan) === plan.ENABLED) {
@@ -221,12 +181,13 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
             }
 
             $scope.currentStyle = $scope.notes.length > 0 ? floatLeftStyle : centeredStyle;
+
             $timeout(function () {
-                correctImg();
-            });
+                $window.print();
+            }, 1000);
+
         });
     };
-    $scope.init();
 
 
 

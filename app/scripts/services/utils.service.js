@@ -332,14 +332,18 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         },
 
         decodeHtmlEntities: function (html) {
-            return html.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);/gi,
-                function (str) {
-                    var temp = document.createElement('p');
-                    temp.innerHTML = str;
-                    str = temp.textContent || temp.innerText;
-                    return str;
-                }
-            );
+            if(html){
+                return html.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);/gi,
+                    function (str) {
+                        var temp = document.createElement('p');
+                        temp.innerHTML = str;
+                        str = temp.textContent || temp.innerText;
+                        return str;
+                    }
+                );
+            } else {
+                return html;
+            }
         }
 
 

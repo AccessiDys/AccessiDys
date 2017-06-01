@@ -34,11 +34,11 @@ angular.module('cnedApp').directive('profileStyle',
         return {
             restrict: 'A',
             scope: {
-                profile: '=profile'
+                profile: '='
             },
             link: function (scope, element) {
 
-                var generateProfileStyle = function(){
+                var generateProfileStyle = function () {
 
                     if (scope.profile) {
 
@@ -47,7 +47,7 @@ angular.module('cnedApp').directive('profileStyle',
                         var profileStyle = '';
 
                         for (var i = 0; i < profile.profileTags.length; i++) {
-                            var fontWeight = profile.profileTags[i].styleValue === 'Gras' ? 'bold': 'normal';
+                            var fontWeight = profile.profileTags[i].styleValue === 'Gras' ? 'bold' : 'normal';
 
                             profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' {';
                             profileStyle += 'font-family: ' + profile.profileTags[i].police + ' !important;';
@@ -65,7 +65,7 @@ angular.module('cnedApp').directive('profileStyle',
                                 profileStyle += 'height: ' + (1.286 + (6) * 0.18) + 'em' + ';';
                                 profileStyle += 'line-height: ' + (1.286 + (6) * 0.18) + 'em !important;';
 
-                                if( profile.profileTags[i].tagDetail.balise === 'mark'){
+                                if (profile.profileTags[i].tagDetail.balise === 'mark') {
                                     profileStyle += 'display: inline-block !important;';
                                 }
                             }
@@ -232,13 +232,16 @@ angular.module('cnedApp').directive('profileStyle',
 
                         }
 
+
+                        profileStyle += ' @media print {' + profileStyle + '}';
+
                         element.html(profileStyle);
 
                     }
 
                 };
 
-                scope.$watch('profile', function(){
+                scope.$watch('profile', function () {
                     generateProfileStyle();
                 }, true);
 
