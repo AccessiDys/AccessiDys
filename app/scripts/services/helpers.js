@@ -35,15 +35,6 @@ cnedApp.factory('_', function () {
     // page
 });
 
-cnedApp.filter('docNameFilter', function () {
-    return function (input) {
-        input = decodeURIComponent(input);
-        var filenameStartIndex = input.indexOf('_') + 1;
-        var filenameEndIndex = input.lastIndexOf('_');
-        var shortFilename = input.substring(filenameStartIndex, filenameEndIndex);
-        return shortFilename;
-    };
-});
 cnedApp.factory('protocolToLowerCase', function () {
     /**
      * if the http/https protocol is uppercase, return the url with lowercase

@@ -60,6 +60,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                             return $element[0].innerHTML.length;
                         }, function (newValue, oldValue) {
                             if (newValue !== oldValue) {
+                                console.log(' html watcher newValue = ' + newValue + ' - oldValue = ' + oldValue, $element[0].innerHTML);
                                 generateColoration($element[0]);
                             }
                         });
@@ -69,7 +70,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                 var generateColoration = function (element) {
                     if (htmlWatcher) {
                         htmlWatcher();
-                        htmlWatcher = null;
+                        htmlWatcher = undefined;
                     }
 
                     $timeout(function () {
@@ -185,6 +186,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
 
                                         child.innerHTML = textTransform;
+                                        console.log('reinject');
 
                                         if (coloration === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
@@ -232,24 +234,26 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                         }
 
 
-                        bindHtmlWatcher();
+                        /*$timeout(function(){
+                            bindHtmlWatcher();
+
+                        }, 110);*/
 
                     }, 200);
                 };
 
+                $element.bind('keyup', function(){
+                    generateColoration($element[0]);
+                });
 
 
                 /**
                  * Watcher for the current profile
                  */
                 $rootScope.$watch('currentProfile', function (newvalue) {
-
-
                     if (newvalue) {
                         generateColoration($element[0]);
-
                     }
-
                 }, true);
             }
         };

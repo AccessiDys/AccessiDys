@@ -218,42 +218,6 @@ cnedApp.directive('draggableNote',
     });
 
 /*
- * Directive to detect the end of a ng-repeat in Overview
- */
-cnedApp.directive('onFinishApercu', ['$timeout',
-
-    function ($timeout) {
-        return {
-            restrict: 'A',
-            link: function (scope) {
-                if (scope.$last === true) {
-                    $timeout(function () {
-                        scope.$emit('ngRepeatFinishedApercu');
-                    });
-                }
-            }
-        };
-    }]);
-
-/*
- * Directive to detect the end of a ng-repeat in Print
- */
-cnedApp.directive('onFinishRender', ['$timeout',
-
-    function ($timeout) {
-        return {
-            restrict: 'A',
-            link: function (scope) {
-                if (scope.$last === true) {
-                    $timeout(function () {
-                        scope.$emit('ngRepeatFinished');
-                    });
-                }
-            }
-        };
-    }]);
-
-/*
  * Directive to limit the number of characters to be entered.
  */
 cnedApp.directive('maxLength', function () {

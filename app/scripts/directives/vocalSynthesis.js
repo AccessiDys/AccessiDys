@@ -33,6 +33,10 @@ cnedApp.directive('vocalSynthesis',
             link: function (scope, elm) {
 
 
+                /**
+                 * Get the text selected
+                 * @returns {string}
+                 */
                 function getSelectedText() {
                     var text = '';
                     if ($window.getSelection) {
@@ -43,6 +47,10 @@ cnedApp.directive('vocalSynthesis',
                     return text;
                 }
 
+                /**
+                 * Check if the browser is supported by vocal synthesis
+                 * @returns {*|true}
+                 */
                 function checkBrowserSupported() {
                     var browserSupported = speechService.isBrowserSupported();
                     if (!browserSupported && !scope.neverShowBrowserNotSupported) {
@@ -55,6 +63,9 @@ cnedApp.directive('vocalSynthesis',
                     return browserSupported;
                 }
 
+                /**
+                 * Launch the vocal synthesis with the selected text
+                 */
                 function speak() {
                     $log.debug('$scope.speak');
                     speechService.stopSpeech();

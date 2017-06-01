@@ -69,6 +69,7 @@ angular.module('cnedApp').controller('OcrModalCtrl', function ($scope, $rootScop
 
                 .then(function (result) {
                     $scope.ocrBarProgress.display = false;
+                    console.log('result.text', result.text);
                     $uibModalInstance.close({
                         result: result.text
                     });

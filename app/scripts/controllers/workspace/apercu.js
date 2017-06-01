@@ -37,7 +37,7 @@ angular.module('cnedApp')
                                         $log, $q, serviceCheck,
                                         htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
-                                        keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
+                                        $uibModal, canvasToImage, tagsService, documentService,
                                         $localForage, UtilsService, LoaderService, Analytics, ToasterService, $state) {
 
         $scope.idDocument = $stateParams.idDocument;
