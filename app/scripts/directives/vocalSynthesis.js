@@ -27,10 +27,11 @@
 /*global cnedApp */
 cnedApp.directive('vocalSynthesis',
 
-    function (keyboardSelectionService, speechService, serviceCheck, $log, $timeout, $window) {
+    function (keyboardSelectionService, speechService, serviceCheck, $log, $timeout, $window, UtilsService, CacheProvider) {
         return {
             restrict: 'A',
             link: function (scope, elm) {
+
 
                 function getSelectedText() {
                     var text = '';
@@ -62,30 +63,36 @@ cnedApp.directive('vocalSynthesis',
                         $log.debug('$scope.getSelectedText()', text);
                         if (text && !/^\s*$/.test(text)) {
 
-                            speechService.speech(text, true);
+                            if (checkBrowserSupported()) {
+                                speechService.speech(text, true);
 
-                            /*if (checkBrowserSupported()) {
-                                serviceCheck.isOnline().then(function () {
-                                    scope.displayOfflineSynthesisTips = false;
-                                    speechService.speech(text, true);
-                                    window.document.addEventListener('click', scope.stopSpeech, false);
-                                }, function () {
-                                    scope.displayOfflineSynthesisTips = !scope.neverShowOfflineSynthesisTips;
-                                    speechService.speech(text, false);
+                            } else {
+                                CacheProvider.getItem('vocalSynthesisTipsShowed').then(function (isShowed) {
+                                    if (!isShowed) {
+                                        UtilsService.showInformationModal('label.information',
+                                            'vocalsynthesis.message.info.notsupported', null, false, true)
+                                            .then(function (result) {
+                                                if (result) {
+                                                    CacheProvider.setItem(result.notShowAgain, 'vocalSynthesisTipsShowed');
+                                                }
+                                            });
+                                    }
+
                                 });
-                            }*/
+
+                            }
                         }
                     }, 10);
+
                 }
 
 
                 function speakOnKeyboard(event) {
                     if (keyboardSelectionService.isSelectionCombination(event)) {
-                        scope.speak();
+                        speak();
                     }
                 }
 
-                elm.bind('dblclick', speak);
                 elm.bind('mouseup', speak);
                 elm.bind('keyup', speakOnKeyboard);
 

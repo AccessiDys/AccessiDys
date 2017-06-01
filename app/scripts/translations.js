@@ -315,7 +315,10 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'dropbox.message.error.share.ko': 'Erreur lors du partage. Veuillez contacter votre administrateur',
         'label.ocr': 'Reconnaissance optique de caractères',
         'label.ocr.launch': 'Lancer la reconnaissance optique de caractères',
-        'label.ocr.inprogress': 'Reconnaissance optique de caractères en cours...'
+        'label.ocr.inprogress': 'Reconnaissance optique de caractères en cours...',
+        'label.information': 'Information',
+        'label.notshowagain': 'Ne plus afficher ce message',
+        'vocalsynthesis.message.info.notsupported': 'La lecture vocale ne fonctionne pas avec votre navigateur. <br/> Elle fonctionne notamment avec Google Chrome.'
     });
 
 } ]);

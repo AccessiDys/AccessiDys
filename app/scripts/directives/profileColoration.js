@@ -169,6 +169,8 @@ angular.module('cnedApp').directive('profileColoration',
                                             prevTop = child.offsetTop;
                                         }
 
+                                        console.log('child.tagName', child.tagName);
+
                                         prevTag = child.tagName;
 
                                     } else {

@@ -38,7 +38,7 @@ angular.module('cnedApp')
                                         htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         keyboardSelectionService, $uibModal, canvasToImage, tagsService, documentService,
-                                        gettextCatalog, $localForage, UtilsService, LoaderService, Analytics, ToasterService, $state, UserService) {
+                                        $localForage, UtilsService, LoaderService, Analytics, ToasterService, $state) {
 
         $scope.idDocument = $stateParams.idDocument;
         $scope.tmp = $stateParams.tmp;
@@ -704,67 +704,6 @@ angular.module('cnedApp')
                     UtilsService.showInformationModal('label.offline', 'document.message.info.display.offline', '/listDocument');
                 });
             }
-        };
-
-        /**
-         * Reading of the selected text.
-         *
-         * @method $scope.speak
-         */
-        $scope.speak = function () {
-            $log.debug('$scope.speak');
-            speechService.stopSpeech();
-            $timeout(function () {
-                var text = $scope.getSelectedText();
-                $log.debug('$scope.getSelectedText()', text);
-                if (text && !/^\s*$/.test(text)) {
-
-                    if ($scope.checkBrowserSupported()) {
-                        serviceCheck.isOnline().then(function () {
-                            $scope.displayOfflineSynthesisTips = false;
-                            speechService.speech(text, true);
-                            window.document.addEventListener('click', $scope.stopSpeech, false);
-                        }, function () {
-                            $scope.displayOfflineSynthesisTips = !$scope.neverShowOfflineSynthesisTips;
-                            speechService.speech(text, false);
-                        });
-                    }
-                }
-            }, 10);
-        };
-
-        $scope.stopSpeech = function (e) {
-            speechService.stopSpeech();
-            window.document.removeEventListener('click', $scope.stopSpeech, false);
-        };
-
-        /**
-         * Reading of the text selected by the keyboard.
-         *
-         * @method $scope.speakspeakOnKeyboard
-         */
-        $scope.speakOnKeyboard = function (event) {
-            if (keyboardSelectionService.isSelectionCombination(event)) {
-                $scope.speak();
-            }
-        };
-
-        /**
-         * verifies that the browser supports voice synthesis.
-         * If it does not support it , then a message is displayed to the user.
-         *
-         * @method $scope.checkBrowserSupported
-         */
-        $scope.checkBrowserSupported = function () {
-            var browserSupported = speechService.isBrowserSupported();
-            if (!browserSupported && !$scope.neverShowBrowserNotSupported) {
-                $scope.displayBrowserNotSupported = true;
-            } else {
-                $scope.displayBrowserNotSupported = false;
-            }
-
-            $log.debug('$scope.checkBrowserSupported()', browserSupported);
-            return browserSupported;
         };
 
         /**

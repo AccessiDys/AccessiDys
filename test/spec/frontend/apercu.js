@@ -767,32 +767,6 @@ describe('Controller:ApercuCtrl', function () {
         expect(scope.getSelectedText()).toEqual('');
     }));
 
-    it('ApercuCtrl:closeOfflineSynthesisTips', inject(function () {
-        scope.neverShowOfflineSynthesisTips = false;
-        scope.displayOfflineSynthesisTips = true;
-        scope.closeOfflineSynthesisTips();
-        expect(scope.displayOfflineSynthesisTips).toBe(false);
-        expect(localStorage.getItem('neverShowOfflineSynthesisTips')).toEqual('false');
-
-        scope.neverShowOfflineSynthesisTips = true;
-        scope.displayOfflineSynthesisTips = true;
-        scope.closeOfflineSynthesisTips();
-        expect(scope.displayOfflineSynthesisTips).toBe(false);
-        expect(localStorage.getItem('neverShowOfflineSynthesisTips')).toEqual('true');
-    }));
-
-    it('ApercuCtrl:closeNoAudioRights', inject(function () {
-        scope.displayNoAudioRights = true;
-        scope.closeNoAudioRights();
-        expect(scope.displayNoAudioRights).toBe(false);
-    }));
-
-    it('ApercuCtrl:closeBrowserNotSupported', inject(function () {
-        scope.displayBrowserNotSupported = true;
-        scope.closeBrowserNotSupported();
-        expect(scope.displayBrowserNotSupported).toBe(false);
-    }));
-
     it('ApercuCtrl:checkAnnotations', inject(function (configuration, $rootScope, $httpBackend) {
         scope.annotationURL = '/2015-9-22_testsAnnotations_cf5ad4f059eb80c206e92be53b9e8d30.json';
         localStorage.setItem('notes', JSON.stringify(angular.toJson(mapNotes)));

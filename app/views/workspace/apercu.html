@@ -43,37 +43,7 @@
 </div>
 
 <h1 id="titreDocumentApercu" data-ng-if="titreDoc" class="dark_green animated fadeInLeft">{{titreDoc}}</h1>
-<div class="content" id="offlineSynthesisTips" ng-show="displayOfflineSynthesisTips">
-    <div class="tutorial_area animated fadeInDown">
-        <div class="tutorial_container">
-            <button class="close_tuto" ng-click="closeOfflineSynthesisTips()"></button>
-            <div class="tutorial_content clearfix">
-                <div class="tutorial_symbol">
-                    <img src="/styles/images/lamp_tuto.png" alt=""/>
-                </div>
-                <div class="tutorial_desc">
-                    <h3>Astuce</h3>
-                    <p class="tutorial_text">
-                        En mode déconnecté, la voix utilisée est fournie par votre système d'exploitation.
-                        <br/> Vous pouvez installer de nouvelles voix sur Windows en suivant les instructions
-                        disponibles <a href="http://www.nvda-fr.org/voix.php">ici</a>.
-                    </p>
-                    <div class="hide_tuto_container clearfix">
-                        <p class="information_workspace controls_zone checkbox_zone">
-                            <input type="checkbox" class="hidden" name="informationOfflineSynthesisTips"
-                                   id="informationOfflineSynthesisTips" data-ng-model="neverShowOfflineSynthesisTips"/>
-                            <label class="mask" for="informationOfflineSynthesisTips">&nbsp;</label>
-                            <label class="hide_tuto_check" for="informationOfflineSynthesisTips">Ne plus afficher ce
-                                message</label>
-                        </p>
-                        <button class="hide_tuto_btn btn_simple light_blue" ng-click="closeOfflineSynthesisTips()">OK
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="content" id="browserNotSupportedDialog" ng-show="displayBrowserNotSupported">
     <div class="information_dialog_area animated fadeInDown">
         <div class="information_dialog_container">
@@ -96,34 +66,6 @@
                         </p>
                         <button class="hide_information_dialog_btn btn_simple light_blue"
                                 ng-click="closeBrowserNotSupported()">OK
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="content" id="noAudioRightsDialog" ng-show="displayNoAudioRights">
-    <div class="information_dialog_area animated fadeInDown">
-        <div class="information_dialog_container">
-            <button class="information_dialog_close" ng-click="closeNoAudioRights()"></button>
-            <div class="information_dialog_content clearfix">
-                <div class="information_dialog_desc">
-                    <h3>Information</h3>
-                    <p class="information_dialog_text">
-                        La synthèse vocale est désactivée.
-                        <br/> Pour l'activer, veuillez contacter l'administrateur de l'application.
-                    </p>
-                    <div class="hide_information_dialog_container clearfix">
-                        <p class="information_dialog_controls controls_zone checkbox_zone">
-                            <input type="checkbox" class="hidden" name="informationNeverShowNoAudioRights"
-                                   id="informationNeverShowNoAudioRights" data-ng-model="neverShowNoAudioRights"/>
-                            <label class="mask" for="informationNeverShowNoAudioRights">&nbsp;</label>
-                            <label class="hide_information_dialog_check " for="informationNeverShowNoAudioRights">Ne
-                                plus afficher ce message</label>
-                        </p>
-                        <button class="hide_information_dialog_btn btn_simple light_blue"
-                                ng-click="closeNoAudioRights()">OK
                         </button>
                     </div>
                 </div>

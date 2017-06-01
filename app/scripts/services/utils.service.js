@@ -40,7 +40,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
          * @param content
          * @param redirection
          */
-        showInformationModal: function (title, content, redirection, isTranslate) {
+        showInformationModal: function (title, content, redirection, isTranslate, showTipsAgain) {
             return $uibModal.open({
                 templateUrl: 'views/common/information.modal.html',
                 controller: 'InformationModalCtrl',
@@ -57,6 +57,9 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                     },
                     isTranslate: function () {
                         return isTranslate;
+                    },
+                    showTipsAgain: function() {
+                        return showTipsAgain;
                     }
                 }
             }).result;
@@ -286,10 +289,9 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
          * @returns {DocumentFragment}
          */
         colorLines: function (ref, maxLines, prevTop, line) {
-
             var documentFragment = document.createDocumentFragment();
             documentFragment.appendChild(ref.cloneNode(true));
-            documentFragment.children[0].innerHTML = '';
+            documentFragment.childNodes[0].innerHTML = '';
 
             for (var i = 0; i < ref.children.length; i++) {
 
@@ -317,11 +319,9 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                         clone.setAttribute("prevtop", prevTop);
                         clone.setAttribute("currenttop", top);
 
-
-
                     }
                 }
-                documentFragment.children[0].appendChild(clone);
+                documentFragment.childNodes[0].appendChild(clone);
             }
 
             return {

@@ -25,13 +25,32 @@
 'use strict';
 
 angular.module('cnedApp').controller('InformationModalCtrl', function($scope, $rootScope, $uibModalInstance,
-                                                                      $location, title, content, redirection, isTranslate) {
-    $scope.title = title;
-    $scope.content = content;
-    $scope.isTranslate = isTranslate;
+                                                                      $location, gettextCatalog,  title, content, redirection, isTranslate, showTipsAgain) {
+    $scope.title = '';
+    $scope.content = '';
+    $scope.showTipsAgain = showTipsAgain;
+    $scope.notShowAgain = false;
 
+    if(!isTranslate){
+        $scope.title = gettextCatalog.getString(title);
+        $scope.content = gettextCatalog.getString(content);
+    } else {
+        $scope.title = title;
+        $scope.content = content;
+    }
+
+    $scope.onCheckboxChange = function () {
+        $scope.notShowAgain = !$scope.notShowAgain;
+    };
+
+
+    /**
+     * Close modal and redirect to path if exist
+     */
     $scope.closeModal = function() {
-        $uibModalInstance.close();
+        $uibModalInstance.close({
+            notShowAgain: $scope.notShowAgain
+        });
 
         if (redirection) {
             $location.path(redirection);
