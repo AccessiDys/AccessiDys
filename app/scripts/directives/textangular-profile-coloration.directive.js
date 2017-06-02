@@ -234,17 +234,17 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                         }
 
 
-                        /*$timeout(function(){
+                        $timeout(function(){
                             bindHtmlWatcher();
 
-                        }, 110);*/
+                        }, 110);
 
                     }, 200);
                 };
 
-                $element.bind('keyup', function(){
+                /*$element.bind('keyup', function(){
                     generateColoration($element[0]);
-                });
+                });*/
 
 
                 /**
