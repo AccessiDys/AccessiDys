@@ -105,6 +105,10 @@ cnedApp.directive('vocalSynthesis',
                 }
 
                 elm.bind('mouseup', speak);
+                elm.bind('touchend', speak);
+                elem.bind('mousemove', function(event){
+                    event.preventDefault();
+                });
                 elm.bind('keyup', speakOnKeyboard);
 
             }
