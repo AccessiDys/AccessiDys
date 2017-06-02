@@ -25,7 +25,7 @@
 'use strict';
 
 angular.module('cnedApp').service('profilsService', function ($http, configuration, fileStorageService,
-                                                              $localForage, synchronisationStoreService, $rootScope,
+                                                              $localForage, $rootScope,
                                                               $uibModal, $log, $q, UtilsService, UserService, CacheProvider, _) {
 
 
