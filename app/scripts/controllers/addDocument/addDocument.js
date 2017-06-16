@@ -61,9 +61,11 @@ angular
                 if ($scope.document.data !== $scope.initDocumentData) {
                     UtilsService.openConfirmModal('INFORMATION', 'Vous risquez de perdre le document en cours d\'enregistrement, êtes-vous sûr de vouloir quitter cette page ?', true)
                         .then(function () {
+                            $scope.document.data = $scope.initDocumentData;
                             cb();
                         });
                 } else {
+
                     cb();
                 }
             };
@@ -230,6 +232,7 @@ angular
 
             $scope.close = function () {
                 $scope.confirmDocumentEdit(function () {
+                    stateChange();
                     $state.go('app.list-document');
                 });
             };
@@ -692,6 +695,22 @@ angular
 
 
             };
+
+            var stateChange = $rootScope.$on('$stateChangeStart',
+                function (event, toState, toParams, fromState, fromParams) {
+
+                    console.log('toState', toState);
+                    console.log('fromState', fromState);
+
+                    if(fromState.name === 'app.edit-document'){
+                        $scope.confirmDocumentEdit(function () {
+                            stateChange();
+                            $state.go(toState.name);
+                        });
+                        event.preventDefault();
+                    }
+
+                });
 
 
         });
