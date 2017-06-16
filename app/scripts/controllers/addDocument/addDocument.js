@@ -175,8 +175,10 @@ angular
                 }
 
                 var documentData = $scope.document.data;
-                documentData = documentData.replace(/&nbsp;/gi, ' ');
-                documentData = documentData.replace(/href="(http.*?)"/gi, 'href="/#/apercu?url=$1"');
+                if (documentData) {
+                    documentData = documentData.replace(/&nbsp;/gi, ' ');
+                    documentData = documentData.replace(/href="(http.*?)"/gi, 'href="/#/apercu?url=$1"');
+                }
 
 
                 documentService.save({

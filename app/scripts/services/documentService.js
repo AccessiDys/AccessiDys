@@ -47,7 +47,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
             } else if (document.title.length > 201) {
                 errors.push('document.message.save.ko.title.size');
 
-            } else if (!serviceCheck.checkName(document.title)) {
+            } else if (serviceCheck.checkName(document.title)) {
                 errors.push('document.message.save.ko.title.specialchar');
             }
 
