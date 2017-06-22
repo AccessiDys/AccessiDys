@@ -110,6 +110,12 @@ cnedApp.factory('serviceCheck',
                 var finalData = {};
                 var serviceName = '/htmlPage';
 
+                /*$http.get(htmlUrl).then(function(res){
+                    console.log('res.data');
+                }, function(error){
+                    console.log('error');
+                });*/
+
                 $http.post(serviceName, data)
                     .success(function (data) {
                         if (data && data.length > 0) {
@@ -149,7 +155,7 @@ cnedApp.factory('serviceCheck',
                 return deferred.promise;
             },
             checkName: function (str) {
-                return /^[a-zA-Z0-9 àâæçéèêëîïôœùûüÿÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ]*$/g.test(str); // jshint ignore:line
+                return /[^a-zA-Z0-9 ]+/g.test(str); // jshint ignore:line
             },
             isOnline: function () {
                 return $http.head('/?t=' + Date.now());
