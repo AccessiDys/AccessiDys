@@ -41,7 +41,12 @@
 
             <p class="mt-10" data-ng-if="userData.token">
                 <strong>Votre espace de sauvegarde vous permet de retrouver
-                vos documents sur tous vos appareils.</strong>
+                    vos documents sur tous vos appareils.</strong>
+            </p>
+
+            <p class="mt-20" data-ng-if="userData.token">
+                Vous n’êtes pas <strong>{{userData.email}}</strong> ? <a href="" ng-click="logout()">déconnectez vous</a>
+
             </p>
         </div>
     </div>
@@ -58,10 +63,13 @@
 
             <slick infinite="true" slides-to-show="3" slides-to-scroll="3" class="col-md-8 col-md-offset-2 mb-25 ">
                 <div data-ng-repeat="storage in storages">
-                    <div class="storage-container" data-ng-class="{'active': selectedStorage.provider === storage.provider}">
-                        <i class="fa fa-dropbox" aria-hidden="true" data-ng-if="storage.provider === 'dropbox'"
+                    <div class="storage-container"
+                         data-ng-class="{'active': selectedStorage.provider === storage.provider, 'disabled': !storage.isActive}">
+                        <i class="fa {{storage.icon}}" aria-hidden="true"
                            data-ng-click="selectStorage(storage)"></i>
                         <div>{{storage.name}}</div>
+                        <p ng-if="!storage.isActive"><em>Bientôt disponible</em></p>
+                        <p ng-if="storage.isActive">&nbsp;</p>
                     </div>
                 </div>
             </slick>
@@ -71,10 +79,10 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
 
-            <h4 class="mb-25 mt-10">2 - Vous avez un compte ? Identifiez-vous avec</h4>
+            <h4 class="mb-25 mt-10">2 - Vous avez un compte ? Identifiez-vous ou sinon créer un compte</h4>
 
             <div class="selected-storage col-md-12 text-center mb-25">
-                <i class="fa fa-dropbox" aria-hidden="true" data-ng-if="selectedStorage.provider === 'dropbox'"></i>
+                <i class="fa {{selectedStorage.icon}}" aria-hidden="true"></i>
                 <div>{{selectedStorage.name}}</div>
             </div>
 
@@ -88,9 +96,17 @@
                 Annuler
             </button>
 
-            <button data-ng-class="{'btn_simple': selectedStorage.provider, 'light_blue': selectedStorage.provider, 'reset_btn': !selectedStorage.provider}" title="S'identifier" name="login_btn" data-ng-click="login()"
-                    data-ng-disabled="!selectedStorage">
+            <button data-ng-class="{'btn_simple': selectedStorage.provider, 'light_blue': selectedStorage.provider, 'reset_btn': !selectedStorage.provider}"
+                    title="S'identifier" name="login_btn" data-ng-click="login()"
+                    data-ng-disabled="!selectedStorage"
+                    class="mr-30">
                 S'identifier
+            </button>
+
+            <button data-ng-class="{'btn_simple': selectedStorage.provider, 'light_blue': selectedStorage.provider, 'reset_btn': !selectedStorage.provider}"
+                    title="Créer" name="login_btn" data-ng-click="login()"
+                    data-ng-disabled="!selectedStorage">
+                Créer
             </button>
 
 

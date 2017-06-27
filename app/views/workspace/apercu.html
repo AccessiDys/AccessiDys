@@ -194,15 +194,12 @@
 
                         <div id="{{'adapt-content-' + $index }}" tabindex="0"
                              vocal-synthesis
-                             regle-style="page" tags="listTagsByProfil" apply-rules="forceApplyRules"
                              class="resetAll doc-apercu {{currentProfile.data.className}}"
                              style="outline: none !important; z-index: 1; position: relative; word-wrap: break-word; white-space: pre-line;"
                              profile-coloration
                              profile="currentProfile"
                              text="currentContent"
                              data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)"
-                             data-show-loader="showAdaptationLoaderFromLoop($index)"
-                             data-hide-loader="hideAdaptationLoaderFromLoop($index, content.length)"
                              data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
                              data-ng-show="$index != 0 || ( $index == 0 && isSummaryActive)">
                         </div>

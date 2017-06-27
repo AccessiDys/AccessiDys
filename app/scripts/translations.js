@@ -319,7 +319,15 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'label.ocr.inprogress': 'Reconnaissance optique de caractères en cours...',
         'label.information': 'Information',
         'label.notshowagain': 'Ne plus afficher ce message',
-        'vocalsynthesis.message.info.notsupported': 'La lecture vocale ne fonctionne pas avec votre navigateur. <br/> Elle fonctionne notamment avec Google Chrome.'
+        'vocalsynthesis.message.info.notsupported': 'La lecture vocale ne fonctionne pas avec votre navigateur. <br/> Elle fonctionne notamment avec Google Chrome.',
+        'label.logout': 'Déconnexion',
+        'label.logout.confirm': 'Êtes-vous sûr de vouloir vous déconnecter de ce compte ? ',
+        'label.show_profile_overview': 'Afficher l\'aperçu des profils',
+        'label.hide_profile_overview': 'Masquer l\'aperçu des profils',
+        'label.vocal.volume.invalid': 'Le champ "volume" est invalide',
+        'label.vocal.rate.invalid': 'Le champ "vitesse" est invalide',
+        'label.vocal.pitch.invalid': 'Le champ "hauteur de la voix" est invalide'
+
     });
 
 } ]);

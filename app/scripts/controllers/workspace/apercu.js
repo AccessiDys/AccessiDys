@@ -476,7 +476,7 @@ angular.module('cnedApp')
          * ---------- Process of populating -----------
          */
 
-        /** // TODO a mutualiser
+        /**
          * Load the npages of the pdf as a image in the editor
          *
          * @param pdf

@@ -98,51 +98,6 @@ describe('Service:Image', function () {
         request(app).post('/generateSign').expect(200, done);
     });
 
-    it('Service:Image:htmlPagePreview', function (done) {
-        app.post('/htmlPagePreview', function (req, res) {
-            req.body = {
-                lien: 'http://fr.wikipedia.org/wiki/%C3%8Ele_Christmas_(Australie)',
-            };
-            imageService.htmlPagePreview(req, res);
-        });
-        request(app).post('/htmlPagePreview').expect(200, done);
-    });
-
-    it('Service:Image:download previewpdfHTTP', function (done) {
-        app.post('/previewPdf', function (req, res) {
-            req.body = {
-                lien: 'http://www.ncu.edu.tw/~ncu25352/Uploads/201312311030531151830864.pdf'
-            };
-            imageService.previewPdf(req, res);
-        });
-        request(app).post('/previewPdf').expect(200, done);
-    });
-
-
-    it('Service:Image:download previewPdfHTTPS', function (done) {
-
-
-        app.post('/previewPdfHTTPS', function (req, res) {
-            req.body = {
-                lien: 'https://bitcoin.org/bitcoin.pdf'
-            };
-            imageService.previewPdfHTTPS(req, res);
-        });
-        request(app).post('/previewPdfHTTPS').expect(200, done);
-    });
-
-
-
-    it('Service:Image:download htmlImage', function (done) {
-        app.post('/htmlImage', function (req, res) {
-            req.body = {
-                lien: 'http://gruntjs.com'
-            };
-            imageService.htmlImage(req, res);
-        });
-        request(app).post('/htmlImage').expect(200, done);
-    });
-
     it('Service:Image:epubUpload', function (done) {
         app.post('/epubUpload', function (req, res) {
             req.files = {
@@ -172,15 +127,5 @@ describe('Service:Image', function () {
             imageService.externalEpub(req, res);
         });
         request(app).post('/externalEpub').expect(200, done);
-    });
-
-    it('Service:Image:download externalEpubPreview', function (done) {
-        app.post('/externalEpubPreview', function (req, res) {
-            req.body = {
-                lien: 'http://sql.sh/ressources/Cours_SQL.epub'
-            };
-            imageService.externalEpubPreview(req, res);
-        });
-        request(app).post('/externalEpubPreview').expect(200, done);
     });
 });

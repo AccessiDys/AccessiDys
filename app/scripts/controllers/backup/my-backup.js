@@ -25,11 +25,22 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider) {
+angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, UtilsService) {
     $scope.storages = [{
         provider: 'dropbox',
-        img: 'https://pbs.twimg.com/profile_images/662300942335737857/vJbiuGpn.png',
-        name: 'Dropbox'
+        icon: 'fa-dropbox',
+        name: 'Dropbox',
+        isActive: true
+    }, {
+        provider: 'googledrive',
+        icon: 'fa-google',
+        name: 'Google drive',
+        isActive: false
+    }, {
+        provider: 'onedrive',
+        icon: 'fa-cloud',
+        name: 'One drive',
+        isActive: false
     }];
 
     $scope.prevState = $stateParams.prevState;
@@ -42,7 +53,9 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
      * @param storage
      */
     $scope.selectStorage = function (storage) {
-        $scope.selectedStorage = storage;
+        if (storage.isActive) {
+            $scope.selectedStorage = storage;
+        }
     };
 
     /**
@@ -50,7 +63,7 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
      */
     $scope.login = function () {
 
-        if($scope.prevState){
+        if ($scope.prevState) {
             CacheProvider.setItem({
                 prevState: $scope.prevState,
                 file: $scope.file
@@ -62,12 +75,24 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
         }
     };
 
-    $scope.cancel = function(){
-        if($scope.prevState){
+    $scope.cancel = function () {
+        if ($scope.prevState) {
             $rootScope.$state.go($scope.prevState);
         } else {
             $rootScope.$state.go('app.list-document');
         }
     };
+
+    $scope.logout = function () {
+        UtilsService.openConfirmModal('label.logout', 'label.logout.confirm', false)
+            .then(function () {
+                console.log('logout');
+                UserService.logout();
+                CacheProvider.setItem(null, 'listDocument');
+                CacheProvider.setItem(null, 'listProfile');
+
+                window.location = '/';
+            });
+    }
 
 });

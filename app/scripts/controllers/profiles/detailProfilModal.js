@@ -73,6 +73,14 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
         });
     };
 
+    $scope.editVocalSynthesisSettings = function() {
+        $uibModalInstance.close({
+            operation: 'vocal',
+            profile: $scope.profile,
+            template: $scope.template
+        });
+    };
+
     /**
      * Dismiss the current modal
      * @param operation

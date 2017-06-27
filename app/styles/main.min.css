@@ -112,10 +112,30 @@
  .my-backup-page .fa-dropbox {
      font-size: 60px;
      color: rgb(49, 126, 222);
+     margin-top: 10px;
+ }
+
+ .my-backup-page .fa-google,
+ .my-backup-page .fa-cloud {
+     font-size: 50px;
+     margin-top: 5px;
+     margin-bottom: 5px;
+ }
+
+ .my-backup-page .storage-container.disabled > div,
+ .my-backup-page .storage-container.disabled > .fa{
+     color: #eeeeee;
+ }
+
+ .my-backup-page .storage-container.disabled{
+     cursor: default !important;
+ }
+
+ .my-backup-page .storage-container > p{
+     margin: 0;
  }
 
  .my-backup-page .storage-container{
-     width: 70px;
      cursor: pointer;
      text-align: center;
      padding: 5px;
@@ -162,4 +182,20 @@
 
  .popover {
      z-index: 900 !important;
+ }
+
+ .balance-text {
+     text-wrap: balanced;
+ }
+
+ .statictoolbar {
+     position: fixed;
+     top: 12px;
+     z-index: 200;
+     left: 0;
+     right: 0;
+ }
+
+ .mr-30 {
+     margin-right: 30px;
  }

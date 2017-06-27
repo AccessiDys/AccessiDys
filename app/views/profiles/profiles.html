@@ -50,14 +50,30 @@
         <div class="head_section">
             <input type="text" class="serach_field pull-left" data-ng-model="query" id="" name=""
                    data-ng-change="specificFilter()" placeholder="Recherche un profil ..."/>
-            <button class="add_profile grey_btn pull-right" data-ng-click="create()" translate
+
+            <button class="add_profile grey_btn pull-right" data-ng-click="create()"
                     title="{{'Ajouter un profil' | translate}}" name="add_profile">
-                Ajouter un profil
+                {{'Ajouter un profil' | translate}}
             </button>
+
+            <button class="btn_annuler grey_btn pull-right" style="margin: 0 15px 0 0;" data-ng-click="showProfilesOverview()"
+                    title="{{'label.show_profile_overview' | translate}}"
+                    data-ng-if="isProfileOverviewHide">
+                {{'label.show_profile_overview' | translate}}
+            </button>
+
+            <button class="btn_annuler grey_btn pull-right" style="margin: 0 15px 0 0;" data-ng-click="hideProfilesOverview()"
+                    title="{{'label.show_profile_overview' | translate}}"
+                    data-ng-if="!isProfileOverviewHide">
+                {{'label.hide_profile_overview' | translate}}
+            </button>
+
+
         </div>
         <table>
             <thead>
             <tr>
+                <th></th>
                 <th>
                     <span class="cursor-pointer sort-column"
                           data-ng-click="sortType = 'nom'; sortReverse = !sortReverse">
@@ -83,15 +99,27 @@
             </tr>
             </thead>
             <tbody data-ng-repeat="profile in profiles | orderBy:sortType:sortReverse track by $index"
-                   data-ng-show="profile.showed">
+                   data-ng-show="profile.showed"
+                   ng-init="profile.showOverview = true;">
             <tr>
+
+                <td>
+                    <i class="fa fa-caret-up cursor-pointer" aria-hidden="true" data-ng-if="profile.showOverview"
+                       data-ng-click="profile.showOverview = !profile.showOverview"></i>
+                    <i class="fa fa-caret-down cursor-pointer" aria-hidden="true" data-ng-if="!profile.showOverview"
+                       data-ng-click="profile.showOverview = !profile.showOverview"></i>
+                </td>
+
                 <td class="profile_name">
-                            <span data-ng-if="isFavourite(profile)">
-                                <i class="fa fa-star"></i>
-                            </span>
+
+
+
+                    <span data-ng-if="isFavourite(profile)">
+                        <i class="fa fa-star"></i>
+                    </span>
                     <span data-ng-if="isDelegated(profile)">
                                 <i class="fa fa-user"></i>
-                            </span>
+                    </span>
                     {{ profile.data.nom }}
                 </td>
                 <td class="profil_desc">
@@ -121,8 +149,7 @@
                                 Modifier
                             </a>
                         </li>
-                        <li class="duplicating_item"
-                            data-ng-if="!isOwner(profile)">
+                        <li class="duplicating_item">
                             <a href title="Dupliquer" data-ng-click="duplicate(profile)">
                                 Dupliquer
                             </a>
@@ -178,7 +205,7 @@
                     </ul>
                 </td>
             </tr>
-            <tr>
+            <tr ng-show="profile.showOverview">
                 <td colspan="6">
                     <div class="resetAll {{profile.data.className}} preview" style="margin-bottom: 20px;"
                          data-ng-repeat="profileTag in profile.data.profileTags"

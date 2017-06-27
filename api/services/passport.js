@@ -27,39 +27,16 @@
 'use strict';
 /*jshint unused: false, undef:false */
 
-// config/passport.js
-
-// load all the things we need
-var LocalStrategy = require('passport-local').Strategy;
 // dropBox
 var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 
 var config = require('../../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
-var dropbox_type = process.env.DROPBOX_TYPE || config.DROPBOX_TYPE;
-var listDocPath = process.env.CATALOGUE_NAME || config.CATALOGUE_NAME;
-
 var DROPBOX_CLIENT_ID = process.env.DROPBOX_CLIENT_ID || config.DROPBOX_CLIENT_ID; // 'ko5rdy0yozdjizw';
 var DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET || config.DROPBOX_CLIENT_SECRET; //'iqct32159hizifd';
 
-// load up the user model
-var User = require('../../models/User');
-var Profil = require('../../models/Profil');
-var UserProfil = require('../../models/UserProfil');
-
-//token generator and secret grainSalt
-var jwt = require('jwt-simple');
-var secret = 'nownownow';
-var md5 = require('MD5');
 var helpers = require('../helpers/helpers');
-var https = require('https');
-var http = require('http');
-var rest = require('restler');
-var fs = require('fs');
-var path = require('path');
-
-var events = require('events');
 
 // expose this function to our app using module.exports
 
@@ -95,152 +72,5 @@ module.exports = function (passport) {
                     provider: 'dropbox'
                 });
             }
-        }));
-
-
-    passport.use('local-signup', new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField: 'email',
-            passwordField: 'password',
-
-            passReqToCallback: true // allows us to pass back the entire request to the callback
-        },
-
-        function (req, email, password, done) {
-            // asynchronous
-            // User.findOne wont fire unless data is sent back
-            process.nextTick(function () {
-                if (!req.body.nom || !req.body.prenom) {
-                    return done(404, {message: 'Missing fields'});
-                }
-                // find a user whose email is the same as the forms email
-                // we are checking to see if the user trying to login already exists
-                helpers.journalisation(0, null, req._parsedUrl.pathname, 'Email : [' + email + '] ');
-                User.findOne({
-                    'local.email': email
-                }, function (err, user) {
-                    // if there are any errors, return the error
-                    if (err) return done(err);
-
-                    // check to see if theres already a user with that email
-                    if (user) {
-                        var erreur = {
-                            message: 'email deja pris',
-                            email: true
-                        };
-                        return done(404, erreur);
-                    } else {
-                        User.count({}, function (err, numberOfUsers) {
-                            // if there is no user with that email
-                            // create the user
-                            // console.log('creation new user');
-                            var newUser = new User();
-
-                            if (numberOfUsers === 0) {
-                                newUser.local.role = 'admin';
-                            } else {
-                                newUser.local.role = 'user';
-                            }
-                            // set the user's local credentials
-                            newUser.local.email = email;
-                            newUser.local.password = md5(password);
-                            newUser.local.nom = req.body.nom;
-                            newUser.local.prenom = req.body.prenom;
-                            newUser.local.authorisations.ocr = true;
-                            newUser.local.authorisations.audio = true;
-
-                            var mydate = new Date();
-
-                            newUser.local.tokenTime = mydate.getTime() + 4329000;
-                            var randomString = {
-                                chaine: Math.random().toString(36).slice(-8)
-                            };
-                            newUser.local.token = jwt.encode(randomString, secret);
-
-                            newUser.save(function (err, newUser) {
-                                if (err) {
-                                    throw err;
-                                } else {
-                                    Profil.findOne({
-                                        'nom': 'Accessidys par défaut',
-                                        'owner': 'scripted',
-                                    }, function (err, profil) {
-                                        if (profil) {
-                                            var userProfil = new UserProfil({
-                                                'profilID': profil._id,
-                                                'userID': newUser._id,
-                                                'favoris': false,
-                                                'actuel': true,
-                                                'default': true
-                                            });
-                                            userProfil.save(function (err) {
-                                                if (err) {
-                                                    console.log('error creating user profil for default profil');
-                                                }
-                                            });
-                                        }
-                                    });
-                                    return done(null, newUser);
-                                }
-                            });
-                        });
-                    }
-                });
-            });
-        }));
-
-    passport.use('local-login', new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField: 'email',
-            passwordField: 'password',
-            passReqToCallback: true // allows us to pass back the entire request to the callback
-        },
-
-        function (req, email, password, done) { // callback with email and password from our form
-
-            helpers.journalisation(0, null, req._parsedUrl.pathname, 'email :[' + email + ']' + ' password:[' + password + ']');
-
-            User.findOne({
-                'local.email': email
-            }, function (err, user) {
-                if (!user) {
-                    return done(404, null);
-                }
-                if (user.local.password !== password) {
-                    return done(404, null);
-                }
-
-                var mydate = new Date();
-                var nowTime = mydate.getTime();
-                var generateNewToken = true;
-                if (user.local.token && user.local.token !== '') {
-                    if (parseInt(nowTime) < parseInt(user.local.tokenTime)) {
-                        generateNewToken = false;
-                    }
-                }
-                if (generateNewToken) {
-                    var randomString = {
-                        chaine: Math.random().toString(36).slice(-8)
-                    };
-                    user.local.token = jwt.encode(randomString, secret);
-                }
-
-                user.local.tokenTime = mydate.getTime() + 4329000;
-
-                user.save(function (err) {
-                    if (err) {
-                        var item = {
-                            message: 'il ya un probleme dans la sauvegarde '
-                        };
-                        helpers.journalisation(-1, user, req._parsedUrl.pathname, err);
-                        req.session.loged = true;
-                        return done(401);
-                    } else {
-                        helpers.journalisation(1, user, req._parsedUrl.pathname, 'ID : [' + user._id + '] ' + ' Email : [' + user.local.email + ']');
-                        req.session.loged = true;
-                        return done(null, user);
-                    }
-                });
-            });
         }));
 };

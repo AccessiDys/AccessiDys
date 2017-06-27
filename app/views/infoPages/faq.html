@@ -1,5 +1,5 @@
-/* File: socket.js
- *
+<!--
+ File: faq.html
  * Copyright (c) 2013-2016
  * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
  * (direction-innovation@cned.fr)
@@ -20,19 +20,10 @@
  * You should have received a copy of the GNU Affero General Public
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
- *
- */
+ -->
+<h1 class="animated fadeInLeft">FAQ</h1>
+<div class="content">
 
-module.exports = function(io) {
 
-  'use strict';
-  io.on('connection', function(socket) {
-    socket.broadcast.emit('user connected');
+</div>
 
-    // socket.on('allProduct', function() {
-    //   io.sockets.emit('broadcast', {
-    //     name: 'msg'
-    //   });
-    // });
-  });
-};

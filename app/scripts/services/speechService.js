@@ -27,7 +27,7 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('speechService', function ($window, $log) {
+cnedApp.service('speechService', function ($window, $log, $rootScope) {
     var self = this;
 
     /**
@@ -62,8 +62,8 @@ cnedApp.service('speechService', function ($window, $log) {
 
         $log.debug('getVoice - connected', connected);
 
-        if ($window.speechSynthesis) {
-            var voicesAvailable = $window.speechSynthesis.getVoices();
+        if (window.speechSynthesis) {
+            var voicesAvailable = window.speechSynthesis.getVoices();
             for (var i = 0; i < voicesAvailable.length; i++) {
                 if (connected) {
                     if (voicesAvailable[i].lang === 'fr-FR') {
@@ -224,7 +224,7 @@ cnedApp.service('speechService', function ($window, $log) {
         $log.debug('text', text);
 
         if (text && !/^\s*$/.test(text)) {
-            $window.speechSynthesis.cancel();
+            window.speechSynthesis.cancel();
             var voice = self.getVoice(connected);
             $log.debug('voice selected', voice);
             if (voice) {
@@ -235,9 +235,21 @@ cnedApp.service('speechService', function ($window, $log) {
                     if (textArray[i] && !/^\s*$/.test(textArray[i])) {
                         var utterance = new SpeechSynthesisUtterance();
                         utterance.lang = voice.lang;
-                        utterance.rate = 1;
-                        utterance.pitch = 1;
-                        utterance.volume = 1;
+
+
+                        if($rootScope.currentProfile.data.vocalSettings){
+                            utterance.rate = $rootScope.currentProfile.data.vocalSettings.rate;
+                            utterance.pitch = $rootScope.currentProfile.data.vocalSettings.pitch;
+                            utterance.volume = $rootScope.currentProfile.data.vocalSettings.volume;
+                        } else {
+                            utterance.rate = 1;
+                            utterance.pitch = 1;
+                            utterance.volume = 1;
+                        }
+
+                        console.log('utterance', utterance);
+
+
                         utterance.voice = voice;
                         utterance.text = textArray[i];
                         $log.debug('speechSynthesis.speak', utterance);

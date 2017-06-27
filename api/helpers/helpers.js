@@ -28,12 +28,9 @@
 /*jshint unused: false, undef:false */
 
 var config = require('../../../env/config.json');
-
-
 var nodemailer = require('nodemailer');
 var https = require('https');
 var fs = require('fs');
-var path = require('path');
 
 /**
  * Get SMTP host options
@@ -132,9 +129,6 @@ exports.sendMail = function (req, res) {
         } else {
             res.send(response);
         }
-
-        // if you don't want to use this transport object anymore, uncomment following line
-        //smtpTransport.close(); // shut down the connection pool, no more messages
     });
 };
 

@@ -49,6 +49,7 @@ angular.module('cnedApp').directive('imageMenuContainer',
                         + '<button type="button" class="btn btn-default" data-ng-click="resize(75)">75%</button>'
                         + '<button type="button" class="btn btn-default" data-ng-click="resize(100)">100%</button>'
                         + '<button type="button" class="btn btn-default" data-ng-click="reset()" title="Réinitialiser"><i class="fa fa-times" aria-hidden="true"></i></button>'
+                        + '<button type="button" class="btn btn-default" data-ng-click="delete()" title="Supprimer"><i class="fa fa-trash" aria-hidden="true"></i></button>'
                         + '</div>'
                         + '<div class="btn-group mt-10" role="group" aria-label="...">'
                         + '<button type="button" class="btn btn-default" ng-click="openOcrModal()">{{"label.ocr"| translate}}</button>'
@@ -122,10 +123,12 @@ angular.module('cnedApp').directive('imageMenuContainer',
                 };
 
                 $scope.resize = function (size) {
-
                     $scope.image.style['width'] = size + '%';
+                };
 
-                }
+                $scope.delete = function () {
+                    $scope.image.remove();
+                };
             }
 
         };

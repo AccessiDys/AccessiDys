@@ -248,6 +248,14 @@ angular.module('cnedApp')
                         // Modal dismissed
                         $scope.openProfileModal(params.template, params.profile);
                     });
+                } else if (params.operation === 'vocal') {
+                    $scope.openVocalSynthesisSettingsModal(params.profile).then(function (vocalParams) {
+                        // Modal closed
+                        $scope.openProfileModal(params.template, vocalParams.profile);
+                    }, function () {
+                        // Modal dismissed
+                        $scope.openProfileModal(params.template, params.profile);
+                    });
                 }
 
             }, function (params) {
@@ -310,6 +318,28 @@ angular.module('cnedApp')
             return $uibModal.open({
                 templateUrl: 'views/profiles/renameProfilModal.html',
                 controller: 'profilesRenommageModalCtrl',
+                scope: $scope,
+                backdrop: 'static',
+                size: 'md',
+                resolve: {
+                    profile: function () {
+                        return profile;
+                    }
+                }
+            }).result;
+        };
+
+        /**
+         * Open Vocal synthesis  settings modal of a profile
+         *
+         * @param profile
+         *
+         * @method openVocalSynthesisSettingsModal
+         */
+        $scope.openVocalSynthesisSettingsModal = function (profile) {
+            return $uibModal.open({
+                templateUrl: 'views/profiles/vocal-synthesis-settings.modal.html',
+                controller: 'VocalSynthesisSettingsModalCtrl',
                 scope: $scope,
                 backdrop: 'static',
                 size: 'md',
@@ -786,7 +816,11 @@ angular.module('cnedApp')
 
             var profileToDuplicate = copyProfileForCreation(profile);
             profileToDuplicate.data.nom += ' Copie';
-            profileToDuplicate.data.descriptif += ' Copie';
+            if (profileToDuplicate.data.descriptif) {
+                profileToDuplicate.data.descriptif += ' Copie';
+            } else {
+                profileToDuplicate.data.descriptif = ' Copie';
+            }
 
             $scope.openProfileModal('duplicate', profileToDuplicate);
 
@@ -804,7 +838,8 @@ angular.module('cnedApp')
             var res = {
                 filename: null,
                 filepath: null,
-                data: null
+                data: null,
+                showOverview: true
             };
 
             if (profile && profile.data) {
@@ -827,6 +862,31 @@ angular.module('cnedApp')
             }
 
             return res;
+        };
+
+        $scope.isProfileOverviewHide = false;
+
+        $scope.showProfilesOverview = function () {
+
+            console.log('show');
+
+            for (var i = 0; i < $scope.profiles.length; i++) {
+                $scope.profiles[i].showOverview = true;
+            }
+
+            $scope.isProfileOverviewHide = false;
+
+        };
+
+        $scope.hideProfilesOverview = function () {
+
+            console.log('hide');
+
+            for (var i = 0; i < $scope.profiles.length; i++) {
+                $scope.profiles[i].showOverview = false;
+            }
+
+            $scope.isProfileOverviewHide = true;
         };
 
         /** **** end of the profile detail ***** */

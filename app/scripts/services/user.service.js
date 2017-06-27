@@ -77,18 +77,25 @@ cnedApp.service('UserService', function ($http, configuration, $localForage, $q)
             return deferred.promise;
         },
 
-        // TODO a supprimer
-        findUserByEmail: function (email) {
-            return $http.post('/findUserByEmail', {
-                email: email
-            });
-        },
-
         isAdmin: function () {
             return $http.post('/user/isAdmin', {
                 email: userData.email,
                 provider: userData.provider
             });
+        },
+
+        logout: function(){
+
+            userData = {
+                email: null,
+                firstName: null,
+                lastName: null,
+                provider: null,
+                token: null,
+                isAdmin: false
+            };
+
+            $localForage.setItem('userData', userData);
         }
 
     };

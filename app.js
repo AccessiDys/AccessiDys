@@ -121,7 +121,7 @@ require('./models/UserProfil');
 require('./models/Profil');
 
 // Patches
-//require('./patches/patch_profil');
+require('./patches/patch_profil');
 var patchProd = require('./patches/patch_prod');
 
 //patchProd.updateDb();
@@ -143,7 +143,6 @@ httpsServer.listen(3000, '0.0.0.0');
 
 var io = require('socket.io').listen(httpsServer);
 
-// var socket = require('./routes/socket.js')(io);
 global.io = io;
 global.io.on('connection', function (socket) {
     // socket.emit('news', {

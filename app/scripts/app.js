@@ -41,7 +41,8 @@ var cnedApp = angular.module('cnedApp', [
     'angular-google-analytics',
     '720kb.socialshare',
     'slick',
-    'textAngular'
+    'textAngular',
+    'sticky'
 ]);
 
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
@@ -147,6 +148,12 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
             url: '/contribuer',
             templateUrl: 'views/infoPages/contribute.html',
             pageTrack: '/contribute.html'  // angular-google-analytics extension
+        })
+
+        .state('app.faq', {
+            url: '/faq',
+            templateUrl: 'views/infoPages/faq.html',
+            pageTrack: '/faq.html'  // angular-google-analytics extension
         })
 
         .state('app.404', {

@@ -81,9 +81,17 @@
 
         </div>
 
-<div image-menu-container>
 
-    <text-angular-toolbar ta-toolbar="[['h1','h2','h3', 'h4', 'h5', 'h6', 'p', 'ul'],  [ 'pageBreak', 'insertLinkCustom']]" name="toolbar"></text-angular-toolbar>
+        <div sticky offset="70">
+            <text-angular-toolbar
+                    ta-toolbar="[['h1','h2','h3', 'h4', 'h5', 'h6', 'p', 'ul'],  [ 'pageBreak', 'insertLinkCustom']]"
+                    name="toolbar">
+            </text-angular-toolbar>
+        </div>
+
+        <div image-menu-container>
+
+
 
             <div text-angular
                  name="document-editor"
@@ -92,7 +100,7 @@
                  ng-model="document.data"
                  class="{{currentProfile.data.className}}"></div>
 
-</div>
+        </div>
 
     </div>
 </div>
