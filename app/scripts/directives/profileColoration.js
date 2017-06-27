@@ -81,9 +81,6 @@ angular.module('cnedApp').directive('profileColoration',
                                         line = 0;
                                     }
 
-                                    child.setAttribute("prevtop", prevTop);
-                                    child.setAttribute("currenttop", child.offsetTop);
-
                                     if (profileTag) {
 
                                         var coloration = profileTag.coloration;
@@ -169,8 +166,6 @@ angular.module('cnedApp').directive('profileColoration',
                                             prevTop = child.offsetTop;
                                         }
 
-                                        console.log('child.tagName', child.tagName);
-
                                         prevTag = child.tagName;
 
                                     } else {
@@ -192,7 +187,6 @@ angular.module('cnedApp').directive('profileColoration',
                     textWatcher = $scope.$watch('text', function (newValue, oldValue) {
                         if (newValue !== oldValue) {
                             adaptIndex = 0;
-                            console.log('change text', $scope.text);
                             $element[0].innerHTML = UtilsService.removeSpan(UtilsService.decodeHtmlEntities($scope.text));
                             generateColoration($element[0]);
                         }
