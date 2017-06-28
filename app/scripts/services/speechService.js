@@ -67,7 +67,7 @@ cnedApp.service('speechService', function ($window, $log, $rootScope) {
             for (var i = 0; i < voicesAvailable.length; i++) {
                 console.log('voices available', voicesAvailable[i]);
 
-                if($rootScope.currentProfile && $rootScope.currentProfile.data && voicesAvailable[i].name === $rootScope.currentProfile.data.vocalSettings.voice){
+                if($rootScope.currentProfile && $rootScope.currentProfile.data && $rootScope.currentProfile.data.vocalSettings &&  voicesAvailable[i].name === $rootScope.currentProfile.data.vocalSettings.voice){
                     return voicesAvailable[i];
                 }
 
