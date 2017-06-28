@@ -67,7 +67,7 @@ cnedApp.service('speechService', function ($window, $log, $rootScope) {
             for (var i = 0; i < voicesAvailable.length; i++) {
                 console.log('voices available', voicesAvailable[i]);
 
-                if($rootScope.currentProfile && voicesAvailable[i].name === $rootScope.currentProfile.data.vocalSettings.voice){
+                if($rootScope.currentProfile && $rootScope.currentProfile.data && voicesAvailable[i].name === $rootScope.currentProfile.data.vocalSettings.voice){
                     return voicesAvailable[i];
                 }
 
@@ -243,7 +243,7 @@ cnedApp.service('speechService', function ($window, $log, $rootScope) {
                         utterance.lang = voice.lang;
 
 
-                        if ($rootScope.currentProfile.data.vocalSettings) {
+                        if ($rootScope.currentProfile  && $rootScope.currentProfile.data && $rootScope.currentProfile.data.vocalSettings) {
                             utterance.rate = $rootScope.currentProfile.data.vocalSettings.rate;
                             utterance.pitch = $rootScope.currentProfile.data.vocalSettings.pitch;
                             utterance.volume = $rootScope.currentProfile.data.vocalSettings.volume;
