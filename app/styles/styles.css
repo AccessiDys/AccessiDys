@@ -2963,3 +2963,9 @@ input[type=text]::-ms-clear {
     display: none;
 }
 
+h4.information  {
+    font-family: "HelveticaNHvCn", arial;
+    font-size: 37px;
+    text-transform: uppercase;
+    color: green;
+}

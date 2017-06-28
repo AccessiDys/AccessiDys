@@ -9,3 +9,10 @@
 .action_list li.favourite_item a:hover {
     background-position: 30px 11px;
 }
+
+h4.information  {
+    font-family: "HelveticaNHvCn", arial;
+    font-size: 37px;
+    text-transform: uppercase;
+    color: green;
+}
