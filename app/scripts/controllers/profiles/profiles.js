@@ -268,6 +268,11 @@ angular.module('cnedApp')
                         for (var i = 0; i < $rootScope.profiles.length; i++) {
                             if ((params.profile.data._id && $rootScope.profiles[i].data._id === params.profile.data._id) || (params.oldProfile.filename && $rootScope.profiles[i].filename === params.oldProfile.filename)) {
                                 $rootScope.profiles[i] = params.profile;
+
+                                if((params.profile.data._id && $rootScope.currentProfile.data._id === params.profile.data._id) || (params.oldProfile.filename && $rootScope.currentProfile.filename === params.oldProfile.filename)){
+                                    $rootScope.currentProfile = params.profile;
+                                    $log.debug('profile found edit');
+                                }
                                 break;
                             }
                         }

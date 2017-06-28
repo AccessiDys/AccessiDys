@@ -65,18 +65,24 @@ cnedApp.service('speechService', function ($window, $log, $rootScope) {
         if (window.speechSynthesis) {
             var voicesAvailable = window.speechSynthesis.getVoices();
             for (var i = 0; i < voicesAvailable.length; i++) {
-                if (connected) {
-                    if (voicesAvailable[i].lang === 'fr-FR') {
-                        $log.debug('Voice found ', voicesAvailable[i]);
-                        return voicesAvailable[i];
-                    }
-                } else {
-                    if (voicesAvailable[i].name === 'native') {
-                        $log.debug('Voice found ', voicesAvailable[i]);
-                        return voicesAvailable[i];
-                    }
+                console.log('voices available', voicesAvailable[i]);
+
+                if($rootScope.currentProfile && voicesAvailable[i].name === $rootScope.currentProfile.data.vocalSettings.voice){
+                    return voicesAvailable[i];
+                }
+
+            }
+
+            for (var i = 0; i < voicesAvailable.length; i++) {
+                console.log('voices available', voicesAvailable[i]);
+
+                if (voicesAvailable[i].lang === 'fr-FR') {
+                    $log.debug('Voice found ', voicesAvailable[i]);
+                    return voicesAvailable[i];
                 }
             }
+
+            return voicesAvailable[0];
         }
     };
 
@@ -237,7 +243,7 @@ cnedApp.service('speechService', function ($window, $log, $rootScope) {
                         utterance.lang = voice.lang;
 
 
-                        if($rootScope.currentProfile.data.vocalSettings){
+                        if ($rootScope.currentProfile.data.vocalSettings) {
                             utterance.rate = $rootScope.currentProfile.data.vocalSettings.rate;
                             utterance.pitch = $rootScope.currentProfile.data.vocalSettings.pitch;
                             utterance.volume = $rootScope.currentProfile.data.vocalSettings.volume;

@@ -27,18 +27,31 @@
 
 angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function ($scope, $uibModalInstance,
                                                                                   ToasterService, profilsService,
-                                                                                  $log, profile) {
+                                                                                  $log, $timeout, profile) {
 
     $scope.profile = angular.copy(profile);
 
-    if(!$scope.profile.data.vocalSettings){
+    if (!$scope.profile.data.vocalSettings) {
         $scope.profile.data.vocalSettings = {
             rate: 1,
             volume: 1,
             pitch: 1,
-            voice: ''
+            voice: 'Thomas'
         }
     }
+
+    $uibModalInstance.opened.then(function () {
+        $timeout(function () {
+            jQuery('#vocal-synthesis-sttings-modal').find('select[data-ng-model="profile.data.vocalSettings.voice"] + .customSelect .customSelectInner').text($scope.profile.data.vocalSettings.voice);
+
+        }, 100);
+
+        if (window.speechSynthesis) {
+            $scope.voices = window.speechSynthesis.getVoices();
+        }
+
+    });
+
 
     /**
      * This function closes a modal.
@@ -64,7 +77,7 @@ angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function
             hasError = true;
         }
 
-        if(!hasError){
+        if (!hasError) {
             // if there is no change
             $uibModalInstance.close({
                 profile: $scope.profile

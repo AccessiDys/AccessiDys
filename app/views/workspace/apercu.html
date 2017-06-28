@@ -143,7 +143,7 @@
                              profile="currentProfile"
                              text="currentContent"
                              class="resetAll doc-apercu {{currentProfile.data.className}}"
-                             data-ng-click="checkLinkOffline($event);addNoteOnClick($event)"
+                             data-ng-click="checkLinkOffline($event); addNoteOnClick($event)"
                              data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
                              style="outline: none !important; z-index: 1; position: relative; word-wrap: break-word; white-space: pre-line;">
                         </div>
@@ -199,7 +199,7 @@
                              profile-coloration
                              profile="currentProfile"
                              text="currentContent"
-                             data-ng-click="checkLinkOffline($event);addNoteOnClick($event,$index)"
+
                              data-ng-class="{'border-grey-right': notes.length > 0 || isEnableNoteAdd}"
                              data-ng-show="$index != 0 || ( $index == 0 && isSummaryActive)">
                         </div>

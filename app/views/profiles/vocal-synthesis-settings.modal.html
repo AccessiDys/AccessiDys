@@ -22,7 +22,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  -->
 
-<div id="renameProfilModal" class="modal-header">
+<div class="modal-header">
     <button type="button" class="close" aria-hidden="true" title="Fermer"
             data-ng-click="dismissModal()">&times;</button>
 
@@ -39,7 +39,7 @@
     </strong>
 </div>
 
-<div class="modal-body adjust-modal-body">
+<div id="vocal-synthesis-sttings-modal" class="modal-body adjust-modal-body">
     <div class="row-fluid">
         <p class="controls_zone pull-left">
             <label for="volume">
@@ -54,7 +54,8 @@
                 <span>Vitesse (0.1 - 10)</span>
                 <span class="required"> *</span>
             </label>
-            <input type="number" data-ng-model="profile.data.vocalSettings.rate" step="0.1" required id="rate" name="rate"/>
+            <input type="number" data-ng-model="profile.data.vocalSettings.rate" step="0.1" required id="rate"
+                   name="rate"/>
 
         </p>
 
@@ -65,6 +66,27 @@
             </label>
             <input type="number" data-ng-model="profile.data.vocalSettings.pitch" required id="pitch" name="pitch"/>
 
+        </p>
+
+        <p class="controls_zone pull-left">
+            <label for="voice">
+                <span>voix</span>
+                <span class="required"> *</span>
+            </label>
+
+            <span class="select-wrapper">
+                <select id="voice"
+                        sselect
+                        data-ng-model="profile.data.vocalSettings.voice"
+                        required name="voice">
+                    <option data-ng-repeat="voice in voices"
+                            data-ng-selected="(voice.name == profile.data.vocalSettings.voice)"
+                            value="{{voice.name}}"
+                            sselect-hover>
+                        {{voice.name}}
+                    </option>
+                </select>
+            </span>
         </p>
     </div>
 

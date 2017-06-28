@@ -40,16 +40,14 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                 var windowScroll = 0;
                 var prevScroll = -1;
                 var windowWidth = window.innerWidth;
-                var adaptIndex = 0;
 
-                window.addEventListener('scroll', function () {
+                var tags = {};
+
+
+                window.addEventListener('scroll', _.debounce(function () {
                     windowScroll = window.pageYOffset;
-
-                    if (windowScroll >= prevScroll) {
-                        prevScroll = windowScroll;
-                        generateColoration($element[0]);
-                    }
-                });
+                    generateColoration($element[0]);
+                }, 100));
 
                 /**
                  * Bind the watcher to detect change in the editor
@@ -58,16 +56,16 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                     if (!htmlWatcher) {
                         htmlWatcher = $scope.$watch(function () {
                             return $element[0].innerHTML.length;
-                        }, function (newValue, oldValue) {
+                        }, _.debounce(function (newValue, oldValue) {
                             if (newValue !== oldValue) {
                                 console.log(' html watcher newValue = ' + newValue + ' - oldValue = ' + oldValue, $element[0].innerHTML);
                                 generateColoration($element[0]);
                             }
-                        });
+                        }, 200));
                     }
                 };
 
-                var generateColoration = function (element) {
+                function generateColoration(element) {
                     if (htmlWatcher) {
                         htmlWatcher();
                         htmlWatcher = undefined;
@@ -75,38 +73,33 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                     $timeout(function () {
 
-                        var profile = $rootScope.currentProfile;
-                        var text = element.innerHTML;
+                        console.time('coloration');
 
-                        if (profile && text) {
-
-                            profile = profile.data;
-
-                            var documentFragment = document.createDocumentFragment();
-                            documentFragment.appendChild(element.cloneNode(true));
-
+                        if ($rootScope.currentProfile) {
 
                             var line = 0;
                             var prevTop = -9999;
                             var prevTag = '';
 
-                            for (var i = 0; i < element.children.length; i++) {
-                                var child = element.children[i];
+                            var savedSel = rangy.saveSelection();
+
+                            _.each(element.children, function (child) {
+
+
+                                var clone = child.cloneNode(true);
+
                                 // Adapt child which are displayed on the screen
-                                if (child.offsetTop < (windowScroll + windowWidth)) {
-                                    var profileTag = _.find(profile.profileTags, function (_profileTag) {
-                                        return _profileTag.tagDetail.balise === child.tagName.toLowerCase();
-                                    });
+                                if (child.offsetTop > windowScroll && child.offsetTop < (windowScroll + windowWidth)) {
 
                                     if (child.tagName !== prevTag) {
                                         line = 0;
                                     }
 
-                                    if (profileTag) {
-                                        var savedSel = rangy.saveSelection();
+                                    var profileTag = tags[child.tagName.toLowerCase()]; // get tag settings
 
+                                    if (profileTag) {
                                         var coloration = profileTag.coloration;
-                                        var textTransform = child.innerHTML;
+                                        var textTransform = child.innerHTML.replace(/(<!--.*?-->)/gi, '');
 
                                         // Save rangy cursor
                                         var rangyCursorPattern = /((&nbsp;)*<span id(.*?)\/span>)/gi;
@@ -114,16 +107,17 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                         var rangyCursors = [];
 
                                         if (rangyCursorResult && rangyCursorResult.length > 0) {
-                                            for (var v = 0; v < rangyCursorResult.length; v++) {
-                                                var marker = '%%RG' + v + '%%';
+
+                                            _.each(rangyCursorResult, function (result, index) {
+                                                var marker = '%%RG' + index + '%%';
 
                                                 rangyCursors.push({
                                                     marker: marker,
-                                                    cursor: rangyCursorResult[v]
+                                                    cursor: result
                                                 });
 
-                                                textTransform = textTransform.replace(rangyCursorResult[v], '%%RG' + v + '%%');
-                                            }
+                                                textTransform = textTransform.replace(result, marker);
+                                            });
                                         }
                                         textTransform = textTransform.replace(/&nbsp;/gi, ' %%NB%% ');
                                         textTransform = UtilsService.removeSpan(textTransform);
@@ -145,7 +139,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                                 textTransform = textTransform.replace(imgResult[v], marker);
                                             }
                                         }
-
 
                                         // Split Text
                                         if (coloration === 'Colorer les lignes RBV'
@@ -186,7 +179,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
 
                                         child.innerHTML = textTransform;
-                                        console.log('reinject');
+
 
                                         if (coloration === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
@@ -216,35 +209,39 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             parent.insertBefore(res.documentFragment, nextElement);
                                         }
 
-                                        if(prevTop > child.offsetTop){
+                                        if (prevTop > child.offsetTop) {
                                             prevTop = child.offsetTop;
                                         }
 
                                         prevTag = child.tagName;
 
-                                        rangy.restoreSelection(savedSel);
 
-                                    } else {
-                                        continue;
                                     }
-                                } else {
-                                    break;
                                 }
-                            }
+
+                            });
+
+
+                            rangy.restoreSelection(savedSel);
                         }
 
 
-                        $timeout(function(){
+                        $timeout(function () {
                             bindHtmlWatcher();
-
                         }, 110);
 
-                    }, 200);
-                };
 
-                /*$element.bind('keyup', function(){
-                    generateColoration($element[0]);
-                });*/
+                        console.timeEnd('coloration');
+                    }, 200);
+
+
+                }
+
+                $element.bind('keyup', function (e) {
+
+                    console.log(e.currentTarget);
+                    //generateColoration($element[0]);
+                });
 
 
                 /**
@@ -252,6 +249,11 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                  */
                 $rootScope.$watch('currentProfile', function (newvalue) {
                     if (newvalue) {
+
+                        _.each($rootScope.currentProfile.data.profileTags, function (item) {
+                            tags[item.tagDetail.balise] = item;
+                        });
+
                         generateColoration($element[0]);
                     }
                 }, true);

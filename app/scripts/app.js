@@ -45,7 +45,9 @@ var cnedApp = angular.module('cnedApp', [
     'sticky'
 ]);
 
-cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $httpProvider, AnalyticsProvider, $logProvider, configuration) {
+cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $sceProvider,
+                         $httpProvider, AnalyticsProvider, $logProvider,
+                         configuration) {
 
     // Log enable / disable
     $logProvider.debugEnabled(true);

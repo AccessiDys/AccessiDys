@@ -67,7 +67,6 @@ cnedApp.directive('vocalSynthesis',
                  * Launch the vocal synthesis with the selected text
                  */
                 function speak() {
-                    console.log('scope.speak');
                     $log.debug('$scope.speak');
                     speechService.stopSpeech();
                     $timeout(function () {
