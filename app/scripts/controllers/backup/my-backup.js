@@ -86,12 +86,15 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
     $scope.logout = function () {
         UtilsService.openConfirmModal('label.logout', 'label.logout.confirm', false)
             .then(function () {
-                console.log('logout');
                 UserService.logout();
-                CacheProvider.setItem(null, 'listDocument');
-                CacheProvider.setItem(null, 'listProfile');
+                CacheProvider.setItem(null, 'listDocument').then(function(){
+                    CacheProvider.setItem(null, 'listProfile').then(function(){
+                        window.location.reload();
+                    });
+                });
 
-                window.location = '/';
+
+
             });
     }
 
