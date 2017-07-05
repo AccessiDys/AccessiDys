@@ -58,26 +58,20 @@ cnedApp.service('speechService', function ($window, $log, $rootScope) {
      * @param connected : connected mode or not
      * @return if the mode is connected then returns the first French voice found. Otherwise returns the native voice.
      * */
-    this.getVoice = function (connected) {
-
-        $log.debug('getVoice - connected', connected);
+    this.getVoice = function () {
 
         if (window.speechSynthesis) {
             var voicesAvailable = window.speechSynthesis.getVoices();
             for (var i = 0; i < voicesAvailable.length; i++) {
-                console.log('voices available', voicesAvailable[i]);
-
-                if($rootScope.currentProfile && $rootScope.currentProfile.data && $rootScope.currentProfile.data.vocalSettings &&  voicesAvailable[i].name === $rootScope.currentProfile.data.vocalSettings.voice){
+                if ($rootScope.currentProfile && $rootScope.currentProfile.data
+                    && $rootScope.currentProfile.data.vocalSettings
+                    && voicesAvailable[i].lang.indexOf($rootScope.currentProfile.data.vocalSettings.voice) > -1 ) {
                     return voicesAvailable[i];
                 }
-
             }
 
             for (var i = 0; i < voicesAvailable.length; i++) {
-                console.log('voices available', voicesAvailable[i]);
-
-                if (voicesAvailable[i].lang === 'fr-FR') {
-                    $log.debug('Voice found ', voicesAvailable[i]);
+                if (voicesAvailable[i].lang.indexOf('fr') > -1 ) {
                     return voicesAvailable[i];
                 }
             }
@@ -232,18 +226,18 @@ cnedApp.service('speechService', function ($window, $log, $rootScope) {
         if (text && !/^\s*$/.test(text)) {
             window.speechSynthesis.cancel();
             var voice = self.getVoice(connected);
-            $log.debug('voice selected', voice);
             if (voice) {
                 var textArray = self.splitText(text);
-                $log.debug('Text after split', textArray);
 
                 for (var i = 0; i < textArray.length; i++) {
                     if (textArray[i] && !/^\s*$/.test(textArray[i])) {
                         var utterance = new SpeechSynthesisUtterance();
+
+
                         utterance.lang = voice.lang;
 
 
-                        if ($rootScope.currentProfile  && $rootScope.currentProfile.data && $rootScope.currentProfile.data.vocalSettings) {
+                        if ($rootScope.currentProfile && $rootScope.currentProfile.data && $rootScope.currentProfile.data.vocalSettings) {
                             utterance.rate = $rootScope.currentProfile.data.vocalSettings.rate;
                             utterance.pitch = $rootScope.currentProfile.data.vocalSettings.pitch;
                             utterance.volume = $rootScope.currentProfile.data.vocalSettings.volume;
@@ -253,12 +247,8 @@ cnedApp.service('speechService', function ($window, $log, $rootScope) {
                             utterance.volume = 1;
                         }
 
-                        console.log('utterance', utterance);
-
-
                         utterance.voice = voice;
                         utterance.text = textArray[i];
-                        $log.debug('speechSynthesis.speak', utterance);
                         $window.speechSynthesis.speak(utterance);
                     }
                 }

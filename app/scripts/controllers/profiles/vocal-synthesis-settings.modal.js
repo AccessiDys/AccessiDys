@@ -26,7 +26,7 @@
 /* jshint loopfunc:true */
 
 angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function ($scope, $uibModalInstance,
-                                                                                  ToasterService, profilsService,
+                                                                                  ToasterService, profilsService, gettextCatalog,
                                                                                   $log, $timeout, profile) {
 
     $scope.profile = angular.copy(profile);
@@ -36,19 +36,54 @@ angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function
             rate: 1,
             volume: 1,
             pitch: 1,
-            voice: 'Thomas'
-        }
+            voice: 'fr'
+        };
     }
+
+    $scope.langs = [];
 
     $uibModalInstance.opened.then(function () {
         $timeout(function () {
-            jQuery('#vocal-synthesis-sttings-modal').find('select[data-ng-model="profile.data.vocalSettings.voice"] + .customSelect .customSelectInner').text($scope.profile.data.vocalSettings.voice);
 
+
+            if (window.speechSynthesis) {
+                var voices = window.speechSynthesis.getVoices();
+
+                var voicesAdded = [];
+
+                for (var i = 0; i < voices.length; i++) {
+                    if (voices[i].lang.indexOf('fr') > -1 && voicesAdded.indexOf('fr') === -1) {
+                        $scope.langs.push({
+                            value: 'fr',
+                            label: gettextCatalog.getString('label.fr')
+                        });
+                        voicesAdded.push('fr');
+                    } else if (voices[i].lang.indexOf('es') > -1 && voicesAdded.indexOf('es') === -1) {
+                        $scope.langs.push({
+                            value: 'es',
+                            label: gettextCatalog.getString('label.es')
+                        });
+                        voicesAdded.push('es');
+                    } else if (voices[i].lang.indexOf('en') > -1 && voicesAdded.indexOf('en') === -1)  {
+                        $scope.langs.push({
+                            value: 'en',
+                            label: gettextCatalog.getString('label.en')
+                        });
+                        voicesAdded.push('en');
+                    } else if (voices[i].lang.indexOf('de') > -1 && voicesAdded.indexOf('de') === -1) {
+                        $scope.langs.push({
+                            value: 'de',
+                            label: gettextCatalog.getString('label.de')
+                        });
+                        voicesAdded.push('de');
+                    }
+                }
+            }
+
+            jQuery('#vocal-synthesis-sttings-modal').find('select[data-ng-model="profile.data.vocalSettings.voice"] + .customSelect .customSelectInner').text(gettextCatalog.getString('label.' + $scope.profile.data.vocalSettings.voice));
         }, 100);
 
-        if (window.speechSynthesis) {
-            $scope.voices = window.speechSynthesis.getVoices();
-        }
+
 
     });
 

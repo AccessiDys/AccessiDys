@@ -79,11 +79,11 @@
                         sselect
                         data-ng-model="profile.data.vocalSettings.voice"
                         required name="voice">
-                    <option data-ng-repeat="voice in voices"
-                            data-ng-selected="(voice.name == profile.data.vocalSettings.voice)"
-                            value="{{voice.name}}"
+                    <option data-ng-repeat="lang in langs"
+                            data-ng-selected="(lang.value == profile.data.vocalSettings.voice.value)"
+                            value="{{lang.value}}"
                             sselect-hover>
-                        {{voice.name}}
+                        {{lang.label}}
                     </option>
                 </select>
             </span>

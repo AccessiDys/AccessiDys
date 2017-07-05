@@ -28,6 +28,7 @@
 
 angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $uibModalInstance, $rootScope, $interval, $log, $timeout, profile, profileTagIndex) {
 
+    $scope.isApplyAll = false;
     $scope.requiredFieldErrors = [];
     $scope.profile = profile;
     $rootScope.tmpProfile = angular.copy(profile);
@@ -158,7 +159,8 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.profile.data.profileTags[profileTagIndex].coloration = $scope.style.coloration;
 
             $uibModalInstance.close({
-                profile: $scope.profile
+                profile: $scope.profile,
+                isApplyAll: $scope.isApplyAll
             });
 
             reset();
