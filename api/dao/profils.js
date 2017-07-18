@@ -173,7 +173,8 @@ exports.createProfile = function (req, res) {
             owner: helpers.isAdmin(userData.email, userData.provider) ? 'admin' : userData.email,
             isFavourite: profile.data.isFavourite,
             delegated: profile.data.delegated,
-            preDelegated: profile.data.preDelegated
+            preDelegated: profile.data.preDelegated,
+            vocalSettings: profile.data.vocalSettings ? profile.data.vocalSettings : null
         });
 
         newProfile.save(function (err) {
@@ -231,7 +232,6 @@ exports.updateProfile = function (req, res) {
         provider: req.get('AccessiDys-provider')
     };
 
-    console.log('Update profile ', userData);
 
     if (profile && profile.data) {
 
@@ -248,12 +248,12 @@ exports.updateProfile = function (req, res) {
                     _profile.isFavourite = profile.data.isFavourite;
                     _profile.delegated = profile.data.delegated;
                     _profile.preDelegated = profile.data.preDelegated;
+                    _profile.vocalSettings = profile.data.vocalSettings;
 
                     _profile.save();
 
                     for (var i = 0; i < profile.data.profileTags.length; i++) {
 
-                        console.log('before save', profile.data.profileTags[i]);
 
                         ProfilTag.findByIdAndUpdate(profile.data.profileTags[i]._id, {
                             'police': profile.data.profileTags[i].police,

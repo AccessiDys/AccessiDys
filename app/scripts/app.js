@@ -256,7 +256,7 @@ angular.module('cnedApp').config(function ($provide) {
             taRegisterTool('pageBreak', {
                 buttontext: 'Saut de page',
                 action: function () {
-                    this.$editor().wrapSelection('insertHtml', '<hr/><br/>');
+                    this.$editor().wrapSelection('insertHtml', '<br/><hr/><br/>');
                 }
             });
             // add the button to the default toolbar definition

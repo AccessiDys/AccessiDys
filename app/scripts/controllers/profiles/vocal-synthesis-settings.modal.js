@@ -36,7 +36,7 @@ angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function
             rate: 1,
             volume: 1,
             pitch: 1,
-            voice: 'fr'
+            voice: ''
         };
     }
 
@@ -64,7 +64,7 @@ angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function
                             label: gettextCatalog.getString('label.es')
                         });
                         voicesAdded.push('es');
-                    } else if (voices[i].lang.indexOf('en') > -1 && voicesAdded.indexOf('en') === -1)  {
+                    } else if (voices[i].lang.indexOf('en') > -1 && voicesAdded.indexOf('en') === -1) {
                         $scope.langs.push({
                             value: 'en',
                             label: gettextCatalog.getString('label.en')
@@ -80,9 +80,10 @@ angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function
                 }
             }
 
-            jQuery('#vocal-synthesis-sttings-modal').find('select[data-ng-model="profile.data.vocalSettings.voice"] + .customSelect .customSelectInner').text(gettextCatalog.getString('label.' + $scope.profile.data.vocalSettings.voice));
+            if ($scope.profile.data.vocalSettings.voice) {
+                jQuery('#vocal-synthesis-sttings-modal').find('select[data-ng-model="profile.data.vocalSettings.voice"] + .customSelect .customSelectInner').text(gettextCatalog.getString('label.' + $scope.profile.data.vocalSettings.voice));
+            }
         }, 100);
-
 
 
     });
@@ -95,17 +96,19 @@ angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function
 
         var hasError = false;
 
-        if (!$scope.profile.data.vocalSettings.volume || !angular.isNumber($scope.profile.data.vocalSettings.volume)
+        if (!angular.isNumber($scope.profile.data.vocalSettings.volume)
             || $scope.profile.data.vocalSettings.volume < 0 || $scope.profile.data.vocalSettings.volume > 1) {
             ToasterService.showToaster('#vocal-profile-error-toaster', 'label.vocal.volume.invalid');
             hasError = true;
 
-        } else if (!$scope.profile.data.vocalSettings.rate || !angular.isNumber($scope.profile.data.vocalSettings.rate)
+            console.log('test',angular.isNumber($scope.profile.data.vocalSettings.volume * 1));
+
+        } else if (!angular.isNumber($scope.profile.data.vocalSettings.rate)
             || $scope.profile.data.vocalSettings.rate < 0.1 || $scope.profile.data.vocalSettings.rate > 10) {
 
             ToasterService.showToaster('#vocal-profile-error-toaster', 'label.vocal.rate.invalid');
             hasError = true;
-        } else if (!$scope.profile.data.vocalSettings.pitch || !angular.isNumber($scope.profile.data.vocalSettings.pitch)
+        } else if (!angular.isNumber($scope.profile.data.vocalSettings.pitch)
             || $scope.profile.data.vocalSettings.pitch < 0 || $scope.profile.data.vocalSettings.pitch > 2) {
 
             ToasterService.showToaster('#vocal-profile-error-toaster', 'label.vocal.rate.invalid');
@@ -122,6 +125,30 @@ angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function
 
     $scope.dismissModal = function () {
         $uibModalInstance.dismiss();
+    };
+
+    $scope.onChangeVolume = function(){
+        if($scope.profile.data.vocalSettings.volume < 0){
+            $scope.profile.data.vocalSettings.volume = 0;
+        } else if($scope.profile.data.vocalSettings.volume > 1){
+            $scope.profile.data.vocalSettings.volume = 1;
+        }
+    };
+
+    $scope.onChangeRate = function(){
+        if($scope.profile.data.vocalSettings.rate < 0.1){
+            $scope.profile.data.vocalSettings.rate = 0.1;
+        } else if($scope.profile.data.vocalSettings.rate > 10){
+            $scope.profile.data.vocalSettings.rate = 10;
+        }
+    };
+
+    $scope.onChangePitch = function(){
+        if($scope.profile.data.vocalSettings.pitch < 0){
+            $scope.profile.data.vocalSettings.pitch = 0;
+        } else if($scope.profile.data.vocalSettings.pitch > 2){
+            $scope.profile.data.vocalSettings.pitch = 2;
+        }
     };
 
 });

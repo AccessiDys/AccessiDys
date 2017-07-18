@@ -539,7 +539,7 @@ angular.module('cnedApp')
          * @returns {boolean}
          */
         $scope.isFavourite = function (profile) {
-            if (profile && (profile.data.isFavourite || profile.data.owner === 'admin' || profile.data.owner === 'scripted')) {
+            if (profile && profile.data.isFavourite) {
                 return true;
             }
             return false;

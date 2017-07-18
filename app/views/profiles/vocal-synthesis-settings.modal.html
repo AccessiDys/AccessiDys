@@ -46,7 +46,12 @@
                 <span>Volume (0 - 1)</span>
                 <span class="required"> *</span>
             </label>
-            <input type="number" data-ng-model="profile.data.vocalSettings.volume" required id="volume" name="volume"/>
+            <input type="number"
+                   data-ng-model="profile.data.vocalSettings.volume"
+                   required
+                   id="volume"
+                   name="volume"
+                   ng-change="onChangeVolume()"/>
 
         </p>
         <p class="controls_zone pull-left">
@@ -54,8 +59,13 @@
                 <span>Vitesse (0.1 - 10)</span>
                 <span class="required"> *</span>
             </label>
-            <input type="number" data-ng-model="profile.data.vocalSettings.rate" step="0.1" required id="rate"
-                   name="rate"/>
+            <input type="number"
+                   data-ng-model="profile.data.vocalSettings.rate"
+                   step="0.1"
+                   required
+                   id="rate"
+                   name="rate"
+                   ng-change="onChangeRate()"/>
 
         </p>
 
@@ -64,7 +74,12 @@
                 <span>Hauteur de la voix (0 - 2)</span>
                 <span class="required"> *</span>
             </label>
-            <input type="number" data-ng-model="profile.data.vocalSettings.pitch" required id="pitch" name="pitch"/>
+            <input type="number"
+                   data-ng-model="profile.data.vocalSettings.pitch"
+                   required
+                   id="pitch"
+                   name="pitch"
+                   ng-change="onChangePitch()"/>
 
         </p>
 
