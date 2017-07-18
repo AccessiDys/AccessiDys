@@ -1410,7 +1410,7 @@ a.navbar-brand {
 
 .my-backup-page .storage-container.disabled > div,
 .my-backup-page .storage-container.disabled > .fa {
-    color: #eeeeee;
+    color: #dedede;
 }
 
 .my-backup-page .storage-container.disabled {

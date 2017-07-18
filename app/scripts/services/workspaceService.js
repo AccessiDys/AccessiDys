@@ -239,6 +239,6 @@ cnedApp.service('workspaceService', function workspaceService($log, $localForage
      * @return {String} html
      */
     this.splitPages = function (html) {
-        return html.split('<hr/>');
+        return html.split('<hr>');
     };
 });
