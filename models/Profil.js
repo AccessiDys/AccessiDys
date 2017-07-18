@@ -57,7 +57,21 @@ var profilSchema = mongoose.Schema({
         required: false,
         default: false
     },
-    profileTags: [{type: mongoose.Schema.Types.ObjectId, ref: 'ProfilTag'}]
+    profileTags: [{type: mongoose.Schema.Types.ObjectId, ref: 'ProfilTag'}],
+    vocalSettings: {
+        rate: {
+            type: Number
+        },
+        volume: {
+            type: Number
+        },
+        pitch: {
+            type: Number
+        },
+        voice: {
+            type: String
+        }
+    }
 });
 
 

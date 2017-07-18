@@ -190,18 +190,29 @@
                             </div>
                         </div>
                     </fieldset>
-                    <div class="centering">
-                        <button data-ng-click="dismissModal()" type="button" translate
-                                class="reset_btn" title="{{'Annuler' | translate}}">Annuler
-                        </button>
-                        <button type="button" class="btn_simple light_blue"
-                                data-ng-click="closeModal()" translate
-                                title="{{'validerLaRegle' | translate}}">validerLaRegle
-                        </button>
-                    </div>
+
                 </form>
             </div>
         </div>
     </div>
+    <div class="row-fluid">
+        <div class="col-md-12">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="isApplyAll"> Appliquer ces paramètres pour tous les styles de ce profil
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer text-center">
+    <button data-ng-click="dismissModal()" type="button" translate
+            class="reset_btn" title="{{'Annuler' | translate}}">Annuler
+    </button>
+    <button type="button" class="btn_simple light_blue"
+            data-ng-click="closeModal()" translate
+            title="{{'validerLaRegle' | translate}}">validerLaRegle
+    </button>
+
 </div>
 <!-- /.modal-content -->

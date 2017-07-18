@@ -326,7 +326,11 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'label.hide_profile_overview': 'Masquer l\'aperçu des profils',
         'label.vocal.volume.invalid': 'Le champ "volume" est invalide',
         'label.vocal.rate.invalid': 'Le champ "vitesse" est invalide',
-        'label.vocal.pitch.invalid': 'Le champ "hauteur de la voix" est invalide'
+        'label.vocal.pitch.invalid': 'Le champ "hauteur de la voix" est invalide',
+        'label.fr': 'Français',
+        'label.de': 'Allemand',
+        'label.en': 'Anglais',
+        'label.es': 'Espagnol'
 
     });
 

@@ -38,7 +38,7 @@
         <div class="collapse navbar-collapse">
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="current_profile" data-ng-if="!$state.includes('app.home')">
+                <li class="current_profile" data-ng-if="!$state.includes('app.home') && !$state.includes('app.list-profile') && !$state.includes('app.my-backup')">
                     <label>Profil actuel</label>
                     <select id="headerSelect"
                             style="-webkit-appearance: menulist-button; width: 215px; position: absolute; opacity: 0; height: 43px; font-size: 18px;"

@@ -234,6 +234,22 @@ angular.module('cnedApp')
 
                     $scope.openTagEditModal(params.profile, params.index).then(function (tagEditParams) {
                         // Modal closed
+
+                        if (tagEditParams.isApplyAll) {
+
+                            for (var i = 0; i < tagEditParams.profile.data.profileTags.length; i++) {
+                                if (i !== params.index) {
+                                    tagEditParams.profile.data.profileTags[i].police = tagEditParams.profile.data.profileTags[params.index].police;
+                                    tagEditParams.profile.data.profileTags[i].taille = tagEditParams.profile.data.profileTags[params.index].taille;
+                                    tagEditParams.profile.data.profileTags[i].interligne = tagEditParams.profile.data.profileTags[params.index].interligne;
+                                    tagEditParams.profile.data.profileTags[i].styleValue = tagEditParams.profile.data.profileTags[params.index].styleValue;
+                                    tagEditParams.profile.data.profileTags[i].spaceSelected = tagEditParams.profile.data.profileTags[params.index].spaceSelected;
+                                    tagEditParams.profile.data.profileTags[i].spaceCharSelected = tagEditParams.profile.data.profileTags[params.index].spaceCharSelected;
+                                    tagEditParams.profile.data.profileTags[i].coloration = tagEditParams.profile.data.profileTags[params.index].coloration;
+                                }
+                            }
+                        }
+
                         $scope.openProfileModal(params.template, tagEditParams.profile);
                     }, function () {
                         // Modal dismissed
@@ -261,7 +277,6 @@ angular.module('cnedApp')
             }, function (params) {
                 // Modal dismissed
                 if (params.operation && params.operation === 'save') {
-                    $log.debug('updated profile', params.profile);
                     params.profile.showed = true;
 
                     if (params.template === 'update') {
@@ -269,9 +284,8 @@ angular.module('cnedApp')
                             if ((params.profile.data._id && $rootScope.profiles[i].data._id === params.profile.data._id) || (params.oldProfile.filename && $rootScope.profiles[i].filename === params.oldProfile.filename)) {
                                 $rootScope.profiles[i] = params.profile;
 
-                                if((params.profile.data._id && $rootScope.currentProfile.data._id === params.profile.data._id) || (params.oldProfile.filename && $rootScope.currentProfile.filename === params.oldProfile.filename)){
+                                if ((params.profile.data._id && $rootScope.currentProfile.data._id === params.profile.data._id) || (params.oldProfile.filename && $rootScope.currentProfile.filename === params.oldProfile.filename)) {
                                     $rootScope.currentProfile = params.profile;
-                                    $log.debug('profile found edit');
                                 }
                                 break;
                             }
@@ -525,7 +539,7 @@ angular.module('cnedApp')
          * @returns {boolean}
          */
         $scope.isFavourite = function (profile) {
-            if (profile && (profile.data.isFavourite || profile.data.owner === 'admin' || profile.data.owner === 'scripted')) {
+            if (profile && profile.data.isFavourite) {
                 return true;
             }
             return false;
