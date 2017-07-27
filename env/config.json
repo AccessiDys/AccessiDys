@@ -16,5 +16,6 @@
 	"EMAIL_FROM": "noreply@xxxxx.fr",
 	"CATALOGUE_NAME":"adaptation.html",
 	"ADMIN_EMAIL": "xxxxxx",
-	"ADMIN_PROVIDER": "xxxxxx"
+	"ADMIN_PROVIDER": "xxxxxx",
+	"INIT_DEFAULT_PROFILE": true
 }
