@@ -693,6 +693,10 @@ angular
                     iconclass: ''
                 });
 
+                textAngularManager.updateToolbarToolDisplay('toolbar', 'undo', {
+                    tooltiptext: 'Annuler'
+                });
+
 
             };
 
