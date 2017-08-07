@@ -26,6 +26,8 @@
 
 var mongoose = require('mongoose'), ProfilTag = mongoose.model('ProfilTag'), Profil = mongoose.model('Profil'), UserProfil = mongoose.model('UserProfil'), Tags = mongoose.model('Tag'), UserAccount = mongoose.model('User');
 
+var config = require('../../env/config.json');
+
 /**
  * Create default profil
  */
@@ -504,24 +506,29 @@ function updateAllProfilPoliceSize() {
         }
     });
 
-};
+}
 
 function executePatchProfil() {
-    Profil.findOne({
-        'nom': 'Accessidys par défaut',
-        'owner': 'scripted'
-    }, function (err, item) {
-        if (!item) {
 
-            //if not already apply
-            console.log('Accessidys not found !');
-            //Firts Item : Set ACCESSIDYS profil
-            setAccessidysProfil();
+    console.log('INIT_DEFAULT_PROFILE', config.INIT_DEFAULT_PROFILE);
 
-            //Second Item : Update font size for old profile font size
-            updateAllProfilPoliceSize();
-        }
-    });
+    if(config.INIT_DEFAULT_PROFILE){
+        Profil.findOne({
+            'nom': 'Accessidys par défaut',
+            'owner': 'scripted'
+        }, function (err, item) {
+            if (!item) {
+
+                //if not already apply
+                console.log('Accessidys not found !');
+                //Firts Item : Set ACCESSIDYS profil
+                setAccessidysProfil();
+
+                //Second Item : Update font size for old profile font size
+                updateAllProfilPoliceSize();
+            }
+        });
+    }
 
 }
 

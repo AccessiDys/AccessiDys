@@ -1571,7 +1571,8 @@ a.navbar-brand {
 
 .my-backup-page .storage-container.disabled > div,
 .my-backup-page .storage-container.disabled > .fa{
-    color: #eeeeee;
+    color: black;
+    opacity: 0.3;
 }
 
 .my-backup-page .storage-container.disabled{
