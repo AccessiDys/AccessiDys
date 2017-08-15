@@ -58,6 +58,12 @@ angular.module('cnedApp').directive('profileColoration',
                     });
                 }
 
+                window.onresize = function(){
+                    adaptIndex = 0;
+                    $element[0].innerHTML = UtilsService.removeSpan(UtilsService.decodeHtmlEntities($scope.text));
+                    generateColoration($element[0]);
+                };
+
                 var generateColoration = function (element) {
 
                     $timeout(function () {
