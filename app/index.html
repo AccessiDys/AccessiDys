@@ -48,6 +48,8 @@
     <link rel="stylesheet" href="bower_components/cropperjs/dist/cropper.css"/>
     <!-- endbower -->
 
+    <link rel="stylesheet" href="/bower_components/angular-cookie-law/dist/angular-cookie-law.min.css">
+
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="styles/treeView.min.css">
     <link rel="stylesheet" href="styles/animate.min.css">
@@ -62,6 +64,14 @@
 
 </head>
 <body class="body-home" data-ng-class="{'pt-105': isFullsize}">
+
+<cookie-law-banner
+        message="En poursuivant votre navigation sur ce site, vous acceptez l’utilisation de cookies ou autres traceurs pour vous proposer des publicités ciblées adaptés à vos centres d’intérêts et réaliser des statistiques de visites."
+        policy-text="Pour en savoir plus et paramétrer les traceurs"
+        policy-url="/#/mentions"
+        policy-button="true"
+        accept-text="OK">
+</cookie-law-banner>
 
 
 <!--[if lt IE 7]>
@@ -184,6 +194,8 @@
 <script src="scripts/controllers/ocr/ocr.modal.js"></script>
 <script src="scripts/controllers/profiles/vocal-synthesis-settings.modal.js"></script>
 <!-- endbuild -->
+
+<script src="/bower_components/angular-cookie-law/dist/angular-cookie-law.min.js"></script>
 
 <script type="text/javascript">
 

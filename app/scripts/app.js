@@ -42,7 +42,8 @@ var cnedApp = angular.module('cnedApp', [
     '720kb.socialshare',
     'slick',
     'textAngular',
-    'sticky'
+    'sticky',
+    'angular-cookie-law'
 ]);
 
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $sceProvider,
