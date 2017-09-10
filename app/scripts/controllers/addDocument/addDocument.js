@@ -701,12 +701,11 @@ angular
             };
 
             var stateChange = $rootScope.$on('$stateChangeStart',
-                function (event, toState, toParams, fromState, fromParams) {
+                function (event, toState, toParams, fromState) {
 
-                    console.log('toState', toState);
-                    console.log('fromState', fromState);
 
-                    if(fromState.name === 'app.edit-document'){
+                    if(fromState.name === 'app.edit-document' && toState.name !== 'app.my-backup'){
+
                         $scope.confirmDocumentEdit(function () {
                             stateChange();
                             $state.go(toState.name);
