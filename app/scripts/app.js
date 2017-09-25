@@ -22,287 +22,318 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 'use strict';
-/* global io */
+/* global io  */
 
+var testEnv = false;
 var cnedApp = angular.module('cnedApp', [
-  'templates',
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
-  'ngRoute',
-  'gettext',
-  'ui.bootstrap',
-  'angular-md5',
-  'services.config',
-  'ngDialog',
-  'pasvaz.bindonce',
-  'ngAudio',
-  'LocalForageModule']);
+    'templates',
+    'ngCookies',
+    'ngResource',
+    'ngSanitize',
+    'ui.router',
+    'gettext',
+    'ui.bootstrap',
+    'angular-md5',
+    'services.config',
+    'ngAudio',
+    'LocalForageModule',
+    'angular-google-analytics',
+    '720kb.socialshare',
+    'slick',
+    'textAngular',
+    'sticky',
+    'angular-cookie-law'
+]);
 
-cnedApp.config(function($routeProvider, $sceDelegateProvider, $httpProvider) {
-  $sceDelegateProvider.resourceUrlWhitelist([
-    '**']);
-  $httpProvider.defaults.useXDomain = true;
-  $httpProvider.interceptors.push('app.httpinterceptor');
-  delete $httpProvider.defaults.headers.common['X-Requested-With'];
-  $routeProvider.when('/', {
-    templateUrl: 'views/index/main.html',
-    controller: 'MainCtrl'
-  })
-    .when('/apercu', {
-    templateUrl: 'views/workspace/apercu.html',
-    controller: 'ApercuCtrl'
-  })
-    .when('/addDocument', {
-    templateUrl: 'views/addDocument/addDocument.html',
-    controller: 'AddDocumentCtrl'
-  })
-    .when('/print', {
-    templateUrl: 'views/workspace/print.html',
-    controller: 'PrintCtrl'
-  })
-    .when('/profiles', {
-    templateUrl: 'views/profiles/profiles.html',
-    controller: 'ProfilesCtrl'
-  })
-    .when('/tag', {
-    templateUrl: 'views/tag/tag.html',
-    controller: 'TagCtrl'
-  })
-    .when('/userAccount', {
-    templateUrl: 'views/userAccount/userAccount.html',
-    controller: 'UserAccountCtrl'
-  })
-    .when('/inscriptionContinue', {
-    templateUrl: 'views/passport/inscriptionContinue.html',
-    controller: 'passportContinueCtrl'
-  })
-    .when('/adminPanel', {
-    templateUrl: 'views/adminPanel/adminPanel.html',
-    controller: 'AdminPanelCtrl'
-  })
-    .when('/listDocument', {
-    templateUrl: 'views/listDocument/listDocument.html',
-    controller: 'listDocumentCtrl'
-  })
-    .when('/passwordHelp', {
-    templateUrl: 'views/passwordRestore/passwordRestore.html',
-    controller: 'passwordRestoreCtrl'
-  })
-    .when('/detailProfil', {
-    templateUrl: 'views/profiles/detailProfil.html',
-    controller: 'ProfilesCtrl'
-  })
-    .when('/404', {
-    templateUrl: 'views/404/404.html',
-    controller: 'notFoundCtrl'
-  })
-    .when('/needUpdate', {
-    templateUrl: 'views/needUpdate/needUpdate.html',
-    controller: 'needUpdateCtrl'
-  })
-  .when('/signup', {
-    templateUrl: 'views/signup/signup.html'
-  })
-    .when('/mentions', {
-    templateUrl: 'views/mentions/mentions.html',
-    controller: 'mentionsCtrl'
-  })
-    .otherwise({
-    redirectTo: '/404'
-  });
+cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $sceProvider,
+                         $httpProvider, AnalyticsProvider, $logProvider,
+                         configuration) {
+
+    // Log enable / disable
+    $logProvider.debugEnabled(false);
+
+    // Google analytics account settings
+    AnalyticsProvider.setAccount(configuration.GOOGLE_ANALYTICS_ID);
+    AnalyticsProvider.trackPages(true);
+    AnalyticsProvider.trackUrlParams(true);
+    AnalyticsProvider.setPageEvent('$stateChangeSuccess');
+
+    // HttpProvider settings
+    $sceDelegateProvider.resourceUrlWhitelist([
+        '**'
+    ]);
+    $httpProvider.defaults.useXDomain = true;
+    $httpProvider.interceptors.push('app.httpinterceptor');
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+    $urlRouterProvider.otherwise('/');
+
+    $stateProvider
+        .state('app', {
+            url: '',
+            abstract: true,
+            controller: 'CommonCtrl',
+            resolve: {
+                tags: function (tagsService) {
+                    return tagsService.getTags();
+                },
+                userData: function (UserService, $log) {
+                    $log.debug('Init user data');
+                    return UserService.init();
+                }
+            }
+        })
+        .state('app.home', {
+            url: '/',
+            templateUrl: 'views/index/home.html'
+        })
+        .state('app.overview', {
+            url: '/apercu?idDocument&tmp&url&title&annotation',
+            templateUrl: 'views/workspace/apercu.html',
+            controller: 'ApercuCtrl',
+            pageTrack: '/overview.html'  // angular-google-analytics extension
+        })
+        .state('app.edit-document', {
+            url: '/addDocument?idDocument&title&url',
+            templateUrl: 'views/addDocument/addDocument.html',
+            controller: 'AddDocumentCtrl',
+            pageTrack: '/document/edit.html',  // angular-google-analytics extension,
+            params: {
+                file: null
+            }
+        })
+        .state('app.print-document', {
+            url: '/print?documentId&plan&mode',
+            templateUrl: 'views/workspace/print.html',
+            controller: 'PrintCtrl',
+            pageTrack: '/print.html'  // angular-google-analytics extension
+        })
+        .state('app.list-profile', {
+            url: '/profiles',
+            templateUrl: 'views/profiles/profiles.html',
+            controller: 'ProfilesCtrl',
+            pageTrack: '/profile/list.html',  // angular-google-analytics extension
+            params: {
+                file: null
+            }
+        })
+        .state('app.detail-profile', {
+            url: '/detailProfil?url&idProfil',
+            templateUrl: 'views/profiles/detailProfil.html',
+            controller: 'ProfilesCtrl',
+            pageTrack: '/profile/detail.html'  // angular-google-analytics extension
+        })
+        .state('app.list-style', {
+            url: '/tag',
+            templateUrl: 'views/tag/tag.html',
+            controller: 'TagCtrl',
+            pageTrack: '/style/list.html'  // angular-google-analytics extension
+        })
+        .state('app.list-document', {
+            url: '/listDocument',
+            templateUrl: 'views/listDocument/listDocument.html',
+            controller: 'listDocumentCtrl',
+            pageTrack: '/document/list.html'  // angular-google-analytics extension
+        })
+
+        .state('app.legal-notice', {
+            url: '/mentions',
+            templateUrl: 'views/infoPages/mentions.html',
+            pageTrack: '/legal-notice.html'  // angular-google-analytics extension
+        })
+        .state('app.presentation', {
+            url: '/a-propos',
+            templateUrl: 'views/infoPages/about.html',
+            pageTrack: '/presentation.html'  // angular-google-analytics extension
+        })
+        .state('app.contribute', {
+            url: '/contribuer',
+            templateUrl: 'views/infoPages/contribute.html',
+            pageTrack: '/contribute.html'  // angular-google-analytics extension
+        })
+
+        .state('app.faq', {
+            url: '/faq',
+            templateUrl: 'views/infoPages/faq.html',
+            pageTrack: '/faq.html'  // angular-google-analytics extension
+        })
+
+        .state('app.404', {
+            url: '/404',
+            templateUrl: 'views/404/404.html'
+        })
+
+        .state('app.my-backup', {
+            url: '/ma-sauvegarde.html?auth',
+            templateUrl: 'views/backup/my-backup.html',
+            controller: 'MyBackupCtrl',
+            pageTrack: '/overview.html',  // angular-google-analytics extension,
+            params: {
+                prevState: null,
+                file: null
+            },
+            resolve: {
+                auth: function ($state, $stateParams, UserService, OauthService, $log, CacheProvider, fileStorageService, $q, $rootScope) {
+
+                    return CacheProvider.getItem('myBackupRouteData').then(function (routeData) {
+
+                        CacheProvider.setItem(null, 'myBackupRouteData');
+                        if ($stateParams.auth) {
+
+
+                            return OauthService.token().then(function (res) {
+                                return UserService.saveData(res.data).then(function () {
+
+                                    UserService.init().then(function (userData) {
+                                        $rootScope.userData = userData;
+
+                                        fileStorageService.synchronizeFiles().then(function (res) {
+                                            if (res && res.profilesCount > 0) {
+                                                $rootScope.initCommon();
+                                            }
+                                        });
+
+                                    });
+
+                                    if (routeData) {
+                                        $state.go(routeData.prevState, {file: routeData.file});
+                                    } else {
+                                        return res.data;
+                                    }
+                                });
+                            }, function () {
+                                return null; // TODO display error message
+                            });
+
+                        } else {
+                            if (routeData) {
+                                $state.go(routeData.prevState, {file: routeData.file});
+                            } else {
+                                return null;
+                            }
+                        }
+                    });
+
+
+                }
+            }
+        });
 });
 
-angular.module('cnedApp').run(function(gettextCatalog) {
+angular.module('cnedApp').run(function (gettextCatalog) {
 
-  if (localStorage.getItem('langueDefault')) {
-    try {
-      JSON.parse(localStorage.getItem('langueDefault'));
-    } catch (e) {
-      localStorage.setItem('langueDefault', JSON.stringify({
-        name: 'FRANCAIS',
-        shade: 'fr_FR'
-      }));
-    }
-    gettextCatalog.currentLanguage = JSON.parse(localStorage.getItem('langueDefault')).shade;
-  } else {
     gettextCatalog.currentLanguage = 'fr_FR';
     localStorage.setItem('langueDefault', JSON.stringify({
-      name: 'FRANCAIS',
-      shade: 'fr_FR'
+        name: 'FRANCAIS',
+        shade: 'fr_FR'
     }));
     gettextCatalog.debug = true;
-  }
 });
 
-//rend les liens safe
+//Secure the links
 angular.module('cnedApp').config(['$compileProvider',
 
-function($compileProvider) {
-  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/);
-}]);
-
-
-angular.module('cnedApp').run(function($rootScope, $location, $http, dropbox, configuration, $timeout, $window, ngDialog, storageService) {
-  /*global $:false */
-
-  /* Initilaisation du Lock traitement de Documents sur DropBox */
-  localStorage.setItem('lockOperationDropBox', false);
-
-  if (typeof io !== 'undefined') {
-    $rootScope.socket = io.connect('');
-  }
-  if ($rootScope.socket) {
-    $rootScope.socket.on('news', function(data) {
-      $rootScope.socket.emit('my other event', {
-        my: 'data ehhoooo'
-      });
-    });
-  }
-  
-  $rootScope.goHome = function(){
-  		$location.path('/');
-  }
-  $rootScope.backToHome = function() {
-    // $('#errModal').modal('hide');
-    if ($location.absUrl().indexOf('/listDocument') > 0) {
-      window.location.reload();
-    } else {
-      window.location.href = $location.absUrl().substring(0, $location.absUrl().indexOf('#/') + 2) + 'listDocument';
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|javascript):/);
     }
-  };
+]);
 
-  $rootScope.continueLocationChange = function(modalId, next) {
-    ngDialog.closeAll();
-    localStorage.setItem('lockOperationDropBox', false);
-    $location.path(next);
-  };
+angular.module('cnedApp').config(function ($provide) {
+    $provide.decorator('taOptions', ['taRegisterTool', 'taSelection', 'taBrowserTag', 'taTranslations',
+        'taToolFunctions', '$delegate', '$window', 'UtilsService',
+        function (taRegisterTool, taSelection, taBrowserTag, taTranslations,
+                  taToolFunctions, taOptions, $window, UtilsService) {
 
-  $rootScope.closeNgModal = function(modalId) {
-    ngDialog.closeAll();
-  };
+            var blockJavascript = function (link) {
+                if (link.toLowerCase().indexOf('javascript') !== -1) {
+                    return true;
+                }
+                return false;
+            };
 
-  $rootScope.$on('$routeChangeStart', function(event, next) {
-	//vérifier que le hearder est visible
-	if ($('.header_zone').is(':visible') == false)
-          $('.header_zone').slideDown("fast");
-    if ($location.path() === '/apercu') {
-      $rootScope.disableProfilSelector = true;
-    }else{
-      $rootScope.disableProfilSelector = false;
-    }
+            // $delegate is the taOptions we are decorating
+            // register the tool with textAngular
+            taRegisterTool('pageBreak', {
+                buttontext: 'Saut de page',
+                action: function () {
+                    this.$editor().wrapSelection('insertHtml', '<br/><hr><br/>');
+                }
+            });
+            // add the button to the default toolbar definition
+            taOptions.toolbar[1].push('pageBreak');
 
-    $rootScope.MonCompte = false;
-    $rootScope.Document = false;
-    $rootScope.Profil = false;
-    $rootScope.loaderImg = '/styles/images/loader_points.gif';
-    var data = {
-      id: false
+            taTranslations.insertLink.dialogPrompt = 'Veuillez insérer votre url';
+            taTranslations.insertLink.tooltip = 'Insérer / éditer un lien';
+            taTranslations.editLink.unLinkButton.tooltip = 'Supprimer le lien';
+            taTranslations.editLink.reLinkButton.tooltip = 'Editer';
+            taTranslations.editLink.targetToggle.buttontext = 'Ouvrir dans une nouvelle fenêtre';
+
+            taRegisterTool('insertLinkCustom', {
+                tooltiptext: taTranslations.insertLink.tooltip,
+                iconclass: 'fa fa-link',
+                action: function () {
+                    var urlLink;
+                    // if this link has already been set, we need to just edit the existing link
+                    /* istanbul ignore if: we do not test this */
+                    if (taSelection.getSelectionElement().tagName && taSelection.getSelectionElement().tagName.toLowerCase() === 'a') {
+                        urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, taSelection.getSelectionElement().href);
+                    } else {
+                        urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, 'http://');
+                    }
+                    if (urlLink && urlLink !== '' && urlLink !== 'http://' && urlLink !== 'https://') {
+                        // block javascript here
+                        /* istanbul ignore else: if it's javascript don't worry - though probably should show some kind of error message */
+                        if (!blockJavascript(urlLink)) {
+                            return this.$editor().wrapSelection('createLink', urlLink, true);
+                        }
+                    }
+                },
+                activeState: function (commonElement) {
+                    if (commonElement) return commonElement[0].tagName === 'A';
+                    return false;
+                },
+                onElementSelect: {
+                    element: 'a',
+                    action: taToolFunctions.aOnSelectAction
+                }
+            });
+
+            taOptions.toolbar[1].push('insertLinkCustom');
+
+
+            return taOptions;
+        }]);
+});
+
+
+angular.module('cnedApp').run(function ($rootScope, configuration, $timeout, $interval, serviceCheck) {
+    //Delay between every check of session.
+    $rootScope.sessionTime = 43200000;
+    $rootScope.checkIsOnline = function () {
+        return serviceCheck.isOnline().then(function () {
+            //Useful test for the need for the preservation of the disconnected mode, once we have entered this mode.
+            if (!$rootScope.isAppOnline) {
+                $rootScope.isAppOnline = true;
+            }
+        }, function () {
+            $rootScope.isAppOnline = false;
+        });
     };
 
-    if (next.templateUrl) {
-      if (next.templateUrl === 'views/index/main.html' || next.templateUrl === 'views/passport/inscriptionContinue.html' || next.templateUrl === 'views/passwordRestore/passwordRestore.html' || next.templateUrl === 'views/common/errorPage.html' || next.templateUrl === 'views/needUpdate/needUpdate.html' || next.templateUrl === 'views/signup/signup.html') {
-
-        $('body').addClass('page_authentification');
-      } else {
-        $('body').removeClass('page_authentification');
-      }
-      if (next.templateUrl === 'views/workspace/images.html') {
-        $rootScope.showWorkspaceAction = true;
-      } else {
-        $rootScope.showWorkspaceAction = false;
-      }
-    }
-
-    if (window.location.href.indexOf('key=') > -1) {
-      var callbackKey = window.location.href.substring(window.location.href.indexOf('key=') + 4, window.location.href.length);
-      var tmp = [{
-        name: 'compteId',
-        value: callbackKey
-      }, {
-        name: 'listDocLink',
-        value: '/#/listDocument'
-      }, {
-        name: 'lockOperationDropBox',
-        value: false
-      }];
-      storageService.writeService(tmp, 0).then(function(lsResp) {
-        data = {
-          id: callbackKey
-        };
-        $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
-      });
-    } else {
-      storageService.readService('compteId').then(function(obj) {
-        if (obj.exist) {
-          data = {
-            id: obj.value
-          };
-        }
-      });
-
-
-      storageService.readService('listDocLink').then(function(obj) {
-        if (obj.exist) {
-          $rootScope.listDocumentDropBox = localStorage.getItem('listDocLink');
-          if (!$rootScope.$$phase) {
-            $rootScope.$digest();
-          }
-        }
-      });
-
-      var browzerState = false;
-      if (navigator) {
-        browzerState = navigator.onLine;
-      } else {
-        browzerState = true;
-      }
-      if (browzerState) {
-        var random = Math.random() * 10000;
-        if (localStorage.getItem('compteId')) {
-          data = {
-            id: localStorage.getItem('compteId')
-          };
-        }
-        $http.get(configuration.URL_REQUEST + '/profile?id=' + data.id + '&salt=' + random).success(function(result) {
-          if (next.templateUrl && next.templateUrl === 'views/listDocument/listDocument.html') {
-            if (localStorage.getItem('lastDocument')) {
-              var urlDocStorage = localStorage.getItem('lastDocument').replace('#/apercu', '');
-              var titreDocStorage = decodeURI(urlDocStorage.substring(urlDocStorage.lastIndexOf('/') + 1, urlDocStorage.length));
-              var searchDoc = dropbox.search(titreDocStorage, result.dropbox.accessToken, configuration.DROPBOX_TYPE);
-              searchDoc.then(function(res) {
-                if (res.status != 200) {
-                  localStorage.removeItem('lastDocument');
-                }
-              });
-            }
-          }
-          if (next.templateUrl && next.templateUrl === 'views/tag/tag.html' && result.local.role !== 'admin') {
-            $location.path('/listDocument');
-          }
-        })
-          .error(function() {
-          $rootScope.loged = false;
-          $rootScope.dropboxWarning = true;
-          if (next.templateUrl) {
-            var lien = window.location.href;
-            var verif = false;
-            if ((lien.indexOf('https://dl.dropboxusercontent.com') > -1)) {
-              verif = true;
-            }
-            //if ((next.templateUrl === 'tag.html') || (verif !== true && next.templateUrl !== 'main.html' && next.templateUrl !== 'images.html' && next.templateUrl !== 'apercu.html' && next.templateUrl !== 'passwordRestore.html' && next.templateUrl !== 'detailProfil.html' && next.templateUrl !== 'errorPage.html' && next.templateUrl !== 'needUpdate.html')) {
-            //	$location.path('main.html');
-            //}
-          }
+    //environment variable for testing.
+    if (!testEnv) {
+        $rootScope.checkIsOnline().then(function () {
+            //
         });
-      }
-
+        $interval($rootScope.checkIsOnline, 5000);
+    } else {
+        $rootScope.isAppOnline = true;
     }
 
-
-  });
+    if (typeof io !== 'undefined') {
+        $rootScope.socket = io.connect('https://localhost:3000', {secure: true});
+    }
 
 
 });

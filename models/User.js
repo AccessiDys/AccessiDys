@@ -31,10 +31,10 @@ var bcrypt = require('bcrypt-nodejs');
 var userSchema = mongoose.Schema({
 
   local: {
-    email: String,
+    email: String, 
     password: String,
-    nom: String,
-    prenom: String,
+    nom: String, // the first name
+    prenom: String, // the surname
     role: String,
     restoreSecret: String,
     secretTime: String,
@@ -75,15 +75,6 @@ var userSchema = mongoose.Schema({
 });
 
 // methods ======================
-// generating a hash
-//userSchema.methods.generateHash = function(password) {
-//    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-//};
-
-// checking if password is valid
-//userSchema.methods.validPassword = function(password) {
-//    return bcrypt.compareSync(password, this.local.password);
-//};
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', userSchema);

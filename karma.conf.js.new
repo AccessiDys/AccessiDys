@@ -1,0 +1,117 @@
+// Karma configuration
+// Generated on Mon Apr 03 2017 11:56:42 GMT+0200 (CEST)
+
+module.exports = function (config) {
+    config.set({
+
+        // base path that will be used to resolve all patterns (eg. files, exclude)
+        basePath: './',
+
+
+        // frameworks to use
+        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+        frameworks: ['jasmine'],
+
+
+        // list of files / patterns to load in the browser
+        files: [
+            'app/bower_components/jquery/dist/jquery.js',
+            'app/external_components/jQuery.line/jquery.line.js',
+            'app/bower_components/angular/angular.js',
+            'app/bower_components/angular-mocks/angular-mocks.js',
+            'app/bower_components/angular-cookies/angular-cookies.js',
+            'app/bower_components/angular-resource/angular-resource.js',
+            'app/bower_components/angular-route/angular-route.js',
+            'app/bower_components/angular-sanitize/angular-sanitize.js',
+            'app/bower_components/angular-md5/angular-md5.min.js',
+            'app/bower_components/angular-audio/app/angular.audio.js',
+            'app/bower_components/angular-gettext/dist/angular-gettext.min.js',
+            'app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+            'app/bower_components/underscore/underscore.js',
+            'app/bower_components/ckeditor/ckeditor.js',
+            'app/bower_components/pdfjs-dist/build/pdf.js',
+            'app/bower_components/pdfjs-dist/build/pdf.worker.js',
+            'app/bower_components/localforage/dist/localforage.min.js',
+            'app/bower_components/angular-localforage/dist/angular-localForage.min.js',
+            'app/bower_components/angular-google-analytics/dist/angular-google-analytics.min.js',
+            'app/bower_components/angular-socialshare/dist/angular-socialshare.min.js',
+            './app/scripts/**/*.js',
+            './test/spec/frontend/**/*.js'
+        ],
+
+
+        preprocessors: {
+            'app/scripts/**/*.js': 'coverage',
+            'app/scripts/app.js': 'coverage'
+        },
+
+        // list of files / patterns to exclude
+        exclude: ['app/scripts/directives/**/*', 'app/scripts/translations.js'],
+
+
+        reporters: ['coverage', 'dots', 'html'],
+
+        coverageReporter: {
+            reporters: [
+                {
+                    type: 'cobertura',
+                    dir: 'generated/tests/front/coverage/',
+                    file: 'coverage.xml'
+                },
+                {
+                    type: 'html',
+                    dir: 'generated/tests/front/coverage/',
+                }
+            ]
+        },
+
+        junitReporter: {
+            outputFile: 'generated/tests/test-results.xml'
+        },
+
+        htmlReporter: {
+            outputFile: 'generated/tests/front/units.html',
+
+            // Optional
+            pageTitle: 'Accessidys project',
+            subPageTitle: 'Front Unit tests',
+            groupSuites: true,
+            useCompactStyle: true,
+            useLegacyStyle: true
+
+        },
+
+
+        // web server port
+        port: 9876,
+
+
+        // enable / disable colors in the output (reporters and logs)
+        colors: true,
+
+
+        // level of logging
+        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+        logLevel: config.LOG_INFO,
+
+
+        // enable / disable watching file and executing tests whenever any file changes
+        autoWatch: true,
+
+
+        // start these browsers
+        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+        browsers: ['Firefox'],
+
+
+        // Continuous Integration mode
+        // if true, Karma captures browsers, runs the tests and exits
+        singleRun: false,
+
+        // Concurrency level
+        // how many browser should be started simultaneous
+        concurrency: Infinity
+
+
+    })
+};

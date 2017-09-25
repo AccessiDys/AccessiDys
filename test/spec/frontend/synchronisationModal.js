@@ -58,7 +58,7 @@ describe('Controller: SynchronisationModalCtrl', function() {
         $scope = $rootScope.$new();
         controller = $controller('SynchronisationModalCtrl', {
             $scope : $scope,
-            $modalInstance : modalInstance,
+            $uibModalInstance : modalInstance,
             docsSynchronized : docsSynchronized,
             profilsSynchronized : profilsSynchronized
         });

@@ -105,12 +105,6 @@ describe(
                         deferred.resolve();
                         return deferred.promise;
                     },
-                    updateProfil : function() {
-                        deferred = q.defer();
-                        // Place the fake return object here
-                        deferred.resolve();
-                        return deferred.promise;
-                    },
                     deleteProfil : function() {
                         deferred = q.defer();
                         // Place the fake return object here
@@ -121,19 +115,13 @@ describe(
                         });
                         return deferred.promise;
                     },
-                    updateProfilTags : function() {
-                        deferred = q.defer();
-                        // Place the fake return object here
-                        deferred.resolve();
-                        return deferred.promise;
-                    },
                     lookForExistingProfile : function() {
 
                     }
                 };
 
                 fileStorageService = {
-                    searchFiles : function() {
+                    get : function() {
 
                     },
                     saveFile : function() {
@@ -147,35 +135,31 @@ describe(
                     },
                 };
 
-                spyOn(localForage, 'getItem').andCallFake(function() {
+                spyOn(localForage, 'getItem').and.callFake(function() {
                     return deferred.promise;
                 });
-                spyOn(localForage, 'setItem').andCallThrough();
-                spyOn(localForage, 'removeItem').andCallThrough();
-                spyOn(profilsService, 'addProfil').andCallFake(function() {
+                spyOn(localForage, 'setItem').and.callThrough();
+                spyOn(localForage, 'removeItem').and.callThrough();
+                spyOn(profilsService, 'addProfil').and.callFake(function() {
                     return deferred.promise;
                 });
-                spyOn(profilsService, 'updateProfil').andCallFake(function() {
+                spyOn(profilsService, 'deleteProfil').and.callFake(function() {
                     return deferred.promise;
                 });
-                spyOn(profilsService, 'deleteProfil').andCallFake(function() {
-                    return deferred.promise;
-                });
-                spyOn(profilsService, 'lookForExistingProfile').andCallFake(function() {
+                spyOn(profilsService, 'lookForExistingProfile').and.callFake(function() {
                     return deferred2.promise;
                 });
-                spyOn(profilsService, 'updateProfilTags').andCallThrough();
 
-                spyOn(fileStorageService, 'saveFile').andCallFake(function() {
+                spyOn(fileStorageService, 'saveFile').and.callFake(function() {
                     return deferred.promise;
                 });
-                spyOn(fileStorageService, 'deleteFile').andCallFake(function() {
+                spyOn(fileStorageService, 'deleteFile').and.callFake(function() {
                     return deferred.promise;
                 });
-                spyOn(fileStorageService, 'renameFile').andCallFake(function() {
+                spyOn(fileStorageService, 'renameFile').and.callFake(function() {
                     return deferred.promise;
                 });
-                spyOn(fileStorageService, 'searchFiles').andCallFake(function() {
+                spyOn(fileStorageService, 'get').and.callFake(function() {
                     return deferred2.promise;
                 });
 
@@ -190,13 +174,13 @@ describe(
                 q = $q;
                 deferred2 = q.defer();
                 deferred2.resolve();
-                spyOn($q, 'all').andCallFake(function() {
+                spyOn($q, 'all').and.callFake(function() {
                     return deferred2.promise;
                 });
-                spyOn(synchronisationService, 'syncDocuments').andCallFake(function() {
+                spyOn(synchronisationService, 'syncDocuments').and.callFake(function() {
                     return deferred2.promise;
                 });
-                spyOn(synchronisationService, 'syncProfils').andCallFake(function() {
+                spyOn(synchronisationService, 'syncProfils').and.callFake(function() {
                     return deferred2.promise;
                 });
                 synchronisationService.sync('compteId', 'token');
@@ -277,8 +261,6 @@ describe(
                 synchronisationService.syncProfil(profilItem, operations, rejectedItems);
                 $rootScope.$apply();
                 expect(operations.length).toBe(1);
-                expect(profilsService.updateProfil).toHaveBeenCalledWith(true, profilWithRecentDate);
-                expect(profilsService.updateProfilTags).toHaveBeenCalledWith(true, profilWithRecentDate, profileTag);
                 expect(rejectedItems.length).toBe(0);
 
                 // test avec un profil à mettre à jour avec conflit d'existance
@@ -363,7 +345,7 @@ describe(
             it('synchronisationService:syncProfils ', inject(function(synchronisationService, $rootScope, $q) {
                 q = $q;
                 var rejectedItems = false;
-                spyOn(synchronisationService, 'syncProfil').andCallFake(function(profileItem, operations, rejected) {
+                spyOn(synchronisationService, 'syncProfil').and.callFake(function(profileItem, operations, rejected) {
                     if (rejectedItems) {
                         rejected.push({});
                     }
@@ -404,7 +386,7 @@ describe(
 
                 // case of all items failed to synchronize
                 rejectedItems = false;
-                spyOn($q, 'all').andCallFake(function() {
+                spyOn($q, 'all').and.callFake(function() {
                     return deferred2.promise;
                 });
                 synchronizedItems = {
@@ -644,7 +626,7 @@ describe(
             it('synchronisationService:syncDocuments', inject(function(synchronisationService, $rootScope, $q) {
                 q = $q;
                 var rejectedItems = false;
-                spyOn(synchronisationService, 'syncDocument').andCallFake(function(token, docItem, operations, rejected) {
+                spyOn(synchronisationService, 'syncDocument').and.callFake(function(token, docItem, operations, rejected) {
                     if (rejectedItems) {
                         rejected.push({});
                     }
@@ -686,7 +668,7 @@ describe(
 
                 // case of all items failed syncs
                 rejectedItems = false;
-                spyOn($q, 'all').andCallFake(function() {
+                spyOn($q, 'all').and.callFake(function() {
                     return deferred2.promise;
                 });
                 synchronizedItems = {

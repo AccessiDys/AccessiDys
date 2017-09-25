@@ -33,7 +33,7 @@ var helpers = require('../helpers/helpers.js');
 var fs = require('fs');
 
 /**
- * Creer un tag
+ * Create a tag
  */
 exports.create = function(req, res) {
   var tagData = JSON.parse(req.body.tagData);
@@ -58,7 +58,7 @@ exports.create = function(req, res) {
 };
 
 /**
- * Supprimer un tag
+ * Delete a Tag
  */
 exports.remove = function(req, res) {
   var tag = new Tag(req.body.deleteTag);
@@ -83,7 +83,8 @@ exports.remove = function(req, res) {
 };
 
 /**
- * Editer un tag
+ * Update a tag with attributes:
+ * the title,the level,position,picto
  */
 exports.update = function(req, res) {
   var tagData = JSON.parse(req.body.tagData);
@@ -122,7 +123,7 @@ exports.update = function(req, res) {
 };
 
 /**
- * Liste des tags
+ * return tags list
  */
 exports.all = function(req, res) {
   Tag.find().sort({

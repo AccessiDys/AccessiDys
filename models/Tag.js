@@ -30,25 +30,24 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var tagSchema = new Schema({
-	libelle: {
-		type: String
-	},
-	niveau: {
-		type: Number,
-		required: false
-	},
-	picto: {
-		type: String,
-		required: false
-	},
-	position: {
-		type: Number,
-		required: false
-	},
-    balise: {
+    libelle: { //the description
+        type: String
+    },
+    niveau: { // the level
+        type: Number,
+        required: false
+    },
+    picto: { // the pictogram
         type: String,
-        required: true,
-        unique: true
+        required: false
+    },
+    position: { //the position
+        type: Number,
+        required: false
+    },
+    balise: { // the tag
+        type: String,
+        required: true
     }
 });
 

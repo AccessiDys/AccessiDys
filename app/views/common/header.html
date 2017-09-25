@@ -21,167 +21,106 @@
  * License along with this program.
  * If not, see <http://www.gnu.org/licenses/>.
  -->
- <div data-ng-controller="CommonCtrl" class="header wrapper_zone">
-	<ul class="main_menu" data-ng-init="initCommon()">
-		<li class="logo"><a href="{{logoRedirection}}" class="text-muted"
-			title="CNED" data-ng-click="checkLocation($event)"> <img width="180px"
-				src="/styles/images/header_logoCned.png"
-				alt="AccessiDys">
-		</a></li>
-		<li class="last_document"><a href="{{lastDoc}}" bindonce
-			bo-show="false" data-ng-click="checkLocation($event)"> <span>
-					<img src="{{docUrl}}" alt="dernier document ouvert" />
-			</span>
-				<center>{{lastDocTitre}}</center>
-		</a></li>
-		<li class="current_profile">
-			<div data-ng-show="menueShowOffline">
-				<label>Profil actuel</label> <select sselect id="headerSelect"
-					data-ng-model="profilActuel" data-ng-change="changeProfilActuel()"
-					required>
-					<option bindonce data-ng-repeat="profil in listeProfilsParUser"
-						ng-if="profil.type == 'profile'" bo-value="profil">{{profil.nom}}</option>
-				</select>
-			</div>
-		</li>
-		<li class="actions_menu"><a data-ng-if="!isGuest" class="menu_zone" href=""
-			title="Menu" data-ng-click="showMenu()">Menu</a>
-			<ul data-ng-show="showMenuParam" class="drob_down">
-				<li data-ng-show="admin" class="regles"><a href="#/tag"
-					id="regles_submenu" title="Styles" translate
-					data-ng-click="showMenuParam=false;changeStatus($event)">Styles</a></li>
-				<li data-ng-show="menueShowOffline" class="my_profils"><a
-					href="#/profiles" id="profiles_submenu" title="Mes profils" translate
-					 data-ng-click="showMenuParam=false;changeStatus($event)">Profils</a></li>
-				<li data-ng-show="menueShowOffline" class="my_docs"><a
-					href="#/listDocument" id="documents_submenu" title="Mes documents" translate
-					 data-ng-click="showMenuParam=false;changeStatus($event)">Documents</a></li>
-				<li data-ng-show="menueShow" class="my_account"><a
-					href="" id="account_submenu" title="Mon compte" translate
-					 data-ng-click="showMenuParam=false;changeStatus($event);goToUserAccount();">monCompte</a></li>
-				<li data-ng-show="admin" class="managment"><a
-					href="#/adminPanel" id="administration_submenu"
-					title="Administration" translate
-					data-ng-click="showMenuParam=false;changeStatus($event)">Administration</a></li>
-				<li data-ng-show="menueShow" class="bookmarklet"><a href=""
-					title="bookmarklet" id="bookmarklet_submenu" 
-					data-ng-click="bookmarkletPopin()">bookmarklet</a></li>
-				<li data-ng-show="admin" class="update_appli"><a href=""
-					title="update" id="update_submenu" data-toggle="modal" 
-					data-target="#openUpgradeModal" data-ng-click="updgradeService()">Mettre
-						à jour</a></li>
-				<li data-ng-show="logout" class="signout" ><a
-					href="" id="logout_submenu" title="Se deconnecter" translate
-					data-ng-click="logoutFonction()">SeDeconnecter</a></li>
-				<!--   <li class="langue"> -->
-				<!--   <select sselect data-ng-model="langue" data-ng-change="changerLangue()" data-ng-options="c.name for c in languages" class="select-language"></select><br> -->
-				<!--   </li> -->
-			</ul></li>
-	</ul>
-	<div class="modal fade animated fadeIn" id="bookmarkletGenerator"
-		tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-		aria-hidden="true" data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog" id="bookmarkletGenerator2">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-ng-click=""
-						data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3 class="modal-title" id="myModalLabel">Votre Bookmarklet</h3>
-				</div>
-				<div class="modal-body adjust-modal-body">
-					<div class="box">
-						<div>
-							<div class="info_txt">
-								<p class="text_left">Glissez le bouton Accessidys sur la
-									barre de favoris de votre navigateur (située en haut de
-									l’écran) afin de faciliter …lancer automatiquement l’affichage
-									adapté de vos documents</p>
-								<div class="drag_btn">
-									<div class="bookmarklet_contaioner">
-										<p class="bookmarklet_btn">
-											<a
-												href="javascript:(function(){window.location.href={{userDropBoxLink}}})();"
-												class="grey_btn normal_padding normal_case">Accessidys</a>
-										</p>
-										<p class="">
-											<img src="{{bookmarklet_howto}}" alt="" />
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
-		</div>
-		<!-- /.modal -->
-	</div>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
 
-	<div class="modal fade" id="openUpgradeModal" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog ">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">&times;</button>
-					<h3 class="modal-title" id="myModalLabel" >modifierVersionApplication</h3>
-				</div>
-				<div class="modal-body">
-					<div class="form_container">
-						<form id="restorePasswordForm" class="" role="form">
-							<div data-ng-show="failupgrade"
-								class="alert alert-danger animated fadeInDown">
-								{{failupgradeMessage}}</div>
-							<div data-ng-show="successUpgrade"
-								class="alert alert-success animated fadeInDown">L'operation
-								a étè effectue avec succes.</div>
-							<fieldset class="globalFieldStyle" submit-scope>
-								<p class="control_group">
-									<label for="versionActu" class="two_lignes">Version
-										Actuelle</label> <input type="text" maxlength="32" class=""
-										id="versionActu" data-ng-model="oldVersion.valeur" disabled>
-								</p>
-								<p class="control_group">
-									<label for="versionDate" class="two_lignes">Date de la
-										Version :</label> <input type="text" class="" id="versionDate"
-										data-ng-model="oldVersion.date" disabled>
-								</p>
-								<p class="control_group">
-									<label for="newVersion" class="two_lignes">Nouvelle
-										Version :</label> <input type="text" class="" id="newVersion"
-										data-ng-model="oldVersion.newvaleur" disabled>
-								</p>
-								<p class="controls_zone">
-									<input ng-checked="true" type="radio" id="upgrade_soft"
-										name="select_pages" class="hidden ng-pristine ng-valid"
-										data-ng-model="upgradeMode" value="false"><label
-										class="mask" for="upgrade_soft">&nbsp;</label><label
-										for="upgrade_soft">Mise à jour partielle</label>
-								</p>
-								<p class="controls_zone">
-									<input type="radio" id="upgrade_hard" name="select_pages"
-										class="hidden ng-pristine ng-valid"
-										data-ng-model="upgradeMode" value="true"><label
-										class="mask" for="upgrade_hard">&nbsp;</label><label
-										for="upgrade_hard">Mise à jour complète</label>
-								</p>
-							</fieldset>
-						</form>
-					</div>
-				</div>
-				<br />
-				<div class="controls">
-					<button type="button" class="reset_btn data-ng-scope"
-						data-dismiss="modal" title="Annuler" translate>Annuler</button>
-					<button type="button"
-						class="btn_simple light_blue editionProfil data-ng-scope"
-						data-ng-click="updateVersion()" data-dismiss="modal"
-						title="Confirmer la modification de la version" translate>Confirmer
-						la modification de la version</button>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="border-purple"></div>
+        <div class="border-orange"></div>
+        <div class="divider-white"></div>
+
+        <div class="navbar-header">
+            <a ui-sref="app.home" class="navbar-brand" title="Retour à l'accueil">
+                <img width="180px" src="/styles/images/header_logoCned.png" alt="AccessiDys">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="current_profile" data-ng-if="!$state.includes('app.home') && !$state.includes('app.list-profile') && !$state.includes('app.my-backup')">
+                    <label>Profil actuel</label>
+                    <select id="headerSelect"
+                            style="-webkit-appearance: menulist-button; width: 215px; position: absolute; opacity: 0; height: 43px; font-size: 18px;"
+                            data-ng-model="currentProfile"
+                            data-ng-change="onChangeCurrentProfile(currentProfile)"
+                            ng-options="profile as profile.data.nom for profile in profiles track by profile.data.nom">
+
+                    </select>
+
+                    <span class="customSelect ng-pristine ng-untouched ng-valid" style="display: inline-block;">
+                            <span class="customSelectInner"
+                                  style="width: 24px; display: inline-block;">{{currentProfile.data.nom}}</span>
+                        </span>
+                </li>
+                <li class="dropdown" uib-dropdown>
+                    <a class="dropdown-toggle"
+                       data-toggle="dropdown"
+                       role="button"
+                       aria-haspopup="true"
+                       aria-expanded="false"
+                       uib-dropdown-toggle>
+                        Menu
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li data-ng-if="userData.isAdmin" class="regles" ui-sref-active="active">
+                            <a ui-sref="app.list-style"
+                               id="regles_submenu" title="Styles" translate>
+                                Styles
+                            </a>
+                        </li>
+                        <li class="my_profils" ui-sref-active="active">
+                            <a ui-sref="app.list-profile" id="profiles_submenu" title="Mes profils" translate>
+                                Profils
+                            </a>
+                        </li>
+                        <li class="my_docs" ui-sref-active="active">
+                            <a ui-sref="app.list-document" id="documents_submenu" title="Mes documents" translate>
+                                Documents
+                            </a>
+                        </li>
+                        <li class="bookmarklet">
+                            <a href="" title="Web adapté" id="bookmarklet_submenu"
+                               data-ng-click="bookmarkletPopin()">
+                                <i class="fa fa-globe" aria-hidden="true"></i>
+                                Web adapté
+                            </a>
+                        </li>
+                        <li class="my-backup" ui-sref-active="active">
+                            <a ui-sref="app.my-backup" title="Ma sauvegarde">
+                                <i class="fa fa-floppy-o left" aria-hidden="true"></i>
+                                Ma sauvegarde
+                                <i class="fa fa-exclamation-triangle right" aria-hidden="true" data-ng-if="!userData.token"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div>
+
+
+</nav>
+
+
+<div class="loader_cover" data-ng-if="showLoader">
+    <div id="loader_container" data-ng-if="showLoaderProgress">
+        <div class="loader_bar">
+            <div class="progress_bar" data-ng-style="loaderProgressStyle"> </div>
+        </div>
+        <p class="loader_txt">
+            {{loaderMessage | translate}} <img src="/styles/images/loader_points.gif" alt="loader"/>
+        </p>
+    </div>
+    <div data-ng-if="!showLoaderProgress">
+        <div class="fixed_loader">
+            <div class="loadre_container">
+                <p class="loader_txt">{{loaderMessage | translate}}</p>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+

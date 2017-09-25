@@ -1,0 +1,61 @@
+<div class="modal-header">
+    <button type="button" class="close" data-ng-click="dismissModal()"
+            aria-hidden="true">&times;</button>
+    <h3 class="modal-title" id="myModalLabel">Imprimer le
+        document</h3>
+</div>
+<div class="modal-body" id="printModal">
+    <form class="form-horizontal" role="form" id="printDoc" name="printDoc">
+        <div class="info_txt">
+            <p class="text_left">Sélectionner un mode d'impression pour ce document</p>
+            <div class="control_group">
+                <div data-ng-init="printMode=0">
+                    <p class="controls_zone">
+                        <input type="radio" id="all_pages" name="select_pages" class="hidden"
+                               data-ng-model="printMode" data-ng-value="0">
+                        <label class="mask" for="all_pages">&nbsp;</label>
+                        <label for="all_pages">Toutes les pages</label>
+                    </p>
+                    <p class="controls_zone">
+                        <input type="radio" id="current_pages" name="select_pages" class="hidden"
+                               data-ng-model="printMode" data-ng-value="1">
+                        <label class="mask" for="current_pages">&nbsp;</label>
+                        <label for="current_pages">Page actuelle</label>
+                    </p>
+                    <p class="controls_zone">
+                        <input type="radio" id="specific_pages" name="select_pages" class="hidden"
+                               data-ng-model="printMode" data-ng-value="2"
+                               data-ng-click="selectionnerMultiPage()">
+                        <label class="mask" for="specific_pages">&nbsp;</label>
+                        <label for="specific_pages">Sélection</label> <span
+                            data-ng-if="printMode == 2" class="num_pages"> <br/>
+												<br/> De <select sselect id="pages_start_from"
+                                                                 data-ng-model="pageDe"
+                                                                 data-ng-change="selectionnerPageDe()">
+													<option data-ng-repeat="page in content" value="{{$index}}">{{$index}}</option>
+											</select> A <select sselect id="pages_end_width" data-ng-model="pageA"
+                                                                data-ng-change="selectionnerPageDe()">
+													<option data-ng-repeat="page in content" value="{{$index}}">{{$index}}</option>
+											</select>
+											</span>
+                    </p>
+                    <p class="controls_zone">
+                        <input type="checkbox" id="print_plan" name="print_plan" class="hidden"
+                               data-ng-model="printPlan">
+                        <label class="mask" for="print_plan">&nbsp;</label>
+                        <label for="print_plan">Imprimer le plan</label>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+
+    <button type="button" class="reset_btn" title="Annuler"
+            data-ng-click="dismissModal()">Annuler
+    </button>
+    <button type="button" class="btn_simple light_blue" data-ng-click="printByMode()"
+            title="Imprimer">Imprimer
+    </button>
+</div>

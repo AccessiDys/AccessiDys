@@ -42,581 +42,280 @@ var async = require('async');
 
 
 /**
- * Add a profile
+ * Search a profile and the user associated with this profile
  */
-exports.createProfile = function (req, res) {
-    var profile = new Profil(req.body.newProfile);
+exports.getProfiles = function (req, res) {
 
-    var bitmap = fs.readFileSync(profile.photo);
-    profile.photo = new Buffer(bitmap).toString('base64');
-    profile.owner = req.body.newProfile.owner;
-
-    profile.save(function (err) {
-        if (err) {
-            return res.send('users/signup', {
-                errors: err.errors,
-                profile: profile
-            });
-        } else {
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profile ID : [' + profile._id + '] Profile Nom: [' + profile.nom + ']');
-            var userProfil = new UserProfil({
-                'profilID': profile._id,
-                'userID': profile.owner,
-                'favoris': false,
-                'actuel': false,
-                'default': false
-            });
-            userProfil.save(function (err) {
-                if (err) {
-                    res.send({
-                        'result': 'error'
-                    });
-                } else {
-                    res.jsonp(200, profile);
-                }
-            });
-        }
-    });
-};
-
-
-/**
- * List of Profiles by user
- */
-exports.allByUser = function (req, res) {
-    Profil.find({
-        'owner': req.user._id
-    }).exec(function (err, profils) {
-        if (err) {
-            res.render('error', {
-                status: 500
-            });
-        } else {
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'array profile sended');
-            res.send(profils);
-        }
-    });
-};
-
-exports.profilActuByToken = function (req, res) {
-    UserProfil.findOne({
-        userID: req.user._id,
-        actuel: true
-    }, function (err, item) {
-        if (err) {
-            console.log(err);
-            res.send({
-                'result': 'error'
-            });
-        } else {
-            if (item) {
-                Profil.findById(item.profilID, function (err, profileActu) {
-                    if (err) {
-                        res.send({
-                            'result': 'error'
-                        });
-                    } else {
-                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileActu._id + ']' + 'Nom-Profile :[' + profileActu.nom + ']');
-                        res.send(profileActu);
-                    }
-                });
-            } else {
-                UserProfil.findOne({
-                    delegatedID: req.user._id,
-                    actuelDelegate: true
-                }, function (err, item) {
-                    if (err || !item) {
-                        console.log(err);
-                        res.send({
-                            'result': 'error'
-                        });
-                    } else {
-                        Profil.findById(item.profilID, function (err, profileActu) {
-                            if (err) {
-                                res.send({
-                                    'result': 'error'
-                                });
-                            } else {
-                                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + profileActu._id + ']' + 'Nom-Profile :[' + profileActu.nom + ']');
-                                res.send(profileActu);
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    });
-
-
-};
-
-/**
- * Update Profiles
- */
-exports.update = function (req, res) {
-    var profil = new Profil(req.body.updateProfile);
-
-    Profil.findById(profil._id, function (err, item) {
-        if (err) {
-            res.send({
-                'result': 'error'
-            });
-        } else {
-            item.photo = profil.photo;
-            item.nom = profil.nom;
-            item.descriptif = profil.descriptif;
-            item.save(function (err) {
-                if (err) {
-                    res.send({
-                        'result': 'error'
-                    });
-                } else {
-                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profileModified ID : [' + item._id + '] Profile Nom: [' + item.nom + ']');
-                    res.send(200, item);
-                }
-            });
-        }
-    });
-};
-
-
-/**
- * Delete Profiles
- */
-exports.supprimer = function (req, res) {
-    Profil.findByIdAndUpdate(req.body.removeProfile.profilID, {
-        owner: ''
-    }, function (err, item) {
-        if (err) {
-            res.send({
-                'result': 'error'
-            });
-        } else {
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
-            UserProfil.findOneAndRemove({
-                profilID: req.body.removeProfile.profilID,
-                userID: req.body.removeProfile.userID
-            }, function (err, item) {
-                if (err) {
-                    res.send({
-                        'result': 'error'
-                    });
-                } else {
-                    helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'profilID :[' + item.profilID + ']');
-                    res.jsonp(200);
-                }
-            });
-        }
-    });
-};
-
-
-exports.chercherProfil = function (req, res) {
-    Profil.findById(req.body.searchedProfile, function (err, item) {
-        if (err) {
-            res.send({
-                'result': 'error'
-            });
-        } else {
-            if (item) {
-                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + item._id + ']' + 'Nom-Profile :[' + item.nom + ']');
-                res.send(item);
-            }
-        }
-    });
-};
-
-exports.getProfilAndUserProfil = function (req, res) {
-    Profil.findById(req.body.searchedProfile, function (err, itemProfil) {
-        if (err) {
-            res.send({
-                'result': 'error'
-            });
-        } else {
-            if (itemProfil) {
-                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'ID-Profile :[' + itemProfil._id + ']' + 'Nom-Profile :[' + itemProfil.nom + ']');
-                UserProfil.findOne({
-                    profilID: itemProfil._id,
-                    userID: req.body.id
-                }, function (err, itemUserProfilCurrentUser) {
-                    if (err) {
-                        res.send({
-                            'result': 'error'
-                        });
-                    } else if (itemUserProfilCurrentUser) {
-                        var item = {};
-                        item._id = itemProfil._id;
-                        item.nom = itemProfil.nom;
-                        item.descriptif = itemProfil.descriptif;
-                        item.owner = itemProfil.owner;
-                        if (itemProfil.delegated) {
-                            item.delegated = itemProfil.delegated;
-                        }
-                        if (itemProfil.preDelegated) {
-                            item.preDelegated = itemProfil.preDelegated;
-                        }
-                        item.profilID = itemUserProfilCurrentUser.profilID;
-                        item.userID = itemUserProfilCurrentUser.userID;
-                        item.favoris = itemUserProfilCurrentUser.favoris;
-                        item.actuel = itemUserProfilCurrentUser.actuel;
-                        item.default = itemUserProfilCurrentUser.default;
-                        if (itemUserProfilCurrentUser.delegatedID) {
-                            item.delegatedID = itemUserProfilCurrentUser.delegatedID;
-                        }
-                        res.send(item);
-                        // sinon on recherche dans les userprofils non lie a l'utilisateur
-                        // donne
-                    } else {
-                        UserProfil.findOne({
-                            profilID: itemProfil._id
-                        }, function (err, itemUserProfil) {
-                            if (err) {
-                                res.send({
-                                    'result': 'error'
-                                });
-                            } else {
-                                var item = {};
-                                item._id = itemProfil._id;
-                                item.nom = itemProfil.nom;
-                                item.descriptif = itemProfil.descriptif;
-                                item.owner = itemProfil.owner;
-                                if (itemProfil.delegated) {
-                                    item.delegated = itemProfil.delegated;
-                                }
-                                if (itemProfil.preDelegated) {
-                                    item.preDelegated = itemProfil.preDelegated;
-                                }
-                                item.profilID = itemUserProfil.profilID;
-                                item.userID = itemUserProfil.userID;
-                                item.favoris = false;
-                                item.actuel = itemUserProfil.actuel;
-                                item.default = itemUserProfil.default;
-                                if (itemUserProfil.delegatedID) {
-                                    item.delegatedID = itemUserProfil.delegatedID;
-                                }
-                                res.send(item);
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    });
-};
-
-
-
-exports.ajoutDefaultProfil = function (req, res) {
-
-    var profile = new Profil(req.body);
-
-    profile.save(function (err) {
-        if (err) {
-            return res.send('users/signup', {
-                errors: err.errors,
-                profile: profile
-            });
-        } else {
-            // res.jsonp(profile);
-            res.send(profile);
-        }
-    });
-};
-
-
-/**
- * Déléger un profil
- */
-exports.delegateProfil = function (req, res) {
-    Profil.findById(req.body.idProfil, function (err, item) {
-        if (err) {
-            res.send({
-                'result': 'error'
-            });
-        } else {
-            item.preDelegated = req.body.idDelegue;
-            item.save(function (err) {
-                if (err) {
-                    res.send({
-                        'result': 'error'
-                    });
-                } else {
-                    res.send(200, item);
-                }
-            });
-        }
-    });
-};
-
-/**
- * Annuler une délégation d'un profil
- */
-exports.annulerDelegateUserProfil = function (req, res) {
-    Profil.findById(req.body.sendedVars.idProfil, function (err, item) {
-        if (err) {
-            res.send({
-                'result': 'error'
-            });
-        } else {
-            if (item) {
-                item.preDelegated = undefined;
-                item.save(function (err) {
-                    if (err) {
-                        res.send({
-                            'result': 'error'
-                        });
-                    } else {
-                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Annuler une délégation d\'un profil');
-                        res.send(200, item);
-                    }
-                });
-            } else {
-                helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'Annuler une délégation d\'un profil');
-                res.send(200, item);
-            }
-        }
-    });
-};
-
-/* Methode de la listes des profils : Owner */
-exports.listeProfils = function (req, res) {
-
-    console.log('profil delegues' + req.user);
-
-    var listeProfils = [];
+    var userData = {
+        email: req.get('AccessiDys-user')
+    };
 
     async.waterfall([
 
-    function (callback) {
-                callback(null, 'one');
+            function (callback) {
 
-    },
-    function (arg1, callback) {
-                /* Profils de l'utilisateur */
-
+                // Default profiles
                 Profil.find({
-                    'owner': req.user._id
-                }).exec(function (err, profils) {
-                    if (err) {
-                        res.render('error', {
-                            status: 500
-                        });
-                    } else {
-                        for (var i = 0; i < profils.length; i++) {
-                            var profilModified = profils[i].toObject();
-                            profilModified.state = 'mine';
-                            listeProfils.push(profilModified);
-                        }
-                        callback(null, 'one', 'two');
-                    }
-                });
-
-    },
-    function (arg1, arg2, callback) {
-                /* Profils Favoris */
-
-                UserProfil.find({
-                    userID: req.user._id,
-                    favoris: true
-                }, function (err, item) {
-                    if (err) {
-                        res.send({
-                            'result': 'error'
-                        });
-                    } else {
-                        if (item) {
-
-                            var stringProfilsIds = [];
-                            for (var i = 0; i < item.length; i++) {
-                                stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
-                            }
-
-                            if (stringProfilsIds.length > 0) {
-                                Profil.find({
-                                    '_id': {
-                                        $in: stringProfilsIds
-                                    }
-                                }, function (err, profils) {
-
-                                    if (profils) {
-                                        for (var i = 0; i < profils.length; i++) {
-                                            var profilModified = profils[i].toObject();
-                                            profilModified.state = 'favoris';
-                                            listeProfils.push(profilModified);
-                                        }
-                                    }
-
-                                    callback(null, 'one', 'two', 'three');
-                                });
-                            } else {
-                                callback(null, 'one', 'two', 'three');
-                            }
-                        }
-                    }
-                });
-
-    },
-    function (arg1, arg2, arg3, callback) {
-                /* Profils Délégués */
-                UserProfil.find({
-                    delegatedID: req.user._id,
-                    delegate: true
-                }, function (err, item) {
-                    if (err) {
-                        res.send({
-                            'result': 'error'
-                        });
-                    } else {
-                        if (item) {
-
-                            var stringProfilsIds = [];
-                            for (var i = 0; i < item.length; i++) {
-                                stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
-                            }
-
-                            if (stringProfilsIds.length > 0) {
-                                Profil.find({
-                                    '_id': {
-                                        $in: stringProfilsIds
-                                    }
-                                }, function (err, profils) {
-
-                                    if (profils) {
-                                        for (var i = 0; i < profils.length; i++) {
-                                            var profilModified = profils[i].toObject();
-                                            profilModified.state = 'delegated';
-                                            listeProfils.push(profilModified);
-                                        }
-                                    }
-
-                                    callback(null, 'one', 'two', 'three', 'four');
-                                });
-                            } else {
-                                callback(null, 'one', 'two', 'three', 'four');
-                            }
-                        }
-                    }
-                });
-
+                    $or: [
+                        {
+                            owner: 'scripted'
                         },
-                        function (arg1, arg2, arg3, arg4, callback) {
-                /* Profils Par défaut */
+                        {
+                            owner: 'admin'
+                        }]
+                })
+                    .populate('profileTags')
+                    .exec(function (err, profiles) {
+                        callback(err, profiles);
 
-                UserProfil.find({
-                    'default': true
-                }, function (err, item) {
-                    if (err) {
-                        res.send({
-                            'result': 'error'
+                    });
+
+            },
+
+            function (defaultProfiles, callback) {
+
+
+                if (userData.email) {
+                    // Default profiles
+                    Profil.find({
+                        $or: [
+                            {
+                                owner: userData.email
+                            },
+                            {
+                                preDelegated: userData.email
+                            }]
+                    })
+                        .populate('profileTags')
+                        .exec(function (err, profiles) {
+                            callback(err, defaultProfiles, profiles);
+
                         });
-                    } else {
-                        if (item) {
-
-                            var stringProfilsIds = [];
-                            for (var i = 0; i < item.length; i++) {
-                                stringProfilsIds.push(new mongoose.Types.ObjectId(item[i].profilID));
-                            }
-
-                            if (stringProfilsIds.length > 0) {
-
-                                Profil.find({
-                                    '_id': {
-                                        $in: stringProfilsIds
-                                    }
-                                }, function (err, profils) {
-
-                                    if (profils) {
-
-                                        for (var i = 0; i < profils.length; i++) {
-                                            var profilModified = profils[i].toObject();
-                                            profilModified.state = 'default';
-                                            listeProfils.push(profilModified);
-                                        }
-                                    }
-
-                                    callback(null, 'one', 'two', 'three', 'four', 'five');
-                                });
-                            } else {
-                                callback(null, 'one', 'two', 'three', 'four', 'five');
-                            }
-                        }
-                    }
-                });
-
-
-                        },
-                        function (arg1, arg2, arg3, arg4, arg5, callback) {
-                /* Selections des tags des profiles */
-
-                var stringProfilsIds = [];
-                for (var i = 0; i < listeProfils.length; i++) {
-                    stringProfilsIds.push(listeProfils[i]._id);
+                } else {
+                    callback(null, defaultProfiles, []);
                 }
 
-                ProfilTag.find({
-                    profil: {
-                        $in: stringProfilsIds
-                    }
-                }, function (err, tags) {
-                    if (tags) {
 
-                        var listeProfilsTags = [];
+            }
+        ],
+        function (err, defaultProfiles, delegatedProfiles) {
 
-                        for (var i = 0; i < listeProfils.length; i++) {
-                            listeProfils[i].type = 'profile';
-                            listeProfilsTags.push(listeProfils[i]);
-                            var tagsObject = {};
-                            tagsObject.type = 'tags';
-                            tagsObject.idProfil = listeProfils[i]._id;
-                            tagsObject.tags = [];
-                            for (var j = 0; j < tags.length; j++) {
-                                if (listeProfils[i]._id == tags[j].profil) { // jshint
-                                    tagsObject.tags.push(tags[j]);
-                                }
-                            }
-                            if (tagsObject.tags) {
-                                listeProfilsTags.push(tagsObject);
-                            }
+            var profiles = defaultProfiles.concat(delegatedProfiles);
 
-                        }
-                        helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste des profils envoyée');
-                        res.send(listeProfilsTags);
-                    }
-                });
+            if (!err) {
 
-                // res.send("error");
-                        }
-                    ],
-        function (err, result) {});
+                var result = [];
 
-    // function returnResults() {
-    //
-    // helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'La liste
-    // des profils envoyée');
-    // res.send(listeProfils);
-    // };
+                for (var i = 0; i < profiles.length; i++) {
+                    result.push({
+                        filename: profiles[i].nom,
+                        data: profiles[i],
+                        provider: 'accessidys'
+                    });
+                }
 
+                res.send(result);
+            } else {
+                res.send();
+            }
+
+
+        });
 };
 
+/**
+ * Search a profile by id
+ */
+exports.getProfile = function (req, res) {
+
+    var profileId = req.params.profileId;
+
+    if (profileId) {
+        Profil.findOne({
+            _id: profileId
+        })
+            .populate('profileTags')
+            .exec(function (err, profile) {
+
+                if (profile) {
+                    res.send({
+                        filename: profile.nom,
+                        data: profile,
+                        provider: 'accessidys'
+                    });
+                } else {
+                    res.send();
+                }
+
+            });
+    } else {
+        res.send(400);
+    }
+};
 
 /**
- * Search Profile by name
+ * Create a profile
  */
-exports.existingProfiles = function (req, res) {
-    Profil.findOne({
-        'nom': req.body.nom,
-        'owner': req.body.owner,
-        '_id': {
-            $ne: req.body._id
-        }
-    }).exec(function (err, profil) {
-        if (err) {
-            res.render('error', {
-                status: 500
+exports.createProfile = function (req, res) {
+
+    var profile = req.body.profile;
+    var userData = {
+        email: req.get('AccessiDys-user'),
+        provider: req.get('AccessiDys-provider')
+    };
+
+
+    if (profile && profile.data) {
+
+        var newProfile = new Profil({
+            nom: profile.data.nom,
+            descriptif: profile.data.descriptif,
+            owner: helpers.isAdmin(userData.email, userData.provider) ? 'admin' : userData.email,
+            isFavourite: profile.data.isFavourite,
+            delegated: profile.data.delegated,
+            preDelegated: profile.data.preDelegated,
+            vocalSettings: profile.data.vocalSettings ? profile.data.vocalSettings : null
+        });
+
+        newProfile.save(function (err) {
+            if (!err) {
+
+                var profileTags = [];
+
+                for (var i = 0; i < profile.data.profileTags.length; i++) {
+
+                    var newProfileTag = new ProfilTag(profile.data.profileTags[i]);
+                    newProfileTag.save();
+                    profileTags.push(newProfileTag);
+
+                    newProfile.profileTags.push(newProfileTag._id);
+                    newProfile.save();
+                }
+
+                Profil.findOne({
+                    _id: newProfile._id
+                })
+                    .populate('profileTags')
+                    .exec(function (err, profile) {
+
+                        if (profile) {
+                            res.send({
+                                filename: profile.nom,
+                                data: profile,
+                                provider: 'accessidys'
+                            });
+                        } else {
+                            res.send();
+                        }
+
+                    });
+            } else {
+                console.log('err', err);
+                res.send({
+                    'result': 'error'
+                });
+            }
+        });
+    } else {
+        res.send(400);
+    }
+};
+
+/**
+ * Update a profile
+ */
+exports.updateProfile = function (req, res) {
+
+    var profile = req.body.profile;
+    var userData = {
+        email: req.get('AccessiDys-user'),
+        provider: req.get('AccessiDys-provider')
+    };
+
+
+    if (profile && profile.data) {
+
+        Profil.findOne({
+            _id: profile.data._id
+        })
+            .exec(function (err, _profile) {
+
+                if (_profile && ((helpers.isAdmin(userData.email, userData.provider) && (_profile.owner === 'admin' || 'scripted')) || _profile.owner === userData.email)) {
+
+                    _profile.nom = profile.data.nom;
+                    _profile.descriptif = profile.data.descriptif;
+                    _profile.owner = profile.data.owner;
+                    _profile.isFavourite = profile.data.isFavourite;
+                    _profile.delegated = profile.data.delegated;
+                    _profile.preDelegated = profile.data.preDelegated;
+                    _profile.vocalSettings = profile.data.vocalSettings;
+
+                    _profile.save();
+
+                    for (var i = 0; i < profile.data.profileTags.length; i++) {
+
+
+                        ProfilTag.findByIdAndUpdate(profile.data.profileTags[i]._id, {
+                            'police': profile.data.profileTags[i].police,
+                            'taille': profile.data.profileTags[i].taille,
+                            'interligne': profile.data.profileTags[i].interligne,
+                            'styleValue': profile.data.profileTags[i].styleValue,
+                            'coloration': profile.data.profileTags[i].coloration,
+                            'spaceSelected': profile.data.profileTags[i].spaceSelected,
+                            'spaceCharSelected': profile.data.profileTags[i].spaceCharSelected
+                        }, function (err) {
+
+                        });
+                    }
+
+                    res.send(profile);
+
+                } else {
+                    res.send(400);
+                }
+
             });
-        } else {
-            helpers.journalisation(1, req.nom, req._parsedUrl.pathname, 'profile sended');
-            res.send(profil);
-        }
-    });
+    } else {
+        res.send(400);
+    }
+};
+
+/**
+ * Delete a profile
+ */
+exports.deleteProfile = function (req, res) {
+
+    var profileId = req.params.profileId;
+    var userData = {
+        email: req.get('AccessiDys-user'),
+        provider: req.get('AccessiDys-provider')
+    };
+
+    if (profileId) {
+
+        Profil.findOne({
+            _id: profileId
+        })
+            .exec(function (err, _profile) {
+
+                if (_profile && ((helpers.isAdmin(userData.email, userData.provider) && (_profile.owner === 'admin' || 'scripted')) || _profile.owner === userData.email)) {
+
+                    for (var i = 0; i < _profile.profileTags.length; i++) {
+                        ProfilTag.remove({
+                            _id: _profile.profileTags[i]._id
+                        }, function () {
+                        });
+                    }
+
+                    _profile.remove();
+                    res.send(200);
+
+                } else {
+                    res.send(400);
+                }
+
+            });
+    } else {
+        res.send(400);
+    }
 };

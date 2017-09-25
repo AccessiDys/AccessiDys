@@ -23,33 +23,46 @@
  *
  */
 'use strict';
-/* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('profilesRenommageModalCtrl', function($scope, $modalInstance, $controller, displayedPopup) {
-    $scope.displayedPopup = displayedPopup;
+angular.module('cnedApp').controller('profilesRenommageModalCtrl', function ($scope, $uibModalInstance, ToasterService, profilsService, $log, profile) {
+    $scope.profile = angular.copy(profile);
+    $scope.profileName = profile.data.nom;
 
     /**
-     * Cette fonction permet de fermer une modal.
+     * This function closes a modal.
      */
-    $scope.closeModal = function() {
-        var returnedObject = {
-            type : $scope.displayedPopup,
-            oldProfilNom : $scope.oldProfilNom,
-            oldProfilDescriptif : $scope.oldProfilDescriptif
-        };
-        if ($scope.displayedPopup === 'modification') {
-            if ($scope.profMod.descriptif === undefined) {
-                $scope.profMod.descriptif = ' ';
-            }
-            returnedObject.profMod = $scope.profMod;
+    $scope.closeModal = function () {
+
+        if (!$scope.profile.data.nom || $scope.profile.data.nom.length < 1) {
+            // Check if the name is valid
+            ToasterService.showToaster('#rename-profile-success-toaster', 'profile.message.save.ko.name.mandatory');
+
+        } else if ($scope.profile.data.nom.trim() !== $scope.profileName.trim() && $scope.profile.data.nom.trim() !== $scope.profile.filename) {
+            // If a change is detected on profile name check if already exist
+            profilsService.lookForExistingProfile($scope.profile)
+                .then(function (res) {
+
+                    $log.debug('lookForExistingProfile', res);
+
+                    if (!res) {
+                        $uibModalInstance.close({
+                            profile: $scope.profile
+                        });
+                    } else {
+                        ToasterService.showToaster('#rename-profile-success-toaster', 'profile.message.save.ko.name.alreadyexist');
+                    }
+                });
         } else {
-            if ($scope.profil.descriptif === undefined) {
-                $scope.profil.descriptif = ' ';
-            }
-            returnedObject.profil = $scope.profil;
+            // if there is no change
+            $uibModalInstance.close({
+                profile: $scope.profile
+            });
         }
-        $modalInstance.close(returnedObject);
+    };
+
+    $scope.dismissModal = function () {
+        $uibModalInstance.dismiss();
     };
 
 });

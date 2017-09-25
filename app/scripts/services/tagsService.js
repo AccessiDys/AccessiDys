@@ -24,16 +24,32 @@
  */
 'use strict';
 
-var cnedApp = cnedApp;
 
-cnedApp.service('tagsService', function($http, configuration, $localForage) {
-    this.getTags = function() {
-        return $http.get(configuration.URL_REQUEST + '/readTags').then(function(result) {
-            return $localForage.setItem('tags', result.data).then(function() {
+angular.module('cnedApp').service('tagsService', function ($http, $uibModal, CacheProvider) {
+    this.getTags = function () {
+        return $http.get('/readTags').then(function (result) {
+            return CacheProvider.setItem(result.data, 'listTags').then(function () {
                 return result.data;
             });
-        }, function() {
-            return $localForage.getItem('tags');
+
+        }, function () {
+            return CacheProvider.getItem('listTags');
         });
+    };
+
+    this.openEditModal = function (mode, tag) {
+        return $uibModal.open({
+            templateUrl: 'views/tag/edit-tag.modal.html',
+            controller: 'EditTagModalCtrl',
+            size: 'lg',
+            resolve: {
+                mode: function () {
+                    return mode;
+                },
+                tag: function () {
+                    return tag;
+                }
+            }
+        }).result;
     };
 });

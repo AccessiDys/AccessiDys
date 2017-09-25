@@ -24,400 +24,347 @@
  */
 'use strict';
 
-var cnedApp = cnedApp;
+angular.module('cnedApp').service('profilsService', function ($http, configuration, fileStorageService,
+                                                              $localForage, $rootScope,
+                                                              $uibModal, $log, $q, UtilsService, UserService, CacheProvider, _) {
 
-cnedApp.service('profilsService', function($http, configuration, fileStorageService, $localForage, synchronisationStoreService,$rootScope) {
 
     var self = this;
 
     /**
-     * Recupere l'url du css pour le profil actuel
-     * 
-     * @method getUrl
+     * Map new data after saving
+     * @param profile
+     * @param savedProfile
+     * @returns {*}
      */
-    this.getUrl = function() {
-        var token = localStorage.getItem('compteId');
-        var id = JSON.parse(localStorage.getItem('profilActuel'))._id.toString();
-        var url = configuration.URL_REQUEST + '/cssProfil/' + id + '?id=' + token;
+    var mapProfileAfterSave = function (profile, savedProfile) {
 
-        return $http({
-            url : url,
-            method : 'GET',
-            responseType : 'blob'
-        }).then(function(response) {
-            url = URL.createObjectURL(response.data);
-            return fileStorageService.saveCSSInStorage(url, id);
-        }, function() {
-            return fileStorageService.getCSSInStorage(id);
-        }).then(function() {
-            return fileStorageService.getCSSInStorage(id);
-        });
+        profile.filename = savedProfile.filename;
+        profile.provider = savedProfile.provider;
+        profile.filepath = savedProfile.filepath;
+        if (savedProfile.data.delegated) {
+            profile.data.delegated = savedProfile.data.delegated;
+        }
+        if (savedProfile.data.isFavourite) {
+            profile.data.isFavourite = savedProfile.data.isFavourite;
+        }
+        profile.data.owner = savedProfile.data.owner;
+        if (savedProfile.data.preDelegated) {
+            profile.data.preDelegated = savedProfile.data.preDelegated;
+        }
+        profile.data.updated = new Date(savedProfile.data.updated);
+        profile.data.className = self.generateClassName(profile, false);
+        if (savedProfile.data._id) {
+            profile.data._id = savedProfile.data._id;
+        }
+
+
+        return profile;
     };
 
     /**
-     * Met à jour le profil donné.
-     * 
-     * @param profil :
-     *            le profil à mettre à jour
+     * Add the given profile.
+     * @param profile :
+        *            The profile to be saved.
      */
-    this.updateProfil = function(online, profil) {
-        var data = {
-            id : localStorage.getItem('compteId'),
-            updateProfile : profil
-        };
+    this.saveProfile = function (profile) {
+        var deferred = $q.defer();
 
-        if (online) {
-            data.updateProfile.updated = new Date();
-            return $http.post(configuration.URL_REQUEST + '/updateProfil', data).then(function(result) {
-                return $localForage.setItem('profil.' + result.data._id, result.data).then(function() {
-                    return result.data;
-                });
-            });
-        } else {
-            profil.updated = new Date();
-            return synchronisationStoreService.storeProfilToSynchronize({
-                owner: $rootScope.currentUser.local.email ,
-                action : 'update',
-                profil : profil,
-                profilTags : null
-            }).then(function() {
-                return self.updateListProfilInCache(profil);
-            });
-        }
+        var profileToSave = angular.copy(profile);
 
-    };
-
-    /**
-     * Ajoute le profil donné.
-     * 
-     * @param profil :
-     *            le profil à mettre à jour
-     */
-    this.addProfil = function(online, profile, profilTags) {
-        var profil = profile;
-        if (!profil.updated) {
-            profil.updated = new Date();
-        }
-        var data = {
-            id : localStorage.getItem('compteId'),
-            newProfile : profil
-        };
-        if (online) {
-                return $http.post(configuration.URL_REQUEST + '/ajouterProfils', data).then(function(result) {
-                    return self.updateProfilTags(online, result.data, profilTags).then(function() {
-                        return self.addProfilInCache(result.data).then(function() {
-                            return result.data;
-                        });
-
-                    });
-                });
-        } else {
-            // ajout d'un identifiant temporaire
-            profil._id = profil.nom;
-            profil.updated = new Date();
-            // ajout des type pour l'affichage
-            profil.type = 'profile';
-            angular.forEach(profilTags, function(tags) {
-                tags._id = tags.id_tag;
-                tags.tag = tags.id_tag;
-            }, []);
-
-            return synchronisationStoreService.storeProfilToSynchronize({
-                owner: $rootScope.currentUser.local.email,
-                action : 'create',
-                profil : profil,
-                profilTags : profilTags
-            }).then(function() {
-                return self.addProfilInCache(profil).then(function() {
-                    return self.updateProfilTagsInCache(profil._id, profilTags).then(function() {
-                        return profil;
-                    });
-                });
-            });
-        }
-
-    };
-
-    this.addProfilInCache = function(profil) {
-        return $localForage.getItem('listProfils').then(function(data) {
-            var listProfil = data;
-            if (!listProfil) {
-                listProfil = [];
+        if (profileToSave.data.profileTags) {
+            for (var i = 0; i < profileToSave.data.profileTags.length; i++) {
+                delete profileToSave.data.profileTags[i].tagDetail;
             }
-            listProfil.push(profil);
-            $localForage.setItem('listProfils', listProfil);
-            return $localForage.setItem('profil.' + profil._id, profil);
-        });
-    };
+        }
 
-    /**
-     * Supprime le profil donné.
-     * 
-     * @param ownerId :
-     *            le propriétaire du profil
-     * @param profil :
-     *            le profil à mettre à jour
-     */
-    this.deleteProfil = function(online, ownerId, profilId) {
-        var data = {
-            id : localStorage.getItem('compteId'),
-            removeProfile : {
-                profilID : profilId,
-                userID : ownerId
-            }
-        };
-        if (online) {
-            return $http.post(configuration.URL_REQUEST + '/deleteProfil', data).then(function(result) {
-                return $localForage.removeItem('profil.' + profilId).then(function() {
-                    return result.data;
-                }).then(function() {
-                    return $localForage.removeItem('profilTags.' + profilId);
-                });
-            });
-        } else {
-            return synchronisationStoreService.storeProfilToSynchronize({
-                owner: $rootScope.currentUser.local.email ,
-                action : 'delete',
-                profil : {
-                    _id : profilId
-                },
-                profilTags : null
-            }).then(function() {
-                return $localForage.removeItem('profil.' + profilId).then(function() {
-                    return '200'; // Code retournée en cas de succès de la
-                    // suppression.
-                }).then(function() {
-                    return $localForage.getItem('listProfils').then(function(data) {
-                        var listProfil = data;
-                        if (!listProfil) {
-                            listProfil = [];
-                        }
-                        var tagToRemove;
-                        var profilToRemove;
-                        for (var i = 0; i < listProfil.length; i++) {
-                            if (listProfil[i].type === 'tags' && listProfil[i].idProfil === profilId) {
-                                tagToRemove = i;
-                            }
-                            if (listProfil[i].type === 'profile' && listProfil[i]._id === profilId) {
-                                profilToRemove = i;
-                            }
-                        }
-                        if (tagToRemove !== undefined) {
-                            listProfil.splice(tagToRemove, 1);
-                        }
-                        if (profilToRemove !== undefined) {
-                            listProfil.splice(profilToRemove, 1);
-                        }
-                        $localForage.setItem('listProfils', listProfil);
-                        return $localForage.removeItem('profilTags.' + profilId);
+        $log.debug('Save Profile', profileToSave);
+
+        if (profileToSave.data._id || UserService.getData().isAdmin) {
+
+            profileToSave.filename = profileToSave.data.nom;
+
+            // Profile stored in accessidys backend
+            if ($rootScope.isAppOnline) {
+                // send profile to accessidys backend
+                if (profileToSave.data._id) {
+                    // Update mode
+                    this.update(profileToSave).then(function (res) {
+                        profile = mapProfileAfterSave(profile, res.data);
+                        CacheProvider.save(profile, 'listProfile');
+
+                        deferred.resolve(profile);
+                    }, function () {
+                        fileStorageService.addFileToSynchronize(profileToSave, 'profile', 'save');
+                        deferred.resolve(profile);
                     });
+                } else {
+                    // Create mode
+                    this.create(profileToSave).then(function (res) {
+                        profile = mapProfileAfterSave(profile, res.data);
+                        CacheProvider.save(profile, 'listProfile');
 
-                });
-            });
-        }
-    };
-
-    /**
-     * Modifie les styles à un profil.
-     * 
-     * @param profilId :
-     *            le profil
-     * @param tags :
-     *            les styles associés au profil
-     */
-    this.updateProfilTags = function(online, profil, profilTags) {
-        if (online) {
-            return $http.post(configuration.URL_REQUEST + '/setProfilTags', {
-                id : localStorage.getItem('compteId'),
-                profilID : profil._id,
-                profilTags : profilTags
-            }).then(function() {
-                return self.updateProfilTagsInCache(profil._id, profilTags);
-            });
-        } else {
-            return synchronisationStoreService.storeTagToSynchronize({
-                owner: $rootScope.currentUser.local.email ,
-                action : 'update',
-                profil : profil,
-                profilTags : profilTags
-            }).then(function() {
-                return self.updateProfilTagsInCache(profil._id, profilTags);
-            });
-        }
-    };
-
-    /**
-     * Modifie les styles à un profil dans le cache.
-     * 
-     * @param profilId :
-     *            le profil
-     * @param tags :
-     *            les styles associés au profil
-     */
-    this.updateProfilTagsInCache = function(profilId, profilTags) {
-        return $localForage.getItem('listProfils').then(function(data) {
-            // construire un format de donnée qui pourra être affiché en mode
-            // déconnecté.
-            angular.forEach(profilTags, function(tags) {
-                tags._id = tags.id_tag;
-                tags.tag = tags.id_tag;
-            }, []);
-            var listProfil = data;
-            if (!listProfil) {
-                listProfil = [];
-            }
-            var keyToRemove;
-            for (var i = 0; i < listProfil.length; i++) {
-                if (listProfil[i].type === 'tags' && listProfil[i].idProfil === profilId) {
-                    keyToRemove = i;
-                    break;
+                        deferred.resolve(profile);
+                    }, function () {
+                        fileStorageService.addFileToSynchronize(profileToSave, 'profile', 'save');
+                        deferred.resolve(profile);
+                    });
                 }
-            }
-            if (keyToRemove !== undefined) {
-                listProfil[keyToRemove] = {
-                    idProfil : profilId,
-                    tags : profilTags,
-                    type : 'tags'
-                };
             } else {
-                listProfil.push({
-                    idProfil : profilId,
-                    tags : profilTags,
-                    type : 'tags'
+                fileStorageService.save(profileToSave, 'profile').then(function (res) {
+                    deferred.resolve(res);
+                }, function () {
+                    deferred.reject();
                 });
             }
-            $localForage.setItem('listProfils', listProfil);
-            return $localForage.setItem('profilTags.' + profilId, profilTags);
-        });
-    };
 
-    /**
-     * Récupère la liste des profils de l'utilisateur donné.
-     */
-    this.getProfilsByUser = function(online) {
-        if(online){
-            return $http.get(configuration.URL_REQUEST + '/listeProfils', {
-                params : {
-                    id : localStorage.getItem('compteId')
-                }
-            }).then(function(result) {
-                for (var i = 0; i < result.data.length; i++) {
-                    var profilItem = result.data[i];
-                    if (profilItem.type === 'profile') {
-                        $localForage.setItem('profil.' + profilItem._id, profilItem);
-                    } else if (profilItem.type === 'tags') {
-                        $localForage.setItem('profilTags.' + profilItem.idProfil, profilItem.tags);
-                    }
-                }
-                return $localForage.setItem('listProfils', result.data).then(function() {
-                    return result.data;
+        } else {
+            // profile stored in external storage
+
+            if (profileToSave.filename !== profileToSave.data.nom) {
+
+                fileStorageService.rename(profileToSave, profileToSave.data.nom, 'profile').then(function (res) {
+                    profileToSave.filename = res.filename;
+                    profileToSave.filepath = res.filepath;
+
+                    fileStorageService.save(profileToSave, 'profile').then(function (res) {
+                        profile = mapProfileAfterSave(profile, res);
+                        deferred.resolve(profile);
+                    }, function () {
+                        deferred.reject();
+                    });
+                }, function () {
+                    deferred.reject();
                 });
-            }, function() {
-                return $localForage.getItem('listProfils');
-            });
-        } else {
-            return $localForage.getItem('listProfils');
+
+            } else {
+                fileStorageService.save(profileToSave, 'profile').then(function (res) {
+                    profile = mapProfileAfterSave(profile, res);
+                    deferred.resolve(profile);
+                }, function () {
+                    deferred.reject();
+                });
+            }
         }
-        
+
+        return deferred.promise;
+
     };
 
     /**
-     * Récupère la liste des tags du profil donné
-     * 
-     * @param profilId :
-     *            l'identifiant du profil
+     * Create a profile to accessidys backend
+     * @param profile
+     * @returns {HttpPromise}
      */
-    this.getProfilTags = function(profilId) {
-        return $http.post(configuration.URL_REQUEST + '/chercherTagsParProfil', {
-            idProfil : profilId
-        }).then(function(result) {
-            return $localForage.setItem('profilTags.' + profilId, result.data).then(function() {
-                return result.data;
-            });
-        }, function() {
-            return $localForage.getItem('profilTags.' + profilId).then(function(data){
-                return data;
-            });
+    this.create = function (profile) {
+        return $http.post('/profile', {
+            profile: profile
+        }, {
+            headers: {
+                'AccessiDys-user': UserService.getData().email,
+                'AccessiDys-provider': UserService.getData().provider
+            }
         });
     };
 
     /**
-     * Récupère les informations utilisateurs liés au profil (délégation,
-     * propriétaire, favoris, etc.)
-     * 
-     * @param profilId :
-     *            l'id du profil
+     * Update a profile to accessidys backend
+     * @param profile
+     * @returns {HttpPromise}
      */
-    this.getUserProfil = function(profilId) {
-        var params = {
-            searchedProfile : profilId,
-            id : localStorage.getItem('compteId')
-        };
-        return $http.post(configuration.URL_REQUEST + '/getProfilAndUserProfil', params).then(function(result) {
-            return $localForage.setItem('userProfil.' + profilId, result.data).then(function() {
-                return result.data;
-            });
-        }, function() {
-            return $localForage.getItem('userProfil.' + profilId).then(function(data){
-                return data;
-            });
+    this.update = function (profile) {
+        return $http.put('/profile', {
+            profile: profile
+        }, {
+            headers: {
+                'AccessiDys-user': UserService.getData().email,
+                'AccessiDys-provider': UserService.getData().provider
+            }
         });
     };
-    
-    
+
     /**
-     * Recherche un profil du même nom.
-     * 
-     * @param profil
-     *            le profil
+     * Delete a profile
+     * @param profile
+     * @returns {HttpPromise|*|{method}}
      */
-    this.lookForExistingProfile = function(online, profil) {
-        if(online){
-            return $http.post(configuration.URL_REQUEST + '/existingProfil', profil).then(function(res) {
-                return res.data;
+    this.deleteProfil = function (profile) {
+        if (profile.data._id && $rootScope.isAppOnline) {
+
+            var deferred = $q.defer();
+
+            $http.delete('/profile/' + profile.data._id, {
+                headers: {
+                    'AccessiDys-user': UserService.getData().email,
+                    'AccessiDys-provider': UserService.getData().provider
+                }
+            }).then(function () {
+                CacheProvider.delete(profile, 'listProfile').then(function () {
+                    deferred.resolve();
+                });
+            }, function () {
+                deferred.reject();
             });
+
+            return deferred.promise;
+
         } else {
-            return $localForage.getItem('listProfils').then(function(data) {
-                var listProfil = data;
-                var profileFound;
-                if (listProfil && listProfil.length > 0) {
-                    for (var i = 0; i < listProfil.length; i++) {
-                        if (listProfil[i].type === 'profile' && (listProfil[i].nom === profil.nom && (!profil._id || (profil._id && profil._id !== listProfil[i]._id)))) {
-                            profileFound = listProfil[i];
-                            break;
-                        }
+            return fileStorageService.delete(profile, 'profile');
+        }
+    };
+
+
+    /**
+     * Looking for a profile which have the same name
+     * @param profile
+     * @returns {*|Promise}
+     */
+    this.lookForExistingProfile = function (profile) {
+
+        return CacheProvider.list('listProfile').then(function (profiles) {
+            $log.debug('lookForExistingProfile - profiles', profiles);
+            $log.debug('lookForExistingProfile - profile', profile);
+
+            var isFound = false;
+            _.each(profiles, function (item) {
+                if (profile.data.nom === item.data.nom) {
+                    isFound = true;
+                }
+            });
+            return isFound;
+        });
+    };
+
+    this.delegateProfile = function (profile, to) {
+
+        var deferred = $q.defer();
+
+        var profileToDelegate = angular.copy(profile);
+
+        for (var i = 0; i < profileToDelegate.data.profileTags.length; i++) {
+            delete profileToDelegate.data.profileTags[i]._id;
+            delete profileToDelegate.data.profileTags[i].profil;
+            delete profileToDelegate.data.profileTags[i].tagDetail;
+        }
+
+        profileToDelegate.data.preDelegated = to;
+
+        $log.debug('profile to delegate', profileToDelegate);
+
+        if (profileToDelegate.data._id) {
+
+            this.update(profileToDelegate).then(function (res) {
+                deferred.resolve(res.data);
+            }, function () {
+                deferred.reject();
+            });
+
+        } else {
+            this.create(profileToDelegate).then(function (res) {
+                fileStorageService.delete(profileToDelegate, 'profile').then(function () {
+                    deferred.resolve(res.data);
+                }, function () {
+                    deferred.reject();
+                });
+            }, function () {
+                deferred.reject();
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    this.openDelegateProfileModal = function (profile) {
+
+        return $uibModal.open({
+            templateUrl: 'views/profiles/delegate-profile.modal.html',
+            controller: 'DelegateProfileModalCtrl',
+            size: 'md',
+            resolve: {
+                profile: function () {
+                    return profile;
+                }
+            }
+        }).result;
+
+    };
+
+
+    this.getProfiles = function () {
+
+        return $q.all([$http.get('/profiles', {
+            headers: {
+                'AccessiDys-user': UserService.getData().email
+            }
+        }), fileStorageService.list('profile').then(function (files) {
+            var userProfiles = [];
+
+            if (files) {
+                for (var i = 0; i < files.length; i++) {
+                    userProfiles.push(fileStorageService.getData(files[i], 'profile').then(function (file) {
+                        return file;
+                    }));
+                }
+            }
+
+            return $q.all(userProfiles);
+
+        })]).then(function (res) {
+            var defaultProfiles = res[0].data;
+
+            var result = res[1];
+
+            for (var i = 0; i < defaultProfiles.length; i++) {
+                var isFound = false;
+
+                for (var v = 0; v < result.length; v++) {
+
+                    if (result[v].filename === defaultProfiles[i].filename) {
+                        isFound = true;
+                        break;
                     }
                 }
-                return profileFound;
-            });
-        }
 
-    };
-    
-    
-    /**
-     * Met à jour le profils dans le cache 
-     * 
-     * @param profil
-     *            le profil
-     */
-    this.updateListProfilInCache = function(profil){
-        return $localForage.getItem('listProfils').then(function(data) {
-            var listProfil = data;
-            if (!listProfil) {
-                listProfil = [];
-            }
-            for (var i = 0; i < listProfil.length; i++) {
-                if (listProfil[i].type === 'profile' && listProfil[i]._id === profil._id) {
-                    listProfil[i] = profil;
-                    $localForage.setItem('listProfils', listProfil);
-                    break;
+                if (isFound) {
+                    result[v] = defaultProfiles[i];
+                } else {
+                    result.push(defaultProfiles[i]);
                 }
             }
-            return $localForage.setItem('profil.' + profil._id, profil).then(function() {
-                return profil;
-            });
+            CacheProvider.saveAll(result, 'listProfile');
+
+            $log.debug('ProfilesService - getProfiles - result', result);
+
+            return result;
+        }, function () {
+            return fileStorageService.list('profile');
         });
+    };
+
+    this.getProfile = function (profileId) {
+        return $http.get('/profile/' + profileId).then(function (res) {
+            return res.data;
+        });
+    };
+
+    this.generateClassName = function (profile, isTmp) {
+
+        var className = '';
+
+        if (profile && profile.data) {
+
+            var formattedName = UtilsService.cleanUpSpecialChars(profile.data.nom).trim().replace(/ /g, '-');
+
+            className = 'profile-' + formattedName;
+
+            if (isTmp) {
+                className += '-tmp';
+            }
+
+        }
+
+
+        return className;
     };
 
 });

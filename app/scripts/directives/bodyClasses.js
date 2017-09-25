@@ -28,162 +28,202 @@
 /* jshint unused: false, undef:false */
 
 /*
- * Gérer l'affichage de l'aperçu
+ * Directive to manage Drag and Drop annotations.
  */
-cnedApp.directive('bodyClasses', function() {
-    return {
-        link : function(scope, element) {
-            var elementClasses = $(element).attr('class').split(' ');
-            for (var i = 0; i < elementClasses.length; i++) {
-                if (elementClasses[i] === 'doc-apercu' || elementClasses[i] === 'doc-General') {
-                    $('body').removeClass('modal-open');
-                    $('body').find('.modal-backdrop').remove();
-                    $('#bookmarkletGenerator').modal('hide');
+
+cnedApp.directive('draggableNote',
+
+    function ($document, $timeout, $log, $rootScope, $window) {
+        return {
+            restrict: 'A',
+            link: function (scope, elm, attrs) {
+                var startX, startY, initialMouseX, initialMouseY, tagID, type, lineCanvas, lineCanvasHtml, container;
+
+                lineCanvasHtml = '<div id="line-canvas-' + scope.note.idNote + '"></div>';
+                type = attrs.type;
+                container = angular.element(document.querySelector('#' + attrs.container))[0];
+
+                if (type === 'content') {
+                    elm.css({
+                        position: 'absolute',
+                        left: scope.note.x + '%',
+                        top: scope.note.y + '%'
+                    });
+
+                } else if (type === 'link') {
+                    elm.css({
+                        position: 'absolute',
+                        left: scope.note.xLink + '%',
+                        top: scope.note.yLink + '%'
+                    });
                 }
-            }
-        }
-    };
-});
 
-/*
- * Directive pour gérer Drag and Drop des annotations.
- */
-cnedApp.directive('draggableNote', [ '$document',
+                /* If the mouse cursor moves to the document */
 
-function($document) {
-    return {
-        restrict : 'A',
-        link : function(scope, elm, attrs) {
-            var startX, startY, initialMouseX, initialMouseY, tagID, defaultX, maxX, maxY, adaptContent, noteContainer;
-            elm.css({
-                position : 'absolute'
-            });
+                function drawLine() {
+                    var x, y, xLink, yLink;
 
-            /* Si le bouton de la souris est appuyé */
-            elm.bind('mousedown', function($event) {
-                tagID = $event.target.id;
 
-                // click on new editable text
-                if (tagID === 'draggable-note-content' && $event.target.innerHTML === 'Note') {
-                    /*
-                     * empty text content
-                     */
-                    $event.target.innerHTML = '';
-                } else {
+                    if(angular.element( document.querySelector('#line-canvas-' + scope.note.idNote) ).length < 1){
+                        angular.element(document.querySelector('#canvas-container-' + scope.note.idPage)).append(lineCanvasHtml);
+                    }
+
+                    lineCanvas = angular.element(document.querySelector('#line-canvas-' + scope.note.idNote));
+                    if (type === 'content') {
+                        // set the line canvas to the width and height of the carousel
+                        var carousel = angular.element(document.querySelector('#page-content'));
+
+
+                        lineCanvas.css({
+                            position: 'absolute',
+                            width: carousel[0].clientWidth + 'px',
+                            height: carousel[0].clientHeight + 'px'
+                        });
+                    }
+
+                    lineCanvas.find('div').remove();
+
+
+                    var contentElm = angular.element(document.querySelector('#zone-id-' + scope.note.idNote))[0];
+                    var linkElm = angular.element(document.querySelector('#link-id-' + scope.note.idNote))[0];
+
+                    if(linkElm  && contentElm ){
+                        // invariant whatever the method of consultation.
+                        xLink = linkElm.offsetLeft - container.offsetLeft + 60;
+                        x = contentElm.offsetLeft - container.offsetLeft + 40;
+                        yLink = linkElm.offsetTop - container.offsetTop + 25;
+                        y = contentElm.offsetTop - container.offsetTop + 20;
+
+
+                        // déssiner
+                        jQuery('#line-canvas-' + scope.note.idNote).line(xLink, yLink, x, y, {
+                            color: '#747474',
+                            stroke: 1,
+                            zindex: 9
+                        });
+                    }
+                }
+
+                function mousemove($event) {
+                    $event.preventDefault();
+
+                    tagID = $event.target.id;
+
+                    var dx = $event.clientX - initialMouseX;
+                    var dy = $event.clientY - initialMouseY;
+
+                    elm.css({
+                        top: startY + dy + 'px',
+                        left: startX + dx + 'px'
+                    });
+
+                    drawLine();
+
+                    return false;
+                }
+
+                /* If the mouse button is released */
+
+                function mouseup($event) {
+                    tagID = $event.target.id;
+
+
+                    /* jshint ignore:start */
+                    /* If I move the contents of the note in the permitted area */
+                    if (tagID.indexOf('note-id-') > -1) {
+
+                        var x = (elm[0].offsetLeft - 15 - container.offsetLeft) / container.clientWidth * 100;
+                        var y = (elm[0].offsetTop - container.offsetTop) / container.clientHeight * 100;
+
+                        elm.css({
+                            top: y + '%',
+                            left: x + '%'
+                        });
+
+                        scope.note.y = y;
+                        scope.note.x = x;
+                        /* If I move the arrow annotation */
+                    } else if (tagID.indexOf('link-id-') > -1) {
+
+                        var x = (elm[0].offsetLeft+ 7 - container.offsetLeft) / container.clientWidth * 100;
+                        var y = (elm[0].offsetTop - container.offsetTop) / container.clientHeight * 100;
+
+                        elm.css({
+                            top: y + '%',
+                            left: x + '%'
+                        });
+
+                        scope.note.yLink = y;
+                        scope.note.xLink = x;
+                    }
+                    /* jshint ignore:end */
+
+
+                    /* If I move the arrow and the contents of the note */
+                    if (tagID.indexOf('note-id-') > -1 || tagID.indexOf('link-id-') > -1) {
+                        scope.editNote(scope.note);
+                    }
+
+
+                    if (type === 'content') {
+                        $document.unbind('mousemove', mousemove);
+                        $document.unbind('mouseup', mouseup);
+
+                    } else if (type === 'link') {
+                        $document.unbind('mousemove', mousemove);
+                        $document.unbind('mouseup', mouseup);
+                    }
+
+
+                }
+
+
+
+
+                $timeout(function () {
+                    drawLine();
+                }, 300);
+
+
+                /* If the mouse button is pressed */
+                elm.bind('mousedown', function ($event) {
+                    tagID = $event.target.id;
+
+                    startX = elm.prop('offsetLeft');
                     startY = elm.prop('offsetTop');
                     initialMouseX = $event.clientX;
-                    $document.bind('mousemove', mousemove);
-                    $document.bind('mouseup', mouseup);
-                    if (scope.modeImpression) {
-                        startX = elm.prop('offsetLeft') + elm.parent().prop('offsetLeft');
-                        initialMouseY = $event.clientY;
-                        adaptContent = angular.element('#adapt-content-' + scope.note.idPage);
-                        noteContainer = angular.element('#note-container-' + scope.note.idPage);
-                        
-                    } else {
-                        startX = elm.prop('offsetLeft');
-                        initialMouseY = $event.clientY;
-                        adaptContent = angular.element('.adaptContent');
-                        noteContainer = angular.element('#note_container');
+                    initialMouseY = $event.clientY;
+
+                    // click on new editable text
+                    if (tagID.indexOf('note-id-') > -1 || tagID.indexOf('link-id-') > -1) {
+                        $document.bind('mousemove', mousemove);
+                        $document.bind('mouseup', mouseup);
+
+                        return true;
                     }
-                    maxX = adaptContent.width() + noteContainer.width() - elm.width() + parseInt(adaptContent.css('marginLeft'));
-                    maxY = adaptContent.height();
-                    defaultX = adaptContent.width() + parseInt(adaptContent.css('marginLeft'));
-                    return true;
-                }
-            });
+                });
 
-            /* Si le curseur de la souris se déplace sur le document */
 
-            function mousemove($event) {
-                $event.preventDefault();
-                var dx = $event.clientX - initialMouseX;
-                var dy = $event.clientY - initialMouseY;
 
-                /* Si je déplace le contenu de l'annotation dans la zone permise */
-                if ((tagID === 'noteID') && ((startX + dx) > defaultX) && ((startX + dx) < maxX) && ((startY + dy) > 0) && ((startY + dy)) < maxY) {
+                $rootScope.$on('redrawLines', function () {
+                    $log.debug('redrawLines');
+                    drawLine();
+                });
 
-                    elm.css({
-                        top : startY + dy + 'px',
-                        left : startX + dx + 'px'
-                    });
-                    scope.note.y = startY + dy;
-                    scope.note.x = startX + dx;
-                    scope.drawLine();
-                    /* Si je déplace la flèche de l'annotation */
-                } else if (tagID === 'linkID') {
-                    elm.css({
-                        top : startY + dy + 'px',
-                        left : startX + dx + 'px'
-                    });
-                    scope.note.yLink = startY + dy;
-                    scope.note.xLink = startX + dx;
-                    scope.drawLine();
-                } else if (tagID === 'editTexteID') {
-                    return true;
-                }
-
-                return false;
-            }
-
-            /* Si le bouton de la souris est relaché */
-
-            function mouseup($event) {
-                // var tagID = $event.target.id;
-                /* Si je déplace la flèche et le contenu de l'annotation */
-                if (tagID === 'noteID' || tagID === 'linkID') {
-                    scope.editNote(scope.note);
-                }
-                $document.unbind('mousemove', mousemove);
-                $document.unbind('mouseup', mouseup);
-            }
-        }
-    };
-} ]);
-
-/*
- * Directive pour détecter la fin d'un ng-repeat dans l'apercu.
- */
-cnedApp.directive('onFinishApercu', [ '$timeout',
-
-function($timeout) {
-    return {
-        restrict : 'A',
-        link : function(scope) {
-            if (scope.$last === true) {
-                $timeout(function() {
-                    scope.$emit('ngRepeatFinishedApercu');
+                angular.element($window).bind('resize', function() {
+                    drawLine();
                 });
             }
-        }
-    };
-} ]);
+        };
+    });
 
 /*
- * Directive pour détecter la fin d'un ng-repeat dans print.
+ * Directive to limit the number of characters to be entered.
  */
-cnedApp.directive('onFinishRender', [ '$timeout',
-
-function($timeout) {
+cnedApp.directive('maxLength', function () {
     return {
-        restrict : 'A',
-        link : function(scope) {
-            if (scope.$last === true) {
-                $timeout(function() {
-                    scope.$emit('ngRepeatFinished');
-                });
-            }
-        }
-    };
-} ]);
-
-/*
- * Directive pour limiter le nombre de caracteres à saisir.
- */
-cnedApp.directive('maxLength', function() {
-    return {
-        require : 'ngModel',
-        link : function(scope, element, attrs, ngModelCtrl) {
+        require: 'ngModel',
+        link: function (scope, element, attrs, ngModelCtrl) {
             var maxlength = Number(attrs.maxLength);
 
             function fromUser(text) {
@@ -195,6 +235,7 @@ cnedApp.directive('maxLength', function() {
                 }
                 return text;
             }
+
             ngModelCtrl.$parsers.push(fromUser);
         }
     };

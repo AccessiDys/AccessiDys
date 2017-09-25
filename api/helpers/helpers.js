@@ -27,183 +27,144 @@
 'use strict';
 /*jshint unused: false, undef:false */
 
-var config = require('../../env/config.json');
-
-
+var config = require('../../../env/config.json');
 var nodemailer = require('nodemailer');
 var https = require('https');
-var rest = require('restler');
 var fs = require('fs');
-var path = require('path');
-//var events = require('events');
-//var eventEmitter = new events.EventEmitter();
 
-var dropbox_type = config.DROPBOX_TYPE;
-var listDocPath = config.CATALOGUE_NAME;
+/**
+ * Get SMTP host options
+ * @returns {{host: string, port: integer}}
+ */
+function getSmtpOptions() {
 
-exports.journalisation = function(status, user, message, param) {
-  var statusMessage = '';
-  switch (status) {
-    case 0:
-      statusMessage = 'BEGIN';
-      break;
-    case 1:
-      statusMessage = 'END';
-      break;
-    case -1:
-      statusMessage = 'END:ERROR';
-      break;
-    default:
-      statusMessage = 'END:ERROR';
-  }
-  var msg = '[' + statusMessage + ']';
-  if (user && user !== '' && user._id && user.local.nom && user.local.prenom) {
-    msg = msg + ' UtilisateurId : [' + user._id + '] ' + ' Utilisateur Nom : [' + user.local.nom + '] ' + ' Utilisateur Prenom : [' + user.local.prenom + '] ';
-  } else {
-    msg = msg + ' UtilisateurId : ' + 'GUEST';
-  }
+    var smtpConfig = {};
 
-  msg = msg + ' | service :[' + message + '] | parametre :[' + param + ']';
-  console.log(msg);
+    // setting smtp config
+
+    if (config.EMAIL_SERVICE && config.EMAIL_SERVICE !== '') {
+        smtpConfig = {
+            service: config.EMAIL_SERVICE
+        };
+    } else {
+        smtpConfig = {
+            host: config.EMAIL_HOST, // hostname
+            port: config.EMAIL_PORT // port for secure SMTP,
+        };
+    }
+
+    if (config.EMAIL_HOST_UID && config.EMAIL_HOST_UID !== '') {
+        smtpConfig.auth = {
+            user: config.EMAIL_HOST_UID,
+            pass: config.EMAIL_HOST_PWD
+        };
+    }
+
+    return smtpConfig;
+}
+
+/**
+ * Logging method
+ * the message contents : the user Id, Username, firstname of the user,service
+ * and parameter
+ */
+exports.journalisation = function (status, user, message, param) {
+    var statusMessage = '';
+    switch (status) {
+        case 0:
+            statusMessage = 'BEGIN';
+            break;
+        case 1:
+            statusMessage = 'END';
+            break;
+        case -1:
+            statusMessage = 'END:ERROR';
+            break;
+        default:
+            statusMessage = 'END:ERROR';
+    }
+    var msg = '[' + statusMessage + ']';
+    if (user && user !== '' && user._id && user.local.nom && user.local.prenom) {
+        msg = msg + ' UtilisateurId : [' + user._id + '] ' + ' Utilisateur Nom : [' + user.local.nom + '] ' + ' Utilisateur Prenom : [' + user.local.prenom + '] ';
+    } else {
+        msg = msg + ' UtilisateurId : ' + 'GUEST';
+    }
+
+    msg = msg + ' | service :[' + message + '] | parametre :[' + param + ']';
+    console.log(msg);
 
 };
 
-exports.sendMail = function(req, res) {
-  var nodemailer = require('nodemailer');
-  var sentMailInfos = req.body;
-  var mailOptions = {};
-  // create reusable transport method (opens pool of SMTP connections)
+exports.sendMail = function (req, res) {
+    var sentMailInfos = req.body;
+    var mailOptions = {};
+    // create reusable transport method (opens pool of SMTP connections)
 
-  var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: config.EMAIL_HOST, // hostname
-    port: config.EMAIL_PORT, // port for secure SMTP,
-    service: config.EMAIL_SERVICE,
-    auth: {
-      user: config.EMAIL_HOST_UID,
-      pass: config.EMAIL_HOST_PWD
+    var smtpTransport = nodemailer.createTransport(
+        getSmtpOptions());
+    // setup e-mail data with unicode symbols
+
+    if (sentMailInfos.doc && sentMailInfos.doc.indexOf('detailProfil') !== -1) {
+        mailOptions = {
+            from: config.EMAIL_FROM,
+            to: sentMailInfos.to,
+            subject: sentMailInfos.fullName + ' vient de partager avec vous un profil sur l\'application Accessidys. ',
+            text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
+            html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
+        };
+    } else {
+        mailOptions = {
+            from: config.EMAIL_FROM,
+            to: sentMailInfos.to,
+            subject: sentMailInfos.fullName + ' a partagé ' + sentMailInfos.doc + ' avec vous',
+            text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
+            html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
+        };
     }
-  });
-  // setup e-mail data with unicode symbols
 
-  if (sentMailInfos.doc && sentMailInfos.doc.indexOf('idProfil') !== -1) {
-    mailOptions = {
-      from: config.EMAIL_HOST_UID,
-      to: sentMailInfos.to,
-      subject: sentMailInfos.fullName + ' vient de partager avec vous un profil sur l\'application Accessidys. ',
-      text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
-      html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
+    // send mail with defined transport object
+    smtpTransport.sendMail(mailOptions, function (error, response) {
+        if (error) {
+            res.send(error);
+        } else {
+            res.send(response);
+        }
+    });
+};
+
+
+exports.sendEmail = function (req, res) {
+
+    var smtpTransport = nodemailer.createTransport(getSmtpOptions());
+
+    var emailTo = req.body.emailTo;
+    var subject = req.body.subject;
+    var content = req.body.content;
+
+
+    var mailOptions = {
+        from: config.EMAIL_FROM,
+        to: emailTo,
+        subject: subject,
+        text: '',
+        html: content
     };
-  } else {
-    mailOptions = {
-      from: config.EMAIL_HOST_UID,
-      to: sentMailInfos.to,
-      subject: sentMailInfos.fullName + ' a partagé ' + sentMailInfos.doc + ' avec vous',
-      text: sentMailInfos.prenom + ' ' + sentMailInfos.content,
-      html: sentMailInfos.prenom + ' ' + sentMailInfos.encoded
-    };
-  }
-
-
-  // send mail with defined transport object
-  smtpTransport.sendMail(mailOptions, function(error, response) {
-    if (error) {
-      throw error;
-    } else {
-      res.send(response);
-    }
-
-    // if you don't want to use this transport object anymore, uncomment following line
-    //smtpTransport.close(); // shut down the connection pool, no more messages
-  });
-};
-exports.passwordRestoreEmail = function(emailTo, subject, content) {
-
-  //configuration du maile
-  var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: config.EMAIL_HOST, // hostname
-    port: config.EMAIL_PORT, // port for secure SMTP,
-    service: config.EMAIL_SERVICE,
-    auth: {
-      user: config.EMAIL_HOST_UID,
-      pass: config.EMAIL_HOST_PWD
-    }
-  });
-
-  var mailOptions = {
-    from: config.EMAIL_HOST_UID,
-    to: emailTo,
-    subject: subject,
-    text: '',
-    html: content
-  };
-  smtpTransport.sendMail(mailOptions, function(error) {
-    if (error) {
-      return false;
-    } else {
-      return true;
-    }
-  });
+    smtpTransport.sendMail(mailOptions, function (error, response) {
+        if (error) {
+            throw error;
+        } else {
+            res.send(response);
+        }
+    });
 };
 
-exports.sendEmail = function(req, res) {
-
-  //configuration du maile
-  var smtpTransport = nodemailer.createTransport('SMTP', {
-    host: config.EMAIL_HOST, // hostname
-    port: config.EMAIL_PORT, // port for secure SMTP,
-    service: config.EMAIL_SERVICE,
-    auth: {
-      user: config.EMAIL_HOST_UID,
-      pass: config.EMAIL_HOST_PWD
-    }
-  });
-
-  var emailTo = req.body.emailTo;
-  var subject = req.body.subject;
-  var content = req.body.content;
-
-
-  var mailOptions = {
-    from: config.EMAIL_HOST_UID,
-    to: emailTo,
-    subject: subject,
-    text: '',
-    html: content
-  };
-  smtpTransport.sendMail(mailOptions, function(error, response) {
-    if (error) {
-      throw error;
-    } else {
-      res.send(response);
-    }
-  });
+exports.clone = function (a) {
+    return JSON.parse(JSON.stringify(a));
 };
 
-exports.clone = function(a) {
-  return JSON.parse(JSON.stringify(a));
+exports.isAdmin = function (email, provider) {
+
+    return (email === config.ADMIN_EMAIL && provider === config.ADMIN_PROVIDER);
 };
 
-exports.getVersion = function(str) {
-  if (str.indexOf('Appversion=') > -1) {
-    var theStart = str.indexOf('Appversion=');
-    var theEnd = str.indexOf("';", theStart) + 1; // jshint ignore:line
-    var extracted = str.substring(theStart, theEnd);
 
-
-    if (extracted.match(/\d+/)) {
-      return {
-        versionExist: true,
-        version: parseInt(extracted.match(/\d+/)[0]),
-        upgradeType: 1
-      };
-    } else {
-      return {
-        versionExist: false
-      };
-    }
-  } else {
-    return {
-      versionExist: false
-    };
-  }
-};

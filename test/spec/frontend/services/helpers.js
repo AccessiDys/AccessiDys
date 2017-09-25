@@ -129,12 +129,12 @@ function() {
 
         $rootScope.testEnv = true;
         $httpBackend.whenGET(configuration.URL_REQUEST + '/profile?id=' + scope.dataRecu.local.token).respond(scope.dataRecu);
-        spyOn($localForage, 'setItem').andCallThrough();
-        spyOn($localForage, 'clear').andCallThrough();
-        spyOn($localForage, 'getItem').andCallThrough();
-        spyOn($localForage, 'removeItem').andCallThrough();
-        spyOn(localStorage, 'clear').andCallThrough();
-        spyOn($modal, 'open').andCallThrough();
+        spyOn($localForage, 'setItem').and.callThrough();
+        spyOn($localForage, 'clear').and.callThrough();
+        spyOn($localForage, 'getItem').and.callThrough();
+        spyOn($localForage, 'removeItem').and.callThrough();
+        spyOn(localStorage, 'clear').and.callThrough();
+        spyOn($modal, 'open').and.callThrough();
 
         localStorage.setItem('compteId', scope.dataRecu.local.token);
     }));

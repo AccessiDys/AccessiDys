@@ -30,7 +30,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var documentSchema = new Schema({
-	titre : { type:String },
+	titre : { type:String } , // the title
 	url : { type:String },
 	image : { type:String },
 	children : [documentSchema]

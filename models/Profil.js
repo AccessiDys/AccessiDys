@@ -26,38 +26,53 @@
 
 var mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
-
-var profilSchema = new Schema({
-	photo: {
-		type: String
-	},
-	nom: {
-		type: String,
-		required: true
-	},
-	descriptif: {
-		type: String,
-		required: true
-	},
-	owner: {
-		type: String,
-		required: false
-	},
-	preDelegated: {
-		type: String,
-		required: false
-	},
-	delegated: {
-		type: Boolean,
-		required: false
-	},
-	updated: { 
-	    type: Date, 
-	    default: Date.now 
-	},
+var profilSchema = mongoose.Schema({
+    nom: {   // the name
+        type: String,
+        required: true
+    },
+    descriptif: {  // the description
+        type: String
+    },
+    owner: {
+        type: String,
+        required: true
+    },
+    preDelegated: {
+        type: String,
+        required: false,
+        default: ''
+    },
+    delegated: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    updated: {
+        type: Date,
+        default: Date.now
+    },
+    isFavourite: {
+        type: Boolean,
+        required: false,
+        default: false
+    },
+    profileTags: [{type: mongoose.Schema.Types.ObjectId, ref: 'ProfilTag'}],
+    vocalSettings: {
+        rate: {
+            type: Number
+        },
+        volume: {
+            type: Number
+        },
+        pitch: {
+            type: Number
+        },
+        voice: {
+            type: String
+        }
+    }
 });
 
 
-
-var Profil = mongoose.model('Profil', profilSchema);
+module.exports = mongoose.model('Profil', profilSchema);

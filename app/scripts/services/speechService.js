@@ -27,81 +27,87 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('speechService', function($window) {
+cnedApp.service('speechService', function ($window, $log, $rootScope) {
     var self = this;
 
     /**
-     * Arrête la lecture.
+     * Stops the speech.
      * @method stopSpeech
      */
-    this.stopSpeech = function() {
+    this.stopSpeech = function () {
         if ($window.speechSynthesis) {
             $window.speechSynthesis.cancel();
         }
     };
 
     /**
-     * Verifie si le navigateur supporte la synthèse vocale et que des voix sont
-     * disponibles.
+     * Checks whether the browser supports vocal synthesis
+     * and that the voices are available.
+     *
      * @method isBrowserSupported
-     * @return true si le navigateur supporte la synthèse vocale et que des voix sont disponibles
+     * @return true if the browser supports the vocal synthesis and that the voice are available ,
+     * false otherwise
      */
-    this.isBrowserSupported = function() {
+    this.isBrowserSupported = function () {
         return $window.SpeechSynthesisUtterance && $window.speechSynthesis.getVoices().length !== 0;
     };
 
-    /** 
-     * Retourne la voix à utiliser.
+    /**
+     * Returns voice to be used
      * @method getVoice
-     * @param connected : mode connecté ou non
-     * @return Si le mode est connecté alors retourne la première voix française trouvée. Sinon retourne la voix native.
-     */
-    this.getVoice = function(connected) {
-        if ($window.speechSynthesis) {
-            var voicesAvailable = $window.speechSynthesis.getVoices();
+     * @param connected : connected mode or not
+     * @return if the mode is connected then returns the first French voice found. Otherwise returns the native voice.
+     * */
+    this.getVoice = function () {
+
+        if (window.speechSynthesis) {
+            var voicesAvailable = window.speechSynthesis.getVoices();
             for (var i = 0; i < voicesAvailable.length; i++) {
-                if (connected) {
-                    if (voicesAvailable[i].lang === 'fr-FR') {
-                        return voicesAvailable[i];
-                    }
-                } else {
-                    if (voicesAvailable[i].name === 'native') {
-                        return voicesAvailable[i];
-                    }
+                if ($rootScope.currentProfile && $rootScope.currentProfile.data
+                    && $rootScope.currentProfile.data.vocalSettings
+                    && voicesAvailable[i].lang.indexOf($rootScope.currentProfile.data.vocalSettings.voice) > -1 ) {
+                    return voicesAvailable[i];
                 }
             }
+
+            for (var i = 0; i < voicesAvailable.length; i++) {
+                if (voicesAvailable[i].lang.indexOf('fr') > -1 ) {
+                    return voicesAvailable[i];
+                }
+            }
+
+            return voicesAvailable[0];
         }
     };
 
     /**
-     * Découpe le texte si sa taille est supérieure à 200 caractères.
-     * 
+     * Split the text if its size is larger than 200 characters.
      * @method splitText
      */
-    this.splitText = function(text) {
+    this.splitText = function (text) {
         if (text.length < 200) {
-            return [ text ];
+            return [text];
         } else {
             return self.splitTextPriority1(text);
         }
     };
 
     /**
-     * Découpe le texte si s'il contient un retour à la ligne, un '.', '!', '?'.
-     * Appelle les autres fonctions de découpe si ce n'est pas suffisant.
-     * 
+     * Split the text if it contains a line break,'.', '!', '?'.
+     * Calls on other split functions if this is not enough.
+     *
      * @method splitTextPriority1
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
-    this.splitTextPriority1 = function(text) {
+    this.splitTextPriority1 = function (text) {
         if (text.length < 200) {
-            return [ text ];
+            return [text];
         } else {
             var textSplitted = text.split(/[\n.!\?]/);
             if (textSplitted.length > 1) {
                 for (var i = 0; i < textSplitted.length; i++) {
                     var textSplittedSplitted = self.splitText(textSplitted[i]);
-                    textSplitted.splice.apply(textSplitted, [ i, 1 ].concat(textSplittedSplitted));
+                    textSplitted.splice.apply(textSplitted, [i, 1].concat(textSplittedSplitted));
                 }
             } else {
                 textSplitted = self.splitTextPriority2(text);
@@ -111,21 +117,21 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si s'il contient un ':', ';'. Appelle les autres
-     * fonctions de découpe si ce n'est pas suffisant.
-     * 
+     * Split the text if it contains a ':', ';'.
+     * Calls on other split functions if this is not enough.
+     *
      * @method splitTextPriority2
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
-    this.splitTextPriority2 = function(text) {
+    this.splitTextPriority2 = function (text) {
         if (text.length < 200) {
-            return [ text ];
+            return [text];
         } else {
             var textSplitted = text.split(/[:;]/);
             if (textSplitted.length > 1) {
                 for (var i = 0; i < textSplitted.length; i++) {
                     var textSplittedSplitted = self.splitText(textSplitted[i]);
-                    textSplitted.splice.apply(textSplitted, [ i, 1 ].concat(textSplittedSplitted));
+                    textSplitted.splice.apply(textSplitted, [i, 1].concat(textSplittedSplitted));
                 }
             } else {
                 textSplitted = self.splitTextPriority3(text);
@@ -135,21 +141,21 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si s'il contient un ',', ')', ']', '}'. Appelle les
-     * autres fonctions de découpe si ce n'est pas suffisant.
-     * 
+     * Split the text if it contains a ',', ')', ']', '}'.
+     * Calls on other split functions if this is not enough.
+     *
      * @method splitTextPriority3
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
-    this.splitTextPriority3 = function(text) {
+    this.splitTextPriority3 = function (text) {
         if (text.length < 200) {
-            return [ text ];
+            return [text];
         } else {
             var textSplitted = text.split(/[,)\]}]/);
             if (textSplitted.length > 1) {
                 for (var i = 0; i < textSplitted.length; i++) {
                     var textSplittedSplitted = self.splitText(textSplitted[i]);
-                    textSplitted.splice.apply(textSplitted, [ i, 1 ].concat(textSplittedSplitted));
+                    textSplitted.splice.apply(textSplitted, [i, 1].concat(textSplittedSplitted));
                 }
             } else {
                 textSplitted = self.splitTextPriority4(text);
@@ -159,21 +165,21 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si s'il contient un '(', '{', '['. Appelle les autres
-     * fonctions de découpe si ce n'est pas suffisant.
+     * Split the text if it contains a '(', '{', '['. 
+     * Calls on other split functions if this is not enough.
      * 
      * @method splitTextPriority4
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
-    this.splitTextPriority4 = function(text) {
+    this.splitTextPriority4 = function (text) {
         if (text.length < 200) {
-            return [ text ];
+            return [text];
         } else {
             var textSplitted = text.split(/[\[\({]/);
             if (textSplitted.length > 1) {
                 for (var i = 0; i < textSplitted.length; i++) {
                     var textSplittedSplitted = self.splitText(textSplitted[i]);
-                    textSplitted.splice.apply(textSplitted, [ i, 1 ].concat(textSplittedSplitted));
+                    textSplitted.splice.apply(textSplitted, [i, 1].concat(textSplittedSplitted));
                 }
             } else {
                 textSplitted = self.splitTextPriority5(text);
@@ -183,48 +189,64 @@ cnedApp.service('speechService', function($window) {
     };
 
     /**
-     * Découpe le texte si s'il contient un ' ' Découpe le texte en bloc de 200
-     * caractères si ce n'est pas suffisant.
-     * 
+     * Split the text if it contains a  ' ' .
+     * Split the text in block of 200 characters if it is not sufficient.
+     *
      * @method splitTextPriority5
-     * @param text le texte à découper
+     * @param text The text to be split.
      */
-    this.splitTextPriority5 = function(text) {
+    this.splitTextPriority5 = function (text) {
         if (text.length < 200) {
-            return [ text ];
+            return [text];
         } else {
             var textSplitted = text.split(/ /);
             if (textSplitted.length > 1) {
                 for (var i = 0; i < textSplitted.length; i++) {
                     var textSplittedSplitted = self.splitText(textSplitted[i]);
-                    textSplitted.splice.apply(textSplitted, [ i, 1 ].concat(textSplittedSplitted));
+                    textSplitted.splice.apply(textSplitted, [i, 1].concat(textSplittedSplitted));
                 }
             } else {
-                textSplitted.splice.apply(textSplitted, [ 0, 1 ].concat(textSplitted[0].match(/.{1,200}/g)));
+                textSplitted.splice.apply(textSplitted, [0, 1].concat(textSplitted[0].match(/.{1,200}/g)));
             }
             return textSplitted;
         }
     };
 
     /**
-     * Lit le texte donné après découpe et avec la voix accessible selon le mode
-     * (connecté/déconnecté)
-     * 
+     * Reads the given text after the split and
+     * with the accessible voice according to the  mode.
+     * (connected/disconnected)
+     *
      * @method speech
      */
-    this.speech = function(text, connected) {
+    this.speech = function (text, connected) {
+        $log.debug('Calling speech function - connected = ' + connected);
+        $log.debug('text', text);
+
         if (text && !/^\s*$/.test(text)) {
-            $window.speechSynthesis.cancel();
+            window.speechSynthesis.cancel();
             var voice = self.getVoice(connected);
             if (voice) {
                 var textArray = self.splitText(text);
+
                 for (var i = 0; i < textArray.length; i++) {
                     if (textArray[i] && !/^\s*$/.test(textArray[i])) {
                         var utterance = new SpeechSynthesisUtterance();
+
+
                         utterance.lang = voice.lang;
-                        utterance.rate = 1;
-                        utterance.pitch = 1;
-                        utterance.volume = 1;
+
+
+                        if ($rootScope.currentProfile && $rootScope.currentProfile.data && $rootScope.currentProfile.data.vocalSettings) {
+                            utterance.rate = $rootScope.currentProfile.data.vocalSettings.rate;
+                            utterance.pitch = $rootScope.currentProfile.data.vocalSettings.pitch;
+                            utterance.volume = $rootScope.currentProfile.data.vocalSettings.volume;
+                        } else {
+                            utterance.rate = 1;
+                            utterance.pitch = 1;
+                            utterance.volume = 1;
+                        }
+
                         utterance.voice = voice;
                         utterance.text = textArray[i];
                         $window.speechSynthesis.speak(utterance);
@@ -234,7 +256,7 @@ cnedApp.service('speechService', function($window) {
         }
     };
 
-    // 1er appel pour initialiser les voix (bug chrome)
+    // 1st call to initialize the voice (chrome bug)
     self.getVoice(true);
 
 });

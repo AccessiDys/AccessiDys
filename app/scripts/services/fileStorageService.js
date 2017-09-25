@@ -26,215 +26,288 @@
 
 var cnedApp = cnedApp;
 
-cnedApp.service('fileStorageService', function ($localForage, configuration, dropbox, $q, synchronisationStoreService,$rootScope) {
+cnedApp.service('fileStorageService', function ($localForage, configuration, $q, $log,
+                                                CacheProvider, DropboxProvider, UserService, $rootScope, md5) {
 
     var self = this;
 
-    /** ************** Gestion des documents (offline/online) ******************* */
+    /** ************** Document management (offline/online) ******************* */
 
     /**
-     * Recherche les fichiers sur dropbox, met à jour le cache si les fichiers
-     * ont été trouvés. Retourne la liste des fichiers depuis le cache
      *
+     * Search files on Dropbox, updates the cache
+     * if the files have been found. Returns a list of files from the cache
      * @param online
-     *            si il y a accès à internet
+     *            if there is internet access
      * @param token
-     *            le token dropbox
-     * @method searchAllFiles
+     *            the dropbox token
+     * @method list
      */
-    this.searchAllFiles = function (online, token) {
-        if(online) {
-            return dropbox.search('.html', token, configuration.DROPBOX_TYPE).then(function(dropboxFiles) {
-                // Mise à jour de la liste des documents dans le cache
-                return self.updateFileListInStorage(dropboxFiles).then($localForage.getItem('listDocument'));
+    this.list = function (type) {
+        $log.debug('fileStorageService - list ', UserService.getData());
+        var query = '';
+        var storageName = '';
+
+        if (type === 'document') {
+            query = '.html';
+            storageName = 'listDocument';
+        } else if (type === 'profile') {
+            query = '-profile.json';
+            storageName = 'listProfile';
+        }
+
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+            return DropboxProvider.search(query, UserService.getData().token).then(function (files) {
+                return CacheProvider.saveAll(files, storageName);
+            }, function () {
+                return CacheProvider.list(storageName);
             });
         } else {
-            return $localForage.getItem('listDocument');
+            // Resolve Cache
+            return CacheProvider.list(storageName);
         }
     };
 
     /**
-     * Recherche des fichiers dans le dropbox ou dans le cache si dropbox n'est
-     * pas accessible
+     * Search files in Dropbox or in the cache if dropbox is not accessible
      *
      * @param online
-     *            si il y a accès à internet
+     *           if there is internet access
      * @param query
-     *            la requete de recherche
+     *            the search query
      * @param token
-     *            le token dropbox
-     * @method searchFiles
+     *            the dropbox token
+     * @method get
      */
-    this.searchFiles = function (online, query, token) {
-        if(online) {
-            return self.searchFilesInDropbox('_'+query+'_', token).then(function (data) {
-                return self.transformDropboxFilesToStorageFiles(data);
-            });
-        } else {
-            return self.searchFilesInStorage(query);
+    this.get = function (filename, type) {
+
+        var storageName = '';
+
+        if (type === 'document') {
+            storageName = 'listDocument';
+        } else if (type === 'profile') {
+            storageName = 'listProfile';
         }
 
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+
+
+            return DropboxProvider.search('_' + filename + '_', UserService.getData().token).then(function (files) {
+
+
+                if (files && files.length > 0) {
+                    for (var i = 0; i < files.length; i++) {
+                        if (files[i].filename === filename) {
+                            return DropboxProvider.download(files[i].filepath, UserService.getData().token).then(function (fileContent) {
+                                files[i].data = fileContent;
+
+                                return CacheProvider.save(files[i], storageName);
+                            });
+                        }
+                    }
+                } else {
+                    return CacheProvider.get(filename, storageName);
+                }
+
+            }, function () {
+                return CacheProvider.get(filename, storageName);
+            });
+
+        } else {
+            return CacheProvider.get(filename, storageName);
+        }
     };
 
     /**
-     * Recupere le contenu du fichier en local
-     * @param filename le fichier
-     */
-
-    this.searchFileContentInStorage = function(filename){
-        return self.searchFilesInStorage(filename).then(function(files) {
-            return self.getFileInStorage(files[0].filepath);
-        });
-    };
-
-    /**
-     * Recupere le contenu du fichier sur dropbox si possible. sinon le recupere
-     * dans le cache
+     * Search files in Dropbox or in the cache if dropbox is not accessible
      *
      * @param online
-     *            si il y a accès à internet
-     * @param filename
-     *            le fichier
-     * @param le
-     *            token dropbox
-     * @method getFile
+     *           if there is internet access
+     * @param query
+     *            the search query
+     * @param token
+     *            the dropbox token
+     * @method get
      */
-    this.getFile = function (online, filename, token) {
-        if(online) {
-            return self.searchFilesInDropbox('_' + filename + '_', token).then(function (files) {
-                return self.getDropboxFileContent(files[0].path, token).then(function(filecontent) {
-                    var storageFile = self.transformDropboxFileToStorageFile(files[0]);
-                    return self.saveFileInStorage(storageFile, filecontent, false).then(function() {
-                        return self.getFileInStorage(storageFile.filepath);
-                    });
-                }, function(){
-                    return self.searchFileContentInStorage(filename);
+    this.getData = function (file, type) {
+
+        var storageName = '';
+
+        if (type === 'document') {
+            storageName = 'listDocument';
+        } else if (type === 'profile') {
+            storageName = 'listProfile';
+        }
+
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+
+            return DropboxProvider.download(file.filepath, UserService.getData().token).then(function (fileContent) {
+                file.data = fileContent;
+
+                return CacheProvider.save(file, storageName).then(function (fileSaved) {
+                    return fileSaved;
                 });
-            }, function(){
-                return self.searchFileContentInStorage(filename);
+            }, function () {
+                return CacheProvider.get(file.filename, storageName).then(function (fileFound) {
+                    return fileFound;
+                });
             });
+
         } else {
-            return self.searchFileContentInStorage(filename);
+            return CacheProvider.get(file.filename, storageName).then(function (fileFound) {
+                return fileFound;
+            });
         }
     };
 
+    this.save = function (file, type) {
+
+        var storageName = '';
+        var extension = '';
+
+        if (type === 'document') {
+            storageName = 'listDocument';
+            extension = '.html';
+        } else if (type === 'profile') {
+            storageName = 'listProfile';
+            extension = '-profile.json';
+        }
+
+        if (!file.filepath) {
+            file.filepath = this.generateFilepath(file.filename, extension);
+        }
+
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+
+            return DropboxProvider.upload(file.filepath, file.data, UserService.getData().token).then(function (_file) {
+                _file.data = file.data;
+                return CacheProvider.save(_file, storageName);
+            }, function () {
+                self.addFileToSynchronize(file, type, 'save');
+                return CacheProvider.save(file, storageName);
+            });
+
+        } else {
+            self.addFileToSynchronize(file, type, 'save');
+            return CacheProvider.save(file, storageName);
+        }
+    };
+
+
     /**
-     * Renomme le du fichier sur dropbox si possible et dans le cache
-     *
+     * Renames the file on Dropbox and if possible in the cache.
      * @param online
-     *            si il y a accès à internet
+     *            if there is internet access
      * @param oldFilename
-     *            l'ancien nom du fichier
+     *            the old file name.
      * @param newFilename
-     *            le nouveau nom du fichier
+     *            the new file name.
      * @param le
-     *            token dropbox
+     *           the dropbox token
      * @method renameFile
      */
-    this.renameFile = function (online, oldFilename, newFilename, token, noPopup) {
-        var filenameStartIndex = oldFilename.indexOf('_') + 1;
-        var filenameEndIndex = oldFilename.lastIndexOf('_');
-        var shortFilename = oldFilename.substring(filenameStartIndex, filenameEndIndex);
+    this.rename = function (file, newName, type) {
+        var storageName = '';
+        var extension = '';
 
-        if(online) {
-            return dropbox.rename(oldFilename, newFilename, token, configuration.DROPBOX_TYPE, noPopup).then(function () {
-                return self.getFileInStorage(oldFilename).then(function (filecontent) {
-                    var file= {};
-                    file.filename = shortFilename;
-                    file.filepath = newFilename;
-                    return self.saveFileInStorage(file, filecontent).then(function () {
-                        return self.deleteFileInStorage(oldFilename);
+        if (type === 'document') {
+            storageName = 'listDocument';
+            extension = '.html';
+        } else if (type === 'profile') {
+            storageName = 'listProfile';
+            extension = '-profile.json';
+        }
+
+        var newFilePath = this.generateFilepath(newName, extension);
+
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+            if (UserService.getData().provider === 'dropbox') {
+                return DropboxProvider.rename(file.filepath, newFilePath, UserService.getData().token).then(function (data) {
+                    return CacheProvider.delete(file, storageName).then(function () {
+                        return CacheProvider.save(data, storageName);
+                    });
+                }, function () {
+                    self.addFileToSynchronize(file, type, 'delete');
+                    return CacheProvider.delete(file, storageName).then(function () {
+                        file.filename = newName;
+                        file.filepath = newFilePath;
+                        self.addFileToSynchronize(file, type, 'save');
+                        return CacheProvider.save(file, storageName);
                     });
                 });
-            });
+            }
         } else {
-            var d= Date.parse(new Date());
-            var docToSynchronize= {owner: $rootScope.currentUser.local.email , docName: newFilename,filename: shortFilename, newDocName: newFilename, oldDocName: oldFilename,action : 'rename',dateModification: d};
-            synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
-            return self.renameFileInStorage(oldFilename, newFilename);
+            self.addFileToSynchronize(file, type, 'delete');
+
+            $log.debug('Rename - addFileToSynchronize', file);
+
+            return CacheProvider.delete(file, storageName).then(function () {
+                file.filename = newName;
+                file.filepath = newFilePath;
+
+                $log.debug('Rename - addFileToSynchronize', file);
+                self.addFileToSynchronize(file, type, 'save');
+                return CacheProvider.save(file, storageName);
+            });
         }
     };
 
     /**
-     * Supprime le fichier sur dropbox et dans le cache
+     * Delete the file on Dropbox and if possible in the cache.
      *
      * @param online
-     *            si il y a accès à internet
+     *            if there is internet access
      * @param filename
-     *            le nom du fichier
+     *            the name of the file
      * @param le
-     *            token dropbox
+     *           the dropbox token
      * @method deleteFile
      */
-    this.deleteFile = function (online, filename, token, noPopup) {
-        if(online) {
-            return dropbox.delete(filename, token, configuration.DROPBOX_TYPE, noPopup).then(function () {
-                return self.deleteFileInStorage(filename);
+    this.delete = function (file, type) {
+
+        var storageName = '';
+
+        if (type === 'document') {
+            storageName = 'listDocument';
+        } else if (type === 'profile') {
+            storageName = 'listProfile';
+        }
+
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+            return DropboxProvider.delete(file.filepath, UserService.getData().token).then(function () {
+                return CacheProvider.delete(file, storageName);
+            }, function () {
+                self.addFileToSynchronize(file, type, 'delete');
+                return CacheProvider.delete(file, storageName);
             });
         } else {
-            var docToSynchronize= {owner: $rootScope.currentUser.local.email ,docName: filename,action : 'delete', content: null};
-            synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
-            return self.deleteFileInStorage(filename);
+            self.addFileToSynchronize(file, type, 'delete');
+            return CacheProvider.delete(file, storageName);
         }
 
     };
 
     /**
-     * Sauvegarde le contenu du fichier sur dropbox et dans le cache
+     * Share the file on dropbox and returns the sharing URL.
      *
-     * @param online
-     *            si il y a accès à internet
-     * @param filename
-     *            le nom du fichier
-     * @param filecontent
-     *            le contenu du fichier
-     * @param le
-     *            token dropbox
-     * @method saveFile
+     * @method shareFile
      */
-    this.saveFile = function (online, filename, filecontent, token, noPopup) {
-        if(online) {
-            return dropbox.upload(filename, filecontent, token, configuration.DROPBOX_TYPE, noPopup).then(function (dropboxFile) {
-                var storageFile = self.transformDropboxFileToStorageFile(dropboxFile);
-                return self.saveFileInStorage(storageFile, filecontent).then(function () {
-                    return storageFile;
-                });
-            });
+    this.shareFile = function (filepath) {
+        if (UserService.getData() && UserService.getData().token) {
+            return DropboxProvider.shareLink(filepath, UserService.getData().token);
         } else {
-            var filepath = filename;
-            var filenameStartIndex = filepath.indexOf('_') + 1;
-            var filenameEndIndex = filepath.lastIndexOf('_');
-            var shortFilename = filepath.substring(filenameStartIndex, filenameEndIndex);
-            var storageFile = {
-                    filepath: filepath,
-                    filename: shortFilename,
-                    dateModification: new Date()
-            };
-            var d= Date.parse(new Date());
-            var docToSynchronize= {owner: $rootScope.currentUser.local.email ,docName: filename,action : 'update', content: filecontent,dateModification: d, creation: true};
-            // déterminer s'il s'agit d'une création ou d'une modification d'un fichier existant sur le serveur
-            return self.searchFilesInStorage().then(function(filesFound){
-                if(filesFound && filesFound.length > 0){
-                    docToSynchronize.creation = false;
-                }
-                synchronisationStoreService.storeDocumentToSynchronize(docToSynchronize);
-                // create doc to synchronize
-                return self.saveFileInStorage(storageFile, filecontent).then(function () {
-                      return storageFile;
-                 });
-            });
-
+            return null;
         }
     };
 
 
-    /** **************************** Gestion storage ******************** */
+    /** **************************** storage Management ******************** */
 
     /**
-     * Sauvegarde le contenu du fichier pour l'impression
+     * Save the contents of the file for printing.
      *
      * @param filecontent
-     *            le contenu du fichier
+     *            The content fo the file
      * @return a promise
      * @method saveTempFileForPrint
      */
@@ -244,17 +317,16 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
 
 
     /**
-     * Retourne le document à imprimer.
+     * Return the document to be printed.
      */
     this.getTempFileForPrint = function () {
         return $localForage.getItem('printTemp');
     };
 
     /**
-     * Sauvegarde le contenu du fichier temporaire
-     *
+     * Save the contents of the temporary file.
      * @param filecontent
-     *            le contenu du fichier
+     *             The content fo the file
      * @method saveTempFile
      */
     this.saveTempFile = function (filecontent) {
@@ -262,7 +334,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
     };
 
     /**
-     * Recupere le contenu du fichier temporaire
+     * Retrieve the contents of the temporary file
      *
      * @method getTempFile
      */
@@ -270,250 +342,115 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, dro
         return $localForage.getItem('docTemp');
     };
 
-    /**
-     * Recherche des fichiers dans le cache
-     *
-     * @param query
-     *            la requete de recherche
-     * @method searchFilesInStorage
-     */
-    this.searchFilesInStorage = function (query) {
-        return $localForage.getItem('listDocument').then(function (files) {
-            var filesFound = [];
-            for (var i = 0; i < files.length; i++) {
-                var filename = files[i].filename;
-                if (filename === query) {
-                    filesFound.push(files[i]);
+    this.generateFilepath = function (fileName, extension) {
+        var now = new Date();
+        var tmpDate = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+        var hash = md5.createHash(fileName);
+
+        return '/' + tmpDate + '_' + encodeURIComponent(fileName) + '_' + hash + extension;
+    };
+
+    this.addFileToSynchronize = function (file, type, action) {
+
+        var storageName = '';
+
+        if (type === 'document') {
+            storageName = 'documentsToSynchronize';
+        } else if (type === 'profile') {
+            storageName = 'profilesToSynchronize';
+        }
+
+        CacheProvider.getItem(storageName).then(function (items) {
+            if (!items) {
+                items = [];
+            }
+
+            var isFound = false;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].file.filename == file.filename) {
+                    isFound = true;
+
+                    if (items[i].action === 'save' && action === 'delete') {
+                        items.splice(i, 1);
+                    } else {
+                        items[i] = {
+                            action: action,
+                            file: file
+                        };
+                    }
+
+                    break;
                 }
             }
-            return filesFound;
-        });
-    };
 
-    /**
-     * Mets à jour la liste des fichiers dans le cache
-     *
-     * @param dropboxfiles
-     *            la liste des fichiers
-     * @method updateFileListInStorage
-     */
-    this.updateFileListInStorage = function (dropboxfiles) {
-        var filesList = self.transformDropboxFilesToStorageFiles(dropboxfiles);
-        return $localForage.setItem('listDocument', filesList);
-    };
-
-    /**
-     * Sauvegarde le contenu du fichier dans le cache
-     *
-     * @param file
-     *            le fichier
-     * @method saveFileInStorage
-     */
-    this.saveFileInStorage = function (file, fileContent) {
-        // TODO update listDocument
-        return $localForage.setItem('document.' + decodeURIComponent(file.filepath), fileContent).then(function() {
-            return self.saveOrUpdateInListDocument(file);
-        });
-    };
-
-    /**
-     * Supprime un fichier du cache
-     *
-     * @param filepath
-     *            le nom du fichier
-     * @method deleteFileInStorage
-     */
-    this.deleteFileInStorage = function (filepath) {
-        return $localForage.removeItem('document.' + filepath).then(function() {
-            // maj de la liste des documents
-            return self.deleteFromListDocument(filepath);
-        });
-    };
-
-    /**
-     * Renomme un fichier dans le cache
-     *
-     * @param filename
-     *            le nom du fichier
-     * @method deleteFileInStorage
-     */
-    this.renameFileInStorage = function (oldFilename, newFilename) {
-        return self.getFileInStorage(oldFilename).then(function (filecontent) {
-            return self.searchFilesInStorage(oldFilename).then(function(file) {
-                file[0].filepath = newFilename;
-                return self.saveFileInStorage(file[0], filecontent).then(function () {
-                    return self.deleteFileInStorage(oldFilename);
+            if (!isFound) {
+                items.push({
+                    action: action,
+                    file: file
                 });
+            }
+
+            $log.debug('File to synchronize', items);
+            CacheProvider.setItem(items, storageName);
+        });
+    };
+
+    /**
+     * Synchronize files in cache
+     */
+    this.synchronizeFiles = function () {
+        var deferred = $q.defer();
+
+        CacheProvider.getItem('documentsToSynchronize').then(function (documents) {
+
+            CacheProvider.getItem('profilesToSynchronize').then(function (profiles) {
+
+                var toSend = [];
+
+                // Synchronize doc
+                if (documents) {
+                    for (var i = 0; i < documents.length; i++) {
+                        if (documents[i].action === 'save') {
+                            toSend.push(self.save(documents[i].file, 'document'));
+                        } else if (documents[i].action === 'delete') {
+                            toSend.push(self.delete(documents[i].file, 'document'));
+                        }
+                    }
+                }
+
+                // Synchronize profiles
+                if (profiles) {
+
+                    for (var i = 0; i < profiles.length; i++) {
+                        profiles[i].file.data.owner = UserService.getData().email;
+                        if (profiles[i].action === 'save') {
+                            toSend.push(self.save(profiles[i].file, 'profile'));
+                        } else if (profiles[i].action === 'delete') {
+                            toSend.push(self.delete(profiles[i].file, 'profile'));
+                        }
+                    }
+                }
+
+                if (toSend.length > 0) {
+                    $q.all(toSend).then(function (res) {
+                        $log.debug('res from documentsToSynchronize', res);
+                        CacheProvider.setItem(null, 'documentsToSynchronize');
+                        CacheProvider.setItem(null, 'profilesToSynchronize');
+
+                        deferred.resolve({
+                            documentCount: documents ? documents.length : 0,
+                            profilesCount: profiles ? profiles.length : 0
+                        });
+                    });
+                } else {
+                    deferred.resolve();
+                }
+
             });
         });
+
+
+        return deferred.promise;
     };
 
-    /**
-     * Recupere le contenu du fichier dans le cache
-     *
-     * @param filename
-     *            le nom du fichier
-     * @method getFileInStorage
-     */
-    this.getFileInStorage = function (filename) {
-        return $localForage.getItem('document.' + filename);
-    };
-
-    /**
-     * Sauvegarde l'objet dans le cache
-     *
-     * @param cssUrl
-     *            l'objet URL
-     * @method saveCSSInStorage
-     */
-    this.saveCSSInStorage = function (cssURL, id) {
-        return $localForage.setItem('cssURL.' + id, cssURL);
-    };
-
-    /**
-     * Récupère l'url du cache du css pour le profil donné
-     *
-     * @param id
-     *            l'id du profil
-     * @method getCSSInStorage
-     */
-    this.getCSSInStorage = function (id) {
-        return $localForage.getItem('cssURL.' + id);
-    };
-
-    /**
-     * Met à jour un document dans la liste des documents.
-     *
-     * @parma document le document
-     */
-    this.saveOrUpdateInListDocument = function(document) {
-        return $localForage.getItem('listDocument').then(function(listDocument) {
-            var indexOfExistingFile = -1;
-            for(var i = 0; i < listDocument.length; i++) {
-                var doc = listDocument[i];
-                if(doc.filename === document.filename) {
-                    indexOfExistingFile = i;
-                    break;
-                }
-            }
-
-            var filenameStartIndex = document.filepath.indexOf('_') + 1;
-            var filenameEndIndex = document.filepath.lastIndexOf('_');
-            var shortFilename = document.filepath.substring(filenameStartIndex, filenameEndIndex);
-            document.filename = decodeURIComponent(shortFilename);
-            document.filepath = decodeURIComponent(document.filepath);
-            if(indexOfExistingFile !== -1) {
-                // update document if exists
-                listDocument[i] = document;
-            } else {
-                // else add document
-                listDocument.push(document);
-            }
-            return $localForage.setItem('listDocument', listDocument);
-        });
-    };
-
-    /**
-     * Supprime un document de la liste des documents.
-     *
-     * @parma documentName le nom du document
-     */
-    this.deleteFromListDocument = function(documentName) {
-        return $localForage.getItem('listDocument').then(function(listDocument) {
-            var indexOfExistingFile = -1;
-            for(var i = 0; i < listDocument.length; i++) {
-                var doc = listDocument[i];
-                if(doc.filepath === documentName) {
-                    indexOfExistingFile = i;
-                    break;
-                }
-            }
-            if(indexOfExistingFile !== -1) {
-                // delete document if exists
-                listDocument.splice(indexOfExistingFile, 1);
-            }
-            return $localForage.setItem('listDocument', listDocument);
-        });
-    };
-
-
-    /** **************************** Gestion dropbox ******************** */
-
-    /**
-     * Partage le fichier sur dropbox et retourne l'url du partage
-     *
-     * @method shareFile
-     */
-    this.shareFile = function (filename, token) {
-        return dropbox.shareLink(filename, token, configuration.DROPBOX_TYPE).then(function (result) {
-            return result.url;
-        });
-    };
-
-    /**
-     * Recherche des fichiers correspondants à la requete sur dropbox La requête
-     * de recherche
-     *
-     * @param token
-     *            le token dropbox
-     * @method searchFilesInDropbox
-     */
-    this.searchFilesInDropbox = function (query, token) {
-        return dropbox.search(query, token, configuration.DROPBOX_TYPE);
-    };
-
-    /**
-     * Recupere le contenu du fichier dans dropbox
-     *
-     * @param filepath
-     *            le nom complet du fichier
-     * @param le
-     *            token dropbox
-     * @method getDropboxFileContent
-     */
-    this.getDropboxFileContent = function (filepath, token) {
-        return dropbox.download(filepath, token, configuration.DROPBOX_TYPE);
-    };
-
-    /**
-     * Converti le format des fichiers dropbox en format de fichier interne
-     *
-     * @param dropboxFiles
-     *            les fichiers dropbox
-     * @method transformDropboxFilesToStorageFiles
-     */
-    this.transformDropboxFilesToStorageFiles = function (dropboxFiles) {
-        var files = [];
-        for (var i = 0; i < dropboxFiles.length; i++) {
-            var file = self.transformDropboxFileToStorageFile(dropboxFiles[i]);
-            if (file !== null) {
-                files.push(file);
-            }
-        }
-        return files;
-    };
-
-    /**
-     * Converti le format du fichier dropbox en format de fichier interne
-     *
-     * @param dropboxFiles
-     *            les fichiers dropbox
-     * @method transformDropboxFileToStorageFile
-     */
-    this.transformDropboxFileToStorageFile = function (dropboxFile) {
-        var filepath = dropboxFile.path;
-        var filenameStartIndex = filepath.indexOf('_') + 1;
-        var filenameEndIndex = filepath.lastIndexOf('_');
-        var filename = filepath.substring(filenameStartIndex, filenameEndIndex);
-        var dateModification = Date.parse(dropboxFile.modified);
-        var file = null;
-
-        file = {
-                filepath: filepath,
-                filename: filename,
-                dateModification: dateModification
-        };
-
-        return file;
-    };
 });

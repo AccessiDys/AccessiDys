@@ -25,128 +25,83 @@
 'use strict';
 
 describe(
-        'Service: workspaceService',
-        function() {
-            beforeEach(module('cnedApp'));
+    'Service: workspaceService',
+    function () {
+        beforeEach(module('cnedApp'));
 
-            beforeEach(inject(function() {
+        beforeEach(inject(function () {}));
+
+        it('workspaceService:splitPages', inject(function (workspaceService) {
+            var htmlToSplit = '<h1>test</h1><div aria-label="Saut de page" class="cke_pagebreak" contenteditable="false" data-cke-display-name="pagebreak" data-cke-pagebreak="1" style="page-break-after: always" title="Saut de page"></div><h2>test</h2>';
+            var result = workspaceService.splitPages(htmlToSplit);
+            expect(result.length).toBe(1);
+        }));
+
+        it('workspaceService:cleanString', inject(function (workspaceService) {
+            var textToClean = 'ABC def';
+            var result = workspaceService.cleanString(textToClean);
+            expect(result).toEqual('abcdef');
+        }));
+
+        it('workspaceService:cleanAccent', inject(function (workspaceService) {
+            var textToClean = 'é';
+            var result = workspaceService.cleanAccent(textToClean);
+            expect(result).toEqual('e');
+        }));
+
+        it('workspaceService:saveTempNotesForPrint ', inject(function (workspaceService) {
+            var notes = {
+                id: '1'
+            };
+            workspaceService.saveTempNotesForPrint(notes);
+            var result = localStorage.getItem('tempNotes');
+            expect(result).toEqual(angular.toJson({
+                'id': '1'
             }));
+        }));
 
-            it('workspaceService:splitPages', inject(function(workspaceService) {
-                var htmlToSplit = '<h1>test</h1><div style="page-break-after: always"><span style="display: none;">&nbsp;</span></div><h2>test</h2>';
-                var result = workspaceService.splitPages(htmlToSplit);
-                expect(result.length).toBe(2);
-                expect(result[0]).toEqual('<h1>test</h1>');
-                expect(result[1]).toEqual('<h2>test</h2>');
-            }));
+        it('workspaceService:getTempNotesForPrint ', inject(function (workspaceService) {
+            var notes = {
+                id: '1'
+            };
+            localStorage.setItem('tempNotes', '{"id":"1"}');
+            var notesForPrint = workspaceService.getTempNotesForPrint();
+            expect(notesForPrint).toEqual(notes);
 
-            it('workspaceService:cleanString', inject(function(workspaceService) {
-                var textToClean = 'ABC def';
-                var result = workspaceService.cleanString(textToClean);
-                expect(result).toEqual('abcdef');
-            }));
+            localStorage.removeItem('tempNotes');
+            notesForPrint = workspaceService.getTempNotesForPrint();
+            expect(notesForPrint.length).toBe(0);
+        }));
 
-            it('workspaceService:cleanAccent', inject(function(workspaceService) {
-                var textToClean = 'é';
-                var result = workspaceService.cleanAccent(textToClean);
-                expect(result).toEqual('e');
-            }));
+        it('workspaceService:restoreNotesStorage ', inject(function (workspaceService) {
+            var notesDoc = {
+                'idNote': '1401965900625976',
+                'idInPage': 1,
+                'idDoc': '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
+                'idPage': 1,
+                'texte': 'Note 1',
+                'x': 750,
+                'y': 194,
+                'xLink': 382,
+                'yLink': 194,
+                'styleNote': '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
+            };
+            var notes = {
+                '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232': [notesDoc]
+            };
 
-            it('workspaceService:saveTempNotesForPrint ', inject(function(workspaceService) {
-                var notes = {
-                    id : '1'
-                };
-                workspaceService.saveTempNotesForPrint(notes);
-                var result = localStorage.getItem('tempNotes');
-                expect(result).toEqual(angular.toJson({
-                    'id' : '1'
-                }));
-            }));
+            localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
+            var notesStorage = workspaceService.restoreNotesStorage('3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232');
+            expect(notesStorage.length).toBe(1);
+            expect(notesStorage[0]).toEqual(notesDoc);
 
-            it('workspaceService:getTempNotesForPrint ', inject(function(workspaceService) {
-                var notes = {
-                    id : '1'
-                };
-                localStorage.setItem('tempNotes', '{"id":"1"}');
-                var notesForPrint = workspaceService.getTempNotesForPrint();
-                expect(notesForPrint).toEqual(notes);
+            notesStorage = workspaceService.restoreNotesStorage('fauxDocument');
+            expect(notesStorage.length).toBe(0);
 
-                localStorage.removeItem('tempNotes');
-                notesForPrint = workspaceService.getTempNotesForPrint();
-                expect(notesForPrint.length).toBe(0);
-            }));
+            localStorage.removeItem('notes');
+            notesStorage = workspaceService.restoreNotesStorage('pasDeNotes');
+            expect(notesStorage.length).toBe(0);
+        }));
 
-            it('workspaceService:restoreNotesStorage ', inject(function(workspaceService) {
-                var notesDoc = {
-                    'idNote' : '1401965900625976',
-                    'idInPage' : 1,
-                    'idDoc' : '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232',
-                    'idPage' : 1,
-                    'texte' : 'Note 1',
-                    'x' : 750,
-                    'y' : 194,
-                    'xLink' : 382,
-                    'yLink' : 194,
-                    'styleNote' : '<p data-font=\'opendyslexicregular\' data-size=\'14\' data-lineheight=\'18\' data-weight=\'Normal\' data-coloration=\'Surligner les lignes\' > Note 1 </p>'
-                };
-                var notes = {
-                    '3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232' : [ notesDoc ]
-                };
 
-                localStorage.setItem('notes', JSON.stringify(angular.toJson(notes)));
-                var notesStorage = workspaceService.restoreNotesStorage('3330b762b5a39aa67b75fc4cc666819c1aab71e2f7de1227b17df8dd73f95232');
-                expect(notesStorage.length).toBe(1);
-                expect(notesStorage[0]).toEqual(notesDoc);
-
-                notesStorage = workspaceService.restoreNotesStorage('fauxDocument');
-                expect(notesStorage.length).toBe(0);
-
-                localStorage.removeItem('notes');
-                notesStorage = workspaceService.restoreNotesStorage('pasDeNotes');
-                expect(notesStorage.length).toBe(0);
-            }));
-
-            it(
-                    'workspaceService:parcourirHtml ',
-                    inject(function(workspaceService, configuration) {
-                        var data = '<h1><p>test</p><a href="/test">premier lien</a><a href="http://wikipedia.org/test">second lien</a><img src="/img.jpg"/><img src="http://wikipedia.org/img2.jpg"/><a href="#1">hash1</a><a href="' + configuration.URL_REQUEST + '">lien3</a><img src="' + configuration.URL_REQUEST + '/img3"/></h1>';
-                        var tag = {
-                            balise : 'h1',
-                            niveau : 1
-                        };
-                        localStorage.setItem('listTags', JSON.stringify([ tag ]));
-                        var result = workspaceService.parcourirHtml(data, 'localhost', '443');
-                        expect(result[0]).toEqual('<h1>Sommaire</h1><br /><p style="margin-left:0px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,1,0)">page 1: testpremier liensecond lienhash1lien3</p>');
-                        expect(result[1]).toEqual('<h1 id="0"><p>test</p><a href="' + configuration.URL_REQUEST + '/#/apercu?url=http:%2F%2Flocalhost:9080%2Ftest">premier lien</a><a href="' + configuration.URL_REQUEST + '/#/apercu?url=http:%2F%2Fwikipedia.org%2Ftest">second lien</a><img src="/img.jpg"><img src="http://wikipedia.org/img2.jpg">hash1<a href="' + configuration.URL_REQUEST + '/#/apercu?url=http:%2F%2Flocalhost%2F">lien3</a><img src="https://localhost/img3"></h1>');
-
-                        data = '<h1>titre1</h1><h2>titre2</h2><h3>titre3</h3><h4>titre4</h4><h5>titre5</h5><h6>titre6</h6><p>paragraphe</p>';
-                        var tags = [ {
-                            balise : 'h1',
-                            niveau : 0
-                        }, {
-                            balise : 'h2',
-                            niveau : 1
-                        }, {
-                            balise : 'h3',
-                            niveau : 2
-                        }, {
-                            balise : 'h4',
-                            niveau : 3
-                        }, {
-                            balise : 'h5',
-                            niveau : 4
-                        }, {
-                            balise : 'h6',
-                            niveau : 5
-                        }, {
-                            balise : 'p',
-                            niveau : 5
-                        } ];
-                        localStorage.setItem('listTags', JSON.stringify(tags));
-                        result = workspaceService.parcourirHtml(data, 'localhost', '443');
-                        expect(result[0])
-                                .toEqual(
-                                        '<h1>Sommaire</h1><br /><p style="margin-left:180px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,1,0)">page 1: titre1</p><p style="margin-left:0px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,1,1)">page 1: titre2</p><p style="margin-left:30px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,1,2)">page 1: titre3</p><p style="margin-left:60px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,1,3)">page 1: titre4</p><p style="margin-left:90px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,1,4)">page 1: titre5</p><p style="margin-left:120px; text-decoration: underline; text-overflow:ellipsis; overflow:hidden; cursor: pointer;" ng-click="setActive($event,1,5)">page 1: titre6</p>');
-                        expect(result[1]).toEqual('<h1 id="0">titre1</h1><h2 id="1">titre2</h2><h3 id="2">titre3</h3><h4 id="3">titre4</h4><h5 id="4">titre5</h5><h6 id="5">titre6</h6><p id="6">paragraphe</p>');
-                    }));
-        });
+    });

@@ -25,7 +25,7 @@
 
 'use strict';
 
-/*jshint unused: true */
+/*jshint  unused: true */
 /*exported utils, DocStructure */
 
 var utils = require('./utils'),

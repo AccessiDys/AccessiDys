@@ -1,0 +1,122 @@
+<!-- 
+ File: vocal-synthesis-settings.modal.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<div class="modal-header">
+    <button type="button" class="close" aria-hidden="true" title="Fermer"
+            data-ng-click="dismissModal()">&times;</button>
+
+    <h3 class="modal-title" id="renameProfilModalLabel">Paramètres de la synthèse vocale</h3>
+</div>
+
+<div class="alert-block alert-danger alert-dismissable" id="vocal-profile-error-toaster">
+    <i class="fa fa-times" aria-hidden="true"></i>
+
+    <strong profile-coloration
+            profile="currentProfile"
+            text="toasterMsg"
+            class="{{currentProfile.data.className}}">
+    </strong>
+</div>
+
+<div id="vocal-synthesis-sttings-modal" class="modal-body adjust-modal-body">
+    <div class="row-fluid">
+        <p class="controls_zone pull-left">
+            <label for="volume">
+                <span>Volume (0 - 1)</span>
+                <span class="required"> *</span>
+            </label>
+            <input type="number"
+                   data-ng-model="profile.data.vocalSettings.volume"
+                   required
+                   id="volume"
+                   name="volume"
+                   ng-change="onChangeVolume()"/>
+
+        </p>
+        <p class="controls_zone pull-left">
+            <label for="rate">
+                <span>Vitesse (0.1 - 10)</span>
+                <span class="required"> *</span>
+            </label>
+            <input type="number"
+                   data-ng-model="profile.data.vocalSettings.rate"
+                   step="0.1"
+                   required
+                   id="rate"
+                   name="rate"
+                   ng-change="onChangeRate()"/>
+
+        </p>
+
+        <p class="controls_zone pull-left">
+            <label for="pitch">
+                <span>Hauteur de la voix (0 - 2)</span>
+                <span class="required"> *</span>
+            </label>
+            <input type="number"
+                   data-ng-model="profile.data.vocalSettings.pitch"
+                   required
+                   id="pitch"
+                   name="pitch"
+                   ng-change="onChangePitch()"/>
+
+        </p>
+
+        <p class="controls_zone pull-left">
+            <label for="voice">
+                <span>Langue</span>
+                <span class="required"> *</span>
+            </label>
+
+            <span class="select-wrapper">
+                <select id="voice"
+                        sselect
+                        data-ng-model="profile.data.vocalSettings.voice"
+                        required name="voice">
+                    <option data-ng-repeat="lang in langs"
+                            data-ng-selected="(lang.value == profile.data.vocalSettings.voice.value)"
+                            value="{{lang.value}}"
+                            sselect-hover>
+                        {{lang.label}}
+                    </option>
+                </select>
+            </span>
+        </p>
+    </div>
+
+</div>
+
+<div class="modal-footer text-center">
+    <button type="button" class="reset_btn data-ng-scope"
+            data-ng-click="dismissModal()"
+            title="Annuler">Annuler
+    </button>
+    <button type="button" class="btn_simple light_blue data-ng-scope"
+            title="Enregistrer"
+            data-ng-click="closeModal()">Ok
+    </button>
+</div>
+
+
+

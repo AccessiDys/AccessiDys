@@ -24,11 +24,11 @@
  */
 'use strict';
 
-angular.module('cnedApp').controller('SynchronisationModalCtrl', function($scope, $modalInstance, docsSynchronized, profilsSynchronized) {
+angular.module('cnedApp').controller('SynchronisationModalCtrl', function($scope, $uibModalInstance, docsSynchronized, profilsSynchronized) {
     $scope.docsSynchronized = docsSynchronized;
     $scope.profilsSynchronized = profilsSynchronized;
     $scope.closeModal = function() {
-        $modalInstance.close();
+        $uibModalInstance.close();
     };
 
 });

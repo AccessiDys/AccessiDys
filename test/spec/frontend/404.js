@@ -25,24 +25,25 @@
 
 'use strict';
 
-describe('Controller: notFoundCtrl', function() {
+describe('Controller: notFoundCtrl', function () {
 
-  // load the controller's module
-  beforeEach(module('cnedApp'));
+    // load the controller's module
+    beforeEach(module('cnedApp'));
 
-  var notFoundCtrl,
-    scope;
+    var notFoundCtrl, scope;
 
-  // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope) {
-    scope = $rootScope.$new();
-    notFoundCtrl = $controller('notFoundCtrl', {
-      $scope: scope
+    // Initialize the controller and a mock scope
+    beforeEach(inject(function ($controller, $rootScope) {
+        scope = $rootScope.$new();
+        notFoundCtrl = $controller('notFoundCtrl', {
+            $scope: scope
+        });
+
+    }));
+
+    it('should initialise img url', function () {
+        expect(notFoundCtrl).toBeDefined();
+        expect(scope.urlImg).toBeDefined();
+        expect(scope.urlImg).toEqual('styles/images/oopps.png');
     });
-
-  }));
-
-  it('should inisialise img url', function() {
-    
-  });
 });

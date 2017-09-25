@@ -23,14 +23,15 @@
  *
  */
 
-/*global cnedApp, $:false */
+/*global cnedApp */
 'use strict';
 
-cnedApp.directive('sselect', function() {
+cnedApp.directive('sselect', function () {
     return {
         restrict: 'EA',
-        link: function(scope, element) {
-            $(element).customSelect();
+        link: function (scope, element) {
+            jQuery(element).customSelect();
         }
     };
 });
+

@@ -50,7 +50,7 @@ describe('Controller: listDocumentModalCtrl', function() {
         $scope = $rootScope.$new();
         $controller('listDocumentModalCtrl', {
             $scope : $scope,
-            $modalInstance : modalInstance,
+            $uibModalInstance : modalInstance,
             content : contenu,
             reason : raison,
             title : titre,
@@ -71,7 +71,7 @@ describe('Controller: listDocumentModalCtrl', function() {
         },{
             'filename': 'Test'
         }];
-        spyOn($scope, 'specificFilterForModal').andCallThrough();
+        spyOn($scope, 'specificFilterForModal').and.callThrough();
         $scope.searchQuery = {};
         $scope.searchQuery.query = 'Erreur';
         $scope.specificFilterForModal();
