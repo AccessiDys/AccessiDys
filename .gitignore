@@ -12,3 +12,4 @@ generated
 /app/viewsScripts/template_cache.js
 coverage/
 .vagrant
+bower_components/
