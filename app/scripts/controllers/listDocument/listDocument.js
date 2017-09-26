@@ -199,4 +199,27 @@ angular.module('cnedApp')
             });
         };
 
+        /**
+         * Duplicate a document
+         * @param document The document to be duplicate
+         */
+        $scope.duplicateDoc = function (document) {
+            $log.debug('Duplicate a document', document);
+
+            var file = {
+                filename: document.title + '- Copie',
+                filepath: document.filepath,
+                data: document.data,
+                dateModification: new Date()
+            };
+
+            $log.debug('Original')
+            $log.debug(document);
+
+            $log.debug('Copie');
+            $log.debug(file);
+
+            fileStorageService.save(file, 'document');
+        };
+
     });
