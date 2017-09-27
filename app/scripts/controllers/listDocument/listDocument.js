@@ -206,38 +206,10 @@ angular.module('cnedApp')
         $scope.duplicateDoc = function (document) {
             $log.debug('Duplicate a document', document);
 
-            var file = {
-                filename: document.filename + '-Copie'
-            };
-
-            // TODO je pense que ça serait pas mal de créer une méthode dans le documentService de duplication :)
-
-            documentService.isDocumentAlreadyExist({
-                title: file.filename
-            }).then(function (isFound) {
-
-                if (!isFound) {
-
-                    fileStorageService.copyFile(document, file)
-                        .then(function () {
-                            // TODO recharger la liste ou le rajouter manuellement dans la liste
-                        }, function () {
-                            // TODO gestion des erreurs
-                        });
-
-                } else {
-                    // TODO gestion du cas où le nom existe déjà ... Surement ourvrir la modal pour changer le titre
-                }
-
+            documentService.copyDocument(document).then(function () {
+                $scope.getListDocument();
             });
 
-            $log.debug('Original')
-            $log.debug(document);
-
-            $log.debug('Copie');
-            $log.debug(file);
-
-            //fileStorageService.save(file, 'document');
         };
 
     });
