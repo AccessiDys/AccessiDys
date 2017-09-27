@@ -300,6 +300,29 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         }
     };
 
+    /**
+     * Copy a file
+     * @param originalFile
+     * @param destinationFile
+     * @returns {Promise}
+     */
+    this.copyFile = function (originalFile, destinationFile) {
+
+        if(!destinationFile.filepath){
+            destinationFile.filepath = this.generateFilepath(destinationFile.filename, '.html');
+        }
+
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+            if (UserService.getData().provider === 'dropbox') {
+                return DropboxProvider.copy(originalFile.filepath, destinationFile.filepath, UserService.getData().token);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    };
+
 
     /** **************************** storage Management ******************** */
 

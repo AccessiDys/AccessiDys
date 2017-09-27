@@ -143,8 +143,8 @@ angular.module('cnedApp')
                                 // Modal dismiss
                             });
 
-                    }, function(res){
-                        if(res.error === 'email_not_verified'){
+                    }, function (res) {
+                        if (res.error === 'email_not_verified') {
                             ToasterService.showToaster('#list-document-error-toaster', 'dropbox.message.error.share.emailnotverified');
                         } else {
                             ToasterService.showToaster('#list-document-error-toaster', 'dropbox.message.error.share.ko');
@@ -207,11 +207,29 @@ angular.module('cnedApp')
             $log.debug('Duplicate a document', document);
 
             var file = {
-                filename: document.title + '- Copie',
-                filepath: document.filepath,
-                data: document.data,
-                dateModification: new Date()
+                filename: document.filename + '-Copie'
             };
+
+            // TODO je pense que ça serait pas mal de créer une méthode dans le documentService de duplication :)
+
+            documentService.isDocumentAlreadyExist({
+                title: file.filename
+            }).then(function (isFound) {
+
+                if (!isFound) {
+
+                    fileStorageService.copyFile(document, file)
+                        .then(function () {
+                            // TODO recharger la liste ou le rajouter manuellement dans la liste
+                        }, function () {
+                            // TODO gestion des erreurs
+                        });
+
+                } else {
+                    // TODO gestion du cas où le nom existe déjà ... Surement ourvrir la modal pour changer le titre
+                }
+
+            });
 
             $log.debug('Original')
             $log.debug(document);
@@ -219,7 +237,7 @@ angular.module('cnedApp')
             $log.debug('Copie');
             $log.debug(file);
 
-            fileStorageService.save(file, 'document');
+            //fileStorageService.save(file, 'document');
         };
 
     });

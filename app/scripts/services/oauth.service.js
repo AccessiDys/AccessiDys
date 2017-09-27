@@ -30,7 +30,6 @@ cnedApp.factory('OauthService',
         return {
 
             token: function () {
-
                 return $http.get('/auth/token');
             }
         };
