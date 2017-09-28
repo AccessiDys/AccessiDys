@@ -143,8 +143,8 @@ angular.module('cnedApp')
                                 // Modal dismiss
                             });
 
-                    }, function(res){
-                        if(res.error === 'email_not_verified'){
+                    }, function (res) {
+                        if (res.error === 'email_not_verified') {
                             ToasterService.showToaster('#list-document-error-toaster', 'dropbox.message.error.share.emailnotverified');
                         } else {
                             ToasterService.showToaster('#list-document-error-toaster', 'dropbox.message.error.share.ko');
@@ -197,6 +197,19 @@ angular.module('cnedApp')
             }, function () {
                 LoaderService.hideLoader();
             });
+        };
+
+        /**
+         * Duplicate a document
+         * @param document The document to be duplicate
+         */
+        $scope.duplicateDoc = function (document) {
+            $log.debug('Duplicate a document', document);
+
+            documentService.copyDocument(document).then(function () {
+                $scope.getListDocument();
+            });
+
         };
 
     });

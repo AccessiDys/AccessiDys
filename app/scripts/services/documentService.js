@@ -200,6 +200,82 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                 controller: 'OpenDocumentModalCtrl',
                 size: 'lg'
             }).result;
+        },
+
+        copyDocument: function(document) {
+            var deferred = $q.defer();
+
+            $log.debug('Copy document', document);
+
+            var file = {
+                filename: document.filename + '-Copie'
+            };
+
+            LoaderService.showLoader('document.message.info.copy.inprogress');
+
+            methods.isDocumentAlreadyExist({
+                title: file.filename
+            }).then(function (isDocumentAlreadyExist) {
+
+                if (isDocumentAlreadyExist) {
+                    LoaderService.hideLoader();
+
+                    var errors = [];
+                    errors.push('document.message.copy.ko.alreadyExist');
+                    methods.editDocumentTitle(file.filename, errors, 'save')
+                        .then(function (params) {
+                            file.filename = params.title;
+                            fileStorageService.copyFile(document, file)
+                                .then(function (data) {
+                                    LoaderService.setLoaderProgress(75);
+                                    LoaderService.hideLoader();
+
+                                    if (!UserService.getData().token) {
+                                        UtilsService.openConfirmModal('document.message.copy.ok', false)
+                                            .then(function () {
+                                                $rootScope.$state.go('app.my-backup', {prevState: 'app.edit-document', file: file});
+                                            }, function () {
+                                                deferred.resolve(data);
+                                            });
+                                    } else {
+                                        deferred.resolve(data);
+                                    }
+                                }, function () {
+                                    deferred.reject();
+                                });
+                        }, function () {
+                            // Modal dismiss
+                            deferred.reject('edit-title');
+                        });
+
+                } else {
+                    LoaderService.setLoaderProgress(40);
+
+                    fileStorageService.copyFile(document, file)
+                        .then(function (data) {
+                            LoaderService.setLoaderProgress(75);
+                            LoaderService.hideLoader();
+
+                            if (!UserService.getData().token) {
+                                UtilsService.openConfirmModal('document.message.copy.ok', false)
+                                    .then(function () {
+                                        $rootScope.$state.go('app.my-backup', {prevState: 'app.edit-document', file: file});
+                                    }, function () {
+                                        deferred.resolve(data);
+                                    });
+                            } else {
+                                deferred.resolve(data);
+                            }
+
+                        }, function () {
+                            deferred.reject();
+                        });
+                }
+
+            });
+
+            return deferred.promise;
+
         }
     };
 
