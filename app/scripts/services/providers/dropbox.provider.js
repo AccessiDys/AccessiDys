@@ -26,7 +26,7 @@
 'use strict';
 
 angular.module('cnedApp').factory('DropboxProvider',
-    function ($http, $q) {
+    function ($http, $q, $log) {
 
         /**
          * Converts the format of dropbox files  in an internal file format
@@ -36,6 +36,8 @@ angular.module('cnedApp').factory('DropboxProvider',
          * @method transformDropboxFilesToStorageFiles
          */
         var transformDropboxFilesToStorageFiles = function (dropboxFiles) {
+
+            $log.debug('dropboxFiles', dropboxFiles);
             var files = [];
             for (var i = 0; i < dropboxFiles.matches.length; i++) {
                 var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
@@ -246,13 +248,35 @@ angular.module('cnedApp').factory('DropboxProvider',
 
             return deferred.promise;
         };
+
         var authService = function () {
             window.location.href = '/auth/dropbox';
         };
 
-        var tokenService = function () {
+        var copyService = function (from_path, to_path, access_token) {
+            var deferred = $q.defer();
 
-            return $http.get('/auth/token');
+            $http({
+                method: 'POST',
+                url: 'https://api.dropboxapi.com/2/files/copy_v2',
+                data: {
+                    from_path: from_path,
+                    to_path: to_path,
+                    allow_shared_folder: true,
+                    autorename: false,
+                    allow_ownership_transfer: false
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
+            }).then(function () {
+                deferred.resolve();
+            }, function () {
+                // Error
+                deferred.reject();
+            });
+            return deferred.promise;
         };
 
 
@@ -263,8 +287,8 @@ angular.module('cnedApp').factory('DropboxProvider',
             shareLink: shareLinkService,
             download: downloadService,
             rename: renameService,
-            auth: authService,
-            token: tokenService
+            copy: copyService,
+            auth: authService
         };
     });
 

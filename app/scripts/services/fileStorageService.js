@@ -177,6 +177,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             file.filepath = this.generateFilepath(file.filename, extension);
         }
 
+        $log.debug('file.filepath', file.filepath);
+
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
 
             return DropboxProvider.upload(file.filepath, file.data, UserService.getData().token).then(function (_file) {
@@ -297,6 +299,66 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             return DropboxProvider.shareLink(filepath, UserService.getData().token);
         } else {
             return null;
+        }
+    };
+
+
+    /**
+     * Copy a file
+     * @param originalFile
+     * @param destinationFile
+     * @param type
+     * @returns {*}
+     */
+    this.copyFile = function (originalFile, destinationFile, type) {
+
+        var storageName = '';
+        var extension = '';
+
+        if (type === 'document') {
+            storageName = 'listDocument';
+            extension = '.html';
+        } else if (type === 'profile') {
+            storageName = 'listProfile';
+            extension = '-profile.json';
+        }
+
+        // Generate new filepath
+        destinationFile.filepath = decodeURIComponent(this.generateFilepath(destinationFile.filename, extension));
+
+        $log.debug('file.filepath', destinationFile.filepath);
+
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+
+            if (UserService.getData().provider === 'dropbox') {
+
+                return DropboxProvider.copy(originalFile.filepath, destinationFile.filepath, UserService.getData().token)
+                    .then(function () {
+
+                        $log.debug('File copied', destinationFile.filepath);
+
+                        if(!destinationFile.data){
+                            return DropboxProvider.download(destinationFile.filepath, UserService.getData().token)
+                                .then(function (fileContent) {
+                                    destinationFile.data = fileContent;
+
+                                    return CacheProvider.save(destinationFile, storageName);
+                                }, function(){
+                                    return CacheProvider.save(destinationFile, storageName);
+                                });
+                        } else {
+                            return CacheProvider.save(destinationFile, storageName);
+                        }
+                    }, function () {
+                        self.addFileToSynchronize(destinationFile, type, 'save');
+                        return CacheProvider.save(destinationFile, storageName);
+                    });
+            } else {
+                return CacheProvider.save(destinationFile, storageName);
+            }
+        } else {
+            self.addFileToSynchronize(destinationFile, type, 'save');
+            return CacheProvider.save(destinationFile, storageName);
         }
     };
 

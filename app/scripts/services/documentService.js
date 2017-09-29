@@ -132,7 +132,10 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                                 if (!UserService.getData().token) {
                                     UtilsService.openConfirmModal('document.label.save.no-storage.title', 'document.label.save.no-storage.message', false)
                                         .then(function () {
-                                            $rootScope.$state.go('app.my-backup', {prevState: 'app.edit-document', file: file});
+                                            $rootScope.$state.go('app.my-backup', {
+                                                prevState: 'app.edit-document',
+                                                file: file
+                                            });
                                         }, function () {
                                             deferred.resolve(data);
                                         });
@@ -200,6 +203,71 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                 controller: 'OpenDocumentModalCtrl',
                 size: 'lg'
             }).result;
+        },
+
+        copyDocument: function (document) {
+            var deferred = $q.defer();
+
+            $log.debug('Copy document', document);
+
+            var file = {
+                filename: document.filename + '-Copie',
+                data: document.data,
+                dateModification: new Date()
+            };
+
+
+            UtilsService.openConfirmModal('document.message.copy.confirm.title', 'document.message.copy.confirm.message', false)
+                .then(function () {
+                    LoaderService.showLoader('document.message.info.copy.inprogress', false);
+
+                    methods.isDocumentAlreadyExist({
+                        title: file.filename
+                    }).then(function (isDocumentAlreadyExist) {
+
+                        if (isDocumentAlreadyExist) {
+                            LoaderService.hideLoader();
+
+                            var errors = [];
+                            errors.push('document.message.copy.ko.alreadyExist');
+                            methods.editDocumentTitle(file.filename, errors, 'save')
+                                .then(function (params) {
+                                    $log.debug('editDocumentTitle', params);
+                                    LoaderService.showLoader('document.message.info.copy.inprogress', false);
+
+                                    file.filename = params.title;
+
+                                    fileStorageService.copyFile(document, file, 'document')
+                                        .then(function () {
+                                            LoaderService.hideLoader();
+                                            deferred.resolve();
+                                        }, function () {
+                                            LoaderService.hideLoader();
+                                            deferred.reject();
+                                        });
+                                }, function () {
+                                    // Modal dismiss
+                                    deferred.reject('edit-title');
+                                });
+
+                        } else {
+
+                            fileStorageService.copyFile(document, file, 'document')
+                                .then(function () {
+                                    LoaderService.hideLoader();
+                                    deferred.resolve();
+                                }, function () {
+                                    LoaderService.hideLoader();
+                                    deferred.reject();
+                                });
+                        }
+
+                    });
+
+                });
+
+            return deferred.promise;
+
         }
     };
 
