@@ -186,7 +186,6 @@ angular.module('cnedApp')
                 LoaderService.hideLoader();
 
                 if (listDocument) {
-
                     $scope.listDocument = listDocument;
                 } else {
                     $scope.listDocument = [];
@@ -207,6 +206,8 @@ angular.module('cnedApp')
             $log.debug('Duplicate a document', document);
 
             documentService.copyDocument(document).then(function () {
+
+                ToasterService.showToaster('#list-document-success-toaster', 'document.message.copy.ok');
                 $scope.getListDocument();
             });
 

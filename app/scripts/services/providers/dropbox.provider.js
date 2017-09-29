@@ -26,7 +26,7 @@
 'use strict';
 
 angular.module('cnedApp').factory('DropboxProvider',
-    function ($http, $q) {
+    function ($http, $q, $log) {
 
         /**
          * Converts the format of dropbox files  in an internal file format
@@ -36,6 +36,8 @@ angular.module('cnedApp').factory('DropboxProvider',
          * @method transformDropboxFilesToStorageFiles
          */
         var transformDropboxFilesToStorageFiles = function (dropboxFiles) {
+
+            $log.debug('dropboxFiles', dropboxFiles);
             var files = [];
             for (var i = 0; i < dropboxFiles.matches.length; i++) {
                 var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
