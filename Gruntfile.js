@@ -26,6 +26,8 @@
 'use strict';
 
 var path = require('path');
+var packageJson = require('./package.json');
+var swPrecache = require('sw-precache');
 
 module.exports = function (grunt) {
     // load all grunt tasks
@@ -290,8 +292,13 @@ module.exports = function (grunt) {
                 src : [ 'app/index.html' ],
                 ignorePath : /\.\.\//
             }
+        },
+        swPrecache: {
+          dev: {
+            handleFetch: true,
+            rootDir: 'app'
+          }
         }
-
     });
     grunt
         .registerTask(
@@ -340,4 +347,102 @@ module.exports = function (grunt) {
     grunt.registerTask('generate-cache', ['html2js:main']);
 
     grunt.registerTask('removeLogs', ['removelogging']);
+    
+    function writeServiceWorkerFile(rootDir, handleFetch, callback) {
+      var config = {
+        cacheId: packageJson.name,
+        // dynamicUrlToDependencies: {
+        //   'dynamic/page1': [
+        //     path.join(rootDir, 'views', 'layout.jade'),
+        //     path.join(rootDir, 'views', 'page1.jade')
+        //   ],
+        //   'dynamic/page2': [
+        //     path.join(rootDir, 'views', 'layout.jade'),
+        //     path.join(rootDir, 'views', 'page2.jade')
+        //   ]
+        // },
+        // If handleFetch is false (i.e. because this is called from swPrecache:dev), then
+        // the service worker will precache resources but won't actually serve them.
+        // This allows you to test precaching behavior without worry about the cache preventing your
+        // local changes from being picked up during the development cycle.
+        handleFetch: handleFetch,
+        ignoreUrlParametersMatching: [/v/], //because font-awesome js have ?v=x.x.x parameter added to request
+        logger: grunt.log.writeln,
+        staticFileGlobs: [
+          rootDir + '/*.html',
+          rootDir + '/viewsScripts/*.js',
+          rootDir + '/scripts/**/**.js',
+          rootDir + '/styles/**/**',
+          //rootDir + '/fonts/*',
+          rootDir + '/external_components/**/**.js',
+          rootDir + '/',
+          rootDir + '/bower_components/bootstrap/dist/css/bootstrap.min.css',
+          rootDir + '/bower_components/components-font-awesome/css/font-awesome.css',
+          rootDir + '/bower_components/slick-carousel/slick/slick.css',
+          rootDir + '/bower_components/slick-carousel/slick/slick-theme.css',
+          rootDir + '/bower_components/textAngular/dist/textAngular.css',
+          rootDir + '/bower_components/cropperjs/dist/cropper.css',
+          rootDir + '/bower_components/angular-cookie-law/dist/angular-cookie-law.min.css',
+          rootDir + '/bower_components/angular/angular.js',
+          rootDir + '/bower_components/angular-animate/angular-animate.js',
+          rootDir + '/bower_components/angular-sanitize/angular-sanitize.js',
+          rootDir + '/bower_components/angular-cookies/angular-cookies.js',
+          rootDir + '/bower_components/angular-resource/angular-resource.js',
+          rootDir + '/bower_components/angular-gettext/dist/angular-gettext.js',
+          rootDir + '/bower_components/angular-audio/app/angular.audio.js',
+          rootDir + '/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+          rootDir + '/bower_components/jquery/dist/jquery.js',
+          rootDir + '/bower_components/underscore/underscore.js',
+          rootDir + '/bower_components/rangy/rangy-core.js',
+          rootDir + '/bower_components/rangy/rangy-classapplier.js',
+          rootDir + '/bower_components/rangy/rangy-highlighter.js',
+          rootDir + '/bower_components/rangy/rangy-selectionsaverestore.js',
+          rootDir + '/bower_components/rangy/rangy-serializer.js',
+          rootDir + '/bower_components/rangy/rangy-textrange.js',
+          rootDir + '/bower_components/angular-google-analytics/dist/angular-google-analytics.min.js',
+          rootDir + '/bower_components/localforage/dist/localforage.js',
+          rootDir + '/bower_components/angular-localforage/dist/angular-localForage.js',
+          rootDir + '/bower_components/angular-md5/angular-md5.js',
+          rootDir + '/bower_components/Hyphenator/Hyphenator.js',
+          rootDir + '/bower_components/Hyphenator/patterns/fr.js',
+          rootDir + '/bower_components/jszip/dist/jszip.js',
+          rootDir + '/bower_components/pdfjs-dist/build/pdf.js',
+          rootDir + '/bower_components/pdfjs-dist/build/pdf.worker.js',
+          rootDir + '/bower_components/angular-socialshare/dist/angular-socialshare.min.js',
+          rootDir + '/bower_components/angular-ui-router/release/angular-ui-router.js',
+          rootDir + '/bower_components/slick-carousel/slick/slick.min.js',
+          rootDir + '/bower_components/angular-slick/dist/slick.js',
+          rootDir + '/bower_components/textAngular/dist/textAngular.js',
+          rootDir + '/bower_components/textAngular/dist/textAngular-sanitize.js',
+          rootDir + '/bower_components/textAngular/dist/textAngularSetup.js',
+          rootDir + '/bower_components/docxtemplater/build/docxtemplater-latest.js',
+          rootDir + '/bower_components/cropperjs/dist/cropper.js',
+          rootDir + '/bower_components/matchmedia/matchMedia.js',
+          rootDir + '/bower_components/ngSticky/lib/sticky.js',
+          rootDir + '/bower_components/angular-cookie-law/dist/angular-cookie-law.min.js',
+          rootDir + '/bower_components/components-font-awesome/fonts/fontawesome-webfont.woff2',
+          rootDir + '/bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2'
+        ],
+        stripPrefix: rootDir + '/',
+        // verbose defaults to false, but for the purposes of this demo, log more.
+        verbose: true
+      };
+      
+      swPrecache.write(path.join(rootDir, 'service-worker.js'), config, callback);
+    }
+    
+    grunt.registerMultiTask('swPrecache', function() {
+      /* eslint-disable no-invalid-this */
+      var done = this.async();
+      var rootDir = this.data.rootDir;
+      var handleFetch = this.data.handleFetch;
+      /* eslint-enable */
+      
+      writeServiceWorkerFile(rootDir, handleFetch, function(error) {
+        if (error) {
+          grunt.fail.warn(error);
+        }
+        done();
+      });
+    });
 };
