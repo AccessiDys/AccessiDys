@@ -45,6 +45,8 @@
         <div class="head_section">
             <input type="text" class="serach_field pull-left" data-ng-model="query"
                    placeholder="Recherche un document ..." data-ng-change="specificFilter()"/>
+            <a id="create_folder" style="text-decoration: none; color: white;" role="button" data-ng-click="createFolder('/')" type="button" class="grey_btn pull-left add_folder"
+               title="Nouveau dossier">Nouveau dossier</a>
             <a href="#/addDocument" style="text-decoration: none; color: white;" role="button" id="add_documentbtn" type="button" class="grey_btn pull-right add_document"
                title="Ajouter un document">Ajouter un document</a>
         </div>

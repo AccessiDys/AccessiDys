@@ -47,17 +47,20 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         $log.debug('fileStorageService - list ', UserService.getData());
         var query = '';
         var storageName = '';
+        var path = '';
 
         if (type === 'document') {
             query = '.html';
             storageName = 'listDocument';
+            path = '';
         } else if (type === 'profile') {
             query = '-profile.json';
             storageName = 'listProfile';
+            path = '';
         }
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
-            return DropboxProvider.search(query, UserService.getData().token).then(function (files) {
+            return DropboxProvider.search(path, query, UserService.getData().token).then(function (files) {
                 return CacheProvider.saveAll(files, storageName);
             }, function () {
                 return CacheProvider.list(storageName);
@@ -66,6 +69,24 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             // Resolve Cache
             return CacheProvider.list(storageName);
         }
+
+    };
+
+    this.listAll = function(){
+
+         var storageName = 'listDocument';
+         var path = '';
+
+         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+            return DropboxProvider.listAllFiles(path, UserService.getData().token).then(function (files) {
+                return CacheProvider.saveAll(files, storageName);
+            }, function () {
+                return CacheProvider.list(storageName);
+            });
+         } else {
+             // Resolve Cache
+             return CacheProvider.list(storageName);
+         }
     };
 
     /**
@@ -302,6 +323,18 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         }
     };
 
+    /**
+     * Share the file on dropbox and returns the sharing URL.
+     *
+     * @method shareFile
+     */
+    this.createFolder = function (filepath) {
+        if (UserService.getData() && UserService.getData().token) {
+            return DropboxProvider.createFolder(filepath, UserService.getData().token);
+        } else {
+            return null;
+        }
+    };
 
     /**
      * Copy a file
