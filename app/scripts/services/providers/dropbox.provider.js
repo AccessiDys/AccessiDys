@@ -78,7 +78,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                 filename = filepath.substring(filenameStartIndex, filenameEndIndex);
                 type = 'file';
             } else {
-                filename = filepath.split('/')[1];
+                filename = filepath.split('/')[filepath.split('/').length - 1];
                 type = 'folder';
             }
             var dateModification = Date.parse(dropboxFile.server_modified);

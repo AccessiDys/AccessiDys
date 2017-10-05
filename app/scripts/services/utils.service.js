@@ -91,6 +91,31 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         },
 
         /**
+         * Open new folder modal
+         * @param title
+         * @param erros
+         * @param mode
+         */
+        openNewFolderModal: function (title, errors, mode) {
+            return $uibModal.open({
+                templateUrl: 'views/addDocument/add-folder.modal.html',
+                controller: 'AddFolderCtrl',
+                size: 'md',
+                resolve: {
+                    title: function () {
+                        return title;
+                    },
+                    errors: function () {
+                        return errors;
+                    },
+                    mode: function () {
+                        return mode;
+                    }
+                }
+            }).result;
+        },
+
+        /**
          * Open the social share modal
          * @param mode (document | profile )
          * @param itemToShare

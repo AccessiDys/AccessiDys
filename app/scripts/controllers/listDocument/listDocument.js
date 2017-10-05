@@ -259,4 +259,14 @@ angular.module('cnedApp')
 
         };
 
+        $scope.createFolder = function(path) {
+            $log.debug('Create a new folder', path);
+
+            documentService.createFolder(path).then(function () {
+                ToasterService.showToaster('#list-document-success-toaster', 'folder.message.create.ok');
+                $scope.getListDocument();
+            });
+
+        };
+
     });

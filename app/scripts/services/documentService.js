@@ -74,6 +74,24 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
             return deferred.promise;
         },
 
+        isFolderAlreadyExist: function (folder) {
+            var deferred = $q.defer();
+
+            $log.debug('Check if document already exist', folder);
+
+            fileStorageService.listAll().then(function (documents) {
+                var isFound = false;
+                _.each(documents, function (item) {
+                    if (folder.title === item.filename) {
+                        isFound = true;
+                    }
+                });
+                deferred.resolve(isFound);
+            });
+
+            return deferred.promise;
+        },
+
         /**
          * Save the document
          *
@@ -268,6 +286,30 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             return deferred.promise;
 
+        },
+
+        createFolder: function (path, errors) {
+            var deferred = $q.defer();
+
+            $log.debug('editDocumentTitle', path, errors);
+
+            UtilsService.openNewFolderModal('', [], 'save')
+                .then(function (params) {
+                    LoaderService.showLoader('document.message.info.copy.inprogress', false);
+                    LoaderService.hideLoader();
+
+                    path = params.title;
+
+                    fileStorageService.createFolder('/' + path)
+                        .then(function () {
+                            LoaderService.hideLoader();
+                            deferred.resolve();
+                        }, function () {
+                            LoaderService.hideLoader();
+                            deferred.reject();
+                        });
+                });
+            return deferred.promise;
         }
     };
 
