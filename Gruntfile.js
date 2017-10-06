@@ -28,184 +28,29 @@
 var path = require('path');
 var packageJson = require('./package.json');
 var swPrecache = require('sw-precache');
+var wiredep = require('wiredep');
 
 module.exports = function (grunt) {
     // load all grunt tasks
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-    // configurable paths
-    var yeomanConfig = {
-        app: '.',
-        dist: 'dist',
-        generated: 'generated'
-    };
-
     grunt.initConfig({
-        yeoman: yeomanConfig,
         watch: {
             bower : {
                 files : [ 'bower.json' ],
-                tasks : [ 'wiredep' ]
+                tasks : [ 'bower_concat' ]
             },
             main: {
                 files: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff}'],
-                tasks: ['generate-cache']
+                tasks: ['generate-cache', 'express:dev'],
             },
-            options: {
-                livereload: true
-                    /*
-                     * , port: 3000, key: grunt.file.read('../sslcert/key.pem'), cert:
-                     * grunt.file.read('../sslcert/cert.pem')
-                     */
-            }
         },
         express: {
-            options: {
-                hostname: '0.0.0.0'
-            },
-            livereload: {
+            dev: {
                 options: {
-                    server: 'app.js',
-                    livereload: true,
-                    serverreload: false,
-                    bases: ['.tmp', yeomanConfig.app],
-                    spawn: false
+                    script: 'app.js',
                 }
             },
-            test: {
-                options: {
-                    server: path.resolve(__dirname, 'app.js'),
-                    bases: ['./.tmp', './test']
-                }
-            },
-            dist: {
-                options: {
-                    server: 'app.js',
-                    bases: yeomanConfig.dist
-                }
-            },
-            server: {
-                options: {
-                    port: 80
-                }
-            }
-        },
-        clean: {
-            dist: {
-                files: [{
-                    dot: true,
-                    src: ['.tmp', '<%= yeoman.dist %>/*', '<%= yeoman.generated %>/*', '!<%= yeoman.dist %>/.git*']
-                }]
-            },
-            server: '.tmp'
-        },
-        jshint: {
-            options: {
-                jshintrc: '.jshintrc',
-                reporter: require('jshint-html-reporter'),
-                reporterOutput: 'generated/jshint/resultJSHint.html'
-            },
-            all: {
-                src: ['Gruntfile.js', 'app/scripts/**/*.js', 'api/**/*.js', 'test/spec/**/*.js']
-            }
-        },
-        rev: {
-            dist: {
-                files: {
-                    src: ['<%= yeoman.dist %>/scripts/{,*/}*.js', '<%= yeoman.dist %>/styles/{,*/}*.css', '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}', '<%= yeoman.dist %>/styles/fonts/*']
-                }
-            }
-        },
-        useminPrepare: {
-            html: '<%= yeoman.app %>/index.html',
-            options: {
-                dest: '<%= yeoman.dist %>'
-            }
-        },
-        usemin: {
-            html: ['<%= yeoman.dist %>/{,*/}*.html'],
-            css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
-            options: {
-                dirs: ['<%= yeoman.dist %>']
-            }
-        },
-        imagemin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/images',
-                    src: '{,*/}*.{png,jpg,jpeg}',
-                    dest: '<%= yeoman.dist %>/images'
-                }]
-            }
-        },
-        svgmin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/images',
-                    src: '{,*/}*.svg',
-                    dest: '<%= yeoman.dist %>/images'
-                }]
-            }
-        },
-        htmlmin: {
-            dist: {
-                options: {
-                    /*
-                     * removeCommentsFromCDATA: true, //
-                     * https://github.com/yeoman/grunt-usemin/issues/44
-                     * //collapseWhitespace: true, collapseBooleanAttributes: true,
-                     * removeAttributeQuotes: true, removeRedundantAttributes: true,
-                     * useShortDoctype: true, removeEmptyAttributes: true,
-                     * removeOptionalTags: true
-                     */
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>',
-                    src: ['*.html', 'views/*.html'],
-                    dest: '<%= yeoman.dist %>'
-                }]
-            }
-        },
-        copy: {
-            dist: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '.',
-                        dest: '<%= yeoman.dist %>/app/data',
-                        src: ['./AccessiDys_0028_USM_Guide_utilisateur_V01.4.pdf'],
-                        rename: function (dest) {
-                            return dest + '/User_guide.pdf';
-                        }
-                },
-                    {
-                        expand: true,
-                        dot: true,
-                        cwd: '<%= yeoman.app %>',
-                        dest: '<%= yeoman.dist %>',
-                        src: ['app/**/*.{html,css,png,jpeg,GIF,jpg,eot,svg,ttf,woff,appcache,gif,ico,pdf}', 'app/bower_components/**/*.js', 'app/bower_components/**/*.mem', 'app/bower_components/**/*.traineddata', 'app/scripts/**/*.js', 'app.js', 'app/viewsScripts/**/*.js', 'api/**/*', 'models/**/*', 'routes/**/*', 'Gruntfile.js', 'package.json', 'files/**/**/**', 'po/**', 'patches/**', 'env/generalParams.json']
-                }, {
-                        expand: true,
-                        cwd: '<%= yeoman.app %>',
-                        dest: '<%= yeoman.dist %>',
-                        src: ['../env/config.<%= [NODE_ENV] %>.json'],
-                        rename: function (dest) {
-                            return dest + '/env/config.json';
-                        }
-                },
-                    {
-                        expand: true,
-                        cwd: '.tmp/images',
-                        dest: '<%= yeoman.dist %>/images',
-                        src: ['generated/*']
-                }]
-            }
-        },
-        concurrent: {
-            dist: ['imagemin', 'svgmin']
         },
         html2js: {
             options: {
@@ -223,47 +68,9 @@ module.exports = function (grunt) {
                 dest: 'app/viewsScripts/template_cache.js'
             }
         },
-        // ng-annotate tries to make the code safe for minification
-        // automatically
-        // by using the Angular long form for dependency injection.
-        ngAnnotate: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: 'app',
-                    src: ['scripts/**/*.js', 'viewsScripts/*.js'],
-                    dest: 'generated/'
-                }]
-            }
-        },
-        uglify: {
-            build: {
-                src: ['<%= yeoman.generated %>/scripts/**/*.js', '<%= yeoman.generated %>/viewsScripts/*.js'],
-                dest: '<%= yeoman.dist %>/app/scripts/front.js'
-            }
-        },
         karma: {
             unit: {
                 configFile: 'karma.conf.js'
-            }
-        },
-        cdnify: {
-            dist: {
-                html: ['<%= yeoman.dist %>/*.html']
-            }
-        },
-        nggettext_extract: {
-            pot: {
-                files: {
-                    'po/template.pot': ['app/views/**/*.html']
-                }
-            }
-        },
-        nggettext_compile: {
-            all: {
-                files: {
-                    'app/scripts/translations.js': ['po/*.po']
-                }
             }
         },
         /**
@@ -277,27 +84,23 @@ module.exports = function (grunt) {
                 src: '../env/config.test.json'
             }
         },
-        removelogging: {
-            dist: {
-                src: ['api/**/*.js', 'app/scripts/**/*.js'],
-                options: {
-                    // see below for options. this is optional.
-                }
-            }
+        //generate the service-worker.js for offine application 
+        swPrecache: {
+          dev: {
+            handleFetch: false,
+            rootDir: 'app'
+          },
+          prod: {
+            handleFetch: true,
+            rootDir: 'app'
+          }
         },
-
         // Automatically inject Bower components into the app
         wiredep : {
             app : {
                 src : [ 'app/index.html' ],
                 ignorePath : /\.\.\//
             }
-        },
-        swPrecache: {
-          dev: {
-            handleFetch: true,
-            rootDir: 'app'
-          }
         }
     });
     grunt
@@ -326,7 +129,6 @@ module.exports = function (grunt) {
 
                 grunt.log.ok('Found', counter, 'files without copyright');
             });
-    grunt.registerTask('build', ['clean:dist', 'copy:dist', 'useminPrepare', 'ngAnnotate', 'uglify', 'usemin']);
 
     grunt.registerTask('setEnv', function () {
         grunt.config('NODE_ENV', process.env.NODE_ENV);
@@ -338,7 +140,10 @@ module.exports = function (grunt) {
         console.log('ENV = ' + process.env.NODE_ENV);
     });
 
-    grunt.registerTask('build-app', ['env:app', 'setEnv', 'html2js:main', 'build']);
+    grunt.registerTask('build-app', ['env:app','setEnv', 'html2js:main', 'wiredep','swPrecache:prod']);
+    
+    grunt.registerTask('server', ['env:app','setEnv', 'html2js:main', 'wiredep', ,'swPrecache:dev', 'express:dev', 'watch']);
+    grunt.registerTask('serverWithCache', ['build-app','express:dev', 'watch']);
 
     grunt.registerTask('generate-test', ['env:test', 'setEnv', 'html2js:main']);
 
@@ -351,85 +156,34 @@ module.exports = function (grunt) {
     function writeServiceWorkerFile(rootDir, handleFetch, callback) {
       var config = {
         cacheId: packageJson.name,
-        // dynamicUrlToDependencies: {
-        //   'dynamic/page1': [
-        //     path.join(rootDir, 'views', 'layout.jade'),
-        //     path.join(rootDir, 'views', 'page1.jade')
-        //   ],
-        //   'dynamic/page2': [
-        //     path.join(rootDir, 'views', 'layout.jade'),
-        //     path.join(rootDir, 'views', 'page2.jade')
-        //   ]
-        // },
-        // If handleFetch is false (i.e. because this is called from swPrecache:dev), then
-        // the service worker will precache resources but won't actually serve them.
-        // This allows you to test precaching behavior without worry about the cache preventing your
-        // local changes from being picked up during the development cycle.
         handleFetch: handleFetch,
+        maximumFileSizeToCacheInBytes : 5500000, // 5.5 MB
         ignoreUrlParametersMatching: [/v/], //because font-awesome js have ?v=x.x.x parameter added to request
         logger: grunt.log.writeln,
-        staticFileGlobs: [
-          rootDir + '/*.html',
-          rootDir + '/viewsScripts/*.js',
-          rootDir + '/scripts/**/**.js',
-          rootDir + '/styles/**/**',
-          //rootDir + '/fonts/*',
-          rootDir + '/external_components/**/**.js',
-          rootDir + '/',
-          rootDir + '/bower_components/bootstrap/dist/css/bootstrap.min.css',
-          rootDir + '/bower_components/components-font-awesome/css/font-awesome.css',
-          rootDir + '/bower_components/slick-carousel/slick/slick.css',
-          rootDir + '/bower_components/slick-carousel/slick/slick-theme.css',
-          rootDir + '/bower_components/textAngular/dist/textAngular.css',
-          rootDir + '/bower_components/cropperjs/dist/cropper.css',
-          rootDir + '/bower_components/angular-cookie-law/dist/angular-cookie-law.min.css',
-          rootDir + '/bower_components/angular/angular.js',
-          rootDir + '/bower_components/angular-animate/angular-animate.js',
-          rootDir + '/bower_components/angular-sanitize/angular-sanitize.js',
-          rootDir + '/bower_components/angular-cookies/angular-cookies.js',
-          rootDir + '/bower_components/angular-resource/angular-resource.js',
-          rootDir + '/bower_components/angular-gettext/dist/angular-gettext.js',
-          rootDir + '/bower_components/angular-audio/app/angular.audio.js',
-          rootDir + '/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-          rootDir + '/bower_components/jquery/dist/jquery.js',
-          rootDir + '/bower_components/underscore/underscore.js',
-          rootDir + '/bower_components/rangy/rangy-core.js',
-          rootDir + '/bower_components/rangy/rangy-classapplier.js',
-          rootDir + '/bower_components/rangy/rangy-highlighter.js',
-          rootDir + '/bower_components/rangy/rangy-selectionsaverestore.js',
-          rootDir + '/bower_components/rangy/rangy-serializer.js',
-          rootDir + '/bower_components/rangy/rangy-textrange.js',
-          rootDir + '/bower_components/angular-google-analytics/dist/angular-google-analytics.min.js',
-          rootDir + '/bower_components/localforage/dist/localforage.js',
-          rootDir + '/bower_components/angular-localforage/dist/angular-localForage.js',
-          rootDir + '/bower_components/angular-md5/angular-md5.js',
-          rootDir + '/bower_components/Hyphenator/Hyphenator.js',
-          rootDir + '/bower_components/Hyphenator/patterns/fr.js',
-          rootDir + '/bower_components/jszip/dist/jszip.js',
-          rootDir + '/bower_components/pdfjs-dist/build/pdf.js',
-          rootDir + '/bower_components/pdfjs-dist/build/pdf.worker.js',
-          rootDir + '/bower_components/angular-socialshare/dist/angular-socialshare.min.js',
-          rootDir + '/bower_components/angular-ui-router/release/angular-ui-router.js',
-          rootDir + '/bower_components/slick-carousel/slick/slick.min.js',
-          rootDir + '/bower_components/angular-slick/dist/slick.js',
-          rootDir + '/bower_components/textAngular/dist/textAngular.js',
-          rootDir + '/bower_components/textAngular/dist/textAngular-sanitize.js',
-          rootDir + '/bower_components/textAngular/dist/textAngularSetup.js',
-          rootDir + '/bower_components/docxtemplater/build/docxtemplater-latest.js',
-          rootDir + '/bower_components/cropperjs/dist/cropper.js',
-          rootDir + '/bower_components/matchmedia/matchMedia.js',
-          rootDir + '/bower_components/ngSticky/lib/sticky.js',
-          rootDir + '/bower_components/angular-cookie-law/dist/angular-cookie-law.min.js',
-          rootDir + '/bower_components/components-font-awesome/fonts/fontawesome-webfont.woff2',
-          rootDir + '/bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2'
-        ],
-        stripPrefix: rootDir + '/',
+        staticFileGlobs:  Array.prototype.concat( [
+          'app/*.html',
+          'app/viewsScripts/*.js',
+          'app/scripts/**/**.js',
+          'app/styles/**/**',
+          'app/external_components/**/**.js',
+          'app/bower_components/components-font-awesome/fonts/fontawesome-webfont.woff2',
+          'app/bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2'
+        ], getBowerRessourcesList()),
         // verbose defaults to false, but for the purposes of this demo, log more.
-        verbose: true
+        verbose: false,
+        stripPrefix: rootDir + '/',
       };
-      
       swPrecache.write(path.join(rootDir, 'service-worker.js'), config, callback);
     }
+    
+    //use wiredep to get the list off resources to cache
+    function getBowerRessourcesList(){
+      var fullList = wiredep(
+        {directory : 'app/bower_components',
+      });
+      var selectedRessourcesList = Array.prototype.concat( fullList.js , fullList.css );
+      return selectedRessourcesList;
+    };
     
     grunt.registerMultiTask('swPrecache', function() {
       /* eslint-disable no-invalid-this */
