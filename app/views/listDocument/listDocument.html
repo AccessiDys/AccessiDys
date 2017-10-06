@@ -54,6 +54,9 @@
             <thead>
             <tr>
                 <th>
+                    TYPE
+                </th>
+                <th>
                     <span class="cursor-pointer sort-column"
                           data-ng-click="sortType = 'filename'; sortReverse = !sortReverse">
                         TITRE
@@ -75,60 +78,73 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" data-ng-show="document.showed">
-                <td class="profil_desc">
-                    <a href="#/apercu?idDocument={{document.filename}}">
-                        {{ document.filename }}
-                    </a>
-                </td>
-                <td class="profil_desc centering">{{ document.dateModification | date: configuration.DATE_PATTERN}}</td>
-                <td class="action_area centering" uib-dropdown>
-                    <button id="document-actions" type="button" class="action_btn" uib-dropdown-toggle name="document_action_btn">
-                        &nbsp;
-                    </button>
-                    <ul class="action_list" uib-dropdown-menu aria-labelledby="document-actions">
-                        <li class="show_item">
-                            <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document"
-                               title="Afficher">
-                                Afficher
+            <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse">
+                <div data-ng-if="document.type === 'folder'">
+                    <td>
+                        <a data-ng-if="document.type === 'folder'"><img src="../styles/images/docs.png"/></a>
+                        <!--<a data-ng-if="document.type === 'file'">fichier</a>-->
+                    </td>
+                    <td class="profil_desc">
+                        <div data-ng-if="document.type === 'file'">
+                            <a href="#/apercu?idDocument={{document.filename}}">
+                                {{ document.filename }}
                             </a>
-                        </li>
-                        <li class="setting_documentTitle">
-                            <a id="edit_document"
-                               data-toggle="modal"
-                               data-target="#EditTitreModal"
-                               data-ng-click="renameDocumentTitle(document)"
-                               title="Modifier le titre">
-                                Modifier le titre
+                        </div>
+                        <div data-ng-if="document.type === 'folder'">
+                            <a href="">
+                                {{ document.filename }}
                             </a>
-                        </li>
-                        <li class="restructer_item">
-                            <a ng-href="#/addDocument?idDocument={{document.filename}}" id="restructurer_document"
-                               title="Modifier">
-                                Modifier
-                            </a>
-                        </li>
-                        <li class="setting_documentTitle">
-                            <a id="duplicate_document"
-                               data-ng-click="duplicateDoc(document)"
-                               title="Dupliquer le document">
-                                Dupliquer
-                            </a>
-                        </li>
-                        <li class="share_item" data-ng-if="userData.provider">
-                            <a id="share_document" title="Partager le document"
-                               data-ng-click="shareDocument(document)">
-                                Partager
-                            </a>
-                        </li>
-                        <li class="removing_item">
-                            <a id="delete_document"
-                               data-ng-click="deleteDocument(document)" title="Supprimer">
-                                Supprimer
-                            </a>
-                        </li>
-                    </ul>
-                </td>
+                        </div>
+                    </td>
+                    <td class="profil_desc centering">{{ document.dateModification | date: configuration.DATE_PATTERN}}</td>
+                    <td class="action_area centering" uib-dropdown>
+                        <button id="document-actions" type="button" class="action_btn" uib-dropdown-toggle name="document_action_btn">
+                            &nbsp;
+                        </button>
+                        <ul class="action_list" uib-dropdown-menu aria-labelledby="document-actions">
+                            <li class="show_item">
+                                <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document"
+                                   title="Afficher">
+                                    Afficher
+                                </a>
+                            </li>
+                            <li class="setting_documentTitle">
+                                <a id="edit_document"
+                                   data-toggle="modal"
+                                   data-target="#EditTitreModal"
+                                   data-ng-click="renameDocumentTitle(document)"
+                                   title="Modifier le titre">
+                                    Modifier le titre
+                                </a>
+                            </li>
+                            <li class="restructer_item">
+                                <a ng-href="#/addDocument?idDocument={{document.filename}}" id="restructurer_document"
+                                   title="Modifier">
+                                    Modifier
+                                </a>
+                            </li>
+                            <li class="setting_documentTitle">
+                                <a id="duplicate_document"
+                                   data-ng-click="duplicateDoc(document)"
+                                   title="Dupliquer le document">
+                                    Dupliquer
+                                </a>
+                            </li>
+                            <li class="share_item" data-ng-if="userData.provider">
+                                <a id="share_document" title="Partager le document"
+                                   data-ng-click="shareDocument(document)">
+                                    Partager
+                                </a>
+                            </li>
+                            <li class="removing_item">
+                                <a id="delete_document"
+                                   data-ng-click="deleteDocument(document)" title="Supprimer">
+                                    Supprimer
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+                </div>
             </tr>
             </tbody>
         </table>

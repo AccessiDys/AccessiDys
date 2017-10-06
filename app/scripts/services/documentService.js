@@ -291,7 +291,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
         createFolder: function (path, errors) {
             var deferred = $q.defer();
 
-            $log.debug('editDocumentTitle', path, errors);
+            $log.debug('createFolder', path, errors);
 
             UtilsService.openNewFolderModal('', [], 'save')
                 .then(function (params) {
@@ -308,6 +308,20 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                             LoaderService.hideLoader();
                             deferred.reject();
                         });
+                });
+            return deferred.promise;
+        },
+
+        moveFiles: function (from_path, to_path, errors) {
+            var deferred = $q.defer();
+
+            $log.debug('moveFiles', from_path, to_path, errors);
+
+            UtilsService.openConfirmModal('document.message.move.confirm.title', 'document.message.move.confirm.message', false)
+                .then(function () {
+                    LoaderService.showLoader('document.message.info.move.inprogress', false);
+                    LoaderService.hideLoader();
+
                 });
             return deferred.promise;
         }

@@ -187,7 +187,6 @@ angular.module('cnedApp')
 
                 if (listDocument) {
                     $scope.listDocument = listDocument;
-                    //$scope.listDocument = $scope.listDocumentFolder(listDocument);
                 } else {
                     $scope.listDocument = [];
                 }
@@ -198,51 +197,6 @@ angular.module('cnedApp')
                 LoaderService.hideLoader();
             });
         };
-
-        $scope.listDocumentFolder = function( listDocument ){
-            var newList = [];
-
-            for (var i = 0; i < listDocument.length; i++) {
-                var filepathArray = listDocument[i].filepath.split('/');
-
-                if( filepathArray.length > 2 ){
-                    var currentFilepath = '';
-
-                    for(var j=1; j<filepathArray.length-1; j++){
-                        currentFilepath += '/' + filepathArray[i];
-
-                        var folder = {
-                            filename: filepathArray[j],
-                            filepath: currentFilepath,
-                            dateModification: '',
-                            state: 'folder'
-                        };
-
-                        if( !$scope.folderAlreadyIn(newList, folder) ){
-                            newList.push(folder);
-                        }
-                    }
-                }
-
-                var doc = {
-                    filename: listDocument[i].filename,
-                    filepath: listDocument[i].filepath,
-                    dateModification: listDocument[i].dateModification,
-                    state: 'file'
-                };
-                newList.push(doc);
-            }
-            return newList;
-        };
-
-        $scope.folderAlreadyIn = function(list, folder){
-            for (var l in list){
-                if(l.filepath === folder.filepath && l.filename === folder.filename){
-                    return true;
-                }
-            }
-            return false;
-        }
 
         /**
          * Duplicate a document
@@ -264,6 +218,16 @@ angular.module('cnedApp')
 
             documentService.createFolder(path).then(function () {
                 ToasterService.showToaster('#list-document-success-toaster', 'folder.message.create.ok');
+                $scope.getListDocument();
+            });
+
+        };
+
+        $scope.moveFiles = function(from_path, to_path) {
+            $log.debug('Moving files', from_path, to_path);
+
+            documentService.moveFiles(from_path, to_path, []).then(function () {
+                ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
                 $scope.getListDocument();
             });
 

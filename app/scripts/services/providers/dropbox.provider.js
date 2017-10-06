@@ -38,29 +38,43 @@ angular.module('cnedApp').factory('DropboxProvider',
         var transformDropboxFilesToStorageFiles = function (dropboxFiles) {
 
             $log.debug('dropboxFiles', dropboxFiles);
-            var files = [];
-            for (var i = 0; i < dropboxFiles.matches.length; i++) {
-                var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
-                if (file !== null) {
-                    files.push(file);
+            var arbo = [];
+            for (var i = 0; i < dropboxFiles.matches.length; i++) { //excludes profils json files.
+                if (dropboxFiles.matches[i].metadata.name.indexOf('-profile.json') < 0) {
+                    var arboTemp = arbo;
+
+                    var filePathArray = dropboxFiles.matches[i].metadata.path_display.split('/');
+
+                    for (var f = 1; f < filePathArray.length; f++) {
+                        var notFound = true;
+                        var j = 0;
+                        while (notFound && j < arboTemp.length) {
+                            if (arboTemp[j].filename === filePathArray[f]) {
+                                arboTemp = arboTemp[j].content;
+                                notFound = false;
+                            }
+                            j++;
+                        }
+
+                        if (notFound) {
+                            var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
+                            if (file !== null) {
+                                arboTemp.push(file);
+                                if (file.type === 'folder') {
+                                    arboTemp = arboTemp[arboTemp.length - 1].content;
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            return files;
+            console.log('My arbo: ');
+            for(var a=0; a<arbo.length;a++){
+                arbo[a].show = true;
+            }
+            console.log(JSON.stringify(arbo));
+            return arbo;
         };
-
-        /*var transformDropboxFilesToStorageFiles2 = function (dropboxFiles) {
-
-            $log.debug('dropboxFiles', dropboxFiles);
-            var files = [];
-            for (var d of dropboxFiles) {
-                var file = transformDropboxFileToStorageFile(d);
-                if (file !== null) {
-                    files.push(file);
-                }
-            }
-            console.log(files);
-            return files;
-        };*/
 
         /**
          * Converts the format of a dropbox file  in an internal file format
@@ -73,22 +87,31 @@ angular.module('cnedApp').factory('DropboxProvider',
             var filenameStartIndex = filepath.indexOf('_') + 1;
             var filenameEndIndex = filepath.lastIndexOf('_');
             var filename='';
-            var type='';
+            var dateModification = Date.parse(dropboxFile.server_modified);
+            var file;
             if(filenameStartIndex > 0 && filenameEndIndex > -1) {
                 filename = filepath.substring(filenameStartIndex, filenameEndIndex);
-                type = 'file';
+                file = {
+                    filepath: filepath,
+                    filename: filename,
+                    dateModification: dateModification || '',
+                    type: 'file',
+                    show: false,
+                    provider: 'dropbox'
+                };
             } else {
                 filename = filepath.split('/')[filepath.split('/').length - 1];
-                type = 'folder';
+                file = {
+                    filepath: filepath,
+                    filename: filename,
+                    dateModification: dateModification || '',
+                    type: 'folder',
+                    content: [],
+                    show: false,
+                    provider: 'dropbox'
+                };
             }
-            var dateModification = Date.parse(dropboxFile.server_modified);
-            var file = {
-                filepath: filepath,
-                filename: filename,
-                dateModification: dateModification || '',
-                type: type,
-                provider: 'dropbox'
-            };
+
             return file;
         };
 
@@ -193,8 +216,8 @@ angular.module('cnedApp').factory('DropboxProvider',
                 }
             }).success(function (files) {
                 var matches = [];
-                for (var f of files.entries) {
-                    matches.push({metadata: f});
+                for ( var f=0; f < files.entries.length; f++){
+                    matches.push({metadata: files.entries[f]});
                 }
                 var trueFiles = {matches: matches};
                 deferred.resolve(transformDropboxFilesToStorageFiles(trueFiles));
@@ -352,6 +375,29 @@ angular.module('cnedApp').factory('DropboxProvider',
             return deferred.promise;
         };
 
+        var moveFilesService = function (from_path, to_path, access_token) {
+            var deferred = $q.defer();
+
+            $http({
+                method: 'POST',
+                url: 'https://api.dropboxapi.com/2/files/move_v2',
+                data: {
+                    from_path: from_path,
+                    to_path: to_path
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
+            }).then(function () {
+                deferred.resolve();
+            }, function () {
+                // Error
+                deferred.reject();
+            });
+            return deferred.promise;
+        };
+
 
         return {
             upload: uploadService,
@@ -363,6 +409,7 @@ angular.module('cnedApp').factory('DropboxProvider',
             rename: renameService,
             copy: copyService,
             createFolder: createFolderService,
+            moveFiles: moveFilesService,
             auth: authService
         };
     });

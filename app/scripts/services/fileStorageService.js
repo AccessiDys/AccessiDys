@@ -337,6 +337,19 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
     };
 
     /**
+     * Share the file on dropbox and returns the sharing URL.
+     *
+     * @method shareFile
+     */
+    this.moveFiles = function (from_path, to_path) {
+        if (UserService.getData() && UserService.getData().token) {
+            return DropboxProvider.moveFiles(from_path, to_path, UserService.getData().token);
+        } else {
+            return null;
+        }
+    };
+    
+    /**
      * Copy a file
      * @param originalFile
      * @param destinationFile
