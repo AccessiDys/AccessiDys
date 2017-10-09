@@ -38,7 +38,7 @@ angular.module('cnedApp')
                                         htmlEpubTool, $stateParams,
                                         fileStorageService, workspaceService, $timeout, speechService,
                                         $uibModal, canvasToImage, tagsService, documentService,
-                                        $localForage, UtilsService, LoaderService, Analytics, ToasterService, $state) {
+                                        $localForage, UtilsService, LoaderService, Analytics, ToasterService, $state, configuration) {
 
         $scope.idDocument = $stateParams.idDocument;
         $scope.tmp = $stateParams.tmp;
@@ -541,7 +541,7 @@ angular.module('cnedApp')
             } else {
                 $scope.serviceNode = '/sendPdfHTTPS';
             }
-            $http.post($scope.serviceNode, {
+            $http.post(configuration.BASE_URL  + $scope.serviceNode, {
                 lien: url,
                 id: localStorage.getItem('compteId')
             }).success(function (data) {

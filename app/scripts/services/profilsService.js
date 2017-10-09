@@ -157,7 +157,7 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
      * @returns {HttpPromise}
      */
     this.create = function (profile) {
-        return $http.post('/profile', {
+        return $http.post(configuration.BASE_URL  + '/profile', {
             profile: profile
         }, {
             headers: {
@@ -173,7 +173,7 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
      * @returns {HttpPromise}
      */
     this.update = function (profile) {
-        return $http.put('/profile', {
+        return $http.put(configuration.BASE_URL  + '/profile', {
             profile: profile
         }, {
             headers: {
@@ -193,7 +193,7 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
 
             var deferred = $q.defer();
 
-            $http.delete('/profile/' + profile.data._id, {
+            $http.delete(configuration.BASE_URL  + '/profile/' + profile.data._id, {
                 headers: {
                     'AccessiDys-user': UserService.getData().email,
                     'AccessiDys-provider': UserService.getData().provider
@@ -292,7 +292,7 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
 
     this.getProfiles = function () {
 
-        return $q.all([$http.get('/profiles', {
+        return $q.all([$http.get(configuration.BASE_URL  + '/profiles', {
             headers: {
                 'AccessiDys-user': UserService.getData().email
             }
@@ -342,7 +342,7 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
     };
 
     this.getProfile = function (profileId) {
-        return $http.get('/profile/' + profileId).then(function (res) {
+        return $http.get(configuration.BASE_URL  + '/profile/' + profileId).then(function (res) {
             return res.data;
         });
     };

@@ -569,7 +569,7 @@ angular.module('cnedApp')
                 content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour dupliquer votre profil : ' + $scope.oldProfil.data.nom + '. </span>',
                 subject: fullName + ' a dupliqué votre profil'
             };
-            $http.post('/sendEmail', sendVar)
+            $http.post(configuration.BASE_URL  + '/sendEmail', sendVar)
                 .success(function () {
                 });
 

@@ -26,11 +26,11 @@
 'use strict';
 
 cnedApp.factory('OauthService',
-    function ($http) {
+    function ($http, configuration) {
         return {
 
             token: function () {
-                return $http.get('/auth/token');
+                return $http.get(configuration.BASE_URL  + '/auth/token');
             }
         };
     });

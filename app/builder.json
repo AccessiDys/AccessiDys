@@ -1,0 +1,10 @@
+{
+  "win" : {
+    "title" : "Accessidys",
+    "icon" : "styles\\images\\favicon.ico"
+  },
+  "darwin" : {
+    "title" : "Accessidys",
+    "icon" : "styles\\images\\favicon.ico"
+  }
+}

@@ -116,7 +116,7 @@ cnedApp.factory('serviceCheck',
                     console.log('error');
                 });*/
 
-                $http.post(serviceName, data)
+                $http.post(configuration.BASE_URL  + serviceName, data)
                     .success(function (data) {
                         if (data && data.length > 0) {
                             finalData.documentHtml = data;
@@ -139,7 +139,7 @@ cnedApp.factory('serviceCheck',
                 };
                 var localFilePreview = {};
 
-                $http.post('/generateSign', loacalSign)
+                $http.post(configuration.BASE_URL  + '/generateSign', loacalSign)
                     .success(function (loacalSign) {
                         console.log('loacalSign --> ', loacalSign);
                         if (loacalSign && loacalSign.sign) {
@@ -158,7 +158,7 @@ cnedApp.factory('serviceCheck',
                 return /[^a-zA-Z0-9 ]+/g.test(str); // jshint ignore:line
             },
             isOnline: function () {
-                return $http.head('/?t=' + Date.now());
+                return $http.head(configuration.BASE_URL  + '/?t=' + Date.now());
             }
         };
     }
