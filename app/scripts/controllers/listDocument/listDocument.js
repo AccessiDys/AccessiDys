@@ -94,12 +94,21 @@ angular.module('cnedApp')
                     LoaderService.showLoader('document.message.info.rename.inprogress', true);
                     LoaderService.setLoaderProgress(10);
 
-                    fileStorageService.rename(document, params.title, 'document')
-                        .then(function () {
-                            LoaderService.setLoaderProgress(80);
-                            $scope.updateNote('EDIT');
-                            $scope.getListDocument();
-                        });
+                    if(document.type === 'file' ) {
+                        fileStorageService.rename(document, params.title, 'document')
+                            .then(function () {
+                                LoaderService.setLoaderProgress(80);
+                                $scope.updateNote('EDIT');
+                                $scope.getListDocument();
+                            });
+                    } else if (document.type === 'folder') {
+                        fileStorageService.renameFolder(document, params.title)
+                            .then(function () {
+                                LoaderService.setLoaderProgress(80);
+                                $scope.updateNote('EDIT');
+                                $scope.getListDocument();
+                            });
+                    }
                 });
 
             // angular-google-analytics tracking pages

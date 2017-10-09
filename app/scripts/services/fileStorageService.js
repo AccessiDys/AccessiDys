@@ -276,6 +276,39 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
     };
 
     /**
+     * Renames the file on Dropbox and if possible in the cache.
+     * @param online
+     *            if there is internet access
+     * @param oldFilename
+     *            the old file name.
+     * @param newFilename
+     *            the new file name.
+     * @param le
+     *           the dropbox token
+     * @method renameFile
+     */
+    this.renameFolder = function (folder, newName) {
+        var previousPath = folder.filepath;
+        var pathArray = folder.filepath.split('/');
+        pathArray.pop();
+        var newPath = null;
+        if(pathArray.length > 1) {
+            newPath = pathArray.join('/');
+            newPath += newName;
+        } else if(pathArray.length === 1){
+            newPath = '/' + newName;
+        } else {
+            $log.warn('There was à problem on the folder title.');
+        }
+
+        if (newPath!== null && $rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+            if (UserService.getData().provider === 'dropbox') {
+                return DropboxProvider.moveFiles(previousPath, newPath, UserService.getData().token);
+            }
+        }
+    };
+
+    /**
      * Delete the file on Dropbox and if possible in the cache.
      *
      * @param online
