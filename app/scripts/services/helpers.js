@@ -219,7 +219,8 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                     'images/favourit_icn.png',
                     'images/add_document.png',
                     'images/parcourir.png',
-                    'images/clear_uploadpdf.png'
+                    'images/clear_uploadpdf.png',
+                    'tree.html'
                 ];
                 if (config.method == 'GET') { // jshint ignore:line
                     if (!_.contains(exeptionUrl, config.url)) {

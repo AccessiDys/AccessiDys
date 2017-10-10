@@ -4,7 +4,6 @@
   "dependencies": {
     "MD5": "^1.2.1",
     "adm-zip": "0.4.7",
-    "angularjs-dragula": "^2.0.0",
     "async": "~2.3.0",
     "bcrypt-nodejs": "0.0.3",
     "btoa": "^1.1.2",
