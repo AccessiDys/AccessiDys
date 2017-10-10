@@ -76,10 +76,11 @@
     "protractor-jasmine2-html-reporter": "0.0.7",
     "requirejs": "^2.3.3",
     "supertest": "~3.0.0",
+    "sw-precache": "^5.2.0",
     "time-grunt": "~1.4.0"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": "~0.8.0"
   },
   "scripts": {
     "test": "grunt test"

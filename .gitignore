@@ -10,6 +10,7 @@ generated
 /coverage.html
 /jshint-report.html
 /app/viewsScripts/template_cache.js
+/app/service-worker.js
 coverage/
 .vagrant
 bower_components/
