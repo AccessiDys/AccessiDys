@@ -277,16 +277,10 @@ table th:last-child {
     background-position: 11px 7px;
 }
 
-.add_folder {
-    //TODO Image add folder
+.add_document {
     background-image: url(images/add_document.png);
     background-repeat: no-repeat;
     background-position: 11px 7px;
-}
-
-#addFolder {
-    padding-top: 10px;
-    margin-left: 20px;
 }
 
 #addDocument {

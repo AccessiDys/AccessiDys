@@ -83,9 +83,9 @@
                 <th class="action_zone">action</th>
             </tr>
             </thead>
-            <tbody dragula='"global"'>
+            <tbody>
             <!-- Table Body-->
-            <tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" >
+            <!--<tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" >
                 <td>
                     <a data-ng-if="document.type === 'folder'"><img src="../styles/images/docs.png"/></a>
                     <a data-ng-if="document.type === 'file'">fichier</a>
@@ -149,36 +149,40 @@
                         </li>
                     </ul>
                 </td>
-            </tr>
+            </tr>-->
+
             </tbody>
         </table>
 
+        <div id="listDocumentP">
+            <span>
+                TYPE
+            </span>
+            <span>
+                        <span class="cursor-pointer sort-column"
+                              data-ng-click="sortType = 'filename'; sortReverse = !sortReverse">
+                            TITRE
+                            <i class="fa" aria-hidden="true" data-ng-if="sortType === 'filename'"
+                               data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
+                            <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'filename'"></i>
+                        </span>
+            </span>
+            <span>
+                        <span class="cursor-pointer sort-column"
+                              data-ng-click="sortType = 'dateModification'; sortReverse = !sortReverse">
+                            Date derniere modification
+                            <i class="fa" aria-hidden="true" data-ng-if="sortType === 'dateModification'"
+                               data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
+                            <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'dateModification'"></i>
+                        </span>
+            </span>
+            <span class="action_zone">action</span>
 
-        <div data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse">
-
-            <div style="display:inline-block;">
-                <a data-ng-if="document.type === 'folder'">dossier </a>
-                <a data-ng-if="document.type === 'file'">fichier </a>
+            <div dragula='"another-bag"'>
+                <div data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse">
+                    <div ng-include="'tree.html'"></div>
+                </div>
             </div>
-            <div style="display:inline-block;">{{document.filename}}</div>
-
-            <div ng-repeat="document in document.content" ng-include="'tree.html'"></div>
-
-            <script type="text/ng-template" id="tree.html">
-                <div style="display:inline-block;">
-                    <a data-ng-if="document.type === 'folder'"><img src="../styles/images/docs.png"/></a>
-                    <a data-ng-if="document.type === 'file'">fichier</a>
-                </div>
-                <div style="display:inline-block;">
-                    <a href="#/apercu?idDocument={{document.filename}}">
-                        {{ document.filename }}
-                    </a>
-                </div>
-
-                <div ng-repeat="document in document.content" ng-include="'tree.html'"></div>
-            </script>
-
-
         </div>
 
         <p class="text-center mt-10" data-ng-if="listDocument.length > 0"><i>{{listDocument.length}} document<span
@@ -187,3 +191,67 @@
 </div>
 
 
+<script type="text/ng-template" id="tree.html">
+    <div>
+        <span>
+            <a data-ng-if="document.type === 'folder'"><img src="../styles/images/docs.png"/></a>
+            <a data-ng-if="document.type === 'file'">fichier</a>
+        </span>
+        <span class="profil_desc">
+            <a href="#/apercu?idDocument={{document.filename}}">
+                {{ document.filename }}
+            </a>
+        </span>
+
+        <span class="profil_desc centering">{{ document.dateModification | date:
+            configuration.DATE_PATTERN}}
+        </span>
+
+        <div class="action_area centering" uib-dropdown>
+            <ul class="action_list" uib-dropdown-menu aria-labelledby="document-actions">
+                <li class="show_item" data-ng-if="document.type === 'file'">
+                    <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document"
+                       title="Afficher">
+                        Afficher
+                    </a>
+                </li>
+                <li class="setting_documentTitle">
+                    <a id="edit_document"
+                       data-toggle="modal"
+                       data-target="#EditTitreModal"
+                       data-ng-click="renameDocumentTitle(document)"
+                       title="Modifier le titre">
+                        Modifier le titre
+                    </a>
+                </li>
+                <li class="restructer_item" data-ng-if="document.type === 'file'">
+                    <a ng-href="#/addDocument?idDocument={{document.filename}}" id="restructurer_document"
+                       title="Modifier">
+                        Modifier
+                    </a>
+                </li>
+                <li class="setting_documentTitle" data-ng-if="document.type === 'file'">
+                    <a id="duplicate_document"
+                       data-ng-click="duplicateDoc(document)"
+                       title="Dupliquer le document">
+                        Dupliquer
+                    </a>
+                </li>
+                <li class="share_item" data-ng-if="userData.provider">
+                    <a id="share_document" title="Partager le document"
+                       data-ng-click="shareDocument(document)">
+                        Partager
+                    </a>
+                </li>
+                <li class="removing_item">
+                    <a id="delete_document"
+                       data-ng-click="deleteDocument(document)" title="Supprimer">
+                        Supprimer
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div ng-repeat="document in document.content" ng-include="'tree.html'"></div>
+</script>

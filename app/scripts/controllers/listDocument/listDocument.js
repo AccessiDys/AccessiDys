@@ -242,4 +242,16 @@ angular.module('cnedApp')
 
         };
 
+        /*$scope.$on('dragable_doc.drag', function(e1){
+            console.log('Tu viens de drag l\'element ' + e1);
+        });
+
+        $scope.$on('dragable_doc.drop', function(e1, e2){
+            if(e2.type === 'file'){
+                console.log('NOP');
+            } else {
+                console.log('On peu déplacer');
+            }
+        });*/
+
     });
