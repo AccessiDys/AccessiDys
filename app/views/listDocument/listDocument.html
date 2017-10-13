@@ -54,14 +54,10 @@
         </div>
 
 
-
         <table id="listDocumentPage">
             <thead>
             <!-- Table Header-->
             <tr>
-                <th>
-                    TYPE
-                </th>
                 <th>
                     <span class="cursor-pointer sort-column"
                           data-ng-click="sortType = 'filename'; sortReverse = !sortReverse">
@@ -83,7 +79,7 @@
                 <th class="action_zone">action</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody ng-repeat="document in listDocument" ng-include="'tree.html'" ng-init="level = 0">
             <!-- Table Body-->
             <!--<tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" >
                 <td>
@@ -152,46 +148,36 @@
             </tr>-->
 
             </tbody>
+            <script type="text/ng-template" id="tree.html">
+                <tr>
+                    <td>
+                        <span style="margin-left:{{(level * 30)}}px;">
+                            <i data-ng-if="document.type === 'folder'" class="fa fa-folder" aria-hidden="true"></i>
+                            <i data-ng-if="document.type === 'file'" class="fa fa-file" aria-hidden="true"></i>
+                            <span class="ml-10">{{document.filename}}</span>
+
+                        </span>
+                    </td>
+                    <td>
+                        {{ document.dateModification | date: configuration.DATE_PATTERN}}
+                    </td>
+                    <td>
+                        Action
+                    </td>
+                </tr>
+
+
+                <tr ng-include="'tree.html'" ng-repeat="document in document.content" ng-init="level = level + 1"></tr>
+            </script>
         </table>
 
-        <div id="listDocumentP">
-            <span>
-                TYPE
-            </span>
-            <span>
-                        <span class="cursor-pointer sort-column"
-                              data-ng-click="sortType = 'filename'; sortReverse = !sortReverse">
-                            TITRE
-                            <i class="fa" aria-hidden="true" data-ng-if="sortType === 'filename'"
-                               data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
-                            <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'filename'"></i>
-                        </span>
-            </span>
-            <span>
-                        <span class="cursor-pointer sort-column"
-                              data-ng-click="sortType = 'dateModification'; sortReverse = !sortReverse">
-                            Date derniere modification
-                            <i class="fa" aria-hidden="true" data-ng-if="sortType === 'dateModification'"
-                               data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
-                            <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'dateModification'"></i>
-                        </span>
-            </span>
-            <span class="action_zone">action</span>
-
-            <div dragula='"another-bag"'>
-                <div data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse">
-                    <div ng-include="'tree.html'"></div>
-                </div>
-            </div>
-        </div>
-
-        <p class="text-center mt-10" data-ng-if="listDocument.length > 0"><i>{{listDocument.length}} document<span
-                data-ng-if="listDocument.length > 1">s</span></i></p>
+        <!--<p class="text-center mt-10" data-ng-if="listDocument.length > 0"><i>{{listDocument.length}} document<span
+                data-ng-if="listDocument.length > 1">s</span></i></p>-->
     </div>
 </div>
 
 
-<script type="text/ng-template" id="tree.html">
+<!--<script type="text/ng-template" id="tree.html">
     <div>
         <span>
             <a data-ng-if="document.type === 'folder'"><img src="../styles/images/docs.png"/></a>
@@ -254,4 +240,4 @@
     </div>
 
     <div ng-repeat="document in document.content" ng-include="'tree.html'"></div>
-</script>
+</script>-->

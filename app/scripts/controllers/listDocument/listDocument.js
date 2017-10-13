@@ -94,7 +94,7 @@ angular.module('cnedApp')
                     LoaderService.showLoader('document.message.info.rename.inprogress', true);
                     LoaderService.setLoaderProgress(10);
 
-                    if(document.type === 'file' ) {
+                    if (document.type === 'file') {
                         fileStorageService.rename(document, params.title, 'document')
                             .then(function () {
                                 LoaderService.setLoaderProgress(80);
@@ -196,6 +196,7 @@ angular.module('cnedApp')
 
                 if (listDocument) {
                     $scope.listDocument = listDocument;
+                    $log.debug('listDocument', $scope.listDocument);
                 } else {
                     $scope.listDocument = [];
                 }
@@ -222,7 +223,7 @@ angular.module('cnedApp')
 
         };
 
-        $scope.createFolder = function(path) {
+        $scope.createFolder = function (path) {
             $log.debug('Create a new folder', path);
 
             documentService.createFolder(path).then(function () {
@@ -232,7 +233,7 @@ angular.module('cnedApp')
 
         };
 
-        $scope.moveFiles = function(from_path, to_path) {
+        $scope.moveFiles = function (from_path, to_path) {
             $log.debug('Moving files', from_path, to_path);
 
             documentService.moveFiles(from_path, to_path, []).then(function () {
@@ -243,15 +244,15 @@ angular.module('cnedApp')
         };
 
         /*$scope.$on('dragable_doc.drag', function(e1){
-            console.log('Tu viens de drag l\'element ' + e1);
-        });
+         console.log('Tu viens de drag l\'element ' + e1);
+         });
 
-        $scope.$on('dragable_doc.drop', function(e1, e2){
-            if(e2.type === 'file'){
-                console.log('NOP');
-            } else {
-                console.log('On peu déplacer');
-            }
-        });*/
+         $scope.$on('dragable_doc.drop', function(e1, e2){
+         if(e2.type === 'file'){
+         console.log('NOP');
+         } else {
+         console.log('On peu déplacer');
+         }
+         });*/
 
     });
