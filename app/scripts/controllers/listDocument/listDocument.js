@@ -28,7 +28,7 @@ angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope,
                                               configuration, fileStorageService, Analytics,
                                               gettextCatalog, UtilsService, LoaderService, $log, documentService,
-                                              ToasterService, _, $uibModal) {
+                                              ToasterService, _, $uibModal, $state) {
 
         $scope.configuration = configuration;
         $scope.sortType = 'dateModification';
@@ -317,8 +317,8 @@ angular.module('cnedApp')
                 }
             });
 
-            modalInstance.result.then(function (params) {
-
+            modalInstance.result.then(function (result) {
+                $state.go('app.edit-document', {folder: result.selectedFolder});
             });
         };
 

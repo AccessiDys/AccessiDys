@@ -182,11 +182,11 @@ angular
                     documentData = documentData.replace(/href="(http.*?)"/gi, 'href="/#/apercu?url=$1"');
                 }
 
-
                 documentService.save({
                     title: $scope.document.filename,
                     data: documentData,
-                    filePath: $scope.document.filepath
+                    filePath: $scope.document.filepath,
+                    folder: $stateParams.folder
                 }, mode)
                     .then(function (data) {
                         $log.debug('Save - data', data);

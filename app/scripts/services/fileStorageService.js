@@ -188,6 +188,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
         if (!file.filepath) {
             file.filepath = this.generateFilepath(file.filename, extension);
+
+            if(type === 'document'){
+                file.filepath = file.folder.filepath + file.filepath;
+            }
         }
 
         $log.debug('file.filepath', file.filepath);

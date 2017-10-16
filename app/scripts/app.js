@@ -101,7 +101,8 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
             controller: 'AddDocumentCtrl',
             pageTrack: '/document/edit.html',  // angular-google-analytics extension,
             params: {
-                file: null
+                file: null,
+                folder: null
             }
         })
         .state('app.print-document', {
