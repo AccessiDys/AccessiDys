@@ -74,6 +74,24 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
             return deferred.promise;
         },
 
+        isFolderAlreadyExist: function (folder) {
+            var deferred = $q.defer();
+
+            $log.debug('Check if document already exist', folder);
+
+            fileStorageService.listAll().then(function (documents) {
+                var isFound = false;
+                _.each(documents, function (item) {
+                    if (folder.title === item.filename) {
+                        isFound = true;
+                    }
+                });
+                deferred.resolve(isFound);
+            });
+
+            return deferred.promise;
+        },
+
         /**
          * Save the document
          *
@@ -120,7 +138,8 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                             filename: document.title,
                             filepath: document.filePath,
                             data: document.data,
-                            dateModification: new Date()
+                            dateModification: new Date(),
+                            folder: document.folder
                         };
 
 
@@ -268,6 +287,44 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             return deferred.promise;
 
+        },
+
+        createFolder: function (path, errors) {
+            var deferred = $q.defer();
+
+            $log.debug('createFolder', path, errors);
+
+            UtilsService.openNewFolderModal('', [], 'save')
+                .then(function (params) {
+                    LoaderService.showLoader('document.message.info.copy.inprogress', false);
+                    LoaderService.hideLoader();
+
+                    path = params.title;
+
+                    fileStorageService.createFolder('/' + path)
+                        .then(function () {
+                            LoaderService.hideLoader();
+                            deferred.resolve();
+                        }, function () {
+                            LoaderService.hideLoader();
+                            deferred.reject();
+                        });
+                });
+            return deferred.promise;
+        },
+
+        moveFiles: function (from_path, to_path, errors) {
+            var deferred = $q.defer();
+
+            $log.debug('moveFiles', from_path, to_path, errors);
+
+            UtilsService.openConfirmModal('document.message.move.confirm.title', 'document.message.move.confirm.message', false)
+                .then(function () {
+                    LoaderService.showLoader('document.message.info.move.inprogress', false);
+                    LoaderService.hideLoader();
+
+                });
+            return deferred.promise;
         }
     };
 

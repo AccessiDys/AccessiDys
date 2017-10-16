@@ -27,11 +27,15 @@
 angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope,
                                               configuration, fileStorageService, Analytics,
-                                              gettextCatalog, UtilsService, LoaderService, $log, documentService, ToasterService) {
+                                              gettextCatalog, UtilsService, LoaderService, $log, documentService,
+                                              ToasterService, _, $uibModal, $state, $filter) {
 
         $scope.configuration = configuration;
         $scope.sortType = 'dateModification';
         $scope.sortReverse = true;
+        $scope.documentCount = 0;
+        $scope.folderCount = 0;
+        var fileIndex = 0;
 
 
         /**
@@ -62,10 +66,20 @@ angular.module('cnedApp')
          */
         $scope.deleteDocument = function (document) {
 
-            UtilsService.openConfirmModal(gettextCatalog.getString('document.label.delete.title'),
-                gettextCatalog.getString('document.label.delete.anwser').replace('document.name', document.filename), true)
+            var title = 'document.label.delete.title';
+            var msg = 'document.label.delete.anwser';
+            var loader = 'document.message.info.delete.inprogress';
+
+            if (document.type == 'folder') {
+                title = 'folder.label.delete.title';
+                msg = 'folder.label.delete.anwser';
+                loader = 'folder.message.info.delete.inprogress';
+            }
+
+            UtilsService.openConfirmModal(gettextCatalog.getString(title),
+                gettextCatalog.getString(msg).replace('document.name', document.filename), true)
                 .then(function () {
-                    LoaderService.showLoader('document.message.info.delete.inprogress', true);
+                    LoaderService.showLoader(loader, true);
                     LoaderService.setLoaderProgress(30);
 
                     fileStorageService.delete(document, 'document').then(function () {
@@ -91,15 +105,26 @@ angular.module('cnedApp')
 
             documentService.editDocumentTitle(document.filename, [], 'edit')
                 .then(function (params) {
-                    LoaderService.showLoader('document.message.info.rename.inprogress', true);
+
                     LoaderService.setLoaderProgress(10);
 
-                    fileStorageService.rename(document, params.title, 'document')
-                        .then(function () {
-                            LoaderService.setLoaderProgress(80);
-                            $scope.updateNote('EDIT');
-                            $scope.getListDocument();
-                        });
+                    if (document.type === 'file') {
+                        LoaderService.showLoader('document.message.info.rename.inprogress', true);
+                        fileStorageService.rename(document, params.title, 'document')
+                            .then(function () {
+                                LoaderService.setLoaderProgress(80);
+                                $scope.updateNote('EDIT');
+                                $scope.getListDocument();
+                            });
+                    } else if (document.type === 'folder') {
+                        LoaderService.showLoader('folder.message.info.rename.inprogress', true);
+                        fileStorageService.renameFolder(document, params.title)
+                            .then(function () {
+                                LoaderService.setLoaderProgress(80);
+                                $scope.updateNote('EDIT');
+                                $scope.getListDocument();
+                            });
+                    }
                 });
 
             // angular-google-analytics tracking pages
@@ -158,39 +183,137 @@ angular.module('cnedApp')
 
         };
 
+
+        function calculateIndex(list) {
+            if (list) {
+                _.each(list, function (value) {
+
+                    if (value.showed) {
+                        value.index = fileIndex;
+                    }
+
+                    fileIndex++;
+
+                    if (value.content && value.content.length > 0 && value.contentShowed) {
+                        calculateIndex(value.content);
+                    }
+                });
+            }
+        }
+
+        $scope.toggleFolder = function (file) {
+            if (file && file.type === 'folder') {
+                file.contentShowed = !file.contentShowed;
+                fileIndex = 0;
+                calculateIndex($scope.listDocument);
+            }
+        };
+
+
+        $scope.sortByName = function () {
+            $scope.sortType = 'filename';
+            $scope.sortReverse = !$scope.sortReverse;
+
+            $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+
+            calculateIndex($scope.listDocument);
+        };
+
+        $scope.sortByDate = function () {
+            $scope.sortType = 'dateModification';
+            $scope.sortReverse = !$scope.sortReverse;
+
+            $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+
+            calculateIndex($scope.listDocument);
+        };
+
+        function sortList(list, expression, reverse) {
+
+            if (list && list.length > 0) {
+                _.each(list, function (value) {
+                    if (value.content && value.content.length > 0) {
+                        value.content = sortList(value.content, expression, reverse);
+                    }
+                });
+
+                return $filter('orderBy')(list, expression, reverse);
+            }
+
+        }
+
         /*
          * Show all the documents at the beginning
          * and creates the menu associated with the document
          */
-        $scope.initialiseShowDocs = function () {
-            for (var i = 0; i < $scope.listDocument.length; i++) {
-                $scope.listDocument[i].showed = true;
-                $scope.listDocument[i].filenameEncoded = $scope.listDocument[i].filename.replace(/ /g, '_');
+        $scope.initialiseShowDocs = function (list) {
+            if (list) {
+                _.each(list, function (value) {
+                    value.showed = true;
+                    value.contentShowed = false;
+
+                    if (value.type === 'folder') {
+                        $scope.folderCount++;
+                    } else if (value.type === 'file') {
+                        $scope.documentCount++;
+                    }
+
+                    if (value.content && value.content.length > 0) {
+                        $scope.initialiseShowDocs(value.content);
+                    }
+                });
+
+
             }
         };
 
         /* Filter on the name of the document to be displayed */
-        $scope.specificFilter = function () {
+        $scope.specificFilter = function (list) {
             // parcours des Documents
-            for (var i = 0; i < $scope.listDocument.length; i++) {
-                $scope.listDocument[i].showed = $scope.listDocument[i].filename.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1;
+
+            if (list) {
+                _.each(list, function (value) {
+                    value.showed = value.filename.toLowerCase().indexOf($scope.query.toLowerCase()) !== -1;
+
+                    if (value.content && value.content.length > 0) {
+                        $scope.specificFilter(value.content);
+                    }
+                });
             }
         };
 
+        $scope.hasChildShowed = function (children) {
+            return _.find(children, function (child) {
+
+                if (child.type === 'folder' && child.content) {
+                    return $scope.hasChildShowed(child.content);
+                } else {
+                    return child.showed;
+                }
+            });
+        };
+
+        /**
+         * Search all documents
+         */
         $scope.getListDocument = function () {
             LoaderService.showLoader('document.message.info.load', false);
             LoaderService.setLoaderProgress(20);
 
-            fileStorageService.list('document').then(function (listDocument) {
+            fileStorageService.listAll().then(function (listDocument) {
                 LoaderService.setLoaderProgress(100);
                 LoaderService.hideLoader();
 
                 if (listDocument) {
                     $scope.listDocument = listDocument;
+                    $scope.initialiseShowDocs($scope.listDocument);
+
+                    $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+
+                    calculateIndex($scope.listDocument);
                 } else {
                     $scope.listDocument = [];
                 }
-                $scope.initialiseShowDocs();
 
 
             }, function () {
@@ -212,5 +335,46 @@ angular.module('cnedApp')
             });
 
         };
+
+        $scope.createFolder = function (path) {
+            $log.debug('Create a new folder', path);
+
+            documentService.createFolder(path).then(function () {
+                ToasterService.showToaster('#list-document-success-toaster', 'folder.message.create.ok');
+                $scope.getListDocument();
+            });
+
+        };
+
+        $scope.moveFiles = function (from_path, to_path) {
+            $log.debug('Moving files', from_path, to_path);
+
+            documentService.moveFiles(from_path, to_path, []).then(function () {
+                ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
+                $scope.getListDocument();
+            });
+
+        };
+
+        $scope.createDocument = function () {
+
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/listDocument/folder-list.modal.html',
+                controller: 'folderListCtrl',
+                windowClass: 'profil-md',
+                backdrop: 'static',
+                scope: $scope,
+                resolve: {
+                    folderList: function () {
+                        return $scope.listDocument;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                $state.go('app.edit-document', {folder: result.selectedFolder});
+            });
+        };
+
 
     });

@@ -190,6 +190,7 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                     'views/listDocument/listDocument.html',
                     'views/listDocument/listDocumentModal.html',
                     'views/profiles/delegate-profile.modal.html',
+                    'views/listDocument/folder-list.modal.html',
                     'views/profiles/detailProfil.html',
                     'views/profiles/editProfilStyleModal.html',
                     'views/profiles/profilAffichageModal.html',
@@ -219,7 +220,9 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                     'images/favourit_icn.png',
                     'images/add_document.png',
                     'images/parcourir.png',
-                    'images/clear_uploadpdf.png'
+                    'images/clear_uploadpdf.png',
+                    'tree.html',
+                    'tree-folder.html'
                 ];
                 if (config.method == 'GET') { // jshint ignore:line
                     if (!_.contains(exeptionUrl, config.url)) {

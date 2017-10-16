@@ -43,7 +43,8 @@ var cnedApp = angular.module('cnedApp', [
     'slick',
     'textAngular',
     'sticky',
-    'angular-cookie-law'
+    'angular-cookie-law',
+    'ngDragDrop'
 ]);
 
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $sceProvider,
@@ -100,7 +101,8 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
             controller: 'AddDocumentCtrl',
             pageTrack: '/document/edit.html',  // angular-google-analytics extension,
             params: {
-                file: null
+                file: null,
+                folder: null
             }
         })
         .state('app.print-document', {

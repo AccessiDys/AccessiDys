@@ -38,14 +38,42 @@ angular.module('cnedApp').factory('DropboxProvider',
         var transformDropboxFilesToStorageFiles = function (dropboxFiles) {
 
             $log.debug('dropboxFiles', dropboxFiles);
-            var files = [];
-            for (var i = 0; i < dropboxFiles.matches.length; i++) {
-                var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
-                if (file !== null) {
-                    files.push(file);
+            var arbo = [];
+            for (var i = 0; i < dropboxFiles.matches.length; i++) { //excludes profils json files.
+                if (dropboxFiles.matches[i].metadata.name.indexOf('-profile.json') < 0) {
+                    var arboTemp = arbo;
+
+                    var filePathArray = dropboxFiles.matches[i].metadata.path_display.split('/');
+
+                    for (var f = 1; f < filePathArray.length; f++) {
+                        var notFound = true;
+                        var j = 0;
+                        while (notFound && j < arboTemp.length) {
+                            if (arboTemp[j].filename === filePathArray[f]) {
+                                arboTemp = arboTemp[j].content;
+                                notFound = false;
+                            }
+                            j++;
+                        }
+
+                        if (notFound) {
+                            var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
+                            if (file !== null) {
+                                arboTemp.push(file);
+                                if (file.type === 'folder') {
+                                    arboTemp = arboTemp[arboTemp.length - 1].content;
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            return files;
+            console.log('My arbo: ');
+            for(var a=0; a<arbo.length;a++){
+                arbo[a].show = true;
+            }
+            console.log(JSON.stringify(arbo));
+            return arbo;
         };
 
         /**
@@ -58,14 +86,31 @@ angular.module('cnedApp').factory('DropboxProvider',
             var filepath = dropboxFile.path_display;
             var filenameStartIndex = filepath.indexOf('_') + 1;
             var filenameEndIndex = filepath.lastIndexOf('_');
-            var filename = filepath.substring(filenameStartIndex, filenameEndIndex);
+            var filename='';
             var dateModification = Date.parse(dropboxFile.server_modified);
-            var file = {
-                filepath: filepath,
-                filename: filename,
-                dateModification: dateModification,
-                provider: 'dropbox'
-            };
+            var file;
+            if(filenameStartIndex > 0 && filenameEndIndex > -1) {
+                filename = filepath.substring(filenameStartIndex, filenameEndIndex);
+                file = {
+                    filepath: filepath,
+                    filename: filename,
+                    dateModification: dateModification || '',
+                    type: 'file',
+                    show: false,
+                    provider: 'dropbox'
+                };
+            } else {
+                filename = filepath.split('/')[filepath.split('/').length - 1];
+                file = {
+                    filepath: filepath,
+                    filename: filename,
+                    dateModification: dateModification || '',
+                    type: 'folder',
+                    content: [],
+                    show: false,
+                    provider: 'dropbox'
+                };
+            }
 
             return file;
         };
@@ -114,7 +159,7 @@ angular.module('cnedApp').factory('DropboxProvider',
             var deferred = $q.defer();
             $http({
                 method: 'POST',
-                url: 'https://api.dropboxapi.com/2/files/delete',
+                url: 'https://api.dropboxapi.com/2/files/delete_v2',
                 data: {
                     path: filePath
                 },
@@ -135,7 +180,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                 method: 'POST',
                 url: 'https://api.dropboxapi.com/2/files/search',
                 data: {
-                    path: '',
+                    path:'',
                     query: query,
                     start: 0,
                     mode: 'filename',
@@ -147,6 +192,35 @@ angular.module('cnedApp').factory('DropboxProvider',
                 }
             }).success(function (files) {
                 deferred.resolve(transformDropboxFilesToStorageFiles(files));
+            }).error(function (data) {
+                deferred.reject(data);
+            });
+            return deferred.promise;
+        };
+        var listAllFilesService = function (path, access_token){
+            var deferred = $q.defer();
+            $http({
+                method: 'POST',
+                url: 'https://api.dropboxapi.com/2/files/list_folder',
+                data: {
+                    path: path,
+                    recursive: true,
+                    include_media_info: false,
+                    include_deleted: false,
+                    include_has_explicit_shared_members: false,
+                    include_mounted_folders: true
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
+            }).success(function (files) {
+                var matches = [];
+                for ( var f=0; f < files.entries.length; f++){
+                    matches.push({metadata: files.entries[f]});
+                }
+                var trueFiles = {matches: matches};
+                deferred.resolve(transformDropboxFilesToStorageFiles(trueFiles));
             }).error(function (data) {
                 deferred.reject(data);
             });
@@ -279,15 +353,63 @@ angular.module('cnedApp').factory('DropboxProvider',
             return deferred.promise;
         };
 
+        var createFolderService = function (path, access_token) {
+            var deferred = $q.defer();
+
+            $http({
+                method: 'POST',
+                url: 'https://api.dropboxapi.com/2/files/create_folder_v2',
+                data: {
+                    path: path
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
+            }).then(function () {
+                deferred.resolve();
+            }, function () {
+                // Error
+                deferred.reject();
+            });
+            return deferred.promise;
+        };
+
+        var moveFilesService = function (from_path, to_path, access_token) {
+            var deferred = $q.defer();
+
+            $http({
+                method: 'POST',
+                url: 'https://api.dropboxapi.com/2/files/move_v2',
+                data: {
+                    from_path: from_path,
+                    to_path: to_path
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token,
+                    'Content-Type': 'application/json'
+                }
+            }).then(function () {
+                deferred.resolve();
+            }, function () {
+                // Error
+                deferred.reject();
+            });
+            return deferred.promise;
+        };
+
 
         return {
             upload: uploadService,
             delete: deleteService,
             search: searchService,
+            listAllFiles: listAllFilesService,
             shareLink: shareLinkService,
             download: downloadService,
             rename: renameService,
             copy: copyService,
+            createFolder: createFolderService,
+            moveFiles: moveFilesService,
             auth: authService
         };
     });

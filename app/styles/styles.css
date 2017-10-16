@@ -277,6 +277,12 @@ table th:last-child {
     background-position: 11px 7px;
 }
 
+.add_document {
+    background-image: url(images/add_document.png);
+    background-repeat: no-repeat;
+    background-position: 11px 7px;
+}
+
 #addDocument {
     padding-top: 10px;
 }
@@ -2968,4 +2974,20 @@ h4.information  {
     font-size: 37px;
     text-transform: uppercase;
     color: green;
+}
+
+.bg-color-gray {
+    background: #f7f6f6 !important;
+}
+
+.bg-color-white {
+    background: #fff !important;
+}
+
+.bg-selected {
+    background: #009cb8 !important;
+}
+
+.bg-selected * {
+    color: #fff !important;
 }

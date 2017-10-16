@@ -66,18 +66,31 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             // Resolve Cache
             return CacheProvider.list(storageName);
         }
+
+    };
+
+    this.listAll = function(){
+
+         var storageName = 'listDocument';
+         var path = '';
+
+         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+            return DropboxProvider.listAllFiles(path, UserService.getData().token).then(function (files) {
+                return CacheProvider.saveAll(files, storageName);
+            }, function () {
+                return CacheProvider.list(storageName);
+            });
+         } else {
+             // Resolve Cache
+             return CacheProvider.list(storageName);
+         }
     };
 
     /**
      * Search files in Dropbox or in the cache if dropbox is not accessible
-     *
-     * @param online
-     *           if there is internet access
-     * @param query
-     *            the search query
-     * @param token
-     *            the dropbox token
-     * @method get
+     * @param filename
+     * @param type
+     * @returns {*}
      */
     this.get = function (filename, type) {
 
@@ -175,6 +188,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
         if (!file.filepath) {
             file.filepath = this.generateFilepath(file.filename, extension);
+
+            if(type === 'document'){
+                file.filepath = file.folder.filepath + file.filepath;
+            }
         }
 
         $log.debug('file.filepath', file.filepath);
@@ -255,6 +272,39 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
     };
 
     /**
+     * Renames the file on Dropbox and if possible in the cache.
+     * @param online
+     *            if there is internet access
+     * @param oldFilename
+     *            the old file name.
+     * @param newFilename
+     *            the new file name.
+     * @param le
+     *           the dropbox token
+     * @method renameFile
+     */
+    this.renameFolder = function (folder, newName) {
+        var previousPath = folder.filepath;
+        var pathArray = folder.filepath.split('/');
+        pathArray.pop();
+        var newPath = null;
+        if(pathArray.length > 1) {
+            newPath = pathArray.join('/');
+            newPath += newName;
+        } else if(pathArray.length === 1){
+            newPath = '/' + newName;
+        } else {
+            $log.warn('There was à problem on the folder title.');
+        }
+
+        if (newPath!== null && $rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+            if (UserService.getData().provider === 'dropbox') {
+                return DropboxProvider.moveFiles(previousPath, newPath, UserService.getData().token);
+            }
+        }
+    };
+
+    /**
      * Delete the file on Dropbox and if possible in the cache.
      *
      * @param online
@@ -302,7 +352,32 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         }
     };
 
+    /**
+     * Share the file on dropbox and returns the sharing URL.
+     *
+     * @method shareFile
+     */
+    this.createFolder = function (filepath) {
+        if (UserService.getData() && UserService.getData().token) {
+            return DropboxProvider.createFolder(filepath, UserService.getData().token);
+        } else {
+            return null;
+        }
+    };
 
+    /**
+     * Share the file on dropbox and returns the sharing URL.
+     *
+     * @method shareFile
+     */
+    this.moveFiles = function (from_path, to_path) {
+        if (UserService.getData() && UserService.getData().token) {
+            return DropboxProvider.moveFiles(from_path, to_path, UserService.getData().token);
+        } else {
+            return null;
+        }
+    };
+    
     /**
      * Copy a file
      * @param originalFile

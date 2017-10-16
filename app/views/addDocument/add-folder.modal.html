@@ -1,0 +1,74 @@
+<!--
+ File: edit-title.modal.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<div class="modal-header">
+    <button type="button" class="close" aria-hidden="true" data-ng-click="dismissModal()">×</button>
+    <h4 class="modal-title" data-ng-if="mode === 'save'">Créer le dossier</h4>
+    <h4 class="modal-title" data-ng-if="mode === 'edit'">ENTRER LE NOM DU DOSSIER</h4>
+</div>
+
+<div class="alert-block alert-danger alert-dismissable" id="add-folder-error-toaster">
+    <i class="fa fa-times" aria-hidden="true"></i>
+
+    <strong profile-coloration
+            profile="currentProfile"
+            text="toasterMsg"
+            class="{{currentProfile.data.className}}">
+    </strong>
+</div>
+
+<div class="modal-body adjust-modal-body">
+
+    <div class="row-fluid span6">
+        <div class="tab-content">
+            <form id="show_document" name="show_document" role="form">
+                <fieldset>
+                    <p class="controls_zone">
+                        <label for="folder-path" class="simple_label">
+                            <span>Titre</span>
+                            <span class="required">*</span>
+                        </label>
+                        <input type="text" max-length="32" id="folder-path"
+                               placeholder="Entrez le nom du dossier" data-ng-model="folder.title" required>
+                    </p>
+                </fieldset>
+                <div class="centering" id="ProfileButtons">
+                    <button type="button" class="reset_btn" data-dismiss="modal" ng-click="dismissModal()"
+                            title="{{'Annuler' | translate}}">
+                        {{'Annuler' | translate}}
+                    </button>
+                    <button type="button" class="btn_simple light_blue" data-ng-if="mode === 'save'"
+                            data-ng-click="saveName()" title="{{'label.create' | translate}}">
+                        {{'label.create' | translate}}
+                    </button>
+
+                    <button type="button" class="btn_simple light_blue" data-ng-if="mode === 'edit'"
+                            data-ng-click="saveName()" title="{{'label.rename' | translate}}">
+                        {{'label.rename' | translate}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
