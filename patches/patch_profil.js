@@ -45,77 +45,47 @@ function newProfilParDefaut() {
     var profile = new Profil(newProfil);
     profile.save(function (err) {
         if (err) {
-            console.log('erreur creating profile.')
+            console.log('Error creating profile.')
         } else {
-
             //Create link between profiles and tags
-            createProfilTagsForNewProfilByDefault(profile._id);
-
-            //Create link between profiles and users
-            createUserProfilsForNewProfilByDefaultToAllUsers(profile._id);
-
+            createProfilTagsForNewProfilByDefault(profile);
         }
     });
 
-};
+}
 
-function createUserProfilsForNewProfilByDefaultToAllUsers(profileID) {
-
-    //TODO : Select all users and create an user profil with the new profile for each of one
-    UserAccount.find({}, function (err, users) {
-        if (users) {
-            for (var i = 0; i < users.length; i++) {
-                var user = users[i];
-                var userProfil = new UserProfil({
-                    'profilID': profileID,
-                    'userID': user._id,
-                    'favoris': false,
-                    'actuel': true,
-                    'default': true
-                });
-                userProfil.save(function (err) {
-                    if (err) {
-                        console.log('error creating user profil for default profil')
-                    }
-                });
-            }
-        }
-    });
-
-};
-
-function createProfilTagsForNewProfilByDefault(profileID) {
+function createProfilTagsForNewProfilByDefault(profile) {
 
     //for all tags, create the link with the profile
     var newProfilTag = [
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Légende",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Normal",
             "coloration": "Colorer les lignes RBV",
             "spaceCharSelected": 1,
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Titre 1",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Gras",
             "coloration": "Colorer les lignes RBV",
             "spaceCharSelected": 1,
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Sous-titre 1",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Gras",
             "coloration": "Pas de coloration",
             "_id": "57584653c313b67e7031b919",
@@ -124,11 +94,11 @@ function createProfilTagsForNewProfilByDefault(profileID) {
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Titre 2",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Gras",
             "coloration": "Colorer les mots",
             "_id": "57584653c313b67e7031b91a",
@@ -137,99 +107,99 @@ function createProfilTagsForNewProfilByDefault(profileID) {
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "52ea440a791a003f09fd751c",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Normal",
             "coloration": "Pas de coloration",
             "spaceCharSelected": 1,
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "52ea4416791a003f09fd751d",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Gras",
             "coloration": "Pas de coloration",
             "spaceCharSelected": 1,
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Paragraphe",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Normal",
             "coloration": "Pas de coloration",
             "spaceCharSelected": 1,
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Annotation",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Normal",
             "coloration": "Pas de coloration",
             "spaceCharSelected": 1,
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Liste de niveau 1",
             "police": "opendyslexicregular",
             "taille": "18",
-            "interligne": "1",
+            "interligne": 1,
             "styleValue": "Normal",
             "coloration": "Colorer les lignes RBV",
             "spaceCharSelected": 1,
             "spaceSelected": 2
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Entête de page",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Normal",
             "coloration": "Pas de coloration",
             "spaceCharSelected": 1,
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Pied de page",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Normal",
             "coloration": "Pas de coloration",
             "spaceCharSelected": 1,
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Sous-titre 2",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Normal",
             "coloration": "Pas de coloration",
             "spaceCharSelected": 1,
             "spaceSelected": 1
         },
         {
-            "profil": profileID,
+            "profil": profile,
             "tag": "Citation",
             "police": "opendyslexicregular",
-            "taille": "10",
-            "interligne": "1",
+            "taille": 10,
+            "interligne": 1,
             "styleValue": "Normal",
             "coloration": "Pas de coloration",
             "spaceCharSelected": 1,
@@ -237,26 +207,44 @@ function createProfilTagsForNewProfilByDefault(profileID) {
         }
     ];
 
+    profile.profileTags = [];
+
     Tags.find({}, function (err, tags) {
         if (tags) {
 
-            console.log('tags = ' + tags);
             for (var i = 0; i < tags.length; i++) {
+
                 for (var j = 0; j < newProfilTag.length; j++) {
+
                     if (newProfilTag[j].tag.indexOf(tags[i].libelle) > -1) {
                         newProfilTag[j].tag = tags[i]._id;
-                        newProfilTag[j].profil = profileID;
+
+
                         var profilTag = new ProfilTag(newProfilTag[j]);
+
                         profilTag.save(function (err) {
                             if (err) {
                                 console.log('erreur saving profil tag : ' + err);
                             }
                         });
+                        profile.profileTags.push(profilTag._id);
+
+
+
+
                         newProfilTag.splice(j, 1);
+
+
                         break;
                     }
                 }
             }
+            profile.save(function (err) {
+                if (err) {
+                    console.log('error during profile update.')
+                }
+            });
+
         }
     });
 
@@ -372,141 +360,6 @@ function createDefaultTags() {
 
 }
 
-function deleteAllCnedAdaptProfilByDefault() {
-
-    //FIND profile Like '%CnedAdapt par défaut%'
-    Profil.find({
-        nom: /CnedAdapt par défaut/
-    }, function (err, profils) {
-        if (profils) {
-            for (var i = 0; i < profils.length; i++) {
-                var profile = profils[i];
-
-                // Delete profilTags dependences
-                ProfilTag.find({
-                    profil: profile._id
-                }).remove(function (err) {
-                    if (err) {
-                        console.log("erreur remove CnedAdapt profiTag: " + err);
-                    }
-                });
-
-                // Delete userProfils dependences
-                UserProfil.findOneAndRemove({
-                    profilID: profile._id
-                }).remove(function (err) {
-                    if (err) {
-                        console.log("erreur remove CnedAdapt Userprofil: " + err);
-                    }
-                });
-
-                // delete profile
-                Profil.findByIdAndRemove(profile._id, function (err) {
-                    if (err) {
-                        console.log("erreur remove CnedAdapt profil: " + err);
-                    }
-                });
-
-            }
-        }
-
-    });
-
-
-}
-
-function setAccessidysProfil() {
-
-    //Create the new default profile
-    newProfilParDefaut();
-
-    //Delete the last one (and the link with user profiles too)
-    deleteAllCnedAdaptProfilByDefault();
-}
-
-/**
- * Update profiles sizes according to new profil's scales
- */
-function updateAllPoliceSizeForAProfil(profilId) {
-    ProfilTag.find({
-        profil: profilId
-    }, function (err, foundItem) {
-        if (foundItem) {
-            for (var i = 0; i < foundItem.length; i++) {
-                switch (foundItem[i].taille) {
-                    case '1':
-                        foundItem[i].taille = 8;
-                        break;
-                    case '2':
-                        foundItem[i].taille = 9;
-                        break;
-                    case '3':
-                        foundItem[i].taille = 10;
-                        break;
-                    case '4':
-                        foundItem[i].taille = 11;
-                        break;
-                    case '5':
-                        foundItem[i].taille = 12;
-                        break;
-                    case '6':
-                        foundItem[i].taille = 14;
-                        break;
-                    case '7':
-                        foundItem[i].taille = 16;
-                        break;
-                    case '8':
-                        foundItem[i].taille = 18;
-                        break;
-                    case '9':
-                        foundItem[i].taille = 22;
-                        break;
-                    case '10':
-                        foundItem[i].taille = 24;
-                        break;
-                    default:
-                        foundItem[i].taille = 10;
-                        break;
-                }
-                var newSpaceSelected = 0 + (foundItem[i].spaceSelected - 1) * 0.18;
-                var newSpaceCharSelected = 0 + (foundItem[i].spaceCharSelected - 1) * 0.12;
-
-                var newTaille = foundItem[i].taille / 12;
-                var newInterLigne = 1.286 + (foundItem[i].interligne - 1) * 0.18;
-
-                foundItem[i].texte = '<p data-font=\'' + foundItem[i].police + '\' data-size=\'' + newTaille + '\' data-lineheight=\'' + newInterLigne + '\' data-weight=\'' + foundItem[i].styleValue + '\' data-coloration=\'' + foundItem[i].coloration + '\' data-word-spacing=\'' + newSpaceSelected + '\' data-letter-spacing=\'' + newSpaceCharSelected + '\'> </p>';
-                ProfilTag.findByIdAndUpdate(foundItem[i]._id, foundItem[i], function (err, itemEdit) {
-                });
-            }
-        }
-    });
-};
-
-function updateAllProfilPoliceSize() {
-
-    //Check if profile tag that are with font size between 1 to 7 (8 and 9 exit in both size definition)
-    ProfilTag.find({
-        $or: [{taille: '1'}, {taille: '2'}, {taille: '3'}, {taille: '4'}, {taille: '5'}, {taille: '6'}, {taille: '7'}]
-    }, function (err, foundItem) {
-        if (foundItem) {
-            var alreadyTreatedProfileIDs = "";
-
-            for (var i = 0; i < foundItem.length; i++) {
-
-                //Check if profileID already treated
-                if (alreadyTreatedProfileIDs.indexOf(';' + foundItem[i].profil + ';') < 0) {
-                    updateAllPoliceSizeForAProfil(foundItem[i].profil);
-
-                    //Set as treated
-                    alreadyTreatedProfileIDs = alreadyTreatedProfileIDs + ';' + foundItem[i].profil + ';';
-                }
-
-
-            }
-        }
-    });
-
-}
 
 function executePatchProfil() {
 
@@ -522,10 +375,8 @@ function executePatchProfil() {
                 //if not already apply
                 console.log('Accessidys not found !');
                 //Firts Item : Set ACCESSIDYS profil
-                setAccessidysProfil();
-
-                //Second Item : Update font size for old profile font size
-                updateAllProfilPoliceSize();
+                //Create the new default profile
+                newProfilParDefaut();
             }
         });
     }
