@@ -52,7 +52,7 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
                          configuration) {
 
     // Log enable / disable
-    $logProvider.debugEnabled(true);
+    $logProvider.debugEnabled(false);
 
     // Google analytics account settings
     AnalyticsProvider.setAccount(configuration.GOOGLE_ANALYTICS_ID);
