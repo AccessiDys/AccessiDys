@@ -182,27 +182,45 @@ angular
                     documentData = documentData.replace(/href="(http.*?)"/gi, 'href="/#/apercu?url=$1"');
                 }
 
-                documentService.save({
-                    title: $scope.document.filename,
-                    data: documentData,
-                    filePath: $scope.document.filepath,
-                    folder: $stateParams.folder
-                }, mode)
-                    .then(function (data) {
-                        $log.debug('Save - data', data);
-                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.ok');
 
-                        $scope.document.filepath = data.filepath;
-                        $scope.document.filename = data.filename;
+                fileStorageService.listAll(true)
+                    .then(function (listDocument) {
+                        documentService.openFolderModal(listDocument)
+                            .then(function (result) {
 
-                        $scope.initDocumentData = angular.copy($scope.document.data);
+                                var folder = null;
+                                if (result.selectedFolder.filepath !== '/') {
+                                    folder = result.selectedFolder;
+                                }
 
-                    }, function (cause) {
-                        if (cause !== 'edit-title') {
-                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
-                            LoaderService.hideLoader();
-                        }
+                                documentService.save({
+                                    title: $scope.document.filename,
+                                    data: documentData,
+                                    filePath: $scope.document.filepath,
+                                    folder: folder
+                                }, mode)
+                                    .then(function (data) {
+                                        $log.debug('Save - data', data);
+                                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.ok');
+
+                                        $scope.document.filepath = data.filepath;
+                                        $scope.document.filename = data.filename;
+
+                                        $scope.initDocumentData = angular.copy($scope.document.data);
+
+                                    }, function (cause) {
+                                        if (cause !== 'edit-title') {
+                                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
+                                            LoaderService.hideLoader();
+                                        }
+                                    });
+
+                            });
+
+                    }, function () {
                     });
+
+
 
 
             };

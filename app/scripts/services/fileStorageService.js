@@ -69,12 +69,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
     };
 
-    this.listAll = function(){
+    this.listAll = function(forceCache){
 
          var storageName = 'listDocument';
          var path = '';
 
-         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider && !forceCache) {
             return DropboxProvider.listAllFiles(path, UserService.getData().token).then(function (files) {
                 return CacheProvider.saveAll(files, storageName);
             }, function () {

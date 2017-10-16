@@ -396,9 +396,9 @@ angular.module('cnedApp')
 
         $scope.createDocument = function () {
 
-            documentService.openFolderModal($scope.listDocument).then(function (result) {
-                $state.go('app.edit-document', {folder: result.selectedFolder === '/' ? result.selectedFolder.filename : null});
-            });
+            $state.go('app.edit-document');
+
+            
         };
 
 
