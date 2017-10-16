@@ -24,3 +24,11 @@ h2.information  {
 .bg-color-white {
     background: #fff !important;
 }
+
+.bg-selected {
+    background: #009cb8 !important;
+}
+
+.bg-selected * {
+    color: #fff !important;
+}

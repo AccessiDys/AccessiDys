@@ -46,11 +46,14 @@
             <input type="text" class="serach_field pull-left" data-ng-model="query"
                    placeholder="Recherche un document ..." data-ng-change="specificFilter(listDocument)"/>
             <a id="create_folder" style="text-decoration: none; color: white;" role="button"
-               data-ng-click="createFolder('/')" type="button" class="grey_btn pull-left add_folder"
-               title="Nouveau dossier">Nouveau dossier</a>
-            <a href="#/addDocument" style="text-decoration: none; color: white;" role="button" id="add_documentbtn"
+               data-ng-click="createFolder('/')" type="button" class="grey_btn pull-left add_document ml-10"
+               title="Nouveau dossier">
+                Nouveau dossier
+            </a>
+            <a href="" style="text-decoration: none; color: white;" role="button" id="add_documentbtn"
                type="button" class="grey_btn pull-right add_document"
-               title="Ajouter un document">Ajouter un document</a>
+               title="Ajouter un document"
+               ng-click="createDocument()">Ajouter un document</a>
         </div>
 
 
@@ -80,7 +83,8 @@
             </tr>
             </thead>
 
-            <tbody ng-repeat="document in listDocument" ng-include="'tree.html'" ng-init="rowIndex = rowIndex + 1;">
+            <tbody ng-repeat="document in listDocument | orderBy:sortType:sortReverse" ng-include="'tree.html'" ng-init="rowIndex = rowIndex + 1;"
+                   data-drop="true" jqyoui-droppable ng-model="listDocument">
             </tbody>
 
         </table>
@@ -88,24 +92,31 @@
         <script type="text/ng-template" id="tree.html">
 
 
-            <tr ng-class="{'bg-color-gray': ($index % 2) === 0, 'bg-color-white': ($index % 2) === 1}"
-                ng-init="document.contentShowed = false;"
-                data-ng-if="(document.type === 'file' && document.showed) || (document.type === 'folder' && (document.showed || hasChildShowed(document.content)))">
+            <tr ng-class="{'bg-color-gray': (document.index % 2) === 0, 'bg-color-white': (document.index % 2) === 1}"
+                data-ng-if="(document.type === 'file' && document.showed) || (document.type === 'folder' && (document.showed || hasChildShowed(document.content)))"
+                data-drag="true" jqyoui-draggable="{animate:true}"
+                ng-model="document">
                 <td width="60%">
-                        <span style="margin-left:{{(level * 30)}}px;" data-ng-click="document.contentShowed = !document.contentShowed;" class="cursor-pointer">
+                        <span style="margin-left:{{(level * 30)}}px;"
+                              data-ng-click="toggleFolder(document)" class="cursor-pointer">
                             <span class="mr-15" data-ng-if="document.content.length > 0">
-                                <i class="fa fa-caret-square-o-down" aria-hidden="true"  data-ng-if="document.contentShowed"></i>
-                                <i class="fa fa-caret-square-o-right" aria-hidden="true" data-ng-if="!document.contentShowed"></i>
+                                <i class="fa fa-caret-square-o-down" aria-hidden="true"
+                                   data-ng-if="document.contentShowed"></i>
+                                <i class="fa fa-caret-square-o-right" aria-hidden="true"
+                                   data-ng-if="!document.contentShowed"></i>
                             </span>
 
 
-                            <i data-ng-if="document.type === 'folder' && !document.contentShowed" class="fa fa-folder" aria-hidden="true"></i>
-                            <i data-ng-if="document.type === 'folder' && document.contentShowed" class="fa fa-folder-open-o" aria-hidden="true"></i>
+                            <i data-ng-if="document.type === 'folder' && !document.contentShowed" class="fa fa-folder"
+                               aria-hidden="true"></i>
+                            <i data-ng-if="document.type === 'folder' && document.contentShowed"
+                               class="fa fa-folder-open-o" aria-hidden="true"></i>
 
                             <i data-ng-if="document.type === 'file'" class="fa fa-file" aria-hidden="true"></i>
                             <span class="ml-10" data-ng-if="document.type === 'folder'">{{document.filename}}</span>
 
-                            <a href="#/apercu?idDocument={{document.filename}}" class="ml-10" data-ng-if="document.type === 'file'">
+                            <a href="#/apercu?idDocument={{document.filename}}" class="ml-10"
+                               data-ng-if="document.type === 'file'">
                                 {{ document.filename }}
                             </a>
                         </span>
@@ -168,8 +179,9 @@
 
                 <td colspan="3" style="padding:0;">
                     <table style="border:none;">
-                        <tbody ng-repeat="document in document.content" ng-include="'tree.html'"
-                               ng-init="level = level + 1;">
+                        <tbody ng-repeat="document in document.content | orderBy:sortType:sortReverse" ng-include="'tree.html'"
+                               ng-init="level = level + 1;"
+                               data-drop="true" jqyoui-droppable ng-model="document.content">
                         </tbody>
                     </table>
                 </td>

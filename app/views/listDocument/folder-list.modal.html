@@ -1,0 +1,100 @@
+<!-- 
+ File: folder-list.modal.html
+ * Copyright (c) 2013-2016
+ * Centre National d’Enseignement à Distance (Cned), Boulevard Nicephore Niepce, 86360 CHASSENEUIL-DU-POITOU, France
+ * (direction-innovation@cned.fr)
+ *
+ * GNU Affero General Public License (AGPL) version 3.0 or later version
+ *
+ * This file is part of a program which is free software: you can
+ * redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this program.
+ * If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<div id="profilAffichageModal" class="modal-header">
+    <button data-ng-click="dismissModal()" type="button" class="close"
+            aria-hidden="true">&times;</button>
+    <h3 class="modal-title">
+        Choisissez un dossier
+    </h3>
+
+
+</div>
+<div class="modal-body">
+
+
+    <table ng-init="level = 0;">
+        <!-- Table Header-->
+        <thead>
+        <tr>
+            <th>
+                Nom
+            </th>
+        </tr>
+        </thead>
+        <!-- end Table Header-->
+
+        <tbody ng-repeat="file in folderList" ng-include="'tree-folder.html'">
+        </tbody>
+
+
+    </table>
+
+    <script type="text/ng-template" id="tree-folder.html">
+
+
+        <tr ng-class="{'bg-color-gray': ((file.index % 2) === 0 && selectedFolder != file), 'bg-color-white': ((file.index % 2) === 1 && selectedFolder != file), 'bg-selected': selectedFolder == file}"
+            data-ng-if="file.type === 'folder'"
+            class="cursor-pointer"
+            data-ng-click="selectFolder(file)">
+            <td>
+                <span style="margin-left:{{(level * 30)}}px;">
+
+                    <i data-ng-if="file.type === 'folder'" class="fa fa-folder"
+                       aria-hidden="true"></i>
+
+
+                    <span class="ml-10" data-ng-if="file.type === 'folder'">{{file.filename}}</span>
+                </span>
+            </td>
+        </tr>
+
+        <tr ng-if="file.content">
+            <td style="padding:0;">
+                <table style="border:none;">
+                    <tbody ng-repeat="file in file.content" ng-include="'tree-folder.html'"
+                           ng-init="level = level + 1;">
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+
+
+    </script>
+
+
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="reset_btn" title="Annuler" data-ng-click="dismissModal()">
+        Annuler
+    </button>
+    <button type="button" data-ng-class="{'btn_simple': selectedFolder, 'light_blue': selectedFolder, 'reset_btn': !selectedFolder}"
+            data-ng-click="validateFolder()"
+            title="Valider"
+            data-ng-disabled="!selectedFolder">
+        Valider
+    </button>
+
+</div>

@@ -27,11 +27,13 @@
 angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope,
                                               configuration, fileStorageService, Analytics,
-                                              gettextCatalog, UtilsService, LoaderService, $log, documentService, ToasterService, _) {
+                                              gettextCatalog, UtilsService, LoaderService, $log, documentService,
+                                              ToasterService, _, $uibModal) {
 
         $scope.configuration = configuration;
         $scope.sortType = 'dateModification';
         $scope.sortReverse = true;
+        var fileIndex = 0;
 
 
         /**
@@ -167,6 +169,33 @@ angular.module('cnedApp')
 
         };
 
+
+
+        function calculateIndex(list) {
+            if (list) {
+                _.each(list, function (value) {
+
+                    if(value.showed){
+                        value.index = fileIndex;
+                    }
+
+                    fileIndex++;
+
+                    if (value.content && value.content.length > 0 && value.contentShowed) {
+                        calculateIndex(value.content);
+                    }
+                });
+            }
+        }
+
+        $scope.toggleFolder = function(file){
+            if(file && file.type === 'folder'){
+                file.contentShowed = !file.contentShowed;
+                fileIndex = 0;
+                calculateIndex($scope.listDocument);
+            }
+        };
+
         /*
          * Show all the documents at the beginning
          * and creates the menu associated with the document
@@ -175,7 +204,14 @@ angular.module('cnedApp')
             if (list) {
                 _.each(list, function (value) {
                     value.showed = true;
+                    value.contentShowed = false;
+
+                    if (value.content && value.content.length > 0) {
+                        $scope.initialiseShowDocs(value.content);
+                    }
                 });
+
+
             }
         };
 
@@ -219,6 +255,7 @@ angular.module('cnedApp')
                 if (listDocument) {
                     $scope.listDocument = listDocument;
                     $scope.initialiseShowDocs($scope.listDocument);
+                    calculateIndex($scope.listDocument);
                     $log.debug('listDocument', $scope.listDocument);
                 } else {
                     $scope.listDocument = [];
@@ -263,6 +300,26 @@ angular.module('cnedApp')
                 $scope.getListDocument();
             });
 
+        };
+
+        $scope.createDocument = function () {
+
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/listDocument/folder-list.modal.html',
+                controller: 'folderListCtrl',
+                windowClass: 'profil-md',
+                backdrop: 'static',
+                scope: $scope,
+                resolve: {
+                    folderList: function () {
+                        return $scope.listDocument;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (params) {
+
+            });
         };
 
     });

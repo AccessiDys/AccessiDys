@@ -43,7 +43,8 @@ var cnedApp = angular.module('cnedApp', [
     'slick',
     'textAngular',
     'sticky',
-    'angular-cookie-law'
+    'angular-cookie-law',
+    'ngDragDrop'
 ]);
 
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $sceProvider,
