@@ -44,7 +44,7 @@
 
         <div class="head_section">
             <input type="text" class="serach_field pull-left" data-ng-model="query"
-                   placeholder="Recherche un document ..." data-ng-change="specificFilter()"/>
+                   placeholder="Recherche un document ..." data-ng-change="specificFilter(listDocument)"/>
             <a id="create_folder" style="text-decoration: none; color: white;" role="button"
                data-ng-click="createFolder('/')" type="button" class="grey_btn pull-left add_folder"
                title="Nouveau dossier">Nouveau dossier</a>
@@ -88,7 +88,9 @@
         <script type="text/ng-template" id="tree.html">
 
 
-            <tr ng-class="{'bg-color-gray': ($index % 2) === 0, 'bg-color-white': ($index % 2) === 1}" ng-init="document.contentShowed = false;">
+            <tr ng-class="{'bg-color-gray': ($index % 2) === 0, 'bg-color-white': ($index % 2) === 1}"
+                ng-init="document.contentShowed = false;"
+                data-ng-if="(document.type === 'file' && document.showed) || (document.type === 'folder' && (document.showed || hasChildShowed(document.content)))">
                 <td width="60%">
                         <span style="margin-left:{{(level * 30)}}px;" data-ng-click="document.contentShowed = !document.contentShowed;" class="cursor-pointer">
                             <span class="mr-15" data-ng-if="document.content.length > 0">
@@ -145,7 +147,7 @@
                                 Dupliquer
                             </a>
                         </li>
-                        <li class="share_item" data-ng-if="userData.provider">
+                        <li class="share_item" data-ng-if="userData.provider && document.type === 'file'">
                             <a id="share_document" title="Partager le document"
                                data-ng-click="shareDocument(document)">
                                 Partager
