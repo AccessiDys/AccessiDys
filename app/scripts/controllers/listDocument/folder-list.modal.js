@@ -53,7 +53,7 @@ angular.module('cnedApp').controller('folderListCtrl', function ($scope, $uibMod
 
     $scope.validateFolder = function () {
         $uibModalInstance.close({
-            selectedFolder: $scope.selectedFolder.filename !== '/' ? $scope.selectedFolder : null
+            selectedFolder: $scope.selectedFolder
         });
     };
 

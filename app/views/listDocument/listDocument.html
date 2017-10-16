@@ -150,7 +150,12 @@
                                 Modifier
                             </a>
                         </li>
-                        <li class="setting_documentTitle" data-ng-if="document.type === 'file'">
+                        <li class="setting_documentTitle">
+                            <a data-ng-click="moveFile(document)" title="Déplacer">
+                                Déplacer
+                            </a>
+                        </li>
+                        <li class="duplicating_item" data-ng-if="document.type === 'file'">
                             <a id="duplicate_document"
                                data-ng-click="duplicateDoc(document)"
                                title="Dupliquer le document">
@@ -170,11 +175,7 @@
                             </a>
                         </li>
 
-                        <li class="removing_item">
-                            <a data-ng-click="moveFile(document)" title="Supprimer">
-                                Déplacer
-                            </a>
-                        </li>
+
                     </ul>
                 </td>
 

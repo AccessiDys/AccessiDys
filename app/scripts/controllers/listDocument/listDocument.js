@@ -368,7 +368,11 @@ angular.module('cnedApp')
                         var to_path = '';
 
                         if (path) {
-                            to_path = result.selectedFolder.filepath + '/' + path[path.length - 1];
+                            if (result.selectedFolder.filename === '/') {
+                                to_path = result.selectedFolder.filepath + path[path.length - 1];
+                            } else {
+                                to_path = result.selectedFolder.filepath + '/' + path[path.length - 1];
+                            }
                         }
 
                         LoaderService.showLoader('document.message.info.move.inprogress', false);
@@ -393,7 +397,7 @@ angular.module('cnedApp')
         $scope.createDocument = function () {
 
             documentService.openFolderModal($scope.listDocument).then(function (result) {
-                $state.go('app.edit-document', {folder: result.selectedFolder});
+                $state.go('app.edit-document', {folder: result.selectedFolder === '/' ? result.selectedFolder.filename : null});
             });
         };
 
