@@ -47,16 +47,14 @@ angular.module('cnedApp').controller('folderListCtrl', function ($scope, $uibMod
         }
     }
 
-    $scope.selectFolder = function(folder){
+    $scope.selectFolder = function (folder) {
         $scope.selectedFolder = folder;
     };
 
-    $scope.validateFolder = function(){
-
+    $scope.validateFolder = function () {
         $uibModalInstance.close({
-            selectedFolder: $scope.selectedFolder
+            selectedFolder: $scope.selectedFolder.filename !== '/' ? $scope.selectedFolder : null
         });
-
     };
 
 
@@ -66,7 +64,12 @@ angular.module('cnedApp').controller('folderListCtrl', function ($scope, $uibMod
 
 
     $uibModalInstance.opened.then(function () {
-        $scope.folderList = angular.copy(folderList);
+        $scope.folderList = [{
+            filename: '/',
+            filepath: '/',
+            type: 'folder',
+            content: angular.copy(folderList)
+        }];
         calculateIndex($scope.folderList);
     });
 
