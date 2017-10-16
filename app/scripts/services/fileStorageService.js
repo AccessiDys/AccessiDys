@@ -47,20 +47,17 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         $log.debug('fileStorageService - list ', UserService.getData());
         var query = '';
         var storageName = '';
-        var path = '';
 
         if (type === 'document') {
             query = '.html';
             storageName = 'listDocument';
-            path = '';
         } else if (type === 'profile') {
             query = '-profile.json';
             storageName = 'listProfile';
-            path = '';
         }
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
-            return DropboxProvider.search(path, query, UserService.getData().token).then(function (files) {
+            return DropboxProvider.search(query, UserService.getData().token).then(function (files) {
                 return CacheProvider.saveAll(files, storageName);
             }, function () {
                 return CacheProvider.list(storageName);
@@ -91,14 +88,9 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
     /**
      * Search files in Dropbox or in the cache if dropbox is not accessible
-     *
-     * @param online
-     *           if there is internet access
-     * @param query
-     *            the search query
-     * @param token
-     *            the dropbox token
-     * @method get
+     * @param filename
+     * @param type
+     * @returns {*}
      */
     this.get = function (filename, type) {
 

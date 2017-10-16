@@ -54,7 +54,7 @@
         </div>
 
 
-        <table id="listDocumentPage">
+        <table id="listDocumentPage" ng-init="rowIndex = 0; level = 0;">
             <thead>
             <!-- Table Header-->
             <tr>
@@ -79,93 +79,43 @@
                 <th class="action_zone">action</th>
             </tr>
             </thead>
-            <!-- Table Body-->
-            <!--<tr data-ng-repeat="document in listDocument | orderBy:sortType:sortReverse" >
-                <td>
-                    <a data-ng-if="document.type === 'folder'"><img src="../styles/images/docs.png"/></a>
-                    <a data-ng-if="document.type === 'file'">fichier</a>
-                </td>
-                <td class="profil_desc">
-                    <div data-ng-if="document.type === 'file'">
-                        <a href="#/apercu?idDocument={{document.filename}}">
-                            {{ document.filename }}
-                        </a>
-                    </div>
-                    <div data-ng-if="document.type === 'folder'">
-                        <a href="">
-                            {{ document.filename }}
-                        </a>
-                    </div>
-                </td>
-                <td class="profil_desc centering">{{ document.dateModification | date:
-                    configuration.DATE_PATTERN}}
-                </td>
-                <td class="action_area centering" uib-dropdown>
-                    <ul class="action_list" uib-dropdown-menu aria-labelledby="document-actions">
-                        <li class="show_item" data-ng-if="document.type === 'file'">
-                            <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document"
-                               title="Afficher">
-                                Afficher
-                            </a>
-                        </li>
-                        <li class="setting_documentTitle">
-                            <a id="edit_document"
-                               data-toggle="modal"
-                               data-target="#EditTitreModal"
-                               data-ng-click="renameDocumentTitle(document)"
-                               title="Modifier le titre">
-                                Modifier le titre
-                            </a>
-                        </li>
-                        <li class="restructer_item" data-ng-if="document.type === 'file'">
-                            <a ng-href="#/addDocument?idDocument={{document.filename}}" id="restructurer_document"
-                               title="Modifier">
-                                Modifier
-                            </a>
-                        </li>
-                        <li class="setting_documentTitle" data-ng-if="document.type === 'file'">
-                            <a id="duplicate_document"
-                               data-ng-click="duplicateDoc(document)"
-                               title="Dupliquer le document">
-                                Dupliquer
-                            </a>
-                        </li>
-                        <li class="share_item" data-ng-if="userData.provider">
-                            <a id="share_document" title="Partager le document"
-                               data-ng-click="shareDocument(document)">
-                                Partager
-                            </a>
-                        </li>
-                        <li class="removing_item">
-                            <a id="delete_document"
-                               data-ng-click="deleteDocument(document)" title="Supprimer">
-                                Supprimer
-                            </a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>-->
-            <tbody ng-repeat="document in listDocument" ng-include="'tree.html'">
 
+            <tbody ng-repeat="document in listDocument" ng-include="'tree.html'" ng-init="rowIndex = rowIndex + 1;">
             </tbody>
 
         </table>
 
         <script type="text/ng-template" id="tree.html">
 
-            <tr>
-                <td>
-                        <span style="margin-left:{{(level * 30)}}px;">
-                            <i data-ng-if="document.type === 'folder'" class="fa fa-folder" aria-hidden="true"></i>
-                            <i data-ng-if="document.type === 'file'" class="fa fa-file" aria-hidden="true"></i>
-                            <span class="ml-10">{{document.filename}}</span>
 
+            <tr ng-class="{'bg-color-gray': ($index % 2) === 0, 'bg-color-white': ($index % 2) === 1}" ng-init="document.contentShowed = false;">
+                <td width="60%">
+                        <span style="margin-left:{{(level * 30)}}px;" data-ng-click="document.contentShowed = !document.contentShowed;" class="cursor-pointer">
+                            <span class="mr-15" data-ng-if="document.content.length > 0">
+                                <i class="fa fa-caret-square-o-down" aria-hidden="true"  data-ng-if="document.contentShowed"></i>
+                                <i class="fa fa-caret-square-o-right" aria-hidden="true" data-ng-if="!document.contentShowed"></i>
+                            </span>
+
+
+                            <i data-ng-if="document.type === 'folder' && !document.contentShowed" class="fa fa-folder" aria-hidden="true"></i>
+                            <i data-ng-if="document.type === 'folder' && document.contentShowed" class="fa fa-folder-open-o" aria-hidden="true"></i>
+
+                            <i data-ng-if="document.type === 'file'" class="fa fa-file" aria-hidden="true"></i>
+                            <span class="ml-10" data-ng-if="document.type === 'folder'">{{document.filename}}</span>
+
+                            <a href="#/apercu?idDocument={{document.filename}}" class="ml-10" data-ng-if="document.type === 'file'">
+                                {{ document.filename }}
+                            </a>
                         </span>
                 </td>
-                <td class="profil_desc centering">
+                <td class="profil_desc centering" width="35%">
                     {{ document.dateModification | date: configuration.DATE_PATTERN}}
                 </td>
-                <td class="action_area centering" uib-dropdown>
+                <td class="centering" uib-dropdown width="5%">
+                    <button id="document-actions" type="button" class="action_btn" uib-dropdown-toggle
+                            name="document_action_btn">
+                        &nbsp;
+                    </button>
                     <ul class="action_list" uib-dropdown-menu aria-labelledby="document-actions">
                         <li class="show_item" data-ng-if="document.type === 'file'">
                             <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document"
@@ -212,11 +162,12 @@
 
             </tr>
 
-            <tr ng-if="document.content">
+            <tr ng-if="document.content && document.contentShowed">
 
                 <td colspan="3" style="padding:0;">
-                    <table>
-                        <tbody ng-repeat="document in document.content" ng-include="'tree.html'">
+                    <table style="border:none;">
+                        <tbody ng-repeat="document in document.content" ng-include="'tree.html'"
+                               ng-init="level = level + 1;">
                         </tbody>
                     </table>
                 </td>

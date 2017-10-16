@@ -174,13 +174,13 @@ angular.module('cnedApp').factory('DropboxProvider',
             });
             return deferred.promise;
         };
-        var searchService = function (path, query, access_token) {
+        var searchService = function (query, access_token) {
             var deferred = $q.defer();
             $http({
                 method: 'POST',
                 url: 'https://api.dropboxapi.com/2/files/search',
                 data: {
-                    path: path,
+                    path:'',
                     query: query,
                     start: 0,
                     mode: 'filename',

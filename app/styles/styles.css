@@ -2975,3 +2975,11 @@ h4.information  {
     text-transform: uppercase;
     color: green;
 }
+
+.bg-color-gray {
+    background: #f7f6f6 !important;
+}
+
+.bg-color-white {
+    background: #fff !important;
+}

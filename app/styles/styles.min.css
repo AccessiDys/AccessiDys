@@ -16,3 +16,11 @@ h2.information  {
     text-transform: uppercase;
     color: #086e80;
 }
+
+.bg-color-gray {
+    background: #f7f6f6 !important;
+}
+
+.bg-color-white {
+    background: #fff !important;
+}
