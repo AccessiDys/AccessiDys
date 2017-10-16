@@ -66,10 +66,20 @@ angular.module('cnedApp')
          */
         $scope.deleteDocument = function (document) {
 
-            UtilsService.openConfirmModal(gettextCatalog.getString('document.label.delete.title'),
-                gettextCatalog.getString('document.label.delete.anwser').replace('document.name', document.filename), true)
+            var title = 'document.label.delete.title';
+            var msg = 'document.label.delete.anwser';
+            var loader = 'document.message.info.delete.inprogress';
+
+            if (document.type == 'folder') {
+                title = 'folder.label.delete.title';
+                msg = 'folder.label.delete.anwser';
+                loader = 'folder.message.info.delete.inprogress';
+            }
+
+            UtilsService.openConfirmModal(gettextCatalog.getString(title),
+                gettextCatalog.getString(msg).replace('document.name', document.filename), true)
                 .then(function () {
-                    LoaderService.showLoader('document.message.info.delete.inprogress', true);
+                    LoaderService.showLoader(loader, true);
                     LoaderService.setLoaderProgress(30);
 
                     fileStorageService.delete(document, 'document').then(function () {
@@ -95,10 +105,11 @@ angular.module('cnedApp')
 
             documentService.editDocumentTitle(document.filename, [], 'edit')
                 .then(function (params) {
-                    LoaderService.showLoader('document.message.info.rename.inprogress', true);
+
                     LoaderService.setLoaderProgress(10);
 
                     if (document.type === 'file') {
+                        LoaderService.showLoader('document.message.info.rename.inprogress', true);
                         fileStorageService.rename(document, params.title, 'document')
                             .then(function () {
                                 LoaderService.setLoaderProgress(80);
@@ -106,6 +117,7 @@ angular.module('cnedApp')
                                 $scope.getListDocument();
                             });
                     } else if (document.type === 'folder') {
+                        LoaderService.showLoader('folder.message.info.rename.inprogress', true);
                         fileStorageService.renameFolder(document, params.title)
                             .then(function () {
                                 LoaderService.setLoaderProgress(80);
@@ -172,12 +184,11 @@ angular.module('cnedApp')
         };
 
 
-
         function calculateIndex(list) {
             if (list) {
                 _.each(list, function (value) {
 
-                    if(value.showed){
+                    if (value.showed) {
                         value.index = fileIndex;
                     }
 
@@ -190,8 +201,8 @@ angular.module('cnedApp')
             }
         }
 
-        $scope.toggleFolder = function(file){
-            if(file && file.type === 'folder'){
+        $scope.toggleFolder = function (file) {
+            if (file && file.type === 'folder') {
                 file.contentShowed = !file.contentShowed;
                 fileIndex = 0;
                 calculateIndex($scope.listDocument);
@@ -199,7 +210,7 @@ angular.module('cnedApp')
         };
 
 
-        $scope.sortByName = function(){
+        $scope.sortByName = function () {
             $scope.sortType = 'filename';
             $scope.sortReverse = !$scope.sortReverse;
 
@@ -208,7 +219,7 @@ angular.module('cnedApp')
             calculateIndex($scope.listDocument);
         };
 
-        $scope.sortByDate = function(){
+        $scope.sortByDate = function () {
             $scope.sortType = 'dateModification';
             $scope.sortReverse = !$scope.sortReverse;
 
@@ -217,16 +228,16 @@ angular.module('cnedApp')
             calculateIndex($scope.listDocument);
         };
 
-        function sortList(list, expression, reverse){
+        function sortList(list, expression, reverse) {
 
-            if(list && list.length > 0){
+            if (list && list.length > 0) {
                 _.each(list, function (value) {
                     if (value.content && value.content.length > 0) {
                         value.content = sortList(value.content, expression, reverse);
                     }
                 });
 
-                return  $filter('orderBy')(list, expression, reverse);
+                return $filter('orderBy')(list, expression, reverse);
             }
 
         }
@@ -241,10 +252,10 @@ angular.module('cnedApp')
                     value.showed = true;
                     value.contentShowed = false;
 
-                    if(value.type === 'folder'){
-                        $scope.folderCount ++;
-                    } else if(value.type === 'file'){
-                        $scope.documentCount ++;
+                    if (value.type === 'folder') {
+                        $scope.folderCount++;
+                    } else if (value.type === 'file') {
+                        $scope.documentCount++;
                     }
 
                     if (value.content && value.content.length > 0) {
@@ -296,7 +307,10 @@ angular.module('cnedApp')
                 if (listDocument) {
                     $scope.listDocument = listDocument;
                     $scope.initialiseShowDocs($scope.listDocument);
-                    $scope.sortByName();
+
+                    $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+
+                    calculateIndex($scope.listDocument);
                 } else {
                     $scope.listDocument = [];
                 }
@@ -361,7 +375,6 @@ angular.module('cnedApp')
                 $state.go('app.edit-document', {folder: result.selectedFolder});
             });
         };
-
 
 
     });
