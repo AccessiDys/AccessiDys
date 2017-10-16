@@ -99,9 +99,9 @@
                         <span style="margin-left:{{(level * 30)}}px;"
                               data-ng-click="toggleFolder(document)" class="cursor-pointer">
                             <span class="mr-15" data-ng-if="document.content.length > 0">
-                                <i class="fa fa-caret-square-o-down" aria-hidden="true"
+                                <i class="fa fa-chevron-down" aria-hidden="true"
                                    data-ng-if="document.contentShowed"></i>
-                                <i class="fa fa-caret-square-o-right" aria-hidden="true"
+                                <i class="fa fa-chevron-right" aria-hidden="true"
                                    data-ng-if="!document.contentShowed"></i>
                             </span>
 
@@ -167,6 +167,12 @@
                             <a id="delete_document"
                                data-ng-click="deleteDocument(document)" title="Supprimer">
                                 Supprimer
+                            </a>
+                        </li>
+
+                        <li class="removing_item">
+                            <a data-ng-click="moveFile(document)" title="Supprimer">
+                                Déplacer
                             </a>
                         </li>
                     </ul>
