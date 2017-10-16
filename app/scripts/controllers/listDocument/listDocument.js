@@ -28,11 +28,13 @@ angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope,
                                               configuration, fileStorageService, Analytics,
                                               gettextCatalog, UtilsService, LoaderService, $log, documentService,
-                                              ToasterService, _, $uibModal, $state) {
+                                              ToasterService, _, $uibModal, $state, $filter) {
 
         $scope.configuration = configuration;
         $scope.sortType = 'dateModification';
         $scope.sortReverse = true;
+        $scope.documentCount = 0;
+        $scope.folderCount = 0;
         var fileIndex = 0;
 
 
@@ -196,6 +198,39 @@ angular.module('cnedApp')
             }
         };
 
+
+        $scope.sortByName = function(){
+            $scope.sortType = 'filename';
+            $scope.sortReverse = !$scope.sortReverse;
+
+            $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+
+            calculateIndex($scope.listDocument);
+        };
+
+        $scope.sortByDate = function(){
+            $scope.sortType = 'dateModification';
+            $scope.sortReverse = !$scope.sortReverse;
+
+            $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+
+            calculateIndex($scope.listDocument);
+        };
+
+        function sortList(list, expression, reverse){
+
+            if(list && list.length > 0){
+                _.each(list, function (value) {
+                    if (value.content && value.content.length > 0) {
+                        value.content = sortList(value.content, expression, reverse);
+                    }
+                });
+
+                return  $filter('orderBy')(list, expression, reverse);
+            }
+
+        }
+
         /*
          * Show all the documents at the beginning
          * and creates the menu associated with the document
@@ -205,6 +240,12 @@ angular.module('cnedApp')
                 _.each(list, function (value) {
                     value.showed = true;
                     value.contentShowed = false;
+
+                    if(value.type === 'folder'){
+                        $scope.folderCount ++;
+                    } else if(value.type === 'file'){
+                        $scope.documentCount ++;
+                    }
 
                     if (value.content && value.content.length > 0) {
                         $scope.initialiseShowDocs(value.content);
@@ -255,8 +296,7 @@ angular.module('cnedApp')
                 if (listDocument) {
                     $scope.listDocument = listDocument;
                     $scope.initialiseShowDocs($scope.listDocument);
-                    calculateIndex($scope.listDocument);
-                    $log.debug('listDocument', $scope.listDocument);
+                    $scope.sortByName();
                 } else {
                     $scope.listDocument = [];
                 }
@@ -321,5 +361,7 @@ angular.module('cnedApp')
                 $state.go('app.edit-document', {folder: result.selectedFolder});
             });
         };
+
+
 
     });
