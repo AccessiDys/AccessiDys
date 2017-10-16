@@ -146,6 +146,15 @@ angular.module('cnedApp')
         $scope.restoreNotesStorage = function (/* idx */) {
             $log.debug('$scope.docSignature', $scope.docSignature);
             $scope.notes = workspaceService.restoreNotesStorage($scope.docSignature);
+
+            $log.debug('$scope.notes', $scope.notes);
+
+            for (var i = 0; i < $scope.notes.length; i++) {
+                if ($scope.notes[i].texte.indexOf('<p>') === -1) {
+                    $scope.notes[i].texte = '<p>' + $scope.notes[i].texte.replace(/<div>/gi, '<br>').replace(/<\/div>/gi, '') + '</p>';
+                }
+            }
+            $log.debug('$scope.notes', $scope.notes);
         };
 
         /*

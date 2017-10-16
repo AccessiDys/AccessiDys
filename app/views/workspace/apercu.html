@@ -160,9 +160,12 @@
                                     <td id="editTexteID" class="annotation_area closed locked">
                                         <div id="draggable-note-content" contenteditable="true"
                                              data-ng-paste="setPasteNote($event)"
-                                             data-ng-focus="prepareNote(note, $event)"
-                                             data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote"
-                                             ng-bind-html="note.texte"></div>
+                                             data-ng-blur="autoSaveNote(note, $event)"
+                                             class="{{currentProfile.data.className}}"
+                                             text-angular-profile-coloration
+                                             ng-bind-html="note.texte">
+
+                                        </div>
                                     </td>
                                     <td class="collapse_btn">
                                         <button class="collapse_note" data-ng-click="collapse($event)"
