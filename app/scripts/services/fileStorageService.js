@@ -371,8 +371,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
      * @method shareFile
      */
     this.moveFiles = function (from_path, to_path) {
-        if (UserService.getData() && UserService.getData().token) {
-            return DropboxProvider.moveFiles(from_path, to_path, UserService.getData().token);
+        if (UserService.getData() && UserService.getData().token && UserService.getData().provider) {
+            if(UserService.getData().provider === 'dropbox'){
+                return DropboxProvider.moveFiles(from_path, to_path, UserService.getData().token);
+            }
         } else {
             return null;
         }

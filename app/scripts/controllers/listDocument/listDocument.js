@@ -28,7 +28,7 @@ angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope,
                                               configuration, fileStorageService, Analytics,
                                               gettextCatalog, UtilsService, LoaderService, $log, documentService,
-                                              ToasterService, _, $uibModal, $state, $filter) {
+                                              ToasterService, _, $state, $filter) {
 
         $scope.configuration = configuration;
         $scope.sortType = 'dateModification';
@@ -346,32 +346,53 @@ angular.module('cnedApp')
 
         };
 
-        $scope.moveFiles = function (from_path, to_path) {
-            $log.debug('Moving files', from_path, to_path);
+        $scope.moveFile = function (file) {
 
-            documentService.moveFiles(from_path, to_path, []).then(function () {
-                ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
-                $scope.getListDocument();
+            documentService.openFolderModal($scope.listDocument).then(function (result) {
+
+                var title = 'document.message.move.confirm.title';
+                var msg = 'document.message.move.confirm.message';
+
+                if (file.type === 'folder') {
+                    title = 'folder.message.move.confirm.title';
+                }
+
+                title = gettextCatalog.getString(title);
+                msg = gettextCatalog.getString(msg).replace('%%FROM%%', file.filename).replace('%%TO%%', result.selectedFolder.filename);
+
+
+                UtilsService.openConfirmModal(title, msg, true)
+                    .then(function () {
+
+                        var path = file.filepath.split('/');
+                        var to_path = '';
+
+                        if (path) {
+                            to_path = result.selectedFolder.filepath + '/' + path[path.length - 1];
+                        }
+
+                        LoaderService.showLoader('document.message.info.move.inprogress', false);
+
+                        fileStorageService.moveFiles(file.filepath, to_path)
+                            .then(function () {
+                                LoaderService.hideLoader();
+                                ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
+                                $scope.getListDocument();
+                            }, function () {
+                                LoaderService.hideLoader();
+                            });
+
+                    });
+
+
             });
+
 
         };
 
         $scope.createDocument = function () {
 
-            var modalInstance = $uibModal.open({
-                templateUrl: 'views/listDocument/folder-list.modal.html',
-                controller: 'folderListCtrl',
-                windowClass: 'profil-md',
-                backdrop: 'static',
-                scope: $scope,
-                resolve: {
-                    folderList: function () {
-                        return $scope.listDocument;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function (result) {
+            documentService.openFolderModal($scope.listDocument).then(function (result) {
                 $state.go('app.edit-document', {folder: result.selectedFolder});
             });
         };

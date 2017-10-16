@@ -68,11 +68,9 @@ angular.module('cnedApp').factory('DropboxProvider',
                     }
                 }
             }
-            console.log('My arbo: ');
             for(var a=0; a<arbo.length;a++){
                 arbo[a].show = true;
             }
-            console.log(JSON.stringify(arbo));
             return arbo;
         };
 

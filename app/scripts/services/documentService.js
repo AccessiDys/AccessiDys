@@ -313,18 +313,24 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
             return deferred.promise;
         },
 
-        moveFiles: function (from_path, to_path, errors) {
-            var deferred = $q.defer();
+        /**
+         * Open a modal to choose a folder
+         * @param list
+         */
+        openFolderModal: function (list) {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'views/listDocument/folder-list.modal.html',
+                controller: 'folderListCtrl',
+                windowClass: 'profil-md',
+                backdrop: 'static',
+                resolve: {
+                    folderList: function () {
+                        return list;
+                    }
+                }
+            });
 
-            $log.debug('moveFiles', from_path, to_path, errors);
-
-            UtilsService.openConfirmModal('document.message.move.confirm.title', 'document.message.move.confirm.message', false)
-                .then(function () {
-                    LoaderService.showLoader('document.message.info.move.inprogress', false);
-                    LoaderService.hideLoader();
-
-                });
-            return deferred.promise;
+            return modalInstance.result;
         }
     };
 
