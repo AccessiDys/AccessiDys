@@ -7,12 +7,10 @@
   "dependencies": {},
   "devDependencies": {
     "electron": "1.7.8",
-    "electron-builder": "2.8.3",
-    "electron-prebuilt": "1.4.13"
+    "electron-packager": "9.1.0"
   },
   "scripts": {
-    "start": "npm install && electron ./app",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder \".\" --platform=win --out=\"..\/build\" --config=builder.json"
+    "start": "electron ./app",
+    "dist:win": "electron-packager . Accessidys --out=\"../build\" --overwrite --platform=win32 --arch=ia32 --asar=true --icon=\"styles/images/favicon.ico\""
   }
 }
