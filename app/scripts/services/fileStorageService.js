@@ -69,21 +69,21 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
     };
 
-    this.listAll = function(forceCache){
+    this.listAll = function (forceCache) {
 
-         var storageName = 'listDocument';
-         var path = '';
+        var storageName = 'listDocument';
+        var path = '';
 
-         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider && !forceCache) {
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider && !forceCache) {
             return DropboxProvider.listAllFiles(path, UserService.getData().token).then(function (files) {
                 return CacheProvider.saveAll(files, storageName);
             }, function () {
                 return CacheProvider.list(storageName);
             });
-         } else {
-             // Resolve Cache
-             return CacheProvider.list(storageName);
-         }
+        } else {
+            // Resolve Cache
+            return CacheProvider.list(storageName);
+        }
     };
 
     /**
@@ -189,7 +189,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         if (!file.filepath) {
             file.filepath = this.generateFilepath(file.filename, extension);
 
-            if(type === 'document' && file.folder){
+            if (type === 'document' && file.folder) {
                 file.filepath = file.folder.filepath + file.filepath;
             }
         }
@@ -288,16 +288,16 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         var pathArray = folder.filepath.split('/');
         pathArray.pop();
         var newPath = null;
-        if(pathArray.length > 1) {
+        if (pathArray.length > 1) {
             newPath = pathArray.join('/');
             newPath += newName;
-        } else if(pathArray.length === 1){
+        } else if (pathArray.length === 1) {
             newPath = '/' + newName;
         } else {
             $log.warn('There was à problem on the folder title.');
         }
 
-        if (newPath!== null && $rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+        if (newPath !== null && $rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
             if (UserService.getData().provider === 'dropbox') {
                 return DropboxProvider.moveFiles(previousPath, newPath, UserService.getData().token);
             }
@@ -361,7 +361,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         if (UserService.getData() && UserService.getData().token) {
             return DropboxProvider.createFolder(filepath, UserService.getData().token);
         } else {
-            return null;
+            return CacheProvider.save({
+                type: 'folder',
+                filepath: filepath,
+                filename: filepath.substring(filepath.lastIndexOf('/') + 1, filepath.length),
+                content: []
+            }, 'listDocument');
         }
     };
 
@@ -372,14 +377,14 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
      */
     this.moveFiles = function (from_path, to_path) {
         if (UserService.getData() && UserService.getData().token && UserService.getData().provider) {
-            if(UserService.getData().provider === 'dropbox'){
+            if (UserService.getData().provider === 'dropbox') {
                 return DropboxProvider.moveFiles(from_path, to_path, UserService.getData().token);
             }
         } else {
             return null;
         }
     };
-    
+
     /**
      * Copy a file
      * @param originalFile
@@ -414,13 +419,13 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
                         $log.debug('File copied', destinationFile.filepath);
 
-                        if(!destinationFile.data){
+                        if (!destinationFile.data) {
                             return DropboxProvider.download(destinationFile.filepath, UserService.getData().token)
                                 .then(function (fileContent) {
                                     destinationFile.data = fileContent;
 
                                     return CacheProvider.save(destinationFile, storageName);
-                                }, function(){
+                                }, function () {
                                     return CacheProvider.save(destinationFile, storageName);
                                 });
                         } else {
