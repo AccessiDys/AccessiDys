@@ -28,7 +28,7 @@ angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope,
                                               configuration, fileStorageService, Analytics,
                                               gettextCatalog, UtilsService, LoaderService, $log, documentService,
-                                              ToasterService, _, $state, $filter) {
+                                              ToasterService, _, $state, $filter, $timeout) {
 
         $scope.configuration = configuration;
         $scope.sortType = 'dateModification';
@@ -295,6 +295,9 @@ angular.module('cnedApp')
                 LoaderService.setLoaderProgress(100);
                 LoaderService.hideLoader();
 
+                $scope.documentCount = 0;
+                $scope.folderCount = 0;
+
                 if (listDocument) {
                     $scope.listDocument = listDocument;
                     $scope.initialiseShowDocs($scope.listDocument);
@@ -377,55 +380,61 @@ angular.module('cnedApp')
             }
         };
 
+        function updateFilePath(list, oldFilePath, newFilePath) {
+            if (list) {
+                _.each(list, function (value) {
+
+                    if (value.filepath === oldFilePath) {
+                        value.filepath = newFilePath;
+                    } else if (value.content && value.content.length > 0) {
+                        updateFilePath(value.content, oldFilePath, newFilePath);
+                    }
+                });
+            }
+        }
+
 
         $scope.treeOptions = {
-            accept: function (sourceNodeScope, destNodesScope, destIndex) {
-
-                console.log('destNodesScope.$modelValue', destNodesScope.$modelValue);
-                return true;
-            },
             dropped: function (e) {
 
-                console.log('to scope null', e.dest.nodesScope.$nodeScope);
-
+                var toRoot = e.dest.nodesScope.$nodeScope === null;
                 var elm = e.source.nodeScope.$modelValue;
-                var to = e.dest.nodesScope.$nodeScope.$modelValue;
-                var from = e.source.nodeScope.$parentNodeScope.$modelValue;
+                var to_path = '/';
 
-                console.log('elm', elm);
-                console.log('newParent', to);
-                console.log('from', from);
-
-
-                fileIndex = 0;
-                calculateIndex($scope.listDocument);
+                var oldFilePath = elm.filepath;
+                var filenameStartIndex = oldFilePath.lastIndexOf('/');
+                var filename = oldFilePath.substring(filenameStartIndex + 1, oldFilePath.length);
+                var filepath = oldFilePath.substring(0, filenameStartIndex);
 
 
-                /*var path = file.filepath.split('/');
-                 var to_path = '';
+                if (!toRoot) {
+                    to_path = e.dest.nodesScope.$nodeScope.$modelValue.filepath;
+                }
 
-                 if (path) {
-                 if (result.selectedFolder.filename === '/') {
-                 to_path = result.selectedFolder.filepath + path[path.length - 1];
-                 } else {
-                 to_path = result.selectedFolder.filepath + '/' + path[path.length - 1];
-                 }
-                 }
+                if ((filepath === '' && !toRoot) || (filepath !== to_path)) {
 
-                 LoaderService.showLoader('document.message.info.move.inprogress', false);
+                    if (toRoot) {
+                        to_path += filename;
+                    } else {
+                        to_path += '/' + filename;
+                    }
 
-                 fileStorageService.moveFiles(file.filepath, to_path)
-                 .then(function () {
-                 LoaderService.hideLoader();
-                 ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
-                 $scope.getListDocument();
-                 }, function () {
-                 LoaderService.hideLoader();
-                 });
+                    updateFilePath($scope.listDocument, oldFilePath, to_path);
+
+                    fileStorageService.moveFiles(oldFilePath, to_path)
+                        .then(function () {
+                            ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
+                        }, function () {
+                        });
+
+                    $timeout(function () {
+                        fileIndex = 0;
+                        calculateIndex($scope.listDocument);
+                    });
+
+                }
 
 
-                 fileIndex = 0;
-                 calculateIndex($scope.listDocument);*/
             }
         };
 

@@ -90,7 +90,6 @@ h2.information  {
     padding: 20px 20px;
 }
 
-.angular-ui-tree-drag .node-cell.action *
 .tree-node-body .node-cell.action * {
     color: #fff;
 }
