@@ -274,14 +274,19 @@ angular.module('cnedApp')
         };
 
         $scope.hasChildShowed = function (children) {
-            return _.find(children, function (child) {
+            if(children){
+                return _.find(children, function (child) {
 
-                if (child.type === 'folder' && child.content) {
-                    return $scope.hasChildShowed(child.content);
-                } else {
-                    return child.showed;
-                }
-            });
+                    if (child.type === 'folder' && child.content && !child.showed) {
+                        return $scope.hasChildShowed(child.content);
+                    } else {
+                        return child.showed;
+                    }
+                });
+            } else {
+                return false;
+            }
+
         };
 
         /**
