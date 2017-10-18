@@ -333,7 +333,7 @@ angular.module('cnedApp')
 
         $scope.createFolder = function () {
             documentService.createFolder('/').then(function () {
-                ToasterService.showToaster('#folder-list-success-toaster"', 'folder.message.create.ok');
+                ToasterService.showToaster('#list-document-success-toaster', 'folder.message.create.ok');
                 $scope.getListDocument();
             });
 
