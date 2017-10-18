@@ -201,21 +201,12 @@ angular.module('cnedApp')
             }
         }
 
-        $scope.toggleFolder = function (file) {
-            if (file && file.type === 'folder') {
-                file.contentShowed = !file.contentShowed;
-                fileIndex = 0;
-                calculateIndex($scope.listDocument);
-            }
-        };
-
-
         $scope.sortByName = function () {
             $scope.sortType = 'filename';
             $scope.sortReverse = !$scope.sortReverse;
 
             $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
-
+            fileIndex = 0;
             calculateIndex($scope.listDocument);
         };
 
@@ -224,7 +215,7 @@ angular.module('cnedApp')
             $scope.sortReverse = !$scope.sortReverse;
 
             $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
-
+            fileIndex = 0;
             calculateIndex($scope.listDocument);
         };
 
@@ -311,6 +302,7 @@ angular.module('cnedApp')
                     $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
 
                     calculateIndex($scope.listDocument);
+                    $log.debug('listDocument', listDocument);
                 } else {
                     $scope.listDocument = [];
                 }
@@ -364,27 +356,6 @@ angular.module('cnedApp')
                 UtilsService.openConfirmModal(title, msg, true)
                     .then(function () {
 
-                        var path = file.filepath.split('/');
-                        var to_path = '';
-
-                        if (path) {
-                            if (result.selectedFolder.filename === '/') {
-                                to_path = result.selectedFolder.filepath + path[path.length - 1];
-                            } else {
-                                to_path = result.selectedFolder.filepath + '/' + path[path.length - 1];
-                            }
-                        }
-
-                        LoaderService.showLoader('document.message.info.move.inprogress', false);
-
-                        fileStorageService.moveFiles(file.filepath, to_path)
-                            .then(function () {
-                                LoaderService.hideLoader();
-                                ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
-                                $scope.getListDocument();
-                            }, function () {
-                                LoaderService.hideLoader();
-                            });
 
                     });
 
@@ -395,10 +366,67 @@ angular.module('cnedApp')
         };
 
         $scope.createDocument = function () {
-
             $state.go('app.edit-document');
+        };
 
-            
+        $scope.toggleFolder = function (node) {
+            if (node && node.type === 'folder') {
+                node.contentShowed = !node.contentShowed;
+                fileIndex = 0;
+                calculateIndex($scope.listDocument);
+            }
+        };
+
+
+        $scope.treeOptions = {
+            accept: function (sourceNodeScope, destNodesScope, destIndex) {
+
+                console.log('destNodesScope.$modelValue', destNodesScope.$modelValue);
+                return true;
+            },
+            dropped: function (e) {
+
+                console.log('to scope null', e.dest.nodesScope.$nodeScope);
+
+                var elm = e.source.nodeScope.$modelValue;
+                var to = e.dest.nodesScope.$nodeScope.$modelValue;
+                var from = e.source.nodeScope.$parentNodeScope.$modelValue;
+
+                console.log('elm', elm);
+                console.log('newParent', to);
+                console.log('from', from);
+
+
+                fileIndex = 0;
+                calculateIndex($scope.listDocument);
+
+
+                /*var path = file.filepath.split('/');
+                 var to_path = '';
+
+                 if (path) {
+                 if (result.selectedFolder.filename === '/') {
+                 to_path = result.selectedFolder.filepath + path[path.length - 1];
+                 } else {
+                 to_path = result.selectedFolder.filepath + '/' + path[path.length - 1];
+                 }
+                 }
+
+                 LoaderService.showLoader('document.message.info.move.inprogress', false);
+
+                 fileStorageService.moveFiles(file.filepath, to_path)
+                 .then(function () {
+                 LoaderService.hideLoader();
+                 ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
+                 $scope.getListDocument();
+                 }, function () {
+                 LoaderService.hideLoader();
+                 });
+
+
+                 fileIndex = 0;
+                 calculateIndex($scope.listDocument);*/
+            }
         };
 
 

@@ -22,8 +22,8 @@
  * If not, see <http://www.gnu.org/licenses/>.
  -->
 <h1 id="titreListDocument" class="animated fadeInLeft" translate>Documents</h1>
-<div class="content" id="global_container" data-ng-init="getListDocument()">
-    <div document-methodes="" class="doc-General">
+<div class="content row" id="global_container" data-ng-init="getListDocument()">
+    <div class="">
         <div class="alert-block alert-success alert-dismissable" id="list-document-success-toaster">
             <i class="fa fa-check" aria-hidden="true"></i>
             <strong profile-coloration
@@ -57,11 +57,11 @@
         </div>
 
 
-        <table id="listDocumentPage" ng-init="rowIndex = 0; level = 0;">
-            <thead>
-            <!-- Table Header-->
-            <tr>
-                <th>
+        <div class="tree-node">
+
+            <div class="row tree-node-header text-center">
+                <div class="col-md-8">
+
                     <span class="cursor-pointer sort-column"
                           data-ng-click="sortByName()">
                         TITRE
@@ -69,8 +69,10 @@
                            data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
                         <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'filename'"></i>
                     </span>
-                </th>
-                <th>
+
+                </div>
+
+                <div class="col-md-3">
                     <span class="cursor-pointer sort-column"
                           data-ng-click="sortByDate()">
                         Date derniere modification
@@ -78,59 +80,64 @@
                            data-ng-class="{'fa-sort-asc': sortReverse, 'fa-sort-desc': !sortReverse}"></i>
                         <i class="fa fa-sort" aria-hidden="true" data-ng-if="sortType !== 'dateModification'"></i>
                     </span>
-                </th>
-                <th class="action_zone">action</th>
-            </tr>
-            </thead>
 
-            <tbody ng-repeat="document in listDocument " ng-include="'tree.html'">
-            </tbody>
+                </div>
 
-        </table>
+                <div class="col-md-1">
+                    action
+                </div>
+
+            </div>
+
+
+            <div ui-tree="treeOptions" class="tree-node-body" ng-init="level = 0;">
+                <ol ui-tree-nodes="" ng-model="listDocument" id="tree-root">
+                    <li ng-repeat="node in listDocument" ui-tree-node ng-include="'tree.html'"></li>
+                </ol>
+            </div>
+        </div>
+
 
         <script type="text/ng-template" id="tree.html">
+            <div ui-tree-handle class="row"
+                 ng-class="{'bg-color-gray': (node.index % 2) === 0, 'bg-color-white': (node.index % 2) === 1}">
+
+                <div class="col-md-8 node-cell">
+
+                    <span style="margin-left:{{(level * 30)}}px;" class="cursor-pointer">
+
+                        <a class="mr-15" data-ng-if="node.content.length > 0" data-nodrag ng-click="toggleFolder(node)">
+                            <i class="fa " aria-hidden="true"
+                               ng-class="{'fa-chevron-down': node.contentShowed, 'fa-chevron-right': !node.contentShowed}"></i>
+                        </a>
+
+                        <i data-ng-if="node.type === 'folder'" class="fa" aria-hidden="true"
+                           ng-class="{'fa-folder': !node.contentShowed, 'fa-folder-open-o': node.contentShowed }"></i>
 
 
-            <tr ng-class="{'bg-color-gray': (document.index % 2) === 0, 'bg-color-white': (document.index % 2) === 1}"
-                data-ng-if="(document.type === 'file' && document.showed) || (document.type === 'folder' && (document.showed || hasChildShowed(document.content)))"
-                data-drag="true" jqyoui-draggable="{animate:true}"
-                ng-model="document">
-                <td width="60%">
-                        <span style="margin-left:{{(level * 30)}}px;"
-                              data-ng-click="toggleFolder(document)" class="cursor-pointer">
-                            <span class="mr-15" data-ng-if="document.content.length > 0">
-                                <i class="fa fa-chevron-down" aria-hidden="true"
-                                   data-ng-if="document.contentShowed"></i>
-                                <i class="fa fa-chevron-right" aria-hidden="true"
-                                   data-ng-if="!document.contentShowed"></i>
-                            </span>
+                        <i data-ng-if="node.type === 'file'" class="fa fa-file" aria-hidden="true"></i>
+                        <span class="ml-10" data-ng-if="node.type === 'folder'">{{node.filename}}</span>
 
+                        <a href="#/apercu?idDocument={{node.filename}}" class="ml-10"
+                           data-ng-if="node.type === 'file'" data-nodrag>
+                            {{ node.filename }}
+                        </a>
+                    </span>
+                </div>
 
-                            <i data-ng-if="document.type === 'folder' && !document.contentShowed" class="fa fa-folder"
-                               aria-hidden="true"></i>
-                            <i data-ng-if="document.type === 'folder' && document.contentShowed"
-                               class="fa fa-folder-open-o" aria-hidden="true"></i>
+                <div class="col-md-3 node-cell text-center">
+                    {{ node.dateModification | date: configuration.DATE_PATTERN}}
+                    &nbsp;
+                </div>
 
-                            <i data-ng-if="document.type === 'file'" class="fa fa-file" aria-hidden="true"></i>
-                            <span class="ml-10" data-ng-if="document.type === 'folder'">{{document.filename}}</span>
-
-                            <a href="#/apercu?idDocument={{document.filename}}" class="ml-10"
-                               data-ng-if="document.type === 'file'">
-                                {{ document.filename }}
-                            </a>
-                        </span>
-                </td>
-                <td class="profil_desc centering" width="35%">
-                    {{ document.dateModification | date: configuration.DATE_PATTERN}}
-                </td>
-                <td class="centering" uib-dropdown width="5%">
+                <div class="col-md-1 node-cell text-center action" uib-dropdown>
                     <button id="document-actions" type="button" class="action_btn" uib-dropdown-toggle
-                            name="document_action_btn">
+                            name="document_action_btn" data-nodrag>
                         &nbsp;
                     </button>
-                    <ul class="action_list" uib-dropdown-menu aria-labelledby="document-actions">
-                        <li class="show_item" data-ng-if="document.type === 'file'">
-                            <a ng-href="#/apercu?idDocument={{document.filename}}" id="show_document"
+                    <ul class="action_list" uib-dropdown-menu aria-labelledby="document-actions" data-nodrag>
+                        <li class="show_item" data-ng-if="node.type === 'file'">
+                            <a ng-href="#/apercu?idDocument={{node.filename}}" id="show_document"
                                title="Afficher">
                                 Afficher
                             </a>
@@ -144,60 +151,49 @@
                                 Modifier le titre
                             </a>
                         </li>
-                        <li class="restructer_item" data-ng-if="document.type === 'file'">
-                            <a ng-href="#/addDocument?idDocument={{document.filename}}" id="restructurer_document"
+                        <li class="restructer_item" data-ng-if="node.type === 'file'">
+                            <a ng-href="#/addDocument?idDocument={{node.filename}}" id="restructurer_document"
                                title="Modifier">
                                 Modifier
                             </a>
                         </li>
-                        <li class="setting_documentTitle">
-                            <a data-ng-click="moveFile(document)" title="Déplacer">
-                                Déplacer
-                            </a>
-                        </li>
-                        <li class="duplicating_item" data-ng-if="document.type === 'file'">
+                        <li class="duplicating_item" data-ng-if="node.type === 'file'">
                             <a id="duplicate_document"
-                               data-ng-click="duplicateDoc(document)"
+                               data-ng-click="duplicateDoc(node)"
                                title="Dupliquer le document">
                                 Dupliquer
                             </a>
                         </li>
-                        <li class="share_item" data-ng-if="userData.provider && document.type === 'file'">
+                        <li class="share_item" data-ng-if="userData.provider && node.type === 'file'">
                             <a id="share_document" title="Partager le document"
-                               data-ng-click="shareDocument(document)">
+                               data-ng-click="shareDocument(node)">
                                 Partager
                             </a>
                         </li>
                         <li class="removing_item">
                             <a id="delete_document"
-                               data-ng-click="deleteDocument(document)" title="Supprimer">
+                               data-ng-click="deleteDocument(node)" title="Supprimer">
                                 Supprimer
                             </a>
                         </li>
 
 
                     </ul>
-                </td>
-
-            </tr>
-
-            <tr ng-if="document.content && document.contentShowed">
-
-                <td colspan="3" style="padding:0;">
-                    <table style="border:none;">
-                        <tbody ng-repeat="document in document.content "
-                               ng-include="'tree.html'"
-                               ng-init="level = level + 1;">
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
+                </div>
 
 
+            </div>
+            <ol ui-tree-nodes="" ng-model="node.content" ng-class="{hidden: !node.contentShowed}"
+                ng-if="node.type === 'folder'">
+                <li ng-repeat="node in node.content" ui-tree-node ng-include="'tree.html'" ng-init="level = level + 1;">
+                </li>
+            </ol>
         </script>
 
+
         <p class="text-center mt-10" data-ng-if="listDocument.length > 0">
-            <i>{{documentCount}} document<span data-ng-if="documentCount > 1">s</span> - {{folderCount}} dossier<span data-ng-if="folderCount > 1">s</span></i>
+            <i>{{documentCount}} document<span data-ng-if="documentCount > 1">s</span> - {{folderCount}} dossier<span
+                    data-ng-if="folderCount > 1">s</span></i>
         </p>
     </div>
 </div>

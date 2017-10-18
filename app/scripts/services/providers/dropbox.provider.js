@@ -95,7 +95,8 @@ angular.module('cnedApp').factory('DropboxProvider',
                     dateModification: dateModification || '',
                     type: 'file',
                     show: false,
-                    provider: 'dropbox'
+                    provider: 'dropbox',
+                    content: []
                 };
             } else {
                 filename = filepath.split('/')[filepath.split('/').length - 1];

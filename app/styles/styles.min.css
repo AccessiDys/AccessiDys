@@ -32,3 +32,66 @@ h2.information  {
 .bg-selected * {
     color: #fff !important;
 }
+
+.tree-node {
+    padding: 0 15px;
+    border: 1px solid #ddd
+}
+
+.tree-node-header {
+    background: #3c3d42;
+}
+
+.tree-node-header div {
+    height: 40px;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+    font-family: "helveticaCND";
+    text-transform: uppercase;
+    font-size: 14px;
+    border-right: 1px solid #fff;
+    padding: 10px 15px;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.tree-node-header div:last-child {
+    border-right: none;
+}
+
+.tree-node-body ol {
+    padding: 0 !important;
+}
+
+.angular-ui-tree-drag .node-cell,
+.tree-node-body .node-cell {
+    padding: 28px 20px;
+    border-right: 1px solid #ddd;
+}
+
+.angular-ui-tree-drag .node-cell:last-child,
+.tree-node-body .node-cell:last-child {
+    border-right: none;
+}
+
+.angular-ui-tree-drag .node-cell,
+.angular-ui-tree-drag .node-cell a,
+.tree-node-body .node-cell,
+.tree-node-body .node-cell a {
+    color: #3c3d42;
+    font-family: "helveticaCND";
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.angular-ui-tree-drag .node-cell.action,
+.tree-node-body .node-cell.action {
+    padding: 20px 20px;
+}
+
+.angular-ui-tree-drag .node-cell.action *
+.tree-node-body .node-cell.action * {
+    color: #fff;
+}
+

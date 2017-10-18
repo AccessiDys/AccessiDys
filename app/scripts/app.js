@@ -43,7 +43,8 @@ var cnedApp = angular.module('cnedApp', [
     'slick',
     'textAngular',
     'sticky',
-    'angular-cookie-law'
+    'angular-cookie-law',
+    'ui.tree'
 ]);
 
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $sceProvider,
@@ -51,7 +52,7 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
                          configuration) {
 
     // Log enable / disable
-    $logProvider.debugEnabled(false);
+    $logProvider.debugEnabled(true);
 
     // Google analytics account settings
     AnalyticsProvider.setAccount(configuration.GOOGLE_ANALYTICS_ID);
