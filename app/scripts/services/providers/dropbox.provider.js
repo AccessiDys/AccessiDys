@@ -365,8 +365,8 @@ angular.module('cnedApp').factory('DropboxProvider',
                     'Authorization': 'Bearer ' + access_token,
                     'Content-Type': 'application/json'
                 }
-            }).then(function () {
-                deferred.resolve();
+            }).then(function (res) {
+                deferred.resolve(transformDropboxFileToStorageFile(res.data.metadata));
             }, function () {
                 // Error
                 deferred.reject();

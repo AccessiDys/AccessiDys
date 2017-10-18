@@ -331,11 +331,9 @@ angular.module('cnedApp')
 
         };
 
-        $scope.createFolder = function (path) {
-            $log.debug('Create a new folder', path);
-
-            documentService.createFolder(path).then(function () {
-                ToasterService.showToaster('#list-document-success-toaster', 'folder.message.create.ok');
+        $scope.createFolder = function () {
+            documentService.createFolder('/').then(function () {
+                ToasterService.showToaster('#folder-list-success-toaster"', 'folder.message.create.ok');
                 $scope.getListDocument();
             });
 
@@ -439,7 +437,7 @@ angular.module('cnedApp')
                         });
 
                     $timeout(function () {
-                        $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+                        //$scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
 
                         fileIndex = 0;
                         calculateIndex($scope.listDocument);

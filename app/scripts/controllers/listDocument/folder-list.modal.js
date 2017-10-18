@@ -25,7 +25,7 @@
 'use strict';
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('folderListCtrl', function ($scope, $uibModalInstance, _, folderList) {
+angular.module('cnedApp').controller('folderListCtrl', function ($scope, $uibModalInstance, _, documentService, ToasterService, folderList) {
     $scope.folderList = [];
     $scope.selectedFolder = null;
 
@@ -55,6 +55,18 @@ angular.module('cnedApp').controller('folderListCtrl', function ($scope, $uibMod
         $uibModalInstance.close({
             selectedFolder: $scope.selectedFolder
         });
+    };
+
+
+    $scope.createFolder = function () {
+
+        documentService.createFolder('/').then(function (folder) {
+            ToasterService.showToaster('#folder-list-success-toaster', 'folder.message.create.ok');
+            $scope.folderList[0].content.push(folder);
+            folderIndex = 0;
+            calculateIndex($scope.folderList);
+        });
+
     };
 
 

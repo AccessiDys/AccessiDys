@@ -46,7 +46,7 @@
             <input type="text" class="serach_field pull-left" data-ng-model="query"
                    placeholder="Recherche un document ..." data-ng-change="specificFilter(listDocument)"/>
             <a id="create_folder" style="text-decoration: none; color: white;" role="button"
-               data-ng-click="createFolder('/')" type="button" class="grey_btn pull-left add_document ml-10"
+               data-ng-click="createFolder()" type="button" class="grey_btn pull-left add_document ml-10"
                title="Nouveau dossier">
                 Nouveau dossier
             </a>
@@ -106,8 +106,8 @@
 
                     <span style="margin-left:{{(level * 30)}}px;" class="cursor-pointer">
 
-                        <a data-ng-if="node.content.length > 0" data-nodrag ng-click="toggleFolder(node)">
-                            <span class="mr-15">
+                        <a data-nodrag ng-click="toggleFolder(node)">
+                            <span class="mr-15" data-ng-if="node.content.length > 0">
                                 <i class="fa " aria-hidden="true"
                                    ng-class="{'fa-chevron-down': node.contentShowed, 'fa-chevron-right': !node.contentShowed}"></i>
                             </span>

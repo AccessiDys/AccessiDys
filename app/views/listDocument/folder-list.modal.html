@@ -23,6 +23,11 @@
  -->
 
 <div id="profilAffichageModal" class="modal-header">
+    <a id="create_folder" style="text-decoration: none; color: white;" role="button"
+       data-ng-click="createFolder()" type="button" class="grey_btn pull-right add_document mt-10"
+       title="Nouveau dossier">
+        Nouveau dossier
+    </a>
     <button data-ng-click="dismissModal()" type="button" class="close"
             aria-hidden="true">&times;</button>
     <h3 class="modal-title">
@@ -30,8 +35,22 @@
     </h3>
 
 
+
+
 </div>
 <div class="modal-body">
+
+    <div class="alert-block alert-success alert-dismissable" id="folder-list-success-toaster">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        <strong profile-coloration
+                profile="currentProfile"
+                text="toasterMsg"
+                class="{{currentProfile.data.className}}">
+        </strong>
+    </div>
+
+
+
 
 
     <table ng-init="level = 0;">

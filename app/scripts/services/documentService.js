@@ -299,12 +299,10 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     LoaderService.showLoader('document.message.info.copy.inprogress', false);
                     LoaderService.hideLoader();
 
-                    path = params.title;
-
-                    fileStorageService.createFolder('/' + path)
-                        .then(function () {
+                    fileStorageService.createFolder(path + params.title)
+                        .then(function (folder) {
                             LoaderService.hideLoader();
-                            deferred.resolve();
+                            deferred.resolve(folder);
                         }, function () {
                             LoaderService.hideLoader();
                             deferred.reject();
@@ -321,7 +319,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
             var modalInstance = $uibModal.open({
                 templateUrl: 'views/listDocument/folder-list.modal.html',
                 controller: 'folderListCtrl',
-                windowClass: 'profil-md',
+                windowClass: 'profil-lg',
                 backdrop: 'static',
                 resolve: {
                     folderList: function () {
