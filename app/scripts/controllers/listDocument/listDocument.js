@@ -395,6 +395,17 @@ angular.module('cnedApp')
 
 
         $scope.treeOptions = {
+            accept: function (sourceNodeScope, destNodesScope, destIndex) {
+                var elm = sourceNodeScope.node;
+
+                var filenameStartIndex = elm.filepath.lastIndexOf('/');
+                var filepath = elm.filepath.substring(0, filenameStartIndex);
+
+                if ((filepath === '' && typeof destNodesScope.node == 'undefined') || (typeof destNodesScope.node !== 'undefined' && filepath === destNodesScope.node.filepath)) {
+                    return false;
+                }
+                return true;
+            },
             dropped: function (e) {
 
                 var toRoot = e.dest.nodesScope.$nodeScope === null;
@@ -428,6 +439,8 @@ angular.module('cnedApp')
                         });
 
                     $timeout(function () {
+                        $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+
                         fileIndex = 0;
                         calculateIndex($scope.listDocument);
                     });
