@@ -347,7 +347,8 @@ angular.module('gettext').run([ 'gettextCatalog', function(gettextCatalog) {
         'label.fr': 'Français',
         'label.de': 'Allemand',
         'label.en': 'Anglais',
-        'label.es': 'Espagnol'
+        'label.es': 'Espagnol',
+        'folder.default.name': "Mes textes"
 
     });
 

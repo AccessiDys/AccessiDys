@@ -28,7 +28,7 @@ angular.module('cnedApp')
     .controller('listDocumentCtrl', function ($scope, $rootScope,
                                               configuration, fileStorageService, Analytics,
                                               gettextCatalog, UtilsService, LoaderService, $log, documentService,
-                                              ToasterService, _, $state, $filter, $timeout) {
+                                              ToasterService, _, $state, $filter, $timeout, CacheProvider) {
 
         $scope.configuration = configuration;
         $scope.sortType = 'dateModification';
@@ -274,7 +274,7 @@ angular.module('cnedApp')
         };
 
         $scope.hasChildShowed = function (children) {
-            if(children){
+            if (children) {
                 return _.find(children, function (child) {
 
                     if (child.type === 'folder' && child.content && !child.showed) {
@@ -288,6 +288,7 @@ angular.module('cnedApp')
             }
 
         };
+
 
         /**
          * Search all documents
@@ -309,11 +310,36 @@ angular.module('cnedApp')
 
                     $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
 
+                    fileIndex = 0;
                     calculateIndex($scope.listDocument);
                     $log.debug('listDocument', listDocument);
                 } else {
                     $scope.listDocument = [];
                 }
+
+                CacheProvider.getItem('initDefaultFolder').then(function (initDefaultFolder) {
+                    if (!initDefaultFolder && !searchFolder($scope.listDocument, gettextCatalog.getString('folder.default.name'))) {
+
+                        $log.debug('create default folder');
+
+                        fileStorageService.createFolder('/' + gettextCatalog.getString('folder.default.name'))
+                            .then(function (folder) {
+
+                                folder.showed = true;
+                                $scope.listDocument.push(folder);
+
+                                $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+                                fileIndex = 0;
+                                calculateIndex($scope.listDocument);
+
+
+                                CacheProvider.setItem(true, 'initDefaultFolder');
+                            }, function () {
+                                CacheProvider.setItem(false, 'initDefaultFolder');
+                            });
+
+                    }
+                });
 
 
             }, function () {
@@ -344,33 +370,6 @@ angular.module('cnedApp')
 
         };
 
-        $scope.moveFile = function (file) {
-
-            documentService.openFolderModal($scope.listDocument).then(function (result) {
-
-                var title = 'document.message.move.confirm.title';
-                var msg = 'document.message.move.confirm.message';
-
-                if (file.type === 'folder') {
-                    title = 'folder.message.move.confirm.title';
-                }
-
-                title = gettextCatalog.getString(title);
-                msg = gettextCatalog.getString(msg).replace('%%FROM%%', file.filename).replace('%%TO%%', result.selectedFolder.filename);
-
-
-                UtilsService.openConfirmModal(title, msg, true)
-                    .then(function () {
-
-
-                    });
-
-
-            });
-
-
-        };
-
         $scope.createDocument = function () {
             $state.go('app.edit-document');
         };
@@ -394,6 +393,32 @@ angular.module('cnedApp')
                     }
                 });
             }
+        }
+
+        function searchFolder(list, filename) {
+            var res = null;
+
+            if (list && filename) {
+                _.each(list, function (value) {
+
+                    if (res === null) {
+
+                        if (value.type === 'folder') {
+
+                            if (value.filename && value.filename.toLowerCase() === filename.toLowerCase()) {
+                                res = value;
+
+                            } else if (value.content && value.content.length > 0) {
+                                res = searchFolder(value.content, filename);
+                            }
+                        }
+
+                    }
+
+                });
+            }
+
+            return res;
         }
 
 
