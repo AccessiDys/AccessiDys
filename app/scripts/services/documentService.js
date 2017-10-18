@@ -139,7 +139,8 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                             filepath: document.filePath,
                             data: document.data,
                             dateModification: new Date(),
-                            folder: document.folder
+                            folder: document.folder,
+                            type: 'file'
                         };
 
 
