@@ -94,3 +94,11 @@ h2.information  {
     color: #fff;
 }
 
+
+.text-dark {
+    color: #3c3d42;
+}
+
+.border-b-gray {
+    border-bottom: 1px solid #ddd;
+}

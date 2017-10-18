@@ -3052,3 +3052,12 @@ h4.information  {
 .tree-node-body .node-cell.action * {
     color: #fff;
 }
+
+
+.text-dark {
+    color: #3c3d42;
+}
+
+.border-b-gray {
+    border-bottom: 1px solid #ddd;
+}

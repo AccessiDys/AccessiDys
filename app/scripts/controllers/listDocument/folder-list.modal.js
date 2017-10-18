@@ -65,7 +65,7 @@ angular.module('cnedApp').controller('folderListCtrl', function ($scope, $uibMod
 
     $uibModalInstance.opened.then(function () {
         $scope.folderList = [{
-            filename: '/',
+            filename: 'Aucun dossier',
             filepath: '/',
             type: 'folder',
             content: angular.copy(folderList)

@@ -422,7 +422,7 @@ angular.module('cnedApp')
                     to_path = e.dest.nodesScope.$nodeScope.$modelValue.filepath;
                 }
 
-                if ((filepath === '' && !toRoot) || (filepath !== to_path)) {
+                if ((filepath === '' && !toRoot) || (to_path !== '/' && filepath !== to_path)) {
 
                     if (toRoot) {
                         to_path += filename;

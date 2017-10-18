@@ -26,7 +26,7 @@
     <button data-ng-click="dismissModal()" type="button" class="close"
             aria-hidden="true">&times;</button>
     <h3 class="modal-title">
-        Choisissez un dossier
+        Enregistrer dans un dossier
     </h3>
 
 
@@ -36,9 +36,9 @@
 
     <table ng-init="level = 0;">
         <!-- Table Header-->
-        <thead>
+        <thead class="border-b-gray">
         <tr>
-            <th>
+            <th class="bg-color-white text-dark">
                 Nom
             </th>
         </tr>
@@ -92,9 +92,9 @@
     </button>
     <button type="button" data-ng-class="{'btn_simple': selectedFolder, 'light_blue': selectedFolder, 'reset_btn': !selectedFolder}"
             data-ng-click="validateFolder()"
-            title="Valider"
+            title="Enregistrer"
             data-ng-disabled="!selectedFolder">
-        Valider
+        Enregistrer
     </button>
 
 </div>
