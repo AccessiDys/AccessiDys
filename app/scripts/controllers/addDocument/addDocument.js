@@ -167,14 +167,15 @@ angular
              * @method $scope.save
              */
             $scope.save = function () {
-                var mode = '';
-
-
                 if ($scope.document.filepath) {
-                    mode = 'edit';
+                    editDocument();
                 } else {
-                    mode = 'create';
+                    createDocument();
                 }
+            };
+
+
+            function createDocument (){
 
                 var documentData = $scope.document.data;
                 if (documentData) {
@@ -198,7 +199,7 @@ angular
                                     data: documentData,
                                     filePath: $scope.document.filepath,
                                     folder: folder
-                                }, mode)
+                                }, 'create')
                                     .then(function (data) {
                                         $log.debug('Save - data', data);
                                         ToasterService.showToaster('#document-success-toaster', 'document.message.save.ok');
@@ -220,10 +221,38 @@ angular
                     }, function () {
                     });
 
+            }
 
+            function editDocument (){
 
+                var documentData = $scope.document.data;
+                if (documentData) {
+                    documentData = documentData.replace(/&nbsp;/gi, ' ');
+                    documentData = documentData.replace(/href="(http.*?)"/gi, 'href="/#/apercu?url=$1"');
+                }
 
-            };
+                documentService.save({
+                    title: $scope.document.filename,
+                    data: documentData,
+                    filePath: $scope.document.filepath
+                }, 'edit')
+                    .then(function (data) {
+                        $log.debug('Save - data', data);
+                        ToasterService.showToaster('#document-success-toaster', 'document.message.save.ok');
+
+                        $scope.document.filepath = data.filepath;
+                        $scope.document.filename = data.filename;
+
+                        $scope.initDocumentData = angular.copy($scope.document.data);
+
+                    }, function (cause) {
+                        if (cause !== 'edit-title') {
+                            ToasterService.showToaster('#document-success-toaster', 'document.message.save.ko');
+                            LoaderService.hideLoader();
+                        }
+                    });
+
+            }
 
             /**
              * Recovering html content of an eupb

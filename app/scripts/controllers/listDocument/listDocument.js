@@ -382,6 +382,54 @@ angular.module('cnedApp')
             }
         };
 
+        $scope.moveFile = function (file) {
+
+            documentService.openFolderModal($scope.listDocument).then(function (result) {
+
+                var title = 'document.message.move.confirm.title';
+                var msg = 'document.message.move.confirm.message';
+
+                if (file.type === 'folder') {
+                    title = 'folder.message.move.confirm.title';
+                }
+
+                title = gettextCatalog.getString(title);
+                msg = gettextCatalog.getString(msg).replace('%%FROM%%', file.filename).replace('%%TO%%', result.selectedFolder.filename);
+
+
+                UtilsService.openConfirmModal(title, msg, true)
+                    .then(function () {
+
+                        var path = file.filepath.split('/');
+                        var to_path = '';
+
+                        if (path) {
+                            if (result.selectedFolder.filepath === '/') {
+                                to_path = result.selectedFolder.filepath + path[path.length - 1];
+                            } else {
+                                to_path = result.selectedFolder.filepath + '/' + path[path.length - 1];
+                            }
+                        }
+
+                        LoaderService.showLoader('document.message.info.move.inprogress', false);
+
+                        fileStorageService.moveFiles(file.filepath, to_path)
+                            .then(function () {
+                                LoaderService.hideLoader();
+                                ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
+                                $scope.getListDocument();
+                            }, function () {
+                                LoaderService.hideLoader();
+                            });
+
+                    });
+
+
+            });
+
+
+        };
+
         function updateFilePath(list, oldFilePath, newFilePath) {
             if (list) {
                 _.each(list, function (value) {
