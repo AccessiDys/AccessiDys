@@ -436,9 +436,8 @@ angular.module('cnedApp')
             },
             dropped: function (e) {
 
-                var toRoot = e.dest.nodesScope.$nodeScope === null;
                 var elm = e.source.nodeScope.$modelValue;
-                var to_path = '/';
+                var to_path = '';
 
                 var oldFilePath = elm.filepath;
                 var filenameStartIndex = oldFilePath.lastIndexOf('/');
@@ -446,17 +445,13 @@ angular.module('cnedApp')
                 var filepath = oldFilePath.substring(0, filenameStartIndex);
 
 
-                if (!toRoot) {
+                if (e.dest.nodesScope.$nodeScope) {
                     to_path = e.dest.nodesScope.$nodeScope.$modelValue.filepath;
                 }
 
-                if ((filepath === '' && !toRoot) || (to_path !== '/' && filepath !== to_path)) {
+                if (filepath !== to_path) {
 
-                    if (toRoot) {
-                        to_path += filename;
-                    } else {
-                        to_path += '/' + filename;
-                    }
+                    to_path += '/' + filename;
 
                     updateFilePath($scope.listDocument, oldFilePath, to_path);
 

@@ -54,16 +54,6 @@
 
 
     <table ng-init="level = 0;">
-        <!-- Table Header-->
-        <thead class="border-b-gray">
-        <tr>
-            <th class="bg-color-white text-dark">
-                Nom
-            </th>
-        </tr>
-        </thead>
-        <!-- end Table Header-->
-
         <tbody ng-repeat="file in folderList" ng-include="'tree-folder.html'">
         </tbody>
 
