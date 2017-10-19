@@ -167,7 +167,7 @@ angular.module('cnedApp')
                 idNote: idNote,
                 idDoc: $scope.docSignature,
                 idPage: $scope.currentPage,
-                texte: 'Note',
+                texte: '<p>Note</p>',
                 x: x,
                 y: y,
                 xLink: xLink,
