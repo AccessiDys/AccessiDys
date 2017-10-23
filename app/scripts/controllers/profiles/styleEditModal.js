@@ -26,7 +26,7 @@
 /* global $:false */
 /* jshint loopfunc:true */
 
-angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $uibModalInstance, $rootScope, $interval, $log, $timeout, profile, profileTagIndex) {
+angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $uibModalInstance, $rootScope, $interval, $log, $timeout, profile, profileTagIndex, UtilsService) {
 
     $scope.isApplyAll = false;
     $scope.requiredFieldErrors = [];
@@ -41,10 +41,11 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
         styleValue: '',
         spaceSelected: 0,
         spaceCharSelected: 0,
-        coloration: ''
+        coloration: '',
+        colorationType: '',
+        colors: '',
+        colorsList: []
     };
-
-
 
     var reset = function () {
         $scope.requiredFieldErrors = [];
@@ -58,7 +59,10 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             styleValue: '',
             spaceSelected: 0,
             spaceCharSelected: 0,
-            coloration: ''
+            coloration: '',
+            colorationType: '',
+            colors: '',
+            colorsList: []
         };
     };
 
@@ -72,7 +76,10 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
         $rootScope.tmpProfile.data.profileTags[profileTagIndex].styleValue = $scope.style.styleValue;
         $rootScope.tmpProfile.data.profileTags[profileTagIndex].spaceSelected = $scope.style.spaceSelected;
         $rootScope.tmpProfile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceCharSelected;
-        $rootScope.tmpProfile.data.profileTags[profileTagIndex].coloration = $scope.style.coloration;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].colorationType = $scope.style.colorationType;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].colors = $scope.style.colors;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].coloration = $scope.style.colorationType + " " + $scope.style.colors;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].colorsList = $scope.style.colorsList;
 
 
     };
@@ -90,8 +97,11 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
         if ($scope.style.interligne == null) { // jshint ignore:line
             $scope.requiredFieldErrors.push(' Interligne ');
         }
+        if ($scope.style.colorationType == null) { // jshint ignore:line
+            $scope.requiredFieldErrors.push(' Type de coloration ');
+        }
         if ($scope.style.coloration == null) { // jshint ignore:line
-            $scope.requiredFieldErrors.push(' Coloration ');
+            $scope.requiredFieldErrors.push(' Couleurs ');
         }
         if ($scope.style.styleValue == null) { // jshint ignore:line
             $scope.requiredFieldErrors.push(' Graisse ');
@@ -107,6 +117,10 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
     };
 
     $uibModalInstance.opened.then(function () {
+        UtilsService.verifyColorsList($scope.profile.data.profileTags[profileTagIndex]);
+
+        console.log($scope.profile.data.profileTags[profileTagIndex]);
+
         $scope.styleName = $scope.profile.data.profileTags[profileTagIndex].tagDetail.libelle;
 
         $scope.style = {
@@ -116,7 +130,10 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             styleValue: $scope.profile.data.profileTags[profileTagIndex].styleValue,
             spaceSelected: $scope.profile.data.profileTags[profileTagIndex].spaceSelected,
             spaceCharSelected: $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected,
-            coloration: $scope.profile.data.profileTags[profileTagIndex].coloration
+            coloration: $scope.profile.data.profileTags[profileTagIndex].coloration,
+            colorationType: $scope.profile.data.profileTags[profileTagIndex].colorationType,
+            colors: $scope.profile.data.profileTags[profileTagIndex].colors,
+            colorsList: $scope.profile.data.profileTags[profileTagIndex].colorsLists
         };
 
         generateStyle();
@@ -134,7 +151,8 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             modalEdit.find('select[data-ng-model="style.styleValue"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].styleValue);
             modalEdit.find('select[data-ng-model="style.spaceSelected"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].spaceSelected);
             modalEdit.find('select[data-ng-model="style.spaceCharSelected"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].spaceCharSelected);
-            modalEdit.find('select[data-ng-model="style.coloration"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].coloration);
+            modalEdit.find('select[data-ng-model="style.colorationType"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].colorationType);
+            modalEdit.find('select[data-ng-model="style.colors"] + .customSelect .customSelectInner').text($scope.profile.data.profileTags[profileTagIndex].colors);
 
             $scope.editStyleChange('police', $scope.profile.data.profileTags[profileTagIndex].police);
             $scope.editStyleChange('taille', $scope.profile.data.profileTags[profileTagIndex].taille);
@@ -142,7 +160,8 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.editStyleChange('style', $scope.profile.data.profileTags[profileTagIndex].styleValue);
             $scope.editStyleChange('spaceSelected', $scope.profile.data.profileTags[profileTagIndex].spaceSelected);
             $scope.editStyleChange('spaceCharSelected', $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected);
-            $scope.editStyleChange('coloration', $scope.profile.data.profileTags[profileTagIndex].coloration);
+            $scope.editStyleChange('colorationType', $scope.profile.data.profileTags[profileTagIndex].colorationType);
+            $scope.editStyleChange('colors', $scope.profile.data.profileTags[profileTagIndex].colors);
 
 
         }, 200);
@@ -156,7 +175,8 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.profile.data.profileTags[profileTagIndex].styleValue = $scope.style.styleValue;
             $scope.profile.data.profileTags[profileTagIndex].spaceSelected = $scope.style.spaceSelected;
             $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceCharSelected;
-            $scope.profile.data.profileTags[profileTagIndex].coloration = $scope.style.coloration;
+            $scope.profile.data.profileTags[profileTagIndex].colorationType = $scope.style.colorationType;
+            $scope.profile.data.profileTags[profileTagIndex].colors = $scope.style.colors;
 
             $uibModalInstance.close({
                 profile: $scope.profile,
@@ -174,7 +194,6 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
     };
 
     $scope.editStyleChange = function (operation, value) {
-
         switch (operation) {
             case 'police':
                 $scope.style.police = value;
@@ -185,8 +204,28 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             case 'interligne':
                 $scope.style.interligne = value;
                 break;
-            case 'coloration':
-                $scope.style.coloration = value;
+            case 'colorationType':
+                $scope.style.colorationType = value;
+                if(value === 'Pas de coloration'){
+                    $scope.style.colors = '';
+                    $scope.style.colorsList = [];
+                }
+                $scope.style.coloration = $scope.style.colorationType + " " + $scope.style.colors;
+                break;
+            case 'colors':
+                switch (value) {
+                    case 'RBV':
+                        $scope.style.colorsList = ['#D90629', '#066ED9', '#4BD906'];
+                        break;
+                    case 'RVJ':
+                        $scope.style.colorsList = ['#D90629', '#4BD906', '#ECE20F'];
+                        break;
+                    case 'RBVJ':
+                        $scope.style.colorsList = ['#D90629', '#066ED9', '#4BD906', '#ECE20F'];
+                        break;
+                }
+                $scope.style.colors = value;
+                $scope.style.coloration = $scope.style.colorationType + " " + $scope.style.colors;
                 break;
             case 'style':
                 $scope.style.style = value;

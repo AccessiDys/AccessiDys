@@ -1,7 +1,7 @@
 {
 	"NODE_ENV": "dev",
 	"MONGO_URI": "localhost",
-	"MONGO_DB": "adaptation",
+	"MONGO_DB": "dev",
 	"URL_REQUEST": "https://localhost:3000",
 	"SSL_KEY":"key.pem",
 	"SSL_CERT":"cert.pem",
