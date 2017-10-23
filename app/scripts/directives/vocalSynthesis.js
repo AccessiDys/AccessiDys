@@ -32,7 +32,6 @@ cnedApp.directive('vocalSynthesis',
             restrict: 'A',
             link: function (scope, elm) {
 
-
                 /**
                  * Get the text selected
                  * @returns {string}
@@ -67,39 +66,44 @@ cnedApp.directive('vocalSynthesis',
                  * Launch the vocal synthesis with the selected text
                  */
                 function speak() {
-                    $log.debug('$scope.speak');
-                    speechService.stopSpeech();
-                    $timeout(function () {
-                        var text = getSelectedText();
-                        $log.debug('$scope.getSelectedText()', text);
-                        if (text && !/^\s*$/.test(text)) {
 
-                            if (checkBrowserSupported()) {
-                                speechService.speech(text, true);
+                    if(!scope.isEnableNoteAdd){
+                        $log.debug('$scope.speak');
+                        speechService.stopSpeech();
+                        $timeout(function () {
+                            var text = getSelectedText();
+                            $log.debug('$scope.getSelectedText()', text);
+                            if (text && !/^\s*$/.test(text)) {
 
-                            } else {
-                                CacheProvider.getItem('vocalSynthesisTipsShowed').then(function (isShowed) {
-                                    if (!isShowed) {
-                                        UtilsService.showInformationModal('label.information',
-                                            'vocalsynthesis.message.info.notsupported', null, false, true)
-                                            .then(function (result) {
-                                                if (result) {
-                                                    CacheProvider.setItem(result.notShowAgain, 'vocalSynthesisTipsShowed');
-                                                }
-                                            });
-                                    }
+                                if (checkBrowserSupported()) {
+                                    speechService.speech(text, true);
 
-                                });
+                                } else {
+                                    CacheProvider.getItem('vocalSynthesisTipsShowed').then(function (isShowed) {
+                                        if (!isShowed) {
+                                            UtilsService.showInformationModal('label.information',
+                                                'vocalsynthesis.message.info.notsupported', null, false, true)
+                                                .then(function (result) {
+                                                    if (result) {
+                                                        CacheProvider.setItem(result.notShowAgain, 'vocalSynthesisTipsShowed');
+                                                    }
+                                                });
+                                        }
 
+                                    });
+
+                                }
                             }
-                        }
-                    }, 10);
+                        }, 10);
+                    }
+
+
 
                 }
 
 
                 function speakOnKeyboard(event) {
-                    if (keyboardSelectionService.isSelectionCombination(event)) {
+                    if (!scope.isEnableNoteAdd && keyboardSelectionService.isSelectionCombination(event)) {
                         speak();
                     }
                 }
