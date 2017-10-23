@@ -80,14 +80,18 @@ angular.module('cnedApp')
 
         $scope.showTitleDoc = function (title) {
             $log.debug('showTitleDoc - param.title', title);
-            // extract document's title from URl, the tile is between '_'
-            $rootScope.titreDoc = title.substring(title.indexOf('_') + 1, title.lastIndexOf('_'));
-            $scope.docName = title;
-            $scope.docSignature = title;
 
-            if (!$rootScope.titreDoc) {
-                $rootScope.titreDoc = $scope.docName;
+            if (title) {
+                // extract document's title from URl, the tile is between '_'
+                $rootScope.titreDoc = title.substring(title.indexOf('_') + 1, title.lastIndexOf('_'));
+                $scope.docName = title;
+                $scope.docSignature = title;
+
+                if (!$rootScope.titreDoc) {
+                    $rootScope.titreDoc = $scope.docName;
+                }
             }
+
         };
 
         /*
@@ -917,6 +921,31 @@ angular.module('cnedApp')
             }
 
         };
+
+        $scope.confirmLeave = function (cb) {
+
+            if (!$scope.idDocument) {
+                UtilsService.openConfirmModal('INFORMATION', 'Vous risquez de perdre le document en cours d\'aperçu, êtes-vous sûr de vouloir quitter cette page ?', true)
+                    .then(function () {
+                        cb();
+                    });
+            } else {
+
+                cb();
+            }
+        };
+
+        var stateChange = $rootScope.$on('$stateChangeStart',
+            function (event, toState, toParams, fromState) {
+
+                if (fromState.name === 'app.overview' && toState.name !== 'app.edit-document') {
+                    $scope.confirmLeave(function () {
+                        stateChange();
+                        $state.go(toState.name);
+                    });
+                    event.preventDefault();
+                }
+            });
 
         $scope.init();
     });
