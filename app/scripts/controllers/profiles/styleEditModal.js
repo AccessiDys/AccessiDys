@@ -162,6 +162,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.editStyleChange('spaceCharSelected', $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected);
             $scope.editStyleChange('colorationType', $scope.profile.data.profileTags[profileTagIndex].colorationType);
             $scope.editStyleChange('colors', $scope.profile.data.profileTags[profileTagIndex].colors);
+            $scope.editStyleChange('colorsList', $scope.profile.data.profileTags[profileTagIndex].colorsList);
 
 
         }, 200);
@@ -177,6 +178,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceCharSelected;
             $scope.profile.data.profileTags[profileTagIndex].colorationType = $scope.style.colorationType;
             $scope.profile.data.profileTags[profileTagIndex].colors = $scope.style.colors;
+            $scope.profile.data.profileTags[profileTagIndex].colorsList = $scope.style.colorsList;
 
             $uibModalInstance.close({
                 profile: $scope.profile,
@@ -226,6 +228,9 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
                 }
                 $scope.style.colors = value;
                 $scope.style.coloration = $scope.style.colorationType + " " + $scope.style.colors;
+                break;
+            case 'colorsList':
+                $scope.style.colorsList = value;
                 break;
             case 'style':
                 $scope.style.style = value;
