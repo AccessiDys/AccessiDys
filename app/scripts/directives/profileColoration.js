@@ -164,8 +164,10 @@ angular.module('cnedApp').directive('profileColoration',
 
                                        if (coloration === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
+                                            || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 3)
                                             || coloration === 'Surligner les lignes RBV'
-                                            || coloration === 'Surligner les lignes RVJ') {
+                                            || coloration === 'Surligner les lignes RVJ'
+                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 3)) {
 
                                             var res = UtilsService.colorLines(child, 3, prevTop, line);
                                             line = res.line;
@@ -177,9 +179,9 @@ angular.module('cnedApp').directive('profileColoration',
                                             parent.insertBefore(res.documentFragment, nextElement);
                                         } else if (
                                             coloration === 'Colorer les lignes RBVJ'
-                                            || coloration === 'Colorer les lignes Personnaliser'
+                                            || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 4)
                                             || coloration === 'Surligner les lignes RBVJ'
-                                            || coloration === 'Surligner les lignes Personnaliser') {
+                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 4)) {
 
                                             var res = UtilsService.colorLines(child, 4, prevTop, line);
 
