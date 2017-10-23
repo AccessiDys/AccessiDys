@@ -41,7 +41,6 @@ angular.module('cnedApp').directive('profileStyle',
                 var generateProfileStyle = function () {
 
                     if (scope.profile) {
-
                         var profile = scope.profile.data;
                         var className = '.' + profile.className;
                         var profileStyle = '';
@@ -121,7 +120,75 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += '}';
                                     break;
 
+                                case 'Colorer les lignes Personnaliser':
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
+                                    profileStyle += ('color: ' + profile.profileTags[i].colorsList[0] + ';');
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line2 {';
+                                    profileStyle += ('color: ' + profile.profileTags[i].colorsList[1] + ';');
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line3 {';
+                                    profileStyle += ('color: ' + profile.profileTags[i].colorsList[2] + ';');
+                                    profileStyle += '}';
+
+                                    if(profile.profileTags[i].colorsList.length > 3) {
+                                        profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line4 {';
+                                        profileStyle += ('color: ' + profile.profileTags[i].colorsList[3] + ';');
+                                        profileStyle += '}';
+                                    }
+                                    break;
+
+
                                 case 'Colorer les mots':
+                                case 'Colorer les syllabes':
+
+                                profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(1n) {';
+                                profileStyle += 'color: #D90629;';
+                                profileStyle += '}';
+
+                                profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(3n-1) {';
+                                profileStyle += 'color: #066ED9;';
+                                profileStyle += '}';
+
+                                profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(3n) {';
+                                profileStyle += 'color: #4BD906;';
+                                profileStyle += '}';
+
+
+                                break;
+
+                                case 'Colorer les syllabes RBV':
+                                case 'Colorer les syllabes RVJ':
+                                case 'Colorer les syllabes RBVJ':
+                                case 'Colorer les syllabes Personnaliser':
+                                case 'Colorer les mots RBV':
+                                case 'Colorer les mots RVJ':
+                                case 'Colorer les mots RBVJ':
+                                case 'Colorer les mots Personnaliser':
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(1n) {';
+                                    profileStyle += 'color: ' + profile.profileTags[i].colorsList[0] + ';';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(4n-2) {';
+                                    profileStyle += 'color: ' + profile.profileTags[i].colorsList[1] + ';';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(4n-1) {';
+                                    profileStyle += 'color: ' + profile.profileTags[i].colorsList[2] + ';';
+                                    profileStyle += '}';
+
+                                    console.log(profile.profileTags[i].colorsList.length);
+                                    if(profile.profileTags[i].colorsList.length > 3) {
+                                        profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(4n) {';
+                                        profileStyle += 'color: ' + profile.profileTags[i].colorsList[3] + ';';
+                                        profileStyle += '}';
+                                    }
+
+                                    break;
+
                                 case 'Colorer les syllabes':
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(1n) {';
@@ -156,6 +223,38 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += 'background-color: #04ffff;';
                                     profileStyle += '}';
 
+
+                                    break;
+
+                                case 'Surligner les syllabes RBV':
+                                case 'Surligner les syllabes RVJ':
+                                case 'Surligner les syllabes RBVJ':
+                                case 'Surligner les syllabes Personnaliser':
+                                case 'Surligner les mots RBV':
+                                case 'Surligner les mots RVJ':
+                                case 'Surligner les mots RBVJ':
+                                case 'Surligner les mots Personnaliser':
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(1n) {';
+                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'background-color: ' + profile.profileTags[i].colorsList[0] + ';';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(4n-2) {';
+                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'background-color: ' + profile.profileTags[i].colorsList[1] + ';';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(4n-1) {';
+                                    profileStyle += 'color: #000;';
+                                    profileStyle += 'background-color: ' + profile.profileTags[i].colorsList[2] + ';';
+                                    profileStyle += '}';
+
+                                    if(profile.profileTags[i].colorsList.length > 3) {
+                                        profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(4n) {';
+                                        profileStyle += 'color: #000;';
+                                        profileStyle += 'background-color: ' + profile.profileTags[i].colorsList[3] + ';';
+                                        profileStyle += '}';
+                                    }
 
                                     break;
 
@@ -217,6 +316,32 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #ECE20F;';
                                     profileStyle += '}';
+
+                                    break;
+
+                                case 'Surligner les lignes Personnaliser':
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
+                                    profileStyle += 'color: #000 !important;';
+                                    profileStyle += 'background-color: ' + profile.profileTags[i].colorsList[0] + ';';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line2 {';
+                                    profileStyle += 'color: #000 !important;';
+                                    profileStyle += 'background-color: ' + profile.profileTags[i].colorsList[1] + ';';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line3 {';
+                                    profileStyle += 'color: #000 !important;';
+                                    profileStyle += 'background-color: ' + profile.profileTags[i].colorsList[2] + ';';
+                                    profileStyle += '}';
+
+                                    if(profile.profileTags[i].colorsList.length > 3) {
+                                        profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line4 {';
+                                        profileStyle += 'color: #000 !important;';
+                                        profileStyle += 'background-color: ' + profile.profileTags[i].colorsList[3] + ';';
+                                        profileStyle += '}';
+                                    }
 
                                     break;
 

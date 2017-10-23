@@ -51,7 +51,16 @@ var profilTagSchema = new Schema({
         type: String
     },
     coloration: {
+      type: String
+    },
+    colorationType: {
         type: String
+    },
+    colors: {
+        type: String
+    },
+    colorsList: {
+        type: []
     },
     spaceSelected: {
         type: Number,

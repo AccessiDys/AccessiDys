@@ -33,6 +33,7 @@ var config = require('../../env/config.json');
  */
 function newProfilParDefaut() {
 
+    console.log('NEW PROFIL DEFAULT');
     createDefaultTags();
 
 
@@ -45,7 +46,7 @@ function newProfilParDefaut() {
     var profile = new Profil(newProfil);
     profile.save(function (err) {
         if (err) {
-            console.log('Error creating profile.')
+            console.log('Error creating profile.');
         } else {
             //Create link between profiles and tags
             createProfilTagsForNewProfilByDefault(profile);
@@ -56,6 +57,7 @@ function newProfilParDefaut() {
 
 function createProfilTagsForNewProfilByDefault(profile) {
 
+    console.log('CREATE PROFIL TAGS FOR NEW PROFIL BY DEFAULT');
     //for all tags, create the link with the profile
     var newProfilTag = [
         {
@@ -239,6 +241,9 @@ function createProfilTagsForNewProfilByDefault(profile) {
                     }
                 }
             }
+
+            console.log('Trying to show profile tags');
+            console.log(profile.profileTags);
             profile.save(function (err) {
                 if (err) {
                     console.log('error during profile update.')
@@ -253,6 +258,7 @@ function createProfilTagsForNewProfilByDefault(profile) {
 
 function createDefaultTags() {
 
+    console.log('CREATE DEFAULT TAGS');
     var tags = [
         {
             "balise": "h1",

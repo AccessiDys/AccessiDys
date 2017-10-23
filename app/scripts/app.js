@@ -44,6 +44,7 @@ var cnedApp = angular.module('cnedApp', [
     'textAngular',
     'sticky',
     'angular-cookie-law',
+    'angularSpectrumColorpicker',
     'ui.tree'
 ]);
 
