@@ -34,7 +34,8 @@ angular.module('cnedApp')
                                           fileStorageService, tagsService, CacheProvider, $timeout) {
 
         /* Initializations */
-        $scope.colorLists = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes RBV', 'Colorer les lignes RVJ', 'Colorer les lignes RBVJ', 'Surligner les mots', 'Surligner les lignes RBV', 'Surligner les lignes RVJ', 'Surligner les lignes RBVJ'];
+        $scope.colorTypeList = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes', 'Surligner les mots', 'Surligner les syllabes', 'Surligner les lignes'];
+        $scope.colorList = ['RBV', 'RVJ', 'RBVJ', 'Personnaliser'];
         $scope.weightLists = ['Gras', 'Normal'];
         $scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman', 'LDFComicSans',
             'HKGrotesk-Regular', 'SignikaNegative-Regular', 'Century Gothic', 'OpenSans-CondensedLight', 'CodeNewRoman',
@@ -246,6 +247,8 @@ angular.module('cnedApp')
                                     tagEditParams.profile.data.profileTags[i].spaceSelected = tagEditParams.profile.data.profileTags[params.index].spaceSelected;
                                     tagEditParams.profile.data.profileTags[i].spaceCharSelected = tagEditParams.profile.data.profileTags[params.index].spaceCharSelected;
                                     tagEditParams.profile.data.profileTags[i].coloration = tagEditParams.profile.data.profileTags[params.index].coloration;
+                                    tagEditParams.profile.data.profileTags[i].colorationType = tagEditParams.profile.data.profileTags[params.index].colorationType;
+                                    tagEditParams.profile.data.profileTags[i].colors = tagEditParams.profile.data.profileTags[params.index].colors;
                                 }
                             }
                         }

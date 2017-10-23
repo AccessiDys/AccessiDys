@@ -369,9 +369,59 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
             } else {
                 return html;
             }
+        },
+
+        verifyColorsList: function(profileTag) {
+            if( !profileTag.colorsList || profileTag.colorsList.length < 0) {
+                var coloration = profileTag.coloration;
+                var colorationType = '';
+                var colors = '';
+                var colorsList = [];
+
+
+                if(profileTag.coloration.indexOf('Pas de coloration') > -1) {
+                    colorationType = 'Pas de coloration';
+                }else if(profileTag.coloration.indexOf('Colorer les lignes') > -1) {
+                    colorationType = 'Colorer les lignes';
+                }else if(profileTag.coloration.indexOf('Colorer les mots') > -1) {
+                    colorationType = 'Colorer les mots';
+                    colors = 'RBV';
+                    colorsList = ['#D90629', '#066ED9', '#4BD906'];
+                }else if(profileTag.coloration.indexOf('Colorer les syllabes') > -1) {
+                    colorationType = 'Colorer les syllabes';
+                    colors = 'RBV';
+                    colorsList = ['#D90629', '#066ED9', '#4BD906'];
+                }else if(profileTag.coloration.indexOf('Surligner les lignes') > -1) {
+                    colorationType = 'Surligner les lignes';
+                }else if(profileTag.coloration.indexOf('Surligner les mots') > -1) {
+                    colorationType = 'Surligner les mots';
+                    colors = 'RBV';
+                    colorsList = ['#D90629', '#066ED9', '#4BD906'];
+                }else if(profileTag.coloration.indexOf('Surligner les syllabes') > -1) {
+                    colorationType = 'Surligner les syllabes';
+                    colors = 'RBV';
+                    colorsList = ['#D90629', '#066ED9', '#4BD906'];
+                }
+
+                if(profileTag.coloration.indexOf('RBV') > -1) {
+                    colors = 'RBV';
+                    colorsList = ['#D90629', '#066ED9', '#4BD906'];
+                }else if(profileTag.coloration.indexOf('RVJ') > -1) {
+                    colors = 'RVJ';
+                    colorsList = ['#D90629', '#4BD906', '#ECE20F'];
+                }else if(profileTag.coloration.indexOf('RBVJ') > -1) {
+                    colors = 'RBVJ';
+                    colorsList = ['#D90629', '#066ED9', '#4BD906', '#ECE20F'];
+                }else if(profileTag.coloration.indexOf('Personnaliser') > -1) {
+                    colors = 'Personnaliser';
+                }
+
+                profileTag.colorationType = colorationType;
+                profileTag.colors = colors;
+                profileTag.colorsList = colorsList;
+
+            }
         }
-
-
     };
 
     return methods;
