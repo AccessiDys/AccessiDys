@@ -150,20 +150,7 @@ angular.module('cnedApp').controller('SocialShareModalCtrl', function ($rootScop
         }
     };
 
-    // TODO mettre en place la lib comme Gplus
     $scope.attachFacebook = function () {
         $scope.facebookLink = decodeURIComponent($scope.itemToShare.linkToShare);
-       /*
-
-        $timeout(function(){
-            try {
-                FB.XFBML.parse();
-            } catch (ex) {
-                console.log('gotchaa ... ');
-                console.log(ex);
-            }
-        }, 300);*/
-
-
     };
 });

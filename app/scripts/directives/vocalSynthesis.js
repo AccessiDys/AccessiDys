@@ -27,7 +27,7 @@
 /*global cnedApp */
 cnedApp.directive('vocalSynthesis',
 
-    function (keyboardSelectionService, speechService, serviceCheck, $log, $timeout, $window, UtilsService, CacheProvider) {
+    function (keyboardSelectionService, speechService, serviceCheck, $log, $timeout, $window, UtilsService, CacheProvider, $rootScope) {
         return {
             restrict: 'A',
             link: function (scope, elm) {
@@ -67,7 +67,7 @@ cnedApp.directive('vocalSynthesis',
                  */
                 function speak() {
 
-                    if(!scope.isEnableNoteAdd){
+                    if (!scope.isEnableNoteAdd) {
                         $log.debug('$scope.speak');
                         speechService.stopSpeech();
                         $timeout(function () {
@@ -76,7 +76,40 @@ cnedApp.directive('vocalSynthesis',
                             if (text && !/^\s*$/.test(text)) {
 
                                 if (checkBrowserSupported()) {
-                                    speechService.speech(text, true);
+                                    var artyom = new Artyom();
+                                    var vocalSettings = {
+                                        rate: 1,
+                                        volume: 1,
+                                        pitch: 1,
+                                        voice: 'fr'
+                                    };
+
+                                    if ($rootScope.currentProfile && $rootScope.currentProfile.data && $rootScope.currentProfile.data.vocalSettings) {
+                                        vocalSettings = $rootScope.currentProfile.data.vocalSettings;
+                                    }
+
+                                    var language = '';
+
+                                    if (vocalSettings.voice === 'fr') {
+                                        language = 'fr-FR';
+                                    } else if (vocalSettings.voice === 'en') {
+                                        language = 'en-US';
+                                    } else if (vocalSettings.voice === 'es') {
+                                        language = 'es-ES';
+                                    } else if (vocalSettings.voice === 'de') {
+                                        language = 'de-DE';
+                                    }
+
+                                    artyom.initialize({
+                                        lang:language,
+                                        continuous:false,
+                                        debug:true,
+                                        listen:false,
+                                        volume: vocalSettings.volume,
+                                        speed: vocalSettings.rate
+                                    });
+
+                                    artyom.say(text);
 
                                 } else {
                                     CacheProvider.getItem('vocalSynthesisTipsShowed').then(function (isShowed) {
@@ -96,7 +129,6 @@ cnedApp.directive('vocalSynthesis',
                             }
                         }, 10);
                     }
-
 
 
                 }
