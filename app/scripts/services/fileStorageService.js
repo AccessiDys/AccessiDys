@@ -57,7 +57,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         }
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
-            return DropboxProvider.search(query, UserService.getData().token).then(function (files) {
+            return DropboxProvider.search(query, UserService.getData().token, type).then(function (files) {
                 return CacheProvider.saveAll(files, storageName);
             }, function () {
                 return CacheProvider.list(storageName);

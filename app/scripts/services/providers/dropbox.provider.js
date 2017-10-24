@@ -35,32 +35,35 @@ angular.module('cnedApp').factory('DropboxProvider',
          *            The dropbox files
          * @method transformDropboxFilesToStorageFiles
          */
-        var transformDropboxFilesToStorageFiles = function (dropboxFiles) {
-
+        var transformDropboxFilesToStorageFiles = function (dropboxFiles, type) {
+            console.log('type', type);
             var arbo = [];
             for (var i = 0; i < dropboxFiles.matches.length; i++) { //excludes profils json files.
-                if (dropboxFiles.matches[i].metadata.name.indexOf('-profile.json') < 0) {
-                    var arboTemp = arbo;
+                if (type === 'document' ) {
 
-                    var filePathArray = dropboxFiles.matches[i].metadata.path_display.split('/');
+                    if(dropboxFiles.matches[i].metadata.name.indexOf('-profile.json') < 0){
+                        var arboTemp = arbo;
 
-                    for (var f = 1; f < filePathArray.length; f++) {
-                        var notFound = true;
-                        var j = 0;
-                        while (notFound && j < arboTemp.length) {
-                            if (arboTemp[j].filename === filePathArray[f]) {
-                                arboTemp = arboTemp[j].content;
-                                notFound = false;
+                        var filePathArray = dropboxFiles.matches[i].metadata.path_display.split('/');
+
+                        for (var f = 1; f < filePathArray.length; f++) {
+                            var notFound = true;
+                            var j = 0;
+                            while (notFound && j < arboTemp.length) {
+                                if (arboTemp[j].filename === filePathArray[f]) {
+                                    arboTemp = arboTemp[j].content;
+                                    notFound = false;
+                                }
+                                j++;
                             }
-                            j++;
-                        }
 
-                        if (notFound) {
-                            var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
-                            if (file !== null) {
-                                arboTemp.push(file);
-                                if (file.type === 'folder') {
-                                    arboTemp = arboTemp[arboTemp.length - 1].content;
+                            if (notFound) {
+                                var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
+                                if (file !== null) {
+                                    arboTemp.push(file);
+                                    if (file.type === 'folder') {
+                                        arboTemp = arboTemp[arboTemp.length - 1].content;
+                                    }
                                 }
                             }
                         }
@@ -177,7 +180,7 @@ angular.module('cnedApp').factory('DropboxProvider',
             });
             return deferred.promise;
         };
-        var searchService = function (query, access_token) {
+        var searchService = function (query, access_token, type) {
             var deferred = $q.defer();
             $http({
                 method: 'POST',
@@ -194,7 +197,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                     'Content-Type': 'application/json'
                 }
             }).success(function (files) {
-                deferred.resolve(transformDropboxFilesToStorageFiles(files));
+                deferred.resolve(transformDropboxFilesToStorageFiles(files, type));
             }).error(function (data) {
                 deferred.reject(data);
             });
@@ -223,7 +226,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                     matches.push({metadata: files.entries[f]});
                 }
                 var trueFiles = {matches: matches};
-                deferred.resolve(transformDropboxFilesToStorageFiles(trueFiles));
+                deferred.resolve(transformDropboxFilesToStorageFiles(trueFiles, 'document'));
             }).error(function (data) {
                 deferred.reject(data);
             });
