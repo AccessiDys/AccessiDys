@@ -103,7 +103,7 @@ cnedApp.directive('vocalSynthesis',
                                     artyom.initialize({
                                         lang:language,
                                         continuous:false,
-                                        debug:true,
+                                        debug:false,
                                         listen:false,
                                         volume: vocalSettings.volume,
                                         speed: vocalSettings.rate
