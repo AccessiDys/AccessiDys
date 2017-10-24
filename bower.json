@@ -54,6 +54,11 @@
         "Hyphenator.js",
         "patterns/fr.js"
       ]
+    },
+    "artyom.js": {
+      "main": [
+        "build/artyom.window.min.js"
+      ]
     }
   }
 }
