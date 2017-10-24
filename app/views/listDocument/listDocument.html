@@ -60,7 +60,7 @@
         <div class="tree-node">
 
             <div class="row tree-node-header text-center">
-                <div class="col-md-8">
+                <div class="col-xs-8">
 
                     <span class="cursor-pointer sort-column"
                           data-ng-click="sortByName()">
@@ -72,7 +72,7 @@
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-xs-3">
                     <span class="cursor-pointer sort-column"
                           data-ng-click="sortByDate()">
                         Date derniere modification
@@ -83,7 +83,7 @@
 
                 </div>
 
-                <div class="col-md-1">
+                <div class="col-xs-1">
                     action
                 </div>
 
@@ -104,7 +104,7 @@
                  ng-class="{'bg-color-gray': (node.index % 2) === 0, 'bg-color-white': (node.index % 2) === 1}">
 
 
-                <div class="col-md-8 node-cell">
+                <div class="col-xs-8 node-cell">
 
                     <span style="margin-left:{{(level * 30)}}px;" class="cursor-pointer">
 
@@ -128,12 +128,12 @@
                     </span>
                 </div>
 
-                <div class="col-md-3 node-cell text-center">
+                <div class="col-xs-3 node-cell text-center">
                     {{ node.dateModification | date: configuration.DATE_PATTERN}}
                     &nbsp;
                 </div>
 
-                <div class="col-md-1 node-cell text-center action" uib-dropdown>
+                <div class="col-xs-1 node-cell text-center action" uib-dropdown>
                     <button id="document-actions" type="button" class="action_btn" uib-dropdown-toggle
                             name="document_action_btn" data-nodrag>
                         &nbsp;
