@@ -37,7 +37,6 @@ angular.module('cnedApp').factory('DropboxProvider',
          */
         var transformDropboxFilesToStorageFiles = function (dropboxFiles) {
 
-            $log.debug('dropboxFiles', dropboxFiles);
             var arbo = [];
             for (var i = 0; i < dropboxFiles.matches.length; i++) { //excludes profils json files.
                 if (dropboxFiles.matches[i].metadata.name.indexOf('-profile.json') < 0) {
@@ -66,9 +65,14 @@ angular.module('cnedApp').factory('DropboxProvider',
                             }
                         }
                     }
+                } else {
+                    var file = transformDropboxFileToStorageFile(dropboxFiles.matches[i].metadata);
+                    if (file) {
+                        arbo.push(file);
+                    }
                 }
             }
-            for(var a=0; a<arbo.length;a++){
+            for (var a = 0; a < arbo.length; a++) {
                 arbo[a].show = true;
             }
             return arbo;
@@ -84,10 +88,10 @@ angular.module('cnedApp').factory('DropboxProvider',
             var filepath = dropboxFile.path_display;
             var filenameStartIndex = filepath.indexOf('_') + 1;
             var filenameEndIndex = filepath.lastIndexOf('_');
-            var filename='';
+            var filename = '';
             var dateModification = Date.parse(dropboxFile.server_modified);
             var file;
-            if(filenameStartIndex > 0 && filenameEndIndex > -1) {
+            if (filenameStartIndex > 0 && filenameEndIndex > -1) {
                 filename = filepath.substring(filenameStartIndex, filenameEndIndex);
                 file = {
                     filepath: filepath,
@@ -179,7 +183,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                 method: 'POST',
                 url: 'https://api.dropboxapi.com/2/files/search',
                 data: {
-                    path:'',
+                    path: '',
                     query: query,
                     start: 0,
                     mode: 'filename',
@@ -196,7 +200,7 @@ angular.module('cnedApp').factory('DropboxProvider',
             });
             return deferred.promise;
         };
-        var listAllFilesService = function (path, access_token){
+        var listAllFilesService = function (path, access_token) {
             var deferred = $q.defer();
             $http({
                 method: 'POST',
@@ -215,7 +219,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                 }
             }).success(function (files) {
                 var matches = [];
-                for ( var f=0; f < files.entries.length; f++){
+                for (var f = 0; f < files.entries.length; f++) {
                     matches.push({metadata: files.entries[f]});
                 }
                 var trueFiles = {matches: matches};
