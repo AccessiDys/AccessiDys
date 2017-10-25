@@ -252,22 +252,35 @@
                         <ul>
                             <li class="active">
                                 <a href data-ng-if="modeImpression"
-                                   data-ng-click="switchModeAffichage();" title="Mode page">
+                                   data-ng-click="switchModeAffichage();" title="Passer en mode page">
                                     <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    Mode Page
+                                    Passer en mode page
                                 </a>
 
                                 <a href data-ng-if="!modeImpression"
-                                   data-ng-click="switchModeAffichage();" title="Mode lecture">
+                                   data-ng-click="switchModeAffichage();" title="Passer en mode lecture">
                                     <i class="fa fa-book" aria-hidden="true"></i>
-                                    Mode lecture
+                                    Passer en mode lecture
                                 </a>
                             </li>
-                            <li data-ng-class="{'active': isSummaryActive}">
+                            <li data-ng-class="{'active': isSummaryActive}"
+                                data-ng-if="hasSummary()">
 
                                 <a href data-ng-click="plan()" title="Sommaire">
                                     <i class="fa fa-home" aria-hidden="true"></i>
                                     Sommaire
+                                </a>
+                            </li>
+                            <li data-ng-class="{'active': false}"
+                            data-ng-if="!hasSummary()">
+
+                                <a href title="Pas de Sommaire"
+                                   style="pointer-events: none; cursor: default;
+                                   filter: grayscale(100%);
+                                   -webkit-filter: grayscale(100%);
+                                   -moz-filter: grayscale(100%);">
+                                    <i class="fa fa-home" aria-hidden="false"></i>
+                                    Pas de sommaire
                                 </a>
                             </li>
                             <li ng-class="{'active' : isEnableNoteAdd}">
