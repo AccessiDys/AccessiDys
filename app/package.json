@@ -1,0 +1,16 @@
+{
+  "name": "accessidys",
+  "version": "1.0.0",
+  "author": "Accessidys",
+  "description": "",
+  "main": "./main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "1.7.8",
+    "electron-packager": "9.1.0"
+  },
+  "scripts": {
+    "start": "electron ./app",
+    "dist:win": "electron-packager . Accessidys --out=\"../build\" --overwrite --platform=win32 --arch=ia32 --asar=true --icon=\"styles/images/favicon.ico\""
+  }
+}
