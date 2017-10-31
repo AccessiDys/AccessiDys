@@ -113,43 +113,19 @@ angular.module('cnedApp').directive('profileColoration',
                                         }
 
                                         // Split Text
-                                        if (coloration === 'Colorer les lignes RBV'
-                                            || coloration === 'Colorer les lignes RVJ'
-                                            || coloration === 'Surligner les lignes RVJ'
-                                            || coloration === 'Surligner les lignes RBV'
-                                            || coloration === 'Colorer les lignes RBVJ'
-                                            || coloration === 'Colorer les lignes Personnaliser'
-                                            || coloration === 'Surligner les lignes RBVJ'
-                                            || coloration === 'Surligner les lignes Personnaliser') {
-
+                                        if (coloration.indexOf('lignes') > 0){
                                             textTransform = UtilsService.splitOnWordWithSpace(textTransform);
-                                        } else if (coloration === 'Colorer les mots'
-                                            || coloration === 'Colorer les mots RBV'
-                                            || coloration === 'Colorer les mots RVJ'
-                                            || coloration === 'Colorer les mots RBVJ'
-                                            || coloration === 'Colorer les mots Personnaliser'
-                                            || coloration === 'Surligner les mots'
-                                            || coloration === 'Surligner les mots RBV'
-                                            || coloration === 'Surligner les mots RVJ'
-                                            || coloration === 'Surligner les mots RBVJ'
-                                            || coloration === 'Surligner les mots Personnaliser') {
-
+                                        } else if (coloration.indexOf('mots') > 0){
                                             textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
-
-                                        } else if (coloration === 'Colorer les syllabes'
-                                            || coloration === 'Colorer les syllabes RBV'
-                                            || coloration === 'Colorer les syllabes RVJ'
-                                            || coloration === 'Colorer les syllabes RBVJ'
-                                            || coloration === 'Colorer les syllabes Personnaliser'
-                                            || coloration === 'Surligner les syllabes'
-                                            || coloration === 'Surligner les syllabes RBV'
-                                            || coloration === 'Surligner les syllabes RVJ'
-                                            || coloration === 'Surligner les syllabes RBVJ'
-                                            || coloration === 'Surligner les syllabes Personnaliser') {
-
+                                        } else if (coloration.indexOf('syllabes') > 0){
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
+                                        } else if(coloration.indexOf('[Maj. - \'.\']') > 0) {
+                                            textTransform = UtilsService.splitOnSentenceWithPoint(textTransform);
+                                        } else if (coloration.indexOf('[Maj. - \',\' - \'.\']') > 0) {
+                                            textTransform = UtilsService.splitOnSentenceWithComma(textTransform);
+                                        } else if (coloration.indexOf('[Maj. - \';\' - \'.\']') > 0) {
+                                            textTransform = UtilsService.splitOnSentenceWithSemicolon(textTransform);
                                         }
-
 
                                         if (textTransform.trim() === '') {
                                             textTransform = '<br>';
@@ -165,9 +141,28 @@ angular.module('cnedApp').directive('profileColoration',
                                        if (coloration === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
                                             || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 3)
+                                            //|| (coloration.indexOf('Personnaliser')>0 && profileTag.colorsList.length === 3)
                                             || coloration === 'Surligner les lignes RBV'
                                             || coloration === 'Surligner les lignes RVJ'
-                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 3)) {
+                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 3)
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] RBV'
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] RVJ'
+                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RBV'
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RVJ'
+                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RBV'
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RVJ'
+                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] RBV'
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] RVJ'
+                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RBV'
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RVJ'
+                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RBV'
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RVJ'//) {
+                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)) {
 
                                             var res = UtilsService.colorLines(child, 3, prevTop, line);
                                             line = res.line;
@@ -179,9 +174,22 @@ angular.module('cnedApp').directive('profileColoration',
                                             parent.insertBefore(res.documentFragment, nextElement);
                                         } else if (
                                             coloration === 'Colorer les lignes RBVJ'
+                                            //|| ((coloration.indexOf('Personnaliser') > 0) && (profileTag.colorsList.length === 4))
                                             || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 4)
                                             || coloration === 'Surligner les lignes RBVJ'
-                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 4)) {
+                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] RBVJ'
+                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ'
+                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ'
+                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] RBVJ'
+                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ'
+                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ'
+                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)) {
 
                                             var res = UtilsService.colorLines(child, 4, prevTop, line);
 
