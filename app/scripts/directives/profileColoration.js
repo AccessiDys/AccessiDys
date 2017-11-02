@@ -141,7 +141,6 @@ angular.module('cnedApp').directive('profileColoration',
                                        if (coloration === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
                                             || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 3)
-                                            //|| (coloration.indexOf('Personnaliser')>0 && profileTag.colorsList.length === 3)
                                             || coloration === 'Surligner les lignes RBV'
                                             || coloration === 'Surligner les lignes RVJ'
                                             || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 3)
@@ -161,7 +160,7 @@ angular.module('cnedApp').directive('profileColoration',
                                             || coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RVJ'
                                             || (coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
                                             || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RBV'
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RVJ'//) {
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RVJ'
                                             || (coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)) {
 
                                             var res = UtilsService.colorLines(child, 3, prevTop, line);
@@ -174,7 +173,6 @@ angular.module('cnedApp').directive('profileColoration',
                                             parent.insertBefore(res.documentFragment, nextElement);
                                         } else if (
                                             coloration === 'Colorer les lignes RBVJ'
-                                            //|| ((coloration.indexOf('Personnaliser') > 0) && (profileTag.colorsList.length === 4))
                                             || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 4)
                                             || coloration === 'Surligner les lignes RBVJ'
                                             || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 4)
