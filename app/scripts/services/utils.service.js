@@ -322,7 +322,6 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
             for (var i = 0; i < ref.children.length; i++) {
 
                 var child = ref.children[i];
-                console.log(child);
                 var clone = child.cloneNode(true);
 
                 if (child.tagName !== 'SPAN' && child.hasChildNodes()) {
