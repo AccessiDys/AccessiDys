@@ -753,6 +753,11 @@ div.modal-body {
     padding-top: 3px;
 }
 
+.modal-body input[type=radio] {
+    width: 20px;
+    height: 20px;
+}
+
 .modal-body fieldset.padding_large {
     padding: 25px 0;
 }

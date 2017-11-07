@@ -193,7 +193,6 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += 'color: ' + profile.profileTags[i].colorsList[2] + ';';
                                     profileStyle += '}';
 
-                                    console.log(profile.profileTags[i].colorsList.length);
                                     if(profile.profileTags[i].colorsList.length > 3) {
                                         profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(4n) {';
                                         profileStyle += 'color: ' + profile.profileTags[i].colorsList[3] + ';';

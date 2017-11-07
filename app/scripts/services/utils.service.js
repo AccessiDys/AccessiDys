@@ -466,7 +466,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         },
 
         verifyColorsList: function(profileTag) {
-            if( !profileTag.colorsList || profileTag.colorsList.length < 0) {
+            if( !profileTag.colorsList || profileTag.colorsList.length < 1) {
                 var coloration = profileTag.coloration;
                 var colorationType = '';
                 var colors = '';
@@ -513,7 +513,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                 profileTag.colorationType = colorationType;
                 profileTag.colors = colors;
                 profileTag.colorsList = colorsList;
-
+                profileTag.souffleType = '[Maj. - \'.\']';
             }
         }
     };

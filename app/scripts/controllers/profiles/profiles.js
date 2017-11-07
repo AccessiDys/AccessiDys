@@ -35,9 +35,7 @@ angular.module('cnedApp')
 
         /* Initializations */
         $scope.colorTypeList = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes', 'Surligner les mots',
-            'Surligner les syllabes', 'Surligner les lignes',
-            'Colorer les groupes de souffle [Maj. - \'.\']', 'Colorer les groupes de souffle [Maj. - \';\' - \'.\']', 'Colorer les groupes de souffle [Maj. - \',\' - \'.\']',
-            'Surligner les groupes de souffle [Maj. - \'.\']', 'Surligner les groupes de souffle [Maj. - \';\' - \'.\']', 'Surligner les groupes de souffle [Maj. - \',\' - \'.\']'];
+            'Surligner les syllabes', 'Surligner les lignes', 'Colorer les groupes de souffle', 'Surligner les groupes de souffle'];
         $scope.colorList = ['RBV', 'RVJ', 'RBVJ', 'Personnaliser'];
         $scope.weightLists = ['Gras', 'Normal'];
         $scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman', 'LDFComicSans',

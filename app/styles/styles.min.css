@@ -102,3 +102,8 @@ h2.information  {
 .border-b-gray {
     border-bottom: 1px solid #ddd;
 }
+
+.modal-body input[type=radio] {
+    width: 20px;
+    height: 20px;
+}
