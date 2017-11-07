@@ -102,7 +102,7 @@
                                             </select>
                                         </span>
                                     </p>
-                                    <p class="controls_zone">
+                                    <!--<p class="controls_zone">
                                         <label for="add_color" class="">
                                             <span translate>Coloration</span>
                                             <span class="required"> *</span>
@@ -120,7 +120,60 @@
                                                 </option>
                                             </select>
                                         </span>
+                                    </p>-->
 
+                                    <p class="controls_zone">
+                                        <label for="add_color_type" class="">
+                                            <span translate>Type de coloration</span>
+                                            <span class="required"> *</span>
+                                        </label>
+
+                                        <span class="select-wrapper">
+                                            <select id="add_color_type"
+                                                    sselect
+                                                    class="color-type-select"
+                                                    data-ng-model="style.colorationType"
+                                                    data-ng-change="editStyleChange('colorationType',style.colorationType)"
+                                                    required name="colorType">
+                                                <option data-ng-repeat="color in colorTypeList"
+                                                        data-ng-selected="color == style.colorationType" value="{{color}}">
+                                                    {{color}}
+                                                </option>
+                                            </select>
+                                        </span>
+                                    </p>
+
+                                    <p class="controls_zone" data-ng-if="style.colorationType !== 'Pas de coloration' && style.colorationType !== ' '">
+                                        <label for="add_color" class="">
+                                            <span translate>Coloration</span>
+                                            <span class="required"> *</span>
+                                        </label>
+                                        <span class="select-wrapper">
+                                            <select id="add_color"
+                                                    sselect
+                                                    class="color-select"
+                                                    data-ng-model="style.colors"
+                                                    data-ng-change="editStyleChange('colors',style.colors)"
+                                                    required name="color">
+                                                <option data-ng-repeat="color in colorList"
+                                                        data-ng-selected="color == style.colors" value="{{color}}">
+                                                    {{color}}
+                                                </option>
+                                            </select>
+                                        </span>
+                                    </p>
+
+                                    <p class="controls_zone" data-ng-if="style.colors === 'Personnaliser'">
+                                        <span id="colors">
+                                            <input data-ng-model="style.colorsList[0]" type="color" style="width:50px;"/>
+                                            <input data-ng-model="style.colorsList[1]" type="color" style="width:50px;"/>
+                                            <input data-ng-model="style.colorsList[2]" type="color" style="width:50px;"/>
+                                            <input data-ng-if="style.colorsList.length > 3"
+                                                   data-ng-model="style.colorsList[3]" type="color" style="width:50px;"/>
+                                            <button type="text" data-ng-if="style.colorsList.length === 3" data-ng-click="style.colorsList.push('#000000')">+1</button>
+                                            <button type="text" data-ng-if="style.colorsList.length === 4" data-ng-click="style.colorsList.pop()">-1</button>
+
+                                        </span>
                                     </p>
                                     <p class="controls_zone">
                                         <label for="weigth">

@@ -457,6 +457,15 @@ angular.module('cnedApp')
             }
         };
 
+        $scope.hasSummary = function(){
+            if($scope.content[0]) {
+                return $scope.content[0].indexOf('</p>') > -1;
+            }
+            else {
+                return false;
+            }
+        };
+
         /**
          * ---------- Process Print -----------
          */
