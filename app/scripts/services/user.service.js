@@ -78,7 +78,7 @@ cnedApp.service('UserService', function ($http, configuration, $localForage, $q)
         },
 
         isAdmin: function () {
-            return $http.post('/user/isAdmin', {
+            return $http.post(configuration.BASE_URL  + '/user/isAdmin', {
                 email: userData.email,
                 provider: userData.provider
             });

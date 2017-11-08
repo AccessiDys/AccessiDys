@@ -73,6 +73,9 @@ angular.module('cnedApp').directive('profileStyle',
 
                             switch (profile.profileTags[i].coloration) {
                                 case 'Colorer les lignes RBV':
+                                case 'Colorer les groupes de souffle [Maj. - \'.\'] RBV':
+                                case 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RBV':
+                                case 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RBV':
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
                                     profileStyle += 'color: #D90629;';
                                     profileStyle += '}';
@@ -87,6 +90,9 @@ angular.module('cnedApp').directive('profileStyle',
 
                                     break;
                                 case 'Colorer les lignes RVJ':
+                                case 'Colorer les groupes de souffle [Maj. - \'.\'] RVJ':
+                                case 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RVJ':
+                                case 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RVJ':
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
                                     profileStyle += 'color: #D90629;';
@@ -103,6 +109,9 @@ angular.module('cnedApp').directive('profileStyle',
                                     break;
 
                                 case 'Colorer les lignes RBVJ':
+                                case 'Colorer les groupes de souffle [Maj. - \'.\'] RBVJ':
+                                case 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ':
+                                case 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ':
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
                                     profileStyle += 'color: #D90629;';
                                     profileStyle += '}';
@@ -121,6 +130,10 @@ angular.module('cnedApp').directive('profileStyle',
                                     break;
 
                                 case 'Colorer les lignes Personnaliser':
+                                case 'Colorer les groupes de souffle [Maj. - \'.\'] Personnaliser':
+                                case 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser':
+                                case 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser':
+
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
                                     profileStyle += ('color: ' + profile.profileTags[i].colorsList[0] + ';');
                                     profileStyle += '}';
@@ -180,7 +193,6 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += 'color: ' + profile.profileTags[i].colorsList[2] + ';';
                                     profileStyle += '}';
 
-                                    console.log(profile.profileTags[i].colorsList.length);
                                     if(profile.profileTags[i].colorsList.length > 3) {
                                         profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(4n) {';
                                         profileStyle += 'color: ' + profile.profileTags[i].colorsList[3] + ';';
@@ -259,6 +271,9 @@ angular.module('cnedApp').directive('profileStyle',
                                     break;
 
                                 case 'Surligner les lignes RBV':
+                                case 'Surligner les groupes de souffle [Maj. - \'.\'] RBV':
+                                case 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RBV':
+                                case 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RBV':
 
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
@@ -278,6 +293,9 @@ angular.module('cnedApp').directive('profileStyle',
 
                                     break;
                                 case 'Surligner les lignes RVJ':
+                                case 'Surligner les groupes de souffle [Maj. - \'.\'] RVJ':
+                                case 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RVJ':
+                                case 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RVJ':
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
                                     profileStyle += 'color: #000 !important;';
@@ -296,6 +314,9 @@ angular.module('cnedApp').directive('profileStyle',
 
                                     break;
                                 case 'Surligner les lignes RBVJ':
+                                case 'Surligner les groupes de souffle [Maj. - \'.\'] RBVJ':
+                                case 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ':
+                                case 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ':
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
                                     profileStyle += 'color: #000 !important;';
@@ -320,6 +341,9 @@ angular.module('cnedApp').directive('profileStyle',
                                     break;
 
                                 case 'Surligner les lignes Personnaliser':
+                                case 'Surligner les groupes de souffle [Maj. - \'.\'] Personnaliser':
+                                case 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser':
+                                case 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser':
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
                                     profileStyle += 'color: #000 !important;';

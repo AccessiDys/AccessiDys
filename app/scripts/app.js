@@ -44,8 +44,7 @@ var cnedApp = angular.module('cnedApp', [
     'textAngular',
     'sticky',
     'angular-cookie-law',
-    'ui.tree',
-    'angularSpectrumColorpicker'
+    'ui.tree'
 ]);
 
 cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvider, $sceProvider,

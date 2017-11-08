@@ -26,7 +26,7 @@
 'use strict';
 
 angular.module('cnedApp').factory('DropboxProvider',
-    function ($http, $q, $log) {
+    function ($http, $q, $log, configuration) {
 
         /**
          * Converts the format of dropbox files  in an internal file format
@@ -330,7 +330,7 @@ angular.module('cnedApp').factory('DropboxProvider',
         };
 
         var authService = function () {
-            window.location.href = '/auth/dropbox';
+            window.location.href = configuration.BASE_URL + '/auth/dropbox';
         };
 
         var copyService = function (from_path, to_path, access_token) {

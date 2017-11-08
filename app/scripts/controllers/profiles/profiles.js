@@ -34,7 +34,8 @@ angular.module('cnedApp')
                                           fileStorageService, tagsService, CacheProvider, $timeout) {
 
         /* Initializations */
-        $scope.colorTypeList = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes', 'Surligner les mots', 'Surligner les syllabes', 'Surligner les lignes'];
+        $scope.colorTypeList = ['Pas de coloration', 'Colorer les mots', 'Colorer les syllabes', 'Colorer les lignes', 'Surligner les mots',
+            'Surligner les syllabes', 'Surligner les lignes', 'Colorer les groupes de souffle', 'Surligner les groupes de souffle'];
         $scope.colorList = ['RBV', 'RVJ', 'RBVJ', 'Personnaliser'];
         $scope.weightLists = ['Gras', 'Normal'];
         $scope.policeLists = ['Arial', 'opendyslexicregular', 'Times New Roman', 'LDFComicSans',
@@ -572,7 +573,7 @@ angular.module('cnedApp')
                 content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour dupliquer votre profil : ' + $scope.oldProfil.data.nom + '. </span>',
                 subject: fullName + ' a dupliqué votre profil'
             };
-            $http.post('/sendEmail', sendVar)
+            $http.post(configuration.BASE_URL  + '/sendEmail', sendVar)
                 .success(function () {
                 });
 

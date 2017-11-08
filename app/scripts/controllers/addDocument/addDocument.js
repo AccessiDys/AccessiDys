@@ -35,7 +35,8 @@ angular
         'AddDocumentCtrl',
         function ($log, $scope, $rootScope, $stateParams, serviceCheck, $http,
                   htmlEpubTool, fileStorageService,
-                  canvasToImage, UtilsService, LoaderService, ToasterService, documentService, UserService, textAngularManager, $state) {
+                  canvasToImage, UtilsService, LoaderService, ToasterService, documentService,
+                  UserService, textAngularManager, $state, configuration) {
 
             $scope.document = {
                 filename: null,
@@ -265,7 +266,7 @@ angular
                 LoaderService.showLoader('document.message.info.save.analyze', false);
 
                 var epubLink = $scope.lien;
-                $http.post('/externalEpub', {
+                $http.post(configuration.BASE_URL  + '/externalEpub', {
                     lien: epubLink
                 }).success(function (data) {
                     var epubContent = angular.fromJson(data);
@@ -372,7 +373,7 @@ angular
                 } else {
                     service = '/sendPdfHTTPS';
                 }
-                $http.post(service, {
+                $http.post(configuration.BASE_URL  + service, {
                     lien: url
                 }).success(function (data) {
                     // Clear editor content
