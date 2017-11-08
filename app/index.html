@@ -203,7 +203,25 @@
 <script src="scripts/controllers/profiles/vocal-synthesis-settings.modal.js"></script>
 <!-- <script src="scripts/service-worker-registration.js"></script> -->
 <script src="scripts/controllers/listDocument/folder-list.modal.js"></script>
+<script src="scripts/services/providers/google-drive.provider.js"></script>
+
 <!-- endbuild -->
+
+<script src="https://apis.google.com/js/api.js"></script>
+
+
+<script>
+    function initClient() {
+        gapi.client.init({
+            'apiKey': 'AIzaSyCDhYAS2olgbveIqrSJGRzSYLB8HSzq250'
+        }).then(function(){
+            console.log('gapi loaded');
+        })
+    }
+
+    gapi.load('client', initClient);
+
+</script>
 
 <script type="text/javascript">
 

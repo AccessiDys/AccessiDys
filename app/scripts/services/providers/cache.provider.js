@@ -59,9 +59,6 @@ angular.module('cnedApp').factory('CacheProvider',
                             if (items[i] && items[i].filename === file.filename) {
 
                                 items.splice(i, 1);
-
-
-
                                 break;
                             }
                         }

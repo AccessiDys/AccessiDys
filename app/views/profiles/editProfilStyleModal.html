@@ -143,28 +143,6 @@
                                         </span>
                                     </p>
 
-                                    <p class="controls_zone" data-ng-if="style.colorationType === 'Colorer les groupes de souffle' || style.colorationType === 'Surligner les groupes de souffle'">
-                                        <label for="add_souffle_type" class="" style="display: inline-block">
-                                            <span translate>Groupe de souffle</span>
-                                            <span class="required"> *</span>
-                                        </label>
-
-                                        <span id="add_souffle_type" style="display: inline-block; width: 255px;">
-                                            <span>
-                                                <input type="radio" data-ng-model="style.souffleType" value="[Maj. - '.']" data-ng-change="editStyleChange('souffleType',style.souffleType)">
-                                                Maj. - Point
-                                            </span><br>
-                                            <span>
-                                                <input type="radio" data-ng-model="style.souffleType" value="[Maj. - ',' - '.']" data-ng-change="editStyleChange('souffleType',style.souffleType)">
-                                                Maj. - Virgule - Point
-                                            </span><br>
-                                            <span>
-                                                <input type="radio" data-ng-model="style.souffleType" value="[Maj. - ';' - '.']" data-ng-change="editStyleChange('souffleType',style.souffleType)">
-                                                Maj. - Point-Virgule - Point
-                                            </span>
-                                        </span>
-                                    </p>
-
                                     <p class="controls_zone" data-ng-if="style.colorationType !== 'Pas de coloration' && style.colorationType !== ' '">
                                         <label for="add_color" class="">
                                             <span translate>Coloration</span>
@@ -186,11 +164,8 @@
                                     </p>
 
                                     <p class="controls_zone" data-ng-if="style.colors === 'Personnaliser'">
-                                        <label for="add_color" class="">
-                                            <span translate>Cliquer pour modifier</span>
-                                            <span class="required"> *</span>
-                                        </label>
-                                        <span id="colors" style="display: inline-block; width: 255px;">
+                                        <label>&nbsp;</label>
+                                        <span id="colors">
                                             <input data-ng-model="style.colorsList[0]" type="color" style="width:50px;"/>
                                             <input data-ng-model="style.colorsList[1]" type="color" style="width:50px;"/>
                                             <input data-ng-model="style.colorsList[2]" type="color" style="width:50px;"/>

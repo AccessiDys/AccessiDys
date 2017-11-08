@@ -18,6 +18,8 @@
     "nue": "0.7.0dev",
     "passport": "^0.3.2",
     "passport-dropbox-oauth2": "^1.1.0",
+    "passport-google-drive": "0.0.6",
+    "passport-onedrive": "0.0.4",
     "restler": "^3.2.2",
     "socket.io": "1.7.3",
     "underscore": "~1.8.3",

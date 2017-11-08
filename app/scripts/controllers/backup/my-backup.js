@@ -25,22 +25,22 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, UtilsService) {
+angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, UtilsService, GoogleDriveProvider) {
     $scope.storages = [{
         provider: 'dropbox',
         icon: 'fa-dropbox',
         name: 'Dropbox',
         isActive: true
     }, {
-        provider: 'googledrive',
+        provider: 'google-drive',
         icon: 'fa-google',
         name: 'Google drive',
-        isActive: false
+        isActive: true
     }, {
-        provider: 'onedrive',
+        provider: 'one-drive',
         icon: 'fa-cloud',
         name: 'One drive',
-        isActive: false
+        isActive: true
     }];
 
     $scope.prevState = $stateParams.prevState;
@@ -72,6 +72,10 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
 
         if ($scope.selectedStorage.provider === 'dropbox') {
             DropboxProvider.auth();
+        } else if ($scope.selectedStorage.provider === 'google-drive'){
+            GoogleDriveProvider.auth();
+        } else if ($scope.selectedStorage.provider === 'one-drive'){
+
         }
     };
 
