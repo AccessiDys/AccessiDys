@@ -302,10 +302,104 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         },
 
         /**
+         * Split Text by sentences (Maj to point)
+         * @param text
+         */
+        splitOnSentenceWithPoint: function (text) {
+            var formattedText = text;
+            var tmpText = '';
+
+            if (formattedText) {
+                formattedText = text.replace(/&nbsp;/gi, ' ');
+                //formattedText = formattedText.replace(methods.sentenceRegex, '<span>$1 </span>');
+                formattedText = formattedText.split(methods.sentencePointRegex);
+
+                for(var i = 0; i < formattedText.length; i++){
+                    if( i % 2 === 0 ) {
+                        tmpText += '<span>' + formattedText[i];
+                    } else {
+                        tmpText += formattedText[i] + ' </span>';
+                    }
+                }
+            }
+
+            return tmpText;
+        },
+
+        /**
+         * Split Text by sentences (Maj to point)
+         * @param text
+         */
+        splitOnSentenceWithComma: function (text) {
+            var formattedText = text;
+            var tmpText = '';
+
+            if (formattedText) {
+                formattedText = text.replace(/&nbsp;/gi, ' ');
+                //formattedText = formattedText.replace(methods.sentenceRegex, '<span>$1 </span>');
+                formattedText = formattedText.split(methods.sentencePointRegex);
+                for(var j = 0; j < formattedText.length; j++) {
+                    formattedText[j] = formattedText[j].split(',');
+                }
+
+                for(var i = 0; i < formattedText.length; i++){
+                    if( i % 2 === 0) {
+                        for (var l = 0; l < formattedText[i].length; l++) {
+                            if (formattedText[i].length > 1 && (l < (formattedText[i].length - 1))) {
+                                tmpText += '<span>' + formattedText[i][l] + ', </span>';
+                            } else {
+                                tmpText += '<span>' + formattedText[i][l];
+                            }
+                        }
+                    } else {
+                        tmpText += formattedText[i] + ' </span>';
+                    }
+                }
+            }
+
+            return tmpText;
+        },
+
+        /**
+         * Split Text by sentences (Maj to point)
+         * @param text
+         */
+        splitOnSentenceWithSemicolon: function (text) {
+            var formattedText = text;
+            var tmpText = '';
+
+            if (formattedText) {
+                formattedText = text.replace(/&nbsp;/gi, ' ');
+                //formattedText = formattedText.replace(methods.sentenceRegex, '<span>$1 </span>');
+                formattedText = formattedText.split(methods.sentencePointRegex);
+                for(var j = 0; j < formattedText.length; j++) {
+                    formattedText[j] = formattedText[j].split(';');
+                }
+
+                for(var i = 0; i < formattedText.length; i++){
+                    if( i % 2 === 0) {
+                        for (var l = 0; l < formattedText[i].length; l++) {
+                            if (formattedText[i].length > 1 && (l < (formattedText[i].length - 1))) {
+                                tmpText += '<span>' + formattedText[i][l] + '; </span>';
+                            } else {
+                                tmpText += '<span>' + formattedText[i][l];
+                            }
+                        }
+                    } else {
+                        tmpText += formattedText[i] + ' </span>';
+                    }
+                }
+            }
+
+            return tmpText;
+        },
+
+        /**
          * Regex to select words in text
          */
         wordRegex: /([^><\s]+)(?![^<]*>)/gi,
         // /([\w,.'&;:"«»:%\?\-éèœëêçàâôîùïö\(\)\/]+)(?![^<]*>)/gi
+        sentencePointRegex: /([.?!])\s*(?=[A-Z])/g,
 
         /**
          * Color lines of Node element
@@ -376,7 +470,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         },
 
         verifyColorsList: function(profileTag) {
-            if( !profileTag.colorsList || profileTag.colorsList.length < 0) {
+            if( !profileTag.colorsList || profileTag.colorsList.length < 1) {
                 var coloration = profileTag.coloration;
                 var colorationType = '';
                 var colors = '';
@@ -423,7 +517,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                 profileTag.colorationType = colorationType;
                 profileTag.colors = colors;
                 profileTag.colorsList = colorsList;
-
+                profileTag.souffleType = '[Maj. - \'.\']';
             }
         }
     };
