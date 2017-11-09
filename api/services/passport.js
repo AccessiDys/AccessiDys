@@ -37,7 +37,6 @@ var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 var DROPBOX_CLIENT_ID = process.env.DROPBOX_CLIENT_ID || config.DROPBOX_CLIENT_ID;
 var DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET || config.DROPBOX_CLIENT_SECRET;
 
-
 var GOOGLE_DRIVE_CLIENT_ID = process.env.GOOGLE_DRIVE_CLIENT_ID || config.GOOGLE_DRIVE_CLIENT_ID;
 var GOOGLE_DRIVE_CLIENT_SECRET = process.env.GOOGLE_DRIVE_CLIENT_SECRET || config.GOOGLE_DRIVE_CLIENT_SECRET;
 
@@ -102,16 +101,22 @@ module.exports = function (passport) {
     passport.use(new OneDriveStrategy({
             clientID: ONE_DRIVE_CLIENT_ID,
             clientSecret: ONE_DRIVE_CLIENT_SECRET,
-            callbackURL: URL_REQUEST + '/auth/one-drive/callback'
+            callbackURL: URL_REQUEST + '/auth/one-drive/callback',
+            scope: 'onedrive.readwrite onedrive.appfolder user.read files.read, files.readwrite, files.read.all, files.readwrite.all'
         },
         function(accessToken, refreshToken, profile, done) {
+
+            console.log(profile);
+            console.log(profile._json.owner);
+
             return done(null, {
                 email: profile._json.emailAddress,
                 firstName: '',
-                lastName: profile._json.name.displayName,
+                lastName: profile.displayName,
                 token: accessToken,
                 provider: 'one-drive'
             });
         }
     ));
 };
+
