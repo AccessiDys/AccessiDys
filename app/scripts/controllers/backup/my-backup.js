@@ -70,13 +70,20 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
             }, 'myBackupRouteData');
         }
 
-        if ($scope.selectedStorage.provider === 'dropbox') {
-            DropboxProvider.auth();
-        } else if ($scope.selectedStorage.provider === 'google-drive'){
-            GoogleDriveProvider.auth();
-        } else if ($scope.selectedStorage.provider === 'one-drive'){
-            OneDriveProvider.auth();
-        }
+        UserService.logout();
+        CacheProvider.setItem(null, 'listDocument').then(function(){
+            CacheProvider.setItem(null, 'listProfile').then(function(){
+                if ($scope.selectedStorage.provider === 'dropbox') {
+                    DropboxProvider.auth();
+                } else if ($scope.selectedStorage.provider === 'google-drive'){
+                    GoogleDriveProvider.auth();
+                } else if ($scope.selectedStorage.provider === 'one-drive'){
+                    OneDriveProvider.auth();
+                }
+            });
+        });
+
+
     };
 
     $scope.cancel = function () {

@@ -410,20 +410,11 @@ angular.module('cnedApp')
                 UtilsService.openConfirmModal(title, msg, true)
                     .then(function () {
 
-                        var path = file.filepath.split('/');
-                        var to_path = '';
 
-                        if (path) {
-                            if (result.selectedFolder.filepath === '/') {
-                                to_path = result.selectedFolder.filepath + path[path.length - 1];
-                            } else {
-                                to_path = result.selectedFolder.filepath + '/' + path[path.length - 1];
-                            }
-                        }
 
                         LoaderService.showLoader('document.message.info.move.inprogress', false);
 
-                        fileStorageService.moveFiles(file.filepath, to_path)
+                        fileStorageService.moveFiles(file, result.selectedFolder)
                             .then(function () {
                                 LoaderService.hideLoader();
                                 ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');

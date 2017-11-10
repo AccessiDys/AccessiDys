@@ -84,9 +84,6 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
          * @returns {{filename, dateModification: *, type: string, provider: string, content: Array}}
          */
         var transformGoogleFileToStorageFile = function (googleFile) {
-
-            console.log('googleFile', googleFile);
-
             var filenameStartIndex = googleFile.name.indexOf('_') + 1,
                 filenameEndIndex = googleFile.name.lastIndexOf('_'),
                 filename = filenameStartIndex > 0 && filenameEndIndex > -1 ? googleFile.name.substring(filenameStartIndex, filenameEndIndex) : googleFile.name;
@@ -325,22 +322,38 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
             return deferred.promise;
         };
 
+        var patchService = function (file, data, params, access_token) {
+            var deferred = $q.defer();
+
+            $http({
+                method: 'PATCH',
+                url: baseUrl + 'files/' + file.id,
+                params: params,
+                data: data,
+                headers: {
+                    'Authorization': 'Bearer ' + access_token
+                }
+            }).then(function (res) {
+                deferred.resolve(transformGoogleFileToStorageFile(res.data));
+            }, function (data) {
+                deferred.reject(data);
+            });
+
+            return deferred.promise;
+        };
+
         var authService = function () {
             window.location.href = '/auth/google-drive';
         };
 
-        var copyService = function (from_path, to_path, access_token) {
+        var copyService = function (originalFile, destinationFile, access_token) {
             var deferred = $q.defer();
 
             $http({
                 method: 'POST',
-                url: 'https://api.dropboxapi.com/2/files/copy_v2',
+                url: baseUrl + 'files/' + originalFile.id + '/copy',
                 data: {
-                    from_path: from_path,
-                    to_path: to_path,
-                    allow_shared_folder: true,
-                    autorename: false,
-                    allow_ownership_transfer: false
+                    name: destinationFile.filepath.substring(destinationFile.filepath.lastIndexOf('/'), destinationFile.filepath.length)
                 },
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
@@ -412,7 +425,8 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
             copy: copyService,
             createFolder: createFolderService,
             moveFiles: moveFilesService,
-            auth: authService
+            auth: authService,
+            patch: patchService
         };
     });
 

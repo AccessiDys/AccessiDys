@@ -232,12 +232,9 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             $log.debug('Copy document', document);
 
-            var file = {
-                filename: document.filename + '-Copie',
-                data: document.data,
-                dateModification: new Date()
-            };
-
+            var file = angular.copy(document);
+            file.filename += '-Copie';
+            file.dateModification = new Date().toISOString();
 
             UtilsService.openConfirmModal('document.message.copy.confirm.title', 'document.message.copy.confirm.message', false)
                 .then(function () {
