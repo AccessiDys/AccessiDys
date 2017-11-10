@@ -25,7 +25,7 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, UtilsService, GoogleDriveProvider) {
+angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, UtilsService, GoogleDriveProvider, OneDriveProvider) {
     $scope.storages = [{
         provider: 'dropbox',
         icon: 'fa-dropbox',
@@ -75,7 +75,7 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
         } else if ($scope.selectedStorage.provider === 'google-drive'){
             GoogleDriveProvider.auth();
         } else if ($scope.selectedStorage.provider === 'one-drive'){
-            window.location.href = '/auth/one-drive';
+            OneDriveProvider.auth();
         }
     };
 

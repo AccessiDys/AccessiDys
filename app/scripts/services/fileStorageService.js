@@ -27,7 +27,7 @@
 var cnedApp = cnedApp;
 
 cnedApp.service('fileStorageService', function ($localForage, configuration, $q, $log,
-                                                CacheProvider, DropboxProvider, UserService, $rootScope, md5, GoogleDriveProvider) {
+                                                CacheProvider, DropboxProvider, UserService, $rootScope, md5, GoogleDriveProvider, OneDriveProvider) {
 
     var self = this;
 
@@ -75,6 +75,14 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     return CacheProvider.list(storageName);
                 });
 
+            }  else if (provider === 'one-drive') {
+
+                return OneDriveProvider.search(query, UserService.getData().token, type).then(function (files) {
+                    return CacheProvider.saveAll(files, storageName);
+                }, function () {
+                    return CacheProvider.list(storageName);
+                });
+
             } else {
                 // Resolve Cache
                 return CacheProvider.list(storageName);
@@ -106,6 +114,14 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             } else if (provider === 'google-drive') {
 
                 return GoogleDriveProvider.search(null, UserService.getData().token, 'document').then(function (files) {
+                    return CacheProvider.saveAll(files, storageName);
+                }, function () {
+                    return CacheProvider.list(storageName);
+                });
+
+            } else if (provider === 'one-drive') {
+
+                return OneDriveProvider.search(null, UserService.getData().token, 'document').then(function (files) {
                     return CacheProvider.saveAll(files, storageName);
                 }, function () {
                     return CacheProvider.list(storageName);
@@ -293,6 +309,15 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     });
             } else if (provider === 'google-drive') {
                 return GoogleDriveProvider.upload(file, UserService.getData().token)
+                    .then(function (_file) {
+                        _file.data = file.data;
+                        return CacheProvider.save(_file, storageName);
+                    }, function () {
+                        self.addFileToSynchronize(file, type, 'save');
+                        return CacheProvider.save(file, storageName);
+                    });
+            } else if (provider === 'one-drive') {
+                return OneDriveProvider.upload(file.filepath, file.data, UserService.getData().token)
                     .then(function (_file) {
                         _file.data = file.data;
                         return CacheProvider.save(_file, storageName);
