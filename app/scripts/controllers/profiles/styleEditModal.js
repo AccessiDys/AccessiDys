@@ -183,14 +183,18 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.profile.data.profileTags[profileTagIndex].styleValue = $scope.style.styleValue;
             $scope.profile.data.profileTags[profileTagIndex].spaceSelected = $scope.style.spaceSelected;
             $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceCharSelected;
+            $scope.profile.data.profileTags[profileTagIndex].coloration = $scope.style.coloration;
             $scope.profile.data.profileTags[profileTagIndex].colorationType = $scope.style.colorationType;
             $scope.profile.data.profileTags[profileTagIndex].colors = $scope.style.colors;
             $scope.profile.data.profileTags[profileTagIndex].colorsList = $scope.style.colorsList;
+
+
 
             $uibModalInstance.close({
                 profile: $scope.profile,
                 isApplyAll: $scope.isApplyAll
             });
+
 
             reset();
         }
@@ -203,6 +207,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
     };
 
     $scope.editStyleChange = function (operation, value) {
+
         switch (operation) {
             case 'police':
                 $scope.style.police = value;
