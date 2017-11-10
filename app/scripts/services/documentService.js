@@ -137,6 +137,7 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                         LoaderService.setLoaderProgress(40);
 
                         var file = {
+                            id: document.id,
                             filename: document.title,
                             filepath: document.filePath,
                             data: document.data,

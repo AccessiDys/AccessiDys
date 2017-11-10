@@ -273,6 +273,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
     this.save = function (file, type) {
 
+        console.log('save file', file);
+
         var storageName = '';
         var extension = '';
 

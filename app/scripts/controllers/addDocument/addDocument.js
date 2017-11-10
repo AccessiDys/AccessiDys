@@ -233,6 +233,7 @@ angular
                 }
 
                 documentService.save({
+                    id: $scope.document.id,
                     title: $scope.document.filename,
                     data: documentData,
                     filePath: $scope.document.filepath

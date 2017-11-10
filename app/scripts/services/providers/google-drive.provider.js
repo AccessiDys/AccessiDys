@@ -164,9 +164,12 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                     base64Data +
                     close_delim;
 
+                var method = !file.id ? 'POST' : 'PATCH';
+                var url = uploadUrl + 'files' + (file.id ? ('/' + file.id) : '');
+
                 $http({
-                    method: 'POST',
-                    url: uploadUrl + 'files',
+                    method: method,
+                    url: url,
                     data: multipartRequestBody,
                     headers: {
                         'Authorization': 'Bearer ' + access_token,
@@ -321,6 +324,8 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
 
             return deferred.promise;
         };
+
+        
 
         var patchService = function (file, data, params, access_token) {
             var deferred = $q.defer();
