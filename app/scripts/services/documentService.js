@@ -112,6 +112,8 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     title: document.title
                 }).then(function (isDocumentAlreadyExist) {
 
+                    console.log('isDocumentAlreadyExist', isDocumentAlreadyExist);
+
                     if (isDocumentAlreadyExist && mode === 'create') {
 
                         LoaderService.hideLoader();
@@ -300,7 +302,12 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     LoaderService.showLoader('document.message.info.copy.inprogress', false);
                     LoaderService.hideLoader();
 
-                    fileStorageService.createFolder(path + params.title)
+                    var folder = {
+                        filename: params.title,
+                        filepath: path + params.title
+                    };
+
+                    fileStorageService.createFolder(folder)
                         .then(function (folder) {
                             LoaderService.hideLoader();
                             deferred.resolve(folder);

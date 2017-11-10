@@ -32,31 +32,33 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
         var uploadUrl = 'https://www.googleapis.com/upload/drive/v3/';
 
 
-        function addFileToParent(list, file) {
-            var found = false;
+        function buildTree(arr) {
+            var indexed = _.reduce(arr, function (result, item) {
+                result[item.id] = item;
+                return result;
+            }, {});
 
-            if (list && file) {
-                _.each(list, function (value) {
+            // retain the root items only
+            var result = _.filter(arr, function (item) {
 
-                    if (!found) {
+                // get parent
+                var parent = indexed[item.parent];
 
-                        if (value.type === 'folder') {
+                // make sure to remove unnecessary keys
+                delete item.parent;
 
-                            if (value.id && value.id === file.parents[0]) {
-                                value.content.push(file);
-                                found = true;
+                // has parent?
+                if (parent) {
+                    // add item as a child
+                    parent.content = (parent.content || []).concat(item);
+                }
 
-                            } else if (value.content && value.content.length > 0) {
-                                res = addFileToParent(value.content, file);
-                            }
-                        }
+                // This part determines if the item is a root item or not
+                return !parent;
+            });
 
-                    }
 
-                });
-            }
-
-            return found;
+            return result;
         }
 
 
@@ -69,29 +71,11 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
         var transformGoogleFilesToStorageFiles = function (googleFiles, type) {
             var res = [];
 
-
             _.forEach(googleFiles, function (value) {
-
-                var file = transformGoogleFileToStorageFile(value);
-
-                if (file) {
-                    console.log('file ', file);
-                    if (type === 'document' && file.filename && file.filename.indexOf('-profile.json') < 0 ) {
-                        if (file.parents && file.parents.length > 0) {
-                            addFileToParent(res, file);
-                        } else {
-                            res.push(file);
-                        }
-                    } else if(type === 'profile' && file.filename.indexOf('-profile.json') > -1){
-                        res.push(file);
-                    }
-                }
-
+                res.push(transformGoogleFileToStorageFile(value));
             });
 
-            console.log('transform type ' + type, res);
-
-            return res;
+            return buildTree(res);
         };
 
         /**
@@ -101,13 +85,21 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
          */
         var transformGoogleFileToStorageFile = function (googleFile) {
 
+            console.log('googleFile', googleFile);
+
+            var filenameStartIndex = googleFile.name.indexOf('_') + 1,
+                filenameEndIndex = googleFile.name.lastIndexOf('_'),
+                filename = filenameStartIndex > 0 && filenameEndIndex > -1 ? googleFile.name.substring(filenameStartIndex, filenameEndIndex) : googleFile.name;
+
             var file = {
                 id: googleFile.id,
-                filename: googleFile.name,
+                filename: decodeURIComponent(filename),
+                filepath: decodeURIComponent(filename),
                 dateModification: googleFile.modifiedTime ? new Date(googleFile.modifiedTime) : '',
+                mimeType: googleFile.mimeType,
                 type: '',
                 provider: 'google-drive',
-                parents: [],
+                parent: googleFile.parents && googleFile.parents.length > 0 ? googleFile.parents[0] : null,
                 content: []
             };
 
@@ -128,13 +120,8 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                 url: baseUrl + 'files/' + fileId + '?alt=media',
                 headers: {
                     'Authorization': 'Bearer ' + access_token
-                },
-                responseType: 'arraybuffer'
+                }
             }).then(function (res) {
-                // TODO get data
-
-                console.log('dowload get data', res);
-
                 deferred.resolve(res.data);
             }, function (err) {
                 deferred.reject(err);
@@ -142,58 +129,62 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
 
             return deferred.promise;
         };
-        var uploadService = function (filename, dataToSend, access_token) {
+        var uploadService = function (file, access_token) {
             var deferred = $q.defer();
 
+            var boundary = '-------314159265358979323846';
+            var delimiter = "\r\n--" + boundary + "\r\n";
+            var close_delim = "\r\n--" + boundary + "--";
 
-            gapi.client.request({
-                'path': '/drive/v3/files',
-                'method': 'GET',
-                'params': {
-                    'pageSize': 10,
-                    'fields': "nextPageToken, files(id, name)"
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + access_token
+
+            var reader = new FileReader();
+            reader.readAsBinaryString(new Blob([file.data], {
+                type: 'text/html'
+            }));
+
+            reader.onload = function () {
+                var contentType = 'text/html' || 'application/octet-stream';
+
+                var filename = file.filepath.substring(file.filepath.lastIndexOf('/'), file.filepath.length);
+                var metadata = {
+                    'name': filename,
+                    'mimeType': contentType
+                };
+
+                if (file.parents && file.parents.length > 0) {
+                    metadata.parents = file.parents;
                 }
-            }).then(function(response) {
-                console.log('response', response);
-            });
+
+                var base64Data = btoa(reader.result);
+                var multipartRequestBody =
+                    delimiter +
+                    'Content-Type: application/json\r\n\r\n' +
+                    JSON.stringify(metadata) +
+                    delimiter +
+                    'Content-Type: ' + contentType + '\r\n' +
+                    'Content-Transfer-Encoding: base64\r\n' +
+                    '\r\n' +
+                    base64Data +
+                    close_delim;
+
+                $http({
+                    method: 'POST',
+                    url: uploadUrl + 'files',
+                    data: multipartRequestBody,
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token,
+                        'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+                    },
+                    transformRequest: angular.identity
+                }).then(function (res) {
+                    deferred.resolve(transformGoogleFileToStorageFile(res.data));
+                }, function (data) {
+                    deferred.reject(data);
+                });
+
+            };
 
 
-
-
-            /*var body = '--foo_bar_baz\n';
-            body += 'Content-Type: application/json; charset=UTF-8\n\n';
-            body += '{\n';
-            body += '"name": "' + (filename || '') + '"\n';
-            body += '}\n\n';
-
-            body += '--foo_bar_baz\n';
-            body += 'Content-Type: txt/html\n\n';
-            body += dataToSend;
-            body += '\n--foo_bar_baz--';
-
-            $http({
-                method: 'POST',
-                url: uploadUrl + 'files',
-                data: body,
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    'Content-Type': 'multipart/related; boundary=foo_bar_baz',
-                    'Content-Length': body.length
-                },
-                transformRequest: angular.identity
-            }).then(function (res) {
-
-                console.log('upload', res.data);
-
-
-                // TODO
-                //deferred.resolve(transformDropboxFileToStorageFile(data));
-            }, function (data) {
-                deferred.reject(data);
-            });*/
             return deferred.promise;
         };
         var deleteService = function (fileId, access_token) {
@@ -219,10 +210,10 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
             $http({
                 method: 'GET',
                 url: baseUrl + 'files',
-                data: {
+                params: {
                     q: query ? "name contains '" + query + "'" : null,
                     pageSize: 1000,
-                    spaces: 'appDataFolder'
+                    fields: 'files(id, name, modifiedTime, parents, mimeType)'
                 },
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
@@ -241,35 +232,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
             });
             return deferred.promise;
         };
-        var listAllFilesService = function (path, access_token) { // TODO a voir si besoin
-            var deferred = $q.defer();
-            $http({
-                method: 'POST',
-                url: 'https://api.dropboxapi.com/2/files/list_folder',
-                data: {
-                    path: path,
-                    recursive: true,
-                    include_media_info: false,
-                    include_deleted: false,
-                    include_has_explicit_shared_members: false,
-                    include_mounted_folders: true
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    'Content-Type': 'application/json'
-                }
-            }).success(function (files) {
-                var matches = [];
-                for (var f = 0; f < files.entries.length; f++) {
-                    matches.push({metadata: files.entries[f]});
-                }
-                var trueFiles = {matches: matches};
-                deferred.resolve(transformDropboxFilesToStorageFiles(trueFiles, 'document'));
-            }).error(function (data) {
-                deferred.reject(data);
-            });
-            return deferred.promise;
-        };
+
         var listShareLinkService = function (path, access_token) {
             var deferred = $q.defer();
             $http({
@@ -341,27 +304,22 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
             return deferred.promise;
         };
 
-        var renameService = function (oldFilePath, newFilePath, access_token) {
+        var renameService = function (file, newName, access_token) {
             var deferred = $q.defer();
 
-            downloadService(oldFilePath, access_token).then(function (data) {
-                var documentData = data;
-
-                deleteService(oldFilePath, access_token).then(function () {
-
-                    uploadService(newFilePath, documentData, access_token).then(function (data) {
-                        deferred.resolve(data);
-                    }, function () {
-                        deferred.reject();
-                    });
-
-                }, function () {
-
-                    deferred.reject();
-                });
-
-            }, function () {
-                deferred.reject();
+            $http({
+                method: 'PATCH',
+                url: baseUrl + 'files/' + file.id,
+                data: {
+                    name: newName
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token
+                }
+            }).then(function (res) {
+                deferred.resolve(transformGoogleFileToStorageFile(res.data));
+            }, function (data) {
+                deferred.reject(data);
             });
 
             return deferred.promise;
@@ -405,16 +363,14 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                 url: baseUrl + 'files',
                 data: {
                     name: folderName,
-                    mimeType: 'application/vnd.google-apps.folder'
+                    mimeType: 'application/vnd.google-apps.folder',
+                    modifiedTime: new Date().toISOString()
                 },
                 headers: {
                     'Authorization': 'Bearer ' + access_token
                 }
             }).then(function (res) {
-
-                console.log('create folder', res.data);
-                // TODO
-                //deferred.resolve(transformDropboxFileToStorageFile(data));
+                deferred.resolve(transformGoogleFileToStorageFile(res.data));
             }, function (data) {
                 deferred.reject(data);
             });

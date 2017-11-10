@@ -110,6 +110,11 @@ angular.module('cnedApp')
 
                     if (document.type === 'file') {
                         LoaderService.showLoader('document.message.info.rename.inprogress', true);
+
+                        console.log('document', document);
+                        console.log('document', params.title);
+                        console.log('fileStorageService', fileStorageService);
+
                         fileStorageService.rename(document, params.title, 'document')
                             .then(function () {
                                 LoaderService.setLoaderProgress(80);
@@ -322,7 +327,12 @@ angular.module('cnedApp')
 
                         $log.debug('create default folder');
 
-                        fileStorageService.createFolder('/' + gettextCatalog.getString('folder.default.name'))
+                        var folder = {
+                            filename: gettextCatalog.getString('folder.default.name'),
+                            filepath: '/' + gettextCatalog.getString('folder.default.name')
+                        };
+
+                        fileStorageService.createFolder(folder)
                             .then(function (folder) {
 
                                 folder.showed = true;

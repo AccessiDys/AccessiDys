@@ -75,9 +75,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                     }
                 }
             }
-            for (var a = 0; a < arbo.length; a++) {
-                arbo[a].show = true;
-            }
+
             return arbo;
         };
 
