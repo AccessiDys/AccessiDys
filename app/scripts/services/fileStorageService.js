@@ -157,7 +157,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
             if (provider === 'dropbox') {
 
-                return DropboxProvider.search('_' + filename + '_', UserService.getData().token).then(function (files) {
+                return DropboxProvider.search('_' + encodeURIComponent(filename) + '_', UserService.getData().token).then(function (files) {
 
 
                     if (files && files.length > 0) {

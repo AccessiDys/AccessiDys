@@ -96,7 +96,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                 filename = filepath.substring(filenameStartIndex, filenameEndIndex);
                 file = {
                     filepath: filepath,
-                    filename: filename,
+                    filename: decodeURIComponent(filename),
                     dateModification: dateModification || '',
                     type: 'file',
                     show: false,
@@ -126,9 +126,9 @@ angular.module('cnedApp').factory('DropboxProvider',
                 url: 'https://content.dropboxapi.com/2/files/download',
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
-                    'Dropbox-API-Arg': decodeURIComponent(JSON.stringify({
+                    'Dropbox-API-Arg': JSON.stringify({
                         'path': path
-                    }))
+                    })
                 }
             }).success(function (data) {
                 deferred.resolve(data);
@@ -147,10 +147,10 @@ angular.module('cnedApp').factory('DropboxProvider',
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
                     'Content-Type': 'application/octet-stream',
-                    'Dropbox-API-Arg': decodeURIComponent(JSON.stringify({
+                    'Dropbox-API-Arg': JSON.stringify({
                         path: filePath,
                         mode: 'overwrite'
-                    }))
+                    })
                 }
             }).success(function (data) {
                 deferred.resolve(transformDropboxFileToStorageFile(data));
