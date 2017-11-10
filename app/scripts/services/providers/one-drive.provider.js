@@ -28,7 +28,7 @@
 angular.module('cnedApp').factory('OneDriveProvider',
     function ($http, $q, $log, configuration) {
         //var apiUrl = 'https://api.onedrive.com/v1.0/';
-        var apiUrl = 'https://api.onedrive.com/v1.0/';
+        var apiUrl = 'https://graph.microsoft.com/v1.0';
         /**
          * Converts the format of a dropbox file  in an internal file format
          * @param dropboxFiles
@@ -66,7 +66,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
 
             $http({
                 method: 'POST',
-                url: apiUrl + 'drive/root/children',
+                url: apiUrl + '/drive/root/children',
                 data: {
                     name : file.name,
                     folder: '{}'
@@ -115,7 +115,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
             var deferred = $q.defer();
             $http({
                 method: 'GET',
-                url: apiUrl + 'drive/root/children',
+                url: apiUrl + '/drive/root/children',
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
                 }
