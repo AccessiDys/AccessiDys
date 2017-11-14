@@ -80,16 +80,13 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
         $rootScope.tmpProfile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceCharSelected;
         $rootScope.tmpProfile.data.profileTags[profileTagIndex].colorationType = $scope.style.colorationType;
         $rootScope.tmpProfile.data.profileTags[profileTagIndex].colors = $scope.style.colors;
+        $rootScope.tmpProfile.data.profileTags[profileTagIndex].colorsList = $scope.style.colorsList;
         if($scope.style.colorationType === 'Colorer les groupes de souffle' || $scope.style.colorationType === 'Surligner les groupes de souffle'){
+            $rootScope.tmpProfile.data.profileTags[profileTagIndex].souffleType = $scope.style.souffleType;
             $rootScope.tmpProfile.data.profileTags[profileTagIndex].coloration = $scope.style.colorationType + " " + $scope.style.souffleType + " " + $scope.style.colors;
         } else {
             $rootScope.tmpProfile.data.profileTags[profileTagIndex].coloration = $scope.style.colorationType + " " + $scope.style.colors;
         }
-
-        $rootScope.tmpProfile.data.profileTags[profileTagIndex].colorsList = $scope.style.colorsList;
-        $rootScope.tmpProfile.data.profileTags[profileTagIndex].souffleType = $scope.style.souffleType;
-
-
     };
 
 
@@ -170,6 +167,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.editStyleChange('colorationType', $scope.profile.data.profileTags[profileTagIndex].colorationType);
             $scope.editStyleChange('colors', $scope.profile.data.profileTags[profileTagIndex].colors);
             $scope.editStyleChange('colorsList', $scope.profile.data.profileTags[profileTagIndex].colorsList);
+            $scope.editStyleChange('souffleType', $scope.profile.data.profileTags[profileTagIndex].souffleType);
 
 
         }, 200);
@@ -183,9 +181,11 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.profile.data.profileTags[profileTagIndex].styleValue = $scope.style.styleValue;
             $scope.profile.data.profileTags[profileTagIndex].spaceSelected = $scope.style.spaceSelected;
             $scope.profile.data.profileTags[profileTagIndex].spaceCharSelected = $scope.style.spaceCharSelected;
+            $scope.profile.data.profileTags[profileTagIndex].coloration = $scope.style.coloration;
             $scope.profile.data.profileTags[profileTagIndex].colorationType = $scope.style.colorationType;
             $scope.profile.data.profileTags[profileTagIndex].colors = $scope.style.colors;
             $scope.profile.data.profileTags[profileTagIndex].colorsList = $scope.style.colorsList;
+            $scope.profile.data.profileTags[profileTagIndex].souffleType = $scope.style.souffleType;
 
             $uibModalInstance.close({
                 profile: $scope.profile,
@@ -240,7 +240,12 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
                         break;
                 }
                 $scope.style.colors = value;
-                $scope.style.coloration = $scope.style.colorationType + " " + $scope.style.colors;
+                if($scope.style.colorationType === 'Colorer les groupes de souffle' || $scope.style.colorationType === 'Surligner les groupes de souffle'){
+                    $scope.style.coloration = $scope.style.colorationType + " " + $scope.style.souffleType + " " + $scope.style.colors;
+                }
+                else {
+                    $scope.style.coloration = $scope.style.colorationType + " " + $scope.style.colors;
+                }
                 break;
             case 'colorsList':
                 $scope.style.colorsList = value;
