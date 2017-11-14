@@ -26,7 +26,7 @@
 'use strict';
 
 angular.module('cnedApp').factory('GoogleDriveProvider',
-    function ($http, $q, _) {
+    function ($http, $q, _, FileConstant) {
 
         var baseUrl = 'https://www.googleapis.com/drive/v3/';
         var uploadUrl = 'https://www.googleapis.com/upload/drive/v3/';
@@ -91,7 +91,6 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
             var file = {
                 id: googleFile.id,
                 filename: decodeURIComponent(filename),
-                filepath: decodeURIComponent(filename),
                 dateModification: googleFile.modifiedTime ? new Date(googleFile.modifiedTime) : '',
                 mimeType: googleFile.mimeType,
                 type: '',
@@ -119,6 +118,9 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                     'Authorization': 'Bearer ' + access_token
                 }
             }).then(function (res) {
+
+                console.log('res', res);
+
                 deferred.resolve(res.data);
             }, function (err) {
                 deferred.reject(err);
@@ -126,63 +128,84 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
 
             return deferred.promise;
         };
-        var uploadService = function (file, access_token) {
+        var uploadService = function (file, type, access_token) {
             var deferred = $q.defer();
 
-            var boundary = '-------314159265358979323846';
-            var delimiter = "\r\n--" + boundary + "\r\n";
-            var close_delim = "\r\n--" + boundary + "--";
+            var contentType = FileConstant.MIME_TYPE[type] || 'application/octet-stream';
 
 
-            var reader = new FileReader();
-            reader.readAsBinaryString(new Blob([file.data], {
-                type: 'text/html'
-            }));
-
-            reader.onload = function () {
-                var contentType = 'text/html' || 'application/octet-stream';
-
-                var filename = file.filepath.substring(file.filepath.lastIndexOf('/'), file.filepath.length);
-                var metadata = {
-                    'name': filename,
-                    'mimeType': contentType
-                };
-
-                if (file.parents && file.parents.length > 0) {
-                    metadata.parents = file.parents;
-                }
-
-                var base64Data = btoa(reader.result);
-                var multipartRequestBody =
-                    delimiter +
-                    'Content-Type: application/json\r\n\r\n' +
-                    JSON.stringify(metadata) +
-                    delimiter +
-                    'Content-Type: ' + contentType + '\r\n' +
-                    'Content-Transfer-Encoding: base64\r\n' +
-                    '\r\n' +
-                    base64Data +
-                    close_delim;
-
-                var method = !file.id ? 'POST' : 'PATCH';
-                var url = uploadUrl + 'files' + (file.id ? ('/' + file.id) : '');
+            if (file.id) {
 
                 $http({
-                    method: method,
-                    url: url,
-                    data: multipartRequestBody,
+                    method: 'PATCH',
+                    url: uploadUrl + 'files' + '/' + file.id,
+                    params: {
+                        uploadType: 'media'
+                    },
+                    data: file.data,
                     headers: {
                         'Authorization': 'Bearer ' + access_token,
-                        'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
-                    },
-                    transformRequest: angular.identity
+                        'Content-Type': contentType
+                    }
                 }).then(function (res) {
                     deferred.resolve(transformGoogleFileToStorageFile(res.data));
                 }, function (data) {
                     deferred.reject(data);
                 });
 
-            };
+            } else {
+                var boundary = '-------314159265358979323846';
+                var delimiter = "\r\n--" + boundary + "\r\n";
+                var close_delim = "\r\n--" + boundary + "--";
+
+
+                var reader = new FileReader();
+                reader.readAsBinaryString(new Blob([file.data], {
+                    type: FileConstant.MIME_TYPE[type]
+                }));
+
+                reader.onload = function () {
+
+
+                    var metadata = {
+                        'name': file.filename,
+                        'mimeType': contentType
+                    };
+
+                    if (file.parents && file.parents.length > 0) {
+                        metadata.parents = file.parents;
+                    }
+
+                    var base64Data = btoa(reader.result);
+                    var multipartRequestBody =
+                        delimiter +
+                        'Content-Type: application/json\r\n\r\n' +
+                        JSON.stringify(metadata) +
+                        delimiter +
+                        'Content-Type: ' + contentType + '\r\n' +
+                        'Content-Transfer-Encoding: base64\r\n' +
+                        '\r\n' +
+                        base64Data +
+                        close_delim;
+
+                    $http({
+                        method: 'POST',
+                        url: uploadUrl + 'files',
+                        data: multipartRequestBody,
+                        headers: {
+                            'Authorization': 'Bearer ' + access_token,
+                            'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+                        },
+                        transformRequest: angular.identity
+                    }).then(function (res) {
+                        deferred.resolve(transformGoogleFileToStorageFile(res.data));
+                    }, function (data) {
+                        deferred.reject(data);
+                    });
+
+
+                };
+            }
 
 
             return deferred.promise;
@@ -325,7 +348,6 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
             return deferred.promise;
         };
 
-        
 
         var patchService = function (file, data, params, access_token) {
             var deferred = $q.defer();
@@ -358,7 +380,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                 method: 'POST',
                 url: baseUrl + 'files/' + originalFile.id + '/copy',
                 data: {
-                    name: destinationFile.filepath.substring(destinationFile.filepath.lastIndexOf('/'), destinationFile.filepath.length)
+                    name: destinationFile.filename
                 },
                 headers: {
                     'Authorization': 'Bearer ' + access_token,

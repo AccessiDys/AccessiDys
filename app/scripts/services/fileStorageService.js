@@ -27,7 +27,7 @@
 var cnedApp = cnedApp;
 
 cnedApp.service('fileStorageService', function ($localForage, configuration, $q, $log,
-                                                CacheProvider, DropboxProvider, UserService, $rootScope, md5, GoogleDriveProvider, OneDriveProvider) {
+                                                CacheProvider, DropboxProvider, UserService, $rootScope, GoogleDriveProvider, OneDriveProvider) {
 
     var self = this;
 
@@ -273,8 +273,6 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
     this.save = function (file, type) {
 
-        console.log('save file', file);
-
         var storageName = '';
         var extension = '';
 
@@ -286,21 +284,22 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             extension = '-profile.json';
         }
 
-        if (!file.filepath) {
-            file.filepath = this.generateFilepath(file.filename, extension);
-
-            if (type === 'document' && file.folder) {
-                file.filepath = file.folder.filepath + file.filepath;
-                file.parents = [file.folder.id];
-            }
-        }
-
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
 
             var provider = UserService.getData().provider;
 
             if (provider === 'dropbox') {
+
+                if (!file.filepath) {
+                    file.filepath = DropboxProvider.generateFilepath(file.filename, extension);
+
+                    if (type === 'document' && file.folder) {
+                        file.filepath = file.folder.filepath + file.filepath;
+                    }
+                }
+
+
                 return DropboxProvider.upload(file.filepath, file.data, UserService.getData().token)
                     .then(function (_file) {
                         _file.data = file.data;
@@ -310,7 +309,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                         return CacheProvider.save(file, storageName);
                     });
             } else if (provider === 'google-drive') {
-                return GoogleDriveProvider.upload(file, UserService.getData().token)
+
+                return GoogleDriveProvider.upload(file, type, UserService.getData().token)
                     .then(function (_file) {
                         _file.data = file.data;
                         return CacheProvider.save(_file, storageName);
@@ -319,6 +319,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                         return CacheProvider.save(file, storageName);
                     });
             } else if (provider === 'one-drive') {
+
                 return OneDriveProvider.upload(file.filepath, file.data, UserService.getData().token)
                     .then(function (_file) {
                         _file.data = file.data;
@@ -360,13 +361,16 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             extension = '-profile.json';
         }
 
-        var newFilePath = this.generateFilepath(newName, extension);
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+
 
             var provider = UserService.getData().provider;
 
             if (provider === 'dropbox') {
+
+                var newFilePath = DropboxProvider.generateFilepath(newName, extension);
+
                 return DropboxProvider.rename(file.filepath, newFilePath, UserService.getData().token).then(function (data) {
                     return CacheProvider.delete(file, storageName).then(function () {
                         return CacheProvider.save(data, storageName);
@@ -382,7 +386,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                 });
             } else if (provider === 'google-drive') {
                 return GoogleDriveProvider.patch(file, {
-                    name: newFilePath
+                    name: newName
                 }, null, UserService.getData().token)
                     .then(function (data) {
                         return CacheProvider.delete(file, storageName).then(function () {
@@ -393,7 +397,6 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                         return CacheProvider.delete(file, storageName)
                             .then(function () {
                                 file.filename = newName;
-                                file.filepath = newFilePath;
                                 self.addFileToSynchronize(file, type, 'save');
                                 return CacheProvider.save(file, storageName);
                             });
@@ -432,23 +435,25 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         var storageName = 'listDocument';
         var type = 'document';
 
-        var previousPath = folder.filepath;
-        var pathArray = folder.filepath.split('/');
-        pathArray.pop();
-        var newPath = null;
-        if (pathArray.length > 1) {
-            newPath = pathArray.join('/');
-            newPath += newName;
-        } else {
-            newPath = '/' + newName;
-        }
-
-        if (newPath !== null && $rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
 
             var provider = UserService.getData().provider;
 
             if (provider === 'dropbox') {
+
+                var previousPath = folder.filepath;
+                var pathArray = folder.filepath.split('/');
+                pathArray.pop();
+                var newPath = null;
+                if (pathArray.length > 1) {
+                    newPath = pathArray.join('/');
+                    newPath += newName;
+                } else {
+                    newPath = '/' + newName;
+                }
+
                 return DropboxProvider.moveFiles(previousPath, newPath, UserService.getData().token);
+
             } else if (provider === 'google-drive') {
 
                 return GoogleDriveProvider.patch(folder, {
@@ -630,10 +635,6 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             storageName = 'listProfile';
             extension = '-profile.json';
         }
-
-        // Generate new filepath
-        destinationFile.filepath = decodeURIComponent(this.generateFilepath(destinationFile.filename, extension));
-
         $log.debug('file.filepath', destinationFile.filepath);
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
@@ -641,6 +642,9 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             var provider = UserService.getData().provider;
 
             if (provider === 'dropbox') {
+
+                // Generate new filepath
+                destinationFile.filepath = decodeURIComponent(DropboxProvider.generateFilepath(destinationFile.filename, extension));
 
                 return DropboxProvider.copy(originalFile.filepath, destinationFile.filepath, UserService.getData().token)
                     .then(function () {
@@ -731,13 +735,6 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         return $localForage.getItem('docTemp');
     };
 
-    this.generateFilepath = function (fileName, extension) {
-        var now = new Date();
-        var tmpDate = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-        var hash = md5.createHash(fileName);
-
-        return '/' + tmpDate + '_' + encodeURIComponent(fileName) + '_' + hash + extension;
-    };
 
     this.addFileToSynchronize = function (file, type, action) {
 

@@ -26,7 +26,16 @@
 'use strict';
 
 angular.module('cnedApp').factory('DropboxProvider',
-    function ($http, $q, $log, configuration) {
+    function ($http, $q, $log, configuration, md5) {
+
+
+        var generateFilepath = function (fileName, extension) {
+            var now = new Date();
+            var tmpDate = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+            var hash = md5.createHash(fileName);
+
+            return '/' + tmpDate + '_' + encodeURIComponent(fileName) + '_' + hash + extension;
+        };
 
         /**
          * Converts the format of dropbox files  in an internal file format
@@ -414,7 +423,8 @@ angular.module('cnedApp').factory('DropboxProvider',
             copy: copyService,
             createFolder: createFolderService,
             moveFiles: moveFilesService,
-            auth: authService
+            auth: authService,
+            generateFilepath: generateFilepath
         };
     });
 

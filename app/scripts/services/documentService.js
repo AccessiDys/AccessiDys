@@ -112,8 +112,6 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     title: document.title
                 }).then(function (isDocumentAlreadyExist) {
 
-                    console.log('isDocumentAlreadyExist', isDocumentAlreadyExist);
-
                     if (isDocumentAlreadyExist && mode === 'create') {
 
                         LoaderService.hideLoader();
@@ -135,6 +133,8 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
                     } else {
                         LoaderService.setLoaderProgress(40);
+
+                        console.log('service document to edit ', document);
 
                         var file = {
                             id: document.id,
