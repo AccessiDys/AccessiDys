@@ -475,12 +475,15 @@ angular.module('cnedApp')
             accept: function (sourceNodeScope, destNodesScope, destIndex) {
                 var elm = sourceNodeScope.node;
 
-                var filenameStartIndex = elm.filepath.lastIndexOf('/');
-                var filepath = elm.filepath.substring(0, filenameStartIndex);
+                if(elm.filepath){
+                    var filenameStartIndex = elm.filepath.lastIndexOf('/');
+                    var filepath = elm.filepath.substring(0, filenameStartIndex);
 
-                if ((filepath === '' && typeof destNodesScope.node == 'undefined') || (typeof destNodesScope.node !== 'undefined' && filepath === destNodesScope.node.filepath)) {
-                    return false;
+                    if ((filepath === '' && typeof destNodesScope.node == 'undefined') || (typeof destNodesScope.node !== 'undefined' && filepath === destNodesScope.node.filepath)) {
+                        return false;
+                    }
                 }
+
                 return true;
             },
             dropped: function (e) {
@@ -488,10 +491,14 @@ angular.module('cnedApp')
                 var elm = e.source.nodeScope.$modelValue;
                 var to_path = '';
 
+                console.log('file', elm);
+                console.log('dest', e.dest.nodesScope.$nodeScope);
+
                 var oldFilePath = elm.filepath;
                 var filenameStartIndex = oldFilePath.lastIndexOf('/');
                 var filename = oldFilePath.substring(filenameStartIndex + 1, oldFilePath.length);
                 var filepath = oldFilePath.substring(0, filenameStartIndex);
+
 
 
                 if (e.dest.nodesScope.$nodeScope) {

@@ -570,8 +570,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
             } else if (provider === 'google-drive') {
                 return GoogleDriveProvider.createFolder(folder.filename, UserService.getData().token)
-                    .then(function () {
-                        return CacheProvider.save(folder, 'listDocument');
+                    .then(function (data) {
+                        return CacheProvider.save(data, 'listDocument');
                     }, function () {
                         return CacheProvider.save(folder, 'listDocument');
                     });
@@ -609,8 +609,18 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
                 var params = {};
 
+                console.log('file', file);
+                console.log('folder', folder);
+
                 if (folder.filepath !== '/') {
                     params.addParents = folder.id;
+                    if (file.parents && file.parents.length > 0) {
+                        params.removeParents = file.parents[0]
+                    }
+                } else {
+                    if (file.parents && file.parents.length > 0) {
+                        params.removeParents = file.parents[0]
+                    }
                 }
 
                 return GoogleDriveProvider.patch(file, null, params, UserService.getData().token);

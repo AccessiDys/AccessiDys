@@ -96,6 +96,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                 type: '',
                 provider: 'google-drive',
                 parent: googleFile.parents && googleFile.parents.length > 0 ? googleFile.parents[0] : null,
+                parents: googleFile.parents,
                 content: []
             };
 
@@ -118,9 +119,6 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                     'Authorization': 'Bearer ' + access_token
                 }
             }).then(function (res) {
-
-                console.log('res', res);
-
                 deferred.resolve(res.data !== 'null' ? res.data : '');
             }, function (err) {
                 deferred.reject(err);
@@ -182,8 +180,6 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                     if (type === FileConstant.TYPE.profile) {
                         data = JSON.stringify(file.data);
                     }
-
-                    console.log('data', data);
 
                     var base64Data = btoa(data);
                     var multipartRequestBody =
