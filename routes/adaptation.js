@@ -78,8 +78,8 @@ module.exports = function (app, passport) {
         res.redirect('/#/ma-sauvegarde.html?auth=true');
     });
 
-    app.get('/auth/one-drive', passport.authenticate('onedrive'));
-    app.get('/auth/one-drive/callback', passport.authenticate('onedrive', {
+    app.get('/auth/one-drive', passport.authenticate('microsoft'));
+    app.get('/auth/one-drive/callback', passport.authenticate('microsoft', {
         failureRedirect: '/'
     }), function (req, res) {
         req.session.user = req.user;

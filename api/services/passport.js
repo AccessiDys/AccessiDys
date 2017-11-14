@@ -29,7 +29,7 @@
 
 var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
 var GoogleDriveStrategy = require('passport-google-drive').Strategy;
-var OneDriveStrategy = require('passport-onedrive').Strategy;
+var OneDriveStrategy = require('passport-microsoft').Strategy;
 
 var config = require('../../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
@@ -102,15 +102,14 @@ module.exports = function (passport) {
             clientID: ONE_DRIVE_CLIENT_ID,
             clientSecret: ONE_DRIVE_CLIENT_SECRET,
             callbackURL: URL_REQUEST + '/auth/one-drive/callback',
-            scope: 'onedrive.readwrite onedrive.appfolder user.read files.read, files.readwrite, files.read.all, files.readwrite.all'
+            scope: 'user.read files.readwrite offline_access'
         },
-        function(accessToken, refreshToken, profile, done) {
-
+        function (accessToken, refreshToken, profile, done) {
             console.log(profile);
-            console.log(profile._json.owner);
+            console.log(accessToken);
 
             return done(null, {
-                email: profile._json.emailAddress,
+                email: profile._json.userPrincipalName,
                 firstName: '',
                 lastName: profile.displayName,
                 token: accessToken,

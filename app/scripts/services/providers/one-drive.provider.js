@@ -115,9 +115,9 @@ angular.module('cnedApp').factory('OneDriveProvider',
             var deferred = $q.defer();
             $http({
                 method: 'GET',
-                url: apiUrl + '/drive/root/children',
+                url: apiUrl + '/me/drive/root/children',
                 headers: {
-                    'Authorization': 'Bearer ' + access_token,
+                    'Authorization': 'Bearer ' + access_token
                 }
             }).success(function (files) {
                 deferred.resolve(files.files ? files.files.map(transformOneDriveFileToStorageFile) : []);
