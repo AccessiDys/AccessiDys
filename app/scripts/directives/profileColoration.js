@@ -143,25 +143,7 @@ angular.module('cnedApp').directive('profileColoration',
                                             || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 3)
                                             || coloration === 'Surligner les lignes RBV'
                                             || coloration === 'Surligner les lignes RVJ'
-                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 3)
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] RBV'
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] RVJ'
-                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RBV'
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RVJ'
-                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RBV'
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RVJ'
-                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] RBV'
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] RVJ'
-                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RBV'
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RVJ'
-                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RBV'
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RVJ'
-                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 3)) {
+                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 3)) {
 
                                             var res = UtilsService.colorLines(child, 3, prevTop, line);
                                             line = res.line;
@@ -175,19 +157,7 @@ angular.module('cnedApp').directive('profileColoration',
                                             coloration === 'Colorer les lignes RBVJ'
                                             || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 4)
                                             || coloration === 'Surligner les lignes RBVJ'
-                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] RBVJ'
-                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ'
-                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ'
-                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] RBVJ'
-                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ'
-                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ'
-                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)) {
+                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 4)) {
 
                                             var res = UtilsService.colorLines(child, 4, prevTop, line);
 

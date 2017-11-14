@@ -74,6 +74,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                     $timeout(function () {
 
                         console.time('coloration');
+                        console.log($rootScope.currentProfile);
 
                         if ($rootScope.currentProfile) {
 
@@ -141,29 +142,33 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                         }
 
                                         // Split Text
-                                        if (coloration === 'Colorer les lignes RBV'
+                                        if (coloration.indexOf('lignes') > 0) /* === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
                                             || coloration === 'Surligner les lignes RVJ'
                                             || coloration === 'Surligner les lignes RBV'
                                             || coloration === 'Colorer les lignes RBVJ'
-                                            || coloration === 'Surligner les lignes RBVJ') {
-
+                                            || coloration === 'Surligner les lignes RBVJ') */{
                                             textTransform = UtilsService.splitOnWordWithSpace(textTransform);
                                             textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
-
-                                        } else if (coloration === 'Colorer les mots'
-                                            || coloration === 'Surligner les mots') {
-
+                                        } else if ( coloration.indexOf('mots') > 0) {
                                             textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
                                             textTransform = textTransform.replace(/\s\s<span>%%NB%%<\/span>\s\s/gi, '&nbsp;');
-
-                                        } else if (coloration === 'Colorer les syllabes') {
-
+                                        } else if (coloration.indexOf('syllabes') > 0) {
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
+                                            textTransform = textTransform.replace(/\s<span>%%NB%%<\/span>\s/gi, '&nbsp;');
+                                        } else if(coloration.indexOf('[Maj. - \'.\']') > 0) {
+                                            textTransform = UtilsService.splitOnSentenceWithPoint(textTransform);
+                                            textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
+                                        } else if (coloration.indexOf('[Maj. - \',\' - \'.\']') > 0) {
+                                            textTransform = UtilsService.splitOnSentenceWithComma(textTransform);
+                                            textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
+                                        } else if (coloration.indexOf('[Maj. - \';\' - \'.\']') > 0) {
+                                            textTransform = UtilsService.splitOnSentenceWithSemicolon(textTransform);
                                             textTransform = textTransform.replace(/\s<span>%%NB%%<\/span>\s/gi, '&nbsp;');
                                         } else {
                                             textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
                                         }
+
 
                                         textTransform = textTransform.replace(/%%NB%%/gi, ' ');
 
@@ -181,12 +186,9 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                         child.innerHTML = textTransform;
 
 
-                                        if (coloration === 'Colorer les lignes RBV'
-                                            || coloration === 'Colorer les lignes RVJ'
-                                            || coloration === 'Surligner les lignes RBV'
-                                            || coloration === 'Surligner les lignes RVJ') {
+                                        if ( coloration.indexOf('lignes') > 0) {
 
-                                            var res = UtilsService.colorLines(child, 3, prevTop, line);
+                                            var res = UtilsService.colorLines(child, profileTag.colorsList.length, prevTop, line);
                                             line = res.line;
                                             prevTop = res.prevTop;
 
@@ -195,9 +197,24 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             parent.removeChild(child);
                                             parent.insertBefore(res.documentFragment, nextElement);
 
-                                        } else if (
+                                        } /*else if (
                                             coloration === 'Colorer les lignes RBVJ'
-                                            || coloration === 'Surligner les lignes RBVJ') {
+                                            || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Surligner les lignes RBVJ'
+                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] RBVJ'
+                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ'
+                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ'
+                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] RBVJ'
+                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ'
+                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ'
+                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
+                                            coloration.indexOf('lignes') > 0 && profileTag.colorsList.length === 4) {
 
                                             var res = UtilsService.colorLines(child, 4, prevTop, line);
                                             line = res.line;
@@ -207,7 +224,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             var nextElement = child.nextSibling;
                                             parent.removeChild(child);
                                             parent.insertBefore(res.documentFragment, nextElement);
-                                        }
+                                        }*/
 
                                         if (prevTop > child.offsetTop) {
                                             prevTop = child.offsetTop;
@@ -239,7 +256,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                 $element.bind('keyup', function (e) {
 
-                    console.log(e.currentTarget);
+                    //console.log(e.currentTarget);
                     //generateColoration($element[0]);
                 });
 
