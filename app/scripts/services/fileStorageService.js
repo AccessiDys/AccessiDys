@@ -27,7 +27,7 @@
 var cnedApp = cnedApp;
 
 cnedApp.service('fileStorageService', function ($localForage, configuration, $q, $log,
-                                                CacheProvider, DropboxProvider, UserService, $rootScope, GoogleDriveProvider, OneDriveProvider) {
+                                                CacheProvider, DropboxProvider, UserService, $rootScope, GoogleDriveProvider, OneDriveProvider, FileConstant) {
 
     var self = this;
 
@@ -68,6 +68,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     return CacheProvider.list(storageName);
                 });
             } else if (provider === 'google-drive') {
+
+                query = "mimeType = '" + FileConstant.MIME_TYPE[type] + "'";
 
                 return GoogleDriveProvider.search(query, UserService.getData().token, type).then(function (files) {
                     return CacheProvider.saveAll(files, storageName);
@@ -113,7 +115,9 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                 });
             } else if (provider === 'google-drive') {
 
-                return GoogleDriveProvider.search(null, UserService.getData().token, 'document').then(function (files) {
+                var query = "mimeType = '" + FileConstant.MIME_TYPE.document + "' or mimeType = '" + FileConstant.MIME_TYPE.folder + "'";
+
+                return GoogleDriveProvider.search(query, UserService.getData().token, 'document').then(function (files) {
                     return CacheProvider.saveAll(files, storageName);
                 }, function () {
                     return CacheProvider.list(storageName);
@@ -178,9 +182,9 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     return CacheProvider.get(filename, storageName);
                 });
 
-            } else if (provider === 'google-drive') { // TODO a revoir
+            } else if (provider === 'google-drive') {
 
-                return GoogleDriveProvider.search('_' + filename + '_', UserService.getData().token, type)
+                return GoogleDriveProvider.search("name contains '" + filename + "'", UserService.getData().token, type)
                     .then(function (files) {
 
 

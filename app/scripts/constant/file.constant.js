@@ -32,6 +32,7 @@ angular.module('cnedApp').constant('FileConstant', {
     },
     MIME_TYPE: {
         document: 'text/html',
-        profile: 'application/json'
+        profile: 'application/json',
+        folder: 'application/vnd.google-apps.folder'
     }
 });

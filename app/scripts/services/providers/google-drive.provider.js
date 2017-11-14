@@ -121,7 +121,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
 
                 console.log('res', res);
 
-                deferred.resolve(res.data);
+                deferred.resolve(res.data !== 'null' ? res.data : '');
             }, function (err) {
                 deferred.reject(err);
             });
@@ -132,7 +132,6 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
             var deferred = $q.defer();
 
             var contentType = FileConstant.MIME_TYPE[type] || 'application/octet-stream';
-
 
             if (file.id) {
 
@@ -160,6 +159,8 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
 
 
                 var reader = new FileReader();
+
+
                 reader.readAsBinaryString(new Blob([file.data], {
                     type: FileConstant.MIME_TYPE[type]
                 }));
@@ -172,11 +173,19 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                         'mimeType': contentType
                     };
 
-                    if (file.parents && file.parents.length > 0) {
-                        metadata.parents = file.parents;
+                    if (file.folder) {
+                        metadata.parents = [file.folder.id];
                     }
 
-                    var base64Data = btoa(reader.result);
+                    var data = reader.result;
+
+                    if (type === FileConstant.TYPE.profile) {
+                        data = JSON.stringify(file.data);
+                    }
+
+                    console.log('data', data);
+
+                    var base64Data = btoa(data);
                     var multipartRequestBody =
                         delimiter +
                         'Content-Type: application/json\r\n\r\n' +
@@ -192,6 +201,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                         method: 'POST',
                         url: uploadUrl + 'files',
                         data: multipartRequestBody,
+                        params: {'uploadType': 'multipart'},
                         headers: {
                             'Authorization': 'Bearer ' + access_token,
                             'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
@@ -234,7 +244,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                 method: 'GET',
                 url: baseUrl + 'files',
                 params: {
-                    q: query ? "name contains '" + query + "'" : null,
+                    q: query,
                     pageSize: 1000,
                     fields: 'files(id, name, modifiedTime, parents, mimeType)'
                 },
