@@ -110,6 +110,11 @@ angular.module('cnedApp')
 
                     if (document.type === 'file') {
                         LoaderService.showLoader('document.message.info.rename.inprogress', true);
+
+                        console.log('document', document);
+                        console.log('document', params.title);
+                        console.log('fileStorageService', fileStorageService);
+
                         fileStorageService.rename(document, params.title, 'document')
                             .then(function () {
                                 LoaderService.setLoaderProgress(80);
@@ -322,7 +327,12 @@ angular.module('cnedApp')
 
                         $log.debug('create default folder');
 
-                        fileStorageService.createFolder('/' + gettextCatalog.getString('folder.default.name'))
+                        var folder = {
+                            filename: gettextCatalog.getString('folder.default.name'),
+                            filepath: '/' + gettextCatalog.getString('folder.default.name')
+                        };
+
+                        fileStorageService.createFolder(folder)
                             .then(function (folder) {
 
                                 folder.showed = true;
@@ -400,20 +410,10 @@ angular.module('cnedApp')
                 UtilsService.openConfirmModal(title, msg, true)
                     .then(function () {
 
-                        var path = file.filepath.split('/');
-                        var to_path = '';
-
-                        if (path) {
-                            if (result.selectedFolder.filepath === '/') {
-                                to_path = result.selectedFolder.filepath + path[path.length - 1];
-                            } else {
-                                to_path = result.selectedFolder.filepath + '/' + path[path.length - 1];
-                            }
-                        }
 
                         LoaderService.showLoader('document.message.info.move.inprogress', false);
 
-                        fileStorageService.moveFiles(file.filepath, to_path)
+                        fileStorageService.moveFiles(file, result.selectedFolder)
                             .then(function () {
                                 LoaderService.hideLoader();
                                 ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
@@ -474,49 +474,46 @@ angular.module('cnedApp')
             accept: function (sourceNodeScope, destNodesScope, destIndex) {
                 var elm = sourceNodeScope.node;
 
-                var filenameStartIndex = elm.filepath.lastIndexOf('/');
-                var filepath = elm.filepath.substring(0, filenameStartIndex);
+                if (elm.filepath) {
+                    var filenameStartIndex = elm.filepath.lastIndexOf('/');
+                    var filepath = elm.filepath.substring(0, filenameStartIndex);
 
-                if ((filepath === '' && typeof destNodesScope.node == 'undefined') || (typeof destNodesScope.node !== 'undefined' && filepath === destNodesScope.node.filepath)) {
-                    return false;
+                    if ((filepath === '' && typeof destNodesScope.node == 'undefined') || (typeof destNodesScope.node !== 'undefined' && filepath === destNodesScope.node.filepath)) {
+                        return false;
+                    }
                 }
+
                 return true;
             },
             dropped: function (e) {
 
                 var elm = e.source.nodeScope.$modelValue;
-                var to_path = '';
 
-                var oldFilePath = elm.filepath;
-                var filenameStartIndex = oldFilePath.lastIndexOf('/');
-                var filename = oldFilePath.substring(filenameStartIndex + 1, oldFilePath.length);
-                var filepath = oldFilePath.substring(0, filenameStartIndex);
-
+                var dest = {
+                    filepath: '/'
+                };
 
                 if (e.dest.nodesScope.$nodeScope) {
-                    to_path = e.dest.nodesScope.$nodeScope.$modelValue.filepath;
+                    dest = e.dest.nodesScope.$nodeScope.$modelValue;
                 }
 
-                if (filepath !== to_path) {
+                fileStorageService.moveFiles(elm, dest)
+                    .then(function (movedFile) {
 
-                    to_path += '/' + filename;
+                        if (movedFile && elm.filepath) {
+                            updateFilePath($scope.listDocument, elm.filepath, movedFile.filepath);
+                        }
 
-                    updateFilePath($scope.listDocument, oldFilePath, to_path);
-
-                    fileStorageService.moveFiles(oldFilePath, to_path)
-                        .then(function () {
-                            ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
-                        }, function () {
-                        });
-
-                    $timeout(function () {
-                        //$scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
-
-                        fileIndex = 0;
-                        calculateIndex($scope.listDocument);
+                        ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
+                    }, function () {
                     });
 
-                }
+                $timeout(function () {
+                    //$scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+
+                    fileIndex = 0;
+                    calculateIndex($scope.listDocument);
+                });
 
 
             }

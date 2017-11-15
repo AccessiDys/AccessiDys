@@ -168,7 +168,7 @@ angular
              * @method $scope.save
              */
             $scope.save = function () {
-                if ($scope.document.filepath) {
+                if ($scope.document.filepath || $scope.document.id) {
                     editDocument();
                 } else {
                     createDocument();
@@ -233,6 +233,7 @@ angular
                 }
 
                 documentService.save({
+                    id: $scope.document.id,
                     title: $scope.document.filename,
                     data: documentData,
                     filePath: $scope.document.filepath

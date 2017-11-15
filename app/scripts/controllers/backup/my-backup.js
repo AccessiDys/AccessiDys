@@ -25,22 +25,22 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, UtilsService) {
+angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, UtilsService, GoogleDriveProvider, OneDriveProvider) {
     $scope.storages = [{
         provider: 'dropbox',
         icon: 'fa-dropbox',
         name: 'Dropbox',
         isActive: true
     }, {
-        provider: 'googledrive',
+        provider: 'google-drive',
         icon: 'fa-google',
         name: 'Google drive',
-        isActive: false
+        isActive: true
     }, {
-        provider: 'onedrive',
+        provider: 'one-drive',
         icon: 'fa-cloud',
         name: 'One drive',
-        isActive: false
+        isActive: true
     }];
 
     $scope.prevState = $stateParams.prevState;
@@ -70,9 +70,20 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
             }, 'myBackupRouteData');
         }
 
-        if ($scope.selectedStorage.provider === 'dropbox') {
-            DropboxProvider.auth();
-        }
+        UserService.logout();
+        CacheProvider.setItem(null, 'listDocument').then(function(){
+            CacheProvider.setItem(null, 'listProfile').then(function(){
+                if ($scope.selectedStorage.provider === 'dropbox') {
+                    DropboxProvider.auth();
+                } else if ($scope.selectedStorage.provider === 'google-drive'){
+                    GoogleDriveProvider.auth();
+                } else if ($scope.selectedStorage.provider === 'one-drive'){
+                    OneDriveProvider.auth();
+                }
+            });
+        });
+
+
     };
 
     $scope.cancel = function () {

@@ -70,6 +70,22 @@ module.exports = function (app, passport) {
         res.redirect('/#/ma-sauvegarde.html?auth=true');
     });
 
+    app.get('/auth/google-drive', passport.authenticate('google-drive'));
+    app.get('/auth/google-drive/callback', passport.authenticate('google-drive', {
+        failureRedirect: '/'
+    }), function (req, res) {
+        req.session.user = req.user;
+        res.redirect('/#/ma-sauvegarde.html?auth=true');
+    });
+
+    app.get('/auth/one-drive', passport.authenticate('microsoft'));
+    app.get('/auth/one-drive/callback', passport.authenticate('microsoft', {
+        failureRedirect: '/'
+    }), function (req, res) {
+        req.session.user = req.user;
+        res.redirect('/#/ma-sauvegarde.html?auth=true');
+    });
+
     app.get('/auth/token', function (req, res) {
 
         if (req.session.user) {
@@ -87,7 +103,7 @@ module.exports = function (app, passport) {
         if (email && provider) {
 
             res.send({
-                isAdmin: helpers.isAdmin(email , provider)
+                isAdmin: helpers.isAdmin(email, provider)
             });
 
         } else {

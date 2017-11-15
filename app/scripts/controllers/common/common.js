@@ -44,9 +44,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     $rootScope.$watch('isAppOnline', function (newvalue) {
         if (newvalue) {
-
-            console.log('isAppOnline watcher');
-
             fileStorageService.synchronizeFiles().then(function(res){
                 if (res && res.profilesCount > 0) {
                     $rootScope.initCommon();

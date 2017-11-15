@@ -63,14 +63,23 @@
 
             <slick infinite="true" slides-to-show="3" slides-to-scroll="3" class="col-md-8 col-md-offset-2 mb-25 ">
                 <div data-ng-repeat="storage in storages">
+
                     <div class="storage-container"
                          data-ng-class="{'active': selectedStorage.provider === storage.provider, 'disabled': !storage.isActive}">
-                        <i class="fa {{storage.icon}}" aria-hidden="true"
-                           data-ng-click="selectStorage(storage)"></i>
+                        
+                        <img src="/styles/images/google-icon.png"
+                             class="img-google"
+                             data-ng-click="selectStorage(storage)"
+                             ng-if="storage.provider === 'google-drive' && selectedStorage.provider !== storage.provider">
+
+                        <i class="fa {{storage.icon}}"
+                           aria-hidden="true"
+                           data-ng-click="selectStorage(storage)"
+                           ng-if="(storage.provider === 'google-drive' && selectedStorage.provider === storage.provider) || storage.provider !== 'google-drive'"></i>
+
                         <div>{{storage.name}}</div>
-                        <p ng-if="!storage.isActive"><em>Bientôt disponible</em></p>
-                        <p ng-if="storage.isActive">&nbsp;</p>
                     </div>
+
                 </div>
             </slick>
         </div>
@@ -82,7 +91,14 @@
             <h4 class="mb-25 mt-10">2 - Vous avez un compte ? Identifiez-vous ou sinon créer un compte</h4>
 
             <div class="selected-storage col-md-12 text-center mb-25">
-                <i class="fa {{selectedStorage.icon}}" aria-hidden="true"></i>
+                <i class="fa {{selectedStorage.icon}}"
+                   ng-if="selectedStorage.provider !== 'google-drive'"
+                   aria-hidden="true"></i>
+
+                <img src="/styles/images/google-icon.png"
+                     class="img-google"
+                     ng-if="selectedStorage.provider === 'google-drive'">
+
                 <div>{{selectedStorage.name}}</div>
             </div>
 
