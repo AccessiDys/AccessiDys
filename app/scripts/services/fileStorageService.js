@@ -324,7 +324,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     });
             } else if (provider === 'one-drive') {
 
-                return OneDriveProvider.upload(file.filepath, file.data, UserService.getData().token)
+                return OneDriveProvider.upload(file, type, UserService.getData().token)
                     .then(function (_file) {
                         _file.data = file.data;
                         return CacheProvider.save(_file, storageName);

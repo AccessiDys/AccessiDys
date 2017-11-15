@@ -26,8 +26,7 @@
 'use strict';
 
 angular.module('cnedApp').factory('OneDriveProvider',
-    function ($http, $q, $log, configuration) {
-        //var apiUrl = 'https://api.onedrive.com/v1.0/';
+    function ($http, $q, $log, configuration, FileConstant) {
         var apiUrl = 'https://graph.microsoft.com/v1.0';
         /**
          * Converts the format of a dropbox file  in an internal file format
@@ -35,14 +34,41 @@ angular.module('cnedApp').factory('OneDriveProvider',
          *            a dropbox file
          * @method transformDropboxFileToStorageFile
          */
-        var transformOneDriveFileToStorageFile = function (file) {
+        /*var transformOneDriveFileToStorageFile = function (file) {
             return {
                 fileID: file.id,
                 filename: file.name,
                 filepath: '',
                 dateModification: Date.parse(file.modifiedTime),
-                provider: 'onedrive'
+                provider: 'one-drive'
             };
+        };*/
+
+        /**
+         * On reçoit dans un objet où il y a une tableau value:[] il faudra itérer dessus
+         * @param onedriveFile
+         * @returns {{id, filename: string, dateModification: *, mimeType: (*|string|string), type: string, provider: string, parent: null, parents: (*|jQuery.parents|Array), content: Array}}
+         */
+        var transformOneDriveFileToStorageFile = function (onedriveFile) {
+
+            var file = {
+                id: onedriveFile.id,
+                filename: onedriveFile.name,
+                dateModification: onedriveFile.lastModifiedDateTime ? new Date(onedriveFile.lastModifiedDateTime) : '',
+                type: '',
+                provider: 'one-drive',
+                parent: onedriveFile.parentReference && onedriveFile.parentReference.name != 'Accessidys' ? onedriveFile.parentReference.id: null, // TODO mettre le nom du dossier par défaut dans FileConstant
+                content: []
+            };
+
+
+            if (onedriveFile.folder) {
+                file.type = 'folder';
+            } else {
+                file.type = 'file';
+            }
+
+            return file;
         };
 
         var downloadService = function (file, access_token) {
@@ -54,7 +80,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
                     'Authorization': 'Bearer ' + access_token,
                 }
             }).success(function (data) {
-              console.log(data);
+                console.log(data);
                 deferred.resolve(data);
             }).error(function (data) {
                 deferred.reject(data);
@@ -64,37 +90,74 @@ angular.module('cnedApp').factory('OneDriveProvider',
         var uploadService = function (file, type, access_token) {
             var deferred = $q.defer();
 
+            var url = file.folder
+                ? apiUrl + '/me/drive/items/' + file.folder.id + '/children' // TODO url à revoir quand parent
+                : apiUrl + '/me/drive/root:/Accessidys/' + file.filename + '.html:';
+
             $http({
                 method: 'POST',
-                url: apiUrl + '/drive/root/children',
+                url: url + '/createUploadSession',
                 data: {
-                    name : file.name,
-                    folder: '{}'
-                  //parents : ['appDataFolder']
+                    item: {
+                        "@microsoft.graph.conflictBehavior": "rename",
+                        name: file.filename + '.html'
+                    }
                 },
                 headers: {
-                    'Authorization': 'Bearer ' + access_token,
+                    'Authorization': 'Bearer ' + access_token
                 }
-            }).success(function (metadata) {
-                console.log(metadata);
-                /*$http({
-                    method: 'PATCH',
-                    url: apiUrl + 'drive/root/'+ metadata.id +'?uploadType=media',
+            }).then(function (res) {
+                console.log('metadata', res.data);
+
+                $http({
+                    method: 'PUT',
+                    url: res.data.uploadUrl,
                     data: file.data,
                     headers: {
                         'Authorization': 'Bearer ' + access_token,
-                        'Content-Type': 'text/html',
+                        'Content-Range': 'bytes 0-' + (file.data.length - 1) + '/' + file.data.length
                     }
-                }).success(function (data) {
-                    deferred.resolve(transformOneDriveFileToStorageFile(data));
-                }).error(function (data) {
+                }).then(function (res) {
+                    console.log('metadata', res.data);
+
+
+                }, function (data) {
                     deferred.reject(data);
-                });*/
-            }).error(function (data) {
+                });
+
+            }, function (data) {
                 deferred.reject(data);
             });
             return deferred.promise;
         };
+
+        var uploadContent = function (file) {
+            var deferred = $q.defer();
+            var url = apiUrl + '/me/drive/items/' + file.id + '/content';
+
+            var fd = new FormData();
+            fd.append('file', file);
+
+            return $http({
+                method: 'PUT',
+                url: url,
+                data: {
+                    name: file.name,
+                    folder: {}
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + access_token
+                }
+            }).then(function (metadata) {
+                console.log('metadata', metadata);
+
+            }, function (data) {
+                deferred.reject(data);
+            });
+
+            return deferred.promise;
+        };
+
         var deleteService = function (file, access_token) {
             var deferred = $q.defer();
             $http({
@@ -115,7 +178,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
             var deferred = $q.defer();
             $http({
                 method: 'GET',
-                url: apiUrl + '/me/drive/root/children',
+                url: apiUrl + '/me/drive/root:/Accessidys:/children',
                 headers: {
                     'Authorization': 'Bearer ' + access_token
                 }
