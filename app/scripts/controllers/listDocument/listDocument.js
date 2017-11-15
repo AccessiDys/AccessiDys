@@ -411,7 +411,6 @@ angular.module('cnedApp')
                     .then(function () {
 
 
-
                         LoaderService.showLoader('document.message.info.move.inprogress', false);
 
                         fileStorageService.moveFiles(file, result.selectedFolder)
@@ -475,7 +474,7 @@ angular.module('cnedApp')
             accept: function (sourceNodeScope, destNodesScope, destIndex) {
                 var elm = sourceNodeScope.node;
 
-                if(elm.filepath){
+                if (elm.filepath) {
                     var filenameStartIndex = elm.filepath.lastIndexOf('/');
                     var filepath = elm.filepath.substring(0, filenameStartIndex);
 
@@ -489,42 +488,32 @@ angular.module('cnedApp')
             dropped: function (e) {
 
                 var elm = e.source.nodeScope.$modelValue;
-                var to_path = '';
 
-                console.log('file', elm);
-                console.log('dest', e.dest.nodesScope.$nodeScope);
-
-                var oldFilePath = elm.filepath;
-                var filenameStartIndex = oldFilePath.lastIndexOf('/');
-                var filename = oldFilePath.substring(filenameStartIndex + 1, oldFilePath.length);
-                var filepath = oldFilePath.substring(0, filenameStartIndex);
-
-
+                var dest = {
+                    filepath: '/'
+                };
 
                 if (e.dest.nodesScope.$nodeScope) {
-                    to_path = e.dest.nodesScope.$nodeScope.$modelValue.filepath;
+                    dest = e.dest.nodesScope.$nodeScope.$modelValue;
                 }
 
-                if (filepath !== to_path) {
+                fileStorageService.moveFiles(elm, dest)
+                    .then(function (movedFile) {
 
-                    to_path += '/' + filename;
+                        if (movedFile && elm.filepath) {
+                            updateFilePath($scope.listDocument, elm.filepath, movedFile.filepath);
+                        }
 
-                    updateFilePath($scope.listDocument, oldFilePath, to_path);
-
-                    fileStorageService.moveFiles(oldFilePath, to_path)
-                        .then(function () {
-                            ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
-                        }, function () {
-                        });
-
-                    $timeout(function () {
-                        //$scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
-
-                        fileIndex = 0;
-                        calculateIndex($scope.listDocument);
+                        ToasterService.showToaster('#list-document-success-toaster', 'documents.message.move.ok');
+                    }, function () {
                     });
 
-                }
+                $timeout(function () {
+                    //$scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
+
+                    fileIndex = 0;
+                    calculateIndex($scope.listDocument);
+                });
 
 
             }

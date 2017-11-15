@@ -604,7 +604,19 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     }
                 }
 
-                return DropboxProvider.moveFiles(file.filepath, to_path, UserService.getData().token);
+                return DropboxProvider.moveFiles(file.filepath, to_path, UserService.getData().token).then(function (data) {
+                    return CacheProvider.delete(file, 'listDocument').then(function () {
+                        file.filepath = to_path;
+                        return CacheProvider.save(file, 'listDocument');
+                    });
+                }, function () {
+                    self.addFileToSynchronize(file, 'document', 'delete');
+                    return CacheProvider.delete(file, 'listDocument').then(function () {
+                        file.filepath = to_path;
+                        self.addFileToSynchronize(file, 'document', 'save');
+                        return CacheProvider.save(file, 'listDocument');
+                    });
+                });
             } else if (provider === 'google-drive') {
 
                 var params = {};

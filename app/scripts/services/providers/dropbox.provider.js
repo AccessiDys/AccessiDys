@@ -391,23 +391,28 @@ angular.module('cnedApp').factory('DropboxProvider',
         var moveFilesService = function (from_path, to_path, access_token) {
             var deferred = $q.defer();
 
-            $http({
-                method: 'POST',
-                url: 'https://api.dropboxapi.com/2/files/move_v2',
-                data: {
-                    from_path: from_path,
-                    to_path: to_path
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    'Content-Type': 'application/json'
-                }
-            }).then(function () {
+            if(from_path !== to_path){
+                $http({
+                    method: 'POST',
+                    url: 'https://api.dropboxapi.com/2/files/move_v2',
+                    data: {
+                        from_path: from_path,
+                        to_path: to_path
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token,
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function () {
+                    deferred.resolve();
+                }, function () {
+                    // Error
+                    deferred.reject();
+                });
+            } else {
                 deferred.resolve();
-            }, function () {
-                // Error
-                deferred.reject();
-            });
+            }
+
             return deferred.promise;
         };
 
