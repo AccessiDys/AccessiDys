@@ -89,10 +89,9 @@ module.exports = function (passport) {
     }, function (accessToken, refreshToken, profile, done) {
 
         return done(null, {
-
             email: profile._json.user.emailAddress,
-            firstName: '',
-            lastName: profile._json.user.displayName,
+            firstName: profile._json.user.displayName,
+            lastName: '',
             token: accessToken,
             provider: 'google-drive'
         });
