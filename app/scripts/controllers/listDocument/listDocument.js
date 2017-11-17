@@ -161,7 +161,7 @@ angular.module('cnedApp')
                     }
                 }
 
-                fileStorageService.shareFile(document.filepath)
+                fileStorageService.shareFile(document)
                     .then(function (shareLink) {
                         itemToShare.linkToShare = 'https://' + window.location.host + '/#/apercu?title=' + encodeURIComponent(document.filename) + '&url=' + encodeURIComponent(shareLink.url);
 

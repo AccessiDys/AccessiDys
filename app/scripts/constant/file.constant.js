@@ -34,5 +34,8 @@ angular.module('cnedApp').constant('FileConstant', {
         document: 'text/html',
         profile: 'application/json',
         folder: 'application/vnd.google-apps.folder'
+    },
+    DEFAULT_FILE_PATH: {
+        onedrive_default_folder: 'Accessidys'
     }
 });

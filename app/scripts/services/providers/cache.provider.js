@@ -94,7 +94,6 @@ angular.module('cnedApp').factory('CacheProvider',
                 var deferred = $q.defer();
 
                 $localForage.getItem(storageName).then(function (items) {
-
                     if (items) {
                         var isFound = false;
                         var index = 0;
@@ -114,9 +113,10 @@ angular.module('cnedApp').factory('CacheProvider',
                             });
                         } else {
                             items.push(file);
-
                             $localForage.setItem(storageName, items).then(function () {
                                 deferred.resolve(file);
+                            }, function(data){
+                                deferred.reject(data);
                             });
                         }
                     } else {
@@ -125,7 +125,6 @@ angular.module('cnedApp').factory('CacheProvider',
                         });
                     }
                 });
-
                 return deferred.promise;
             },
 
