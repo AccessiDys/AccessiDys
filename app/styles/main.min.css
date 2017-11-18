@@ -1495,3 +1495,8 @@ blockquote {
 .mr-30 {
     margin-right: 30px;
 }
+
+.tooltip-inner {
+    color: #fff !important;
+    padding: 3px 8px !important;
+}

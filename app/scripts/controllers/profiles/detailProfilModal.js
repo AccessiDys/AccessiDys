@@ -120,6 +120,7 @@ angular.module('cnedApp').controller('profilesAffichageModalCtrl', function ($sc
 
                         profilsService.saveProfile($scope.profile)
                             .then(function (savedProfile) {
+
                                 $scope.profile = savedProfile;
 
                                 if ($scope.template === 'duplicate') {

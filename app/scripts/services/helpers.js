@@ -223,7 +223,8 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                     'images/clear_uploadpdf.png',
                     'tree.html',
                     'tree-folder.html',
-                    'directive.html'
+                    'directive.html',
+                    'uib/template/tooltip/tooltip-popup.html'
                 ];
                 if (config.method == 'GET') { // jshint ignore:line
                     if (!_.contains(exeptionUrl, config.url)) {

@@ -39,6 +39,7 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
      */
     var mapProfileAfterSave = function (profile, savedProfile) {
 
+        profile.id = savedProfile.id;
         profile.filename = savedProfile.filename;
         profile.provider = savedProfile.provider;
         profile.filepath = savedProfile.filepath;

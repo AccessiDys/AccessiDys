@@ -194,8 +194,11 @@
                                             <input data-ng-model="style.colorsList[2]" type="color" style="width:45px; height:25px" title="{{ 'Cliquer pour modifier la couleur' | translate}}"/>
                                             <input data-ng-if="style.colorsList.length > 3"
                                                    data-ng-model="style.colorsList[3]" type="color" style="width:45px; height:25px" title="{{ 'Cliquer pour modifier la couleur' | translate}}"/>
-                                            <button type="text" data-ng-if="style.colorsList.length === 3" data-ng-click="style.colorsList.push('#000000')" style="width:45px; height:25px">+1</button>
-                                            <button type="text" data-ng-if="style.colorsList.length === 4" data-ng-click="style.colorsList.pop()" style="width:45px; height:25px">-1</button>
+                                            <button type="text" data-ng-if="style.colorsList.length === 3"
+                                                    data-ng-click="style.colorsList.push('#000000')" style=" width: 45px; height: 25px; position: relative; top: -8px">+1</button>
+                                            <button type="text"
+                                                    data-ng-if="style.colorsList.length === 4"
+                                                    data-ng-click="style.colorsList.pop()" style=" width: 45px; height: 25px; position: relative; top: -8px">-1</button>
 
                                         </span>
                                     </p>

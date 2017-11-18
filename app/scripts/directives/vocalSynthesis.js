@@ -27,7 +27,7 @@
 /*global cnedApp */
 cnedApp.directive('vocalSynthesis',
 
-    function (keyboardSelectionService, speechService, serviceCheck, $log, $timeout, $window, UtilsService, CacheProvider, $rootScope) {
+    function (keyboardSelectionService, speechService, serviceCheck, $log, $timeout, $window, UtilsService, CacheProvider, $rootScope, $compile, _) {
         return {
             restrict: 'A',
             link: function (scope, elm) {
@@ -65,7 +65,9 @@ cnedApp.directive('vocalSynthesis',
                 /**
                  * Launch the vocal synthesis with the selected text
                  */
-                function speak() {
+                function speak(e) {
+
+                    unwrapSelectedText();
 
                     if (!scope.isEnableNoteAdd) {
                         $log.debug('$scope.speak');
@@ -101,15 +103,24 @@ cnedApp.directive('vocalSynthesis',
                                     }
 
                                     artyom.initialize({
-                                        lang:language,
-                                        continuous:false,
-                                        debug:false,
-                                        listen:false,
+                                        lang: language,
+                                        continuous: false,
+                                        debug: false,
+                                        listen: false,
                                         volume: vocalSettings.volume,
                                         speed: vocalSettings.rate
                                     });
 
-                                    artyom.say(text);
+                                    wrapSelectedText(text);
+
+                                    $compile(elm.contents())(scope);
+
+                                    artyom.say(text, {
+                                        onEnd: function () {
+                                            unwrapSelectedText();
+                                        }
+                                    });
+
 
                                 } else {
                                     CacheProvider.getItem('vocalSynthesisTipsShowed').then(function (isShowed) {
@@ -140,9 +151,46 @@ cnedApp.directive('vocalSynthesis',
                     }
                 }
 
+                function wrapSelectedText(text) {
+                    var selection = window.getSelection().getRangeAt(0);
+                    var selectedText = selection.extractContents();
+                    console.log('selectedText', selection);
+                    var span = document.createElement('span');
+                    span.appendChild(selectedText);
+                    span.setAttribute('id', 'speak-tooltip');
+                    span.setAttribute('uib-tooltip', '' + text);
+                    span.setAttribute('tooltip-is-open', 'true');
+                    span.setAttribute('tooltip-placement', 'top');
+                    span.setAttribute('tooltip-popup-close-delay', '10000');
+
+                    selection.insertNode(span);
+                }
+
+                function unwrapSelectedText() {
+                    var tooltip = document.getElementsByClassName('tooltip');
+
+                    if (tooltip && tooltip.length > 0) {
+
+                        _.forEach(tooltip, function (value) {
+                            value.remove();
+                        });
+
+
+                    }
+
+                    var element = document.getElementById('speak-tooltip');
+
+                    if (element) {
+                        element.outerHTML = document.getElementById('speak-tooltip').innerHTML;
+                    }
+
+                    $compile(elm.contents())(scope);
+                }
+
                 elm.bind('mouseup', speak);
                 elm.bind('touchend', speak);
                 elm.bind('keyup', speakOnKeyboard);
+
 
             }
         };

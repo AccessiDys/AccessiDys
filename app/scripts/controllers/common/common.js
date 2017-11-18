@@ -154,6 +154,19 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         return res;
     };
 
+    $rootScope.getDisplayedTextProfileTags = function (profileTags) {
+        var res = '';
+
+        _.forEach(profileTags, function(profileTag){
+
+            if (profileTag) {
+                res += '<' + profileTag.tagDetail.balise + '>' + profileTag.tagDetail.libelle + ' : ' + $rootScope.displayTextSimple + '</' + profileTag.tagDetail.balise + '> <br>';
+            }
+        });
+
+        return res;
+    };
+
     $rootScope.initCommon();
 
 });
