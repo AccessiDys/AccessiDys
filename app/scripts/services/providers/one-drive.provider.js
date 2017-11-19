@@ -346,8 +346,8 @@ angular.module('cnedApp').factory('OneDriveProvider',
                     'Authorization': 'Bearer ' + access_token,
                     'Content-Type': 'application/json'
                 }
-            }).then(function () {
-                deferred.resolve();
+            }).then(function (res) {
+                deferred.resolve(transformOneDriveFileToStorageFile(res.data));
             }, function () {
                 // Error
                 deferred.reject();
