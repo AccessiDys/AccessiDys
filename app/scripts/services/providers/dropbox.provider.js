@@ -45,7 +45,6 @@ angular.module('cnedApp').factory('DropboxProvider',
          * @method transformDropboxFilesToStorageFiles
          */
         var transformDropboxFilesToStorageFiles = function (dropboxFiles, type) {
-            console.log('type', type);
             var arbo = [];
             for (var i = 0; i < dropboxFiles.matches.length; i++) { //excludes profils json files.
                 if (type === 'document' ) {

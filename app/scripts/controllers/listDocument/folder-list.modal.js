@@ -62,7 +62,6 @@ angular.module('cnedApp').controller('folderListCtrl', function ($scope, $uibMod
 
         documentService.createFolder('/').then(function (folder) {
 
-            console.log('new folder', folder);
             ToasterService.showToaster('#folder-list-success-toaster', 'folder.message.create.ok');
             $scope.folderList[0].content.push(folder);
             folderIndex = 0;

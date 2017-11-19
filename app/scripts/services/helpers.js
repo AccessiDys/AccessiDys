@@ -141,7 +141,6 @@ cnedApp.factory('serviceCheck',
 
                 $http.post(configuration.BASE_URL + '/generateSign', loacalSign)
                     .success(function (loacalSign) {
-                        console.log('loacalSign --> ', loacalSign);
                         if (loacalSign && loacalSign.sign) {
                             localFilePreview.sign = loacalSign.sign;
                         }

@@ -127,7 +127,6 @@ angular.module('cnedApp').factory('OneDriveProvider',
                 }
                 deferred.resolve(data);
             }, function (err) {
-                console.log('err', err);
                 deferred.reject(err);
             });
             return deferred.promise;
@@ -231,7 +230,6 @@ angular.module('cnedApp').factory('OneDriveProvider',
         };
         var searchService = function (query, access_token, type) {
 
-            console.log('searchService - query', query);
 
             var deferred = $q.defer();
 
@@ -308,7 +306,6 @@ angular.module('cnedApp').factory('OneDriveProvider',
                     }
                 }).then(function (res) {
 
-                    console.log('downloadLink', res.data);
                     deferred.resolve({
                         url: res.data
                     });
@@ -354,9 +351,6 @@ angular.module('cnedApp').factory('OneDriveProvider',
             var deferred = $q.defer();
             var url = apiUrl + '/me/drive/items/' + file.id + '/copy';
 
-            console.log(url);
-            console.log(file);
-            console.log(copy);
 
             $http({
                 method: 'POST',
@@ -369,11 +363,9 @@ angular.module('cnedApp').factory('OneDriveProvider',
                     'Content-Type': 'application/json'
                 }
             }).then(function (data) {
-                console.log(data);
                 deferred.resolve();
             }, function (data) {
                 // Error
-                console.log(data);
                 deferred.reject();
             });
             return deferred.promise;

@@ -154,7 +154,6 @@ cnedApp.directive('vocalSynthesis',
                 function wrapSelectedText(text) {
                     var selection = window.getSelection().getRangeAt(0);
                     var selectedText = selection.extractContents();
-                    console.log('selectedText', selection);
                     var span = document.createElement('span');
                     span.appendChild(selectedText);
                     span.setAttribute('id', 'speak-tooltip');

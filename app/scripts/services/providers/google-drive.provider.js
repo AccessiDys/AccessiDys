@@ -279,7 +279,6 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                 }
             }).then(function (res) {
 
-                console.log('res.data', res.data);
                 deferred.resolve({
                     url: file.url
                 })

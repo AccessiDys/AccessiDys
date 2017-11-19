@@ -32,7 +32,6 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
     $scope.requiredFieldErrors = [];
     $scope.profile = profile;
 
-    console.log('profile', profile);
 
     $rootScope.tmpProfile = angular.copy(profile);
     $scope.profileTagIndex = profileTagIndex;
@@ -191,7 +190,6 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.profile.data.profileTags[profileTagIndex].souffleType = $scope.style.souffleType;
 
 
-            console.log('$scope.profile', $scope.profile);
 
             $uibModalInstance.close({
                 profile: $scope.profile,

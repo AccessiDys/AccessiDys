@@ -57,7 +57,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                             return $element[0].innerHTML.length;
                         }, _.debounce(function (newValue, oldValue) {
                             if (newValue !== oldValue) {
-                                console.log(' html watcher newValue = ' + newValue + ' - oldValue = ' + oldValue, $element[0].innerHTML);
                                 generateColoration($element[0]);
                             }
                         }, 200));
@@ -72,8 +71,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                     $timeout(function () {
 
-                        console.time('coloration');
-                        console.log($rootScope.currentProfile);
 
                         if ($rootScope.currentProfile) {
 

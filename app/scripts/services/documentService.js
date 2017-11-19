@@ -80,7 +80,6 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
             $log.debug('Check if document already exist', folder);
 
             fileStorageService.listAll().then(function (documents) {
-                console.log(documents);
                 var isFound = false;
                 _.each(documents, function (item) {
                     if (folder.title === item.filename) {
@@ -102,7 +101,6 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
             var deferred = $q.defer();
 
             $log.debug('Save document', document);
-            console.log(document);
 
             var errors = methods.checkFields(document);
 
@@ -136,7 +134,6 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     } else {
                         LoaderService.setLoaderProgress(40);
 
-                        console.log('service document to edit ', document);
 
                         var file = {
                             id: document.id,
@@ -311,7 +308,6 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                         filepath: path + params.title
                     };
 
-                    console.log(folder);
                     fileStorageService.createFolder(folder)
                         .then(function (folder) {
                             LoaderService.hideLoader();

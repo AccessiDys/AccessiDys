@@ -61,7 +61,6 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
     };
 
     if($stateParams.logout && UserService.getData().provider){
-        console.log('logout');
         logout(function(){
             window.location.reload();
         });

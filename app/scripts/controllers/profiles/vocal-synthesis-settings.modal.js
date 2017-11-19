@@ -31,7 +31,6 @@ angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function
 
     $scope.profile = angular.copy(profile);
 
-    console.log('$scope.profile', $scope.profile);
 
     if (!$scope.profile.data.vocalSettings) {
         $scope.profile.data.vocalSettings = {
@@ -82,7 +81,6 @@ angular.module('cnedApp').controller('VocalSynthesisSettingsModalCtrl', function
             ToasterService.showToaster('#vocal-profile-error-toaster', 'label.vocal.volume.invalid');
             hasError = true;
 
-            console.log('test',angular.isNumber($scope.profile.data.vocalSettings.volume * 1));
 
         } else if (!angular.isNumber($scope.profile.data.vocalSettings.rate)
             || $scope.profile.data.vocalSettings.rate < 0.1 || $scope.profile.data.vocalSettings.rate > 10) {

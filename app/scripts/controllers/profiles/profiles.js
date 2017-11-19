@@ -239,7 +239,6 @@ angular.module('cnedApp')
 
                         if (tagEditParams.isApplyAll) {
 
-                            console.log('tagEditParams.profile.data.profileTags[params.index]', tagEditParams.profile.data.profileTags[params.index]);
 
                             for (var i = 0; i < tagEditParams.profile.data.profileTags.length; i++) {
                                 if (i !== params.index) {
@@ -258,7 +257,6 @@ angular.module('cnedApp')
                             }
                         }
 
-                        console.log('tagEditParams', tagEditParams.profile);
 
                         $scope.openProfileModal(params.template, tagEditParams.profile);
                     }, function () {
@@ -416,17 +414,13 @@ angular.module('cnedApp')
                     profilsService.deleteProfil(profile)
                         .then(function () {
 
-                            console.log('profile to delete', profile);
 
                             for (var i = 0; i < $rootScope.profiles.length; i++) {
 
-                                console.log('Root scope profile ', $rootScope.profiles[i]);
 
                                 if ((profile.data._id && $rootScope.profiles[i].data._id === profile.data._id)
                                     || ( profile.filepath && $rootScope.profiles[i].filepath === profile.filepath )
                                     || ( profile.filename && $rootScope.profiles[i].filename === profile.filename )) {
-
-                                    console.log('found');
 
                                     $rootScope.profiles.splice(i, 1);
                                     break;
@@ -937,7 +931,6 @@ angular.module('cnedApp')
                 profile.showOverview = false;
             });
 
-            console.log('$rootScope.profiles', $rootScope.profiles);
 
             $scope.isProfileOverviewHide = true;
         };

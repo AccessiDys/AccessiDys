@@ -111,9 +111,6 @@ angular.module('cnedApp')
                     if (document.type === 'file') {
                         LoaderService.showLoader('document.message.info.rename.inprogress', true);
 
-                        console.log('document', document);
-                        console.log('document', params.title);
-                        console.log('fileStorageService', fileStorageService);
 
                         fileStorageService.rename(document, params.title, 'document')
                             .then(function () {

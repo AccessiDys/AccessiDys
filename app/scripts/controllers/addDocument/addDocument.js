@@ -177,7 +177,6 @@ angular
 
 
             function createDocument (){
-                console.log("Create");
                 var documentData = $scope.document.data;
                 if (documentData) {
                     documentData = documentData.replace(/&nbsp;/gi, ' ');
@@ -225,7 +224,6 @@ angular
             }
 
             function editDocument (){
-                console.log("Edit");
                 var documentData = $scope.document.data;
                 if (documentData) {
                     documentData = documentData.replace(/&nbsp;/gi, ' ');
