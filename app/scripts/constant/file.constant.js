@@ -37,5 +37,12 @@ angular.module('cnedApp').constant('FileConstant', {
     },
     DEFAULT_FILE_PATH: {
         onedrive_default_folder: 'Accessidys'
+    },
+    ONE_DRIVE: {
+        query: {
+            profile: '.txt',
+            document: '.html',
+            filesAndFolders: 'filesAndFolders'
+        }
     }
 });

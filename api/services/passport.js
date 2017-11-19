@@ -101,7 +101,7 @@ module.exports = function (passport) {
             clientID: ONE_DRIVE_CLIENT_ID,
             clientSecret: ONE_DRIVE_CLIENT_SECRET,
             callbackURL: URL_REQUEST + '/auth/one-drive/callback',
-            scope: 'user.read files.readwrite offline_access'
+            scope: 'user.read onedrive.appfolder offline_access'
         },
         function (accessToken, refreshToken, profile, done) {
             return done(null, {

@@ -31,6 +31,9 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
     $scope.isApplyAll = false;
     $scope.requiredFieldErrors = [];
     $scope.profile = profile;
+
+    console.log('profile', profile);
+
     $rootScope.tmpProfile = angular.copy(profile);
     $scope.profileTagIndex = profileTagIndex;
     $scope.styleName = '';
@@ -188,6 +191,7 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
             $scope.profile.data.profileTags[profileTagIndex].souffleType = $scope.style.souffleType;
 
 
+            console.log('$scope.profile', $scope.profile);
 
             $uibModalInstance.close({
                 profile: $scope.profile,
@@ -229,7 +233,16 @@ angular.module('cnedApp').controller('styleEditModalCtrl', function ($scope, $ui
                 }
                 break;
             case 'souffleType':
-                $scope.style.coloration = $scope.style.colorationType + " " + $scope.style.souffleType + " " + $scope.style.colors;
+
+                if($scope.style.colorationType === 'Pas de coloration'){
+                    $scope.style.colors = '';
+                    $scope.style.colorsList = [];
+                } else if($scope.style.colorationType === 'Colorer les groupes de souffle' || $scope.style.colorationType === 'Surligner les groupes de souffle'){
+                    $scope.style.coloration = $scope.style.colorationType + " " + $scope.style.souffleType + " " + $scope.style.colors;
+                } else {
+                    $scope.style.coloration = $scope.style.colorationType + " " + $scope.style.colors;
+                }
+
                 break;
             case 'colors':
                 switch (value) {

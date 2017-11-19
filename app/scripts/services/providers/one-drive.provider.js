@@ -26,24 +26,13 @@
 'use strict';
 
 angular.module('cnedApp').factory('OneDriveProvider',
-    function ($http, $q, $log, configuration, FileConstant) {
+    function ($http, $q, $log, configuration, _, FileConstant) {
         var apiUrl = 'https://graph.microsoft.com/v1.0';
-        /**
-         * Converts the format of a dropbox file  in an internal file format
-         * @param dropboxFiles
-         *            a dropbox file
-         * @method transformDropboxFileToStorageFile
-         */
-        /*var transformOneDriveFileToStorageFile = function (file) {
-            return {
-                fileID: file.id,
-                filename: file.name,
-                filepath: '',
-                dateModification: Date.parse(file.modifiedTime),
-                provider: 'one-drive'
-            };
-        };*/
 
+        /**
+         * Build files tree
+         * @param arr file array
+         */
         function buildTree(arr) {
             var indexed = _.reduce(arr, function (result, item) {
                 result[item.id] = item;
@@ -54,10 +43,10 @@ angular.module('cnedApp').factory('OneDriveProvider',
             var result = _.filter(arr, function (item) {
 
                 // get parent
-                var parent = indexed[item.parent];
+                var parent = indexed[item.parentNode];
 
                 // make sure to remove unnecessary keys
-                delete item.parent;
+                delete item.parentNode;
 
                 // has parent?
                 if (parent) {
@@ -75,17 +64,16 @@ angular.module('cnedApp').factory('OneDriveProvider',
 
         /**
          * Converts the format of google files  in an internal file format
-         * @param googleFiles google files
+         * @param oneDriveFiles google files
          * @param type
          * @returns {Array} File list
          */
         var transformOneDriveFilesToStorageFiles = function (oneDriveFiles) {
             var res = [];
 
+
             _.forEach(oneDriveFiles, function (value) {
-                if(value.name !== "Accessidys") {
-                    res.push(transformOneDriveFileToStorageFile(value));
-                }
+                res.push(transformOneDriveFileToStorageFile(value));
             });
 
             return buildTree(res);
@@ -98,17 +86,19 @@ angular.module('cnedApp').factory('OneDriveProvider',
          */
         var transformOneDriveFileToStorageFile = function (onedriveFile) {
 
-            //console.log(onedriveFile.parentReference);
+
+            var filename = onedriveFile.name ? onedriveFile.name.replace(FileConstant.ONE_DRIVE.query.profile, '').replace(FileConstant.ONE_DRIVE.query.document, '') : '';
+
             var file = {
                 id: onedriveFile.id,
-                filename: onedriveFile.name,
+                filename: filename,
                 dateModification: onedriveFile.lastModifiedDateTime ? new Date(onedriveFile.lastModifiedDateTime) : '',
                 type: '',
                 provider: 'one-drive',
-                parent: onedriveFile.parentReference && onedriveFile.parentReference.name != 'Accessidys' ? onedriveFile.parentReference.id: FileConstant.onedrive_default_folder, // TODO mettre le nom du dossier par défaut dans FileConstant
-                folder: {
-                    id: onedriveFile.parentReference.id
-                },
+                parentNode: onedriveFile.parentReference ? onedriveFile.parentReference.id : null,
+                parent: onedriveFile.parentReference ? onedriveFile.parentReference.id : null,
+                filepath: onedriveFile.parentReference ? onedriveFile.parentReference.path + '/' + onedriveFile.name : null,
+                downloadUrl: onedriveFile['@microsoft.graph.downloadUrl'],
                 content: []
             };
 
@@ -122,110 +112,107 @@ angular.module('cnedApp').factory('OneDriveProvider',
             return file;
         };
 
-        var downloadService = function (fileId, access_token) {
+        var downloadService = function (file, type, access_token) {
             var deferred = $q.defer();
-            console.log("Download: " + fileId);
             $http({
                 method: 'GET',
-                url: apiUrl + '/me/drive/items/' + fileId + '/content',
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                }
-            }).success(function (content) {
-                console.log(content);
-                deferred.resolve(content);
-            }).error(function (data) {
-                deferred.reject(data);
-            });
-            return deferred.promise;
-        };
-        var uploadService = function (file, extension, access_token) {
-            var deferred = $q.defer();
-
-            if(file.filename.indexOf('.html') > 0){
-                console.log("test");
-                console.log(file);
-                console.log(file.id);
-                file.filename = file.filename.replace('.html', '');
-            }
-            if(extension==="-profile.json"){
-                extension = ".txt";
-            }
-            var url = file.folder
-                ? apiUrl + '/me/drive/items/' + file.folder.id + ':/' + file.filename + '.html'
-                : apiUrl + '/me/drive/root:/Accessidys/' + file.filename + extension;
-
-            console.log("Url de départ : " + url)
-            $http({
-                method: 'POST',
-                url: url + ':/createUploadSession',
-                data: {
-                    item: {
-                        "@microsoft.graph.conflictBehavior": "rename",
-                        name: file.filename + extension
-                    }
-                },
+                url: apiUrl + file.filepath + ':/content',
                 headers: {
                     'Authorization': 'Bearer ' + access_token
                 }
             }).then(function (res) {
-                var data;
-                if(extension === ".txt"){
-                    data = JSON.stringify(file.data);
-                } else {
-                    data = file.data;
+                var data = decodeURIComponent(res.data);
+                if (type === FileConstant.TYPE.profile) {
+                    data = JSON.parse(data);
                 }
+                deferred.resolve(data);
+            }, function (err) {
+                console.log('err', err);
+                deferred.reject(err);
+            });
+            return deferred.promise;
+        };
 
-                console.log(data);
+        var uploadService = function (file, extension, access_token) {
+            var deferred = $q.defer();
+
+            var fileName = file.filename + extension;
+
+            var url = apiUrl;
+
+            if (file.folder) {
+                url += file.folder.filepath + '/' + fileName + ':/createUploadSession';
+            } else {
+                if (file.id) {
+                    url += file.filepath + ':/content';
+                } else {
+                    url += '/drive/special/approot:/' + fileName + ':/createUploadSession';
+                }
+            }
+
+            var data = null;
+            if (extension === FileConstant.ONE_DRIVE.query.profile) {
+                data = JSON.stringify(file.data);
+            } else {
+                data = file.data;
+            }
+            data = encodeURIComponent(data);
+
+            if (file.id) {
 
                 $http({
                     method: 'PUT',
-                    url: res.data.uploadUrl,
+                    url: url,
                     data: data,
                     headers: {
-                        'Authorization': 'Bearer ' + access_token,
-                        'Content-Range': 'bytes 0-' + (data.length - 1) + '/' + data.length
+                        'Authorization': 'Bearer ' + access_token
                     }
                 }).then(function (res) {
                     deferred.resolve(res.data);
 
-                }, function (data) {
-                    console.log("C'est ici ? ");
-                    console.log(data);
-                    deferred.reject(data);
+                }, function (err) {
+                    deferred.reject(err);
                 });
 
-            }, function (data) {
-                deferred.reject(data);
-            });
+            } else {
+                $http({
+                    method: 'POST',
+                    url: url,
+                    data: {
+                        item: {
+                            '@microsoft.graph.conflictBehavior': 'rename',
+                            name: fileName
+                        }
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token
+                    }
+                }).then(function (res) {
+
+                    $http({
+                        method: 'PUT',
+                        url: res.data.uploadUrl,
+                        data: data,
+                        headers: {
+                            'Authorization': 'Bearer ' + access_token,
+                            'Content-Range': 'bytes 0-' + (data.length - 1) + '/' + data.length
+                        }
+                    }).then(function (res) {
+                        deferred.resolve(res.data);
+
+                    }, function (err) {
+                        deferred.reject(err);
+                    });
+
+                }, function (data) {
+                    deferred.reject(data);
+                });
+            }
+
+
             return deferred.promise;
         };
 
-        var uploadContent = function (file, access_token) {
-            var deferred = $q.defer();
-            var url = apiUrl + '/me/drive/root:/' + file.folder.id + '/' + file.name + '/content';
-
-            var fd = new FormData();
-            fd.append('file', file);
-
-            $http({
-                method: 'PUT',
-                url: url,
-                data: {
-                    name: file.name,
-                    folder: {}
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + access_token
-                }
-            }).then(function (metadata) {
-                console.log('metadata', metadata);
-            }, function (data) {
-                deferred.reject(data);
-            });
-
-            return deferred.promise;
-        };
 
         var deleteService = function (file, access_token) {
             var deferred = $q.defer();
@@ -233,7 +220,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
                 method: 'DELETE',
                 url: apiUrl + '/me/drive/items/' + file.id,
                 headers: {
-                    'Authorization': 'Bearer ' + access_token,
+                    'Authorization': 'Bearer ' + access_token
                 }
             }).success(function (data) {
                 deferred.resolve(data);
@@ -242,15 +229,13 @@ angular.module('cnedApp').factory('OneDriveProvider',
             });
             return deferred.promise;
         };
-        var searchService = function (search, access_token) {
+        var searchService = function (query, access_token, type) {
+
+            console.log('searchService - query', query);
+
             var deferred = $q.defer();
 
-            if( search === "-profile.json"){
-                deferred.resolve([]);
-            }
-            console.log(search)
-            var url = apiUrl + '/me/drive/root:/Accessidys:/delta';
-
+            var url = apiUrl + '/drive/special/approot/delta';
 
             $http({
                 method: 'GET',
@@ -258,54 +243,42 @@ angular.module('cnedApp').factory('OneDriveProvider',
                 headers: {
                     'Authorization': 'Bearer ' + access_token
                 }
-            }).then (function (files) {
-                deferred.resolve(transformOneDriveFilesToStorageFiles(files.data.value));
-            }, function (data) {
-                // Error Accessidys folder doesn't exist
-                var url = apiUrl + '/me/drive/root/children';
-                $http({
-                    method: 'POST',
-                    url: url,
-                    data: {
-                        name: 'Accessidys',
-                        folder: {}
-                    },
-                    headers: {
-                        'Authorization': 'Bearer ' + access_token
+            }).then(function (files) {
+                var res = [];
+                if (files.data && files.data.value) {
+                    if (files.data.value.length > 0) {
+                        files.data.value.splice(0, 1);
                     }
-                }).then(function(data2){
-                    deferred.resolve(data2);
-                }, function (data2){
-                    // Error
-                    deferred.reject(data2);
-                });
-            });
-            return deferred.promise;
-        };
 
-        var searchAllService = function (search, access_token) {
-            var deferred = $q.defer();
+                    var oneDriveFiles = [];
 
-            if( search === "-profile.json"){
-                deferred.resolve([]);
-            }
-            console.log(search)
-            var url = apiUrl + '/me/drive/root:/Accessidys:/delta';
+                    if (query) {
 
-            $http({
-                method: 'GET',
-                url: url,
-                headers: {
-                    'Authorization': 'Bearer ' + access_token
+                        oneDriveFiles = _.filter(files.data.value, function (file) {
+                            if (query === FileConstant.ONE_DRIVE.query.filesAndFolders) {
+                                return file.name.indexOf(FileConstant.ONE_DRIVE.query.profile) === -1;
+                            }
+                            return file.name.indexOf(query) > -1;
+                        });
+
+                    } else {
+
+                        oneDriveFiles = files.data.value;
+                    }
+
+                    res = transformOneDriveFilesToStorageFiles(oneDriveFiles);
+
                 }
-            }).then (function (files) {
-                deferred.resolve(files.data.value.map(transformOneDriveFileToStorageFile));
-            }, function (data) {
-                // Error
-                deferred.reject(data);
+
+
+                deferred.resolve(res);
+
+            }, function () {
+                deferred.reject();
             });
             return deferred.promise;
         };
+
 
         var listShareLinkService = function (path, access_token) {
             var deferred = $q.defer();
@@ -351,22 +324,9 @@ angular.module('cnedApp').factory('OneDriveProvider',
             }).then(function (data) {
                 console.log(data.data.link.webUrl);
                 deferred.resolve(data.data.link.webUrl);
-            }, function (data) {
-                /*if (data.error && data.error['.tag'] === 'shared_link_already_exists') {
+            }, function (err) {
 
-                    listShareLinkService(path, access_token).then(function (data) {
-                        deferred.resolve(data);
-                    });
-
-                } else if (data.error && data.error['.tag'] === 'email_not_verified') {
-
-                    deferred.reject({
-                        error: 'email_not_verified'
-                    });
-
-                } else {*/
-                    deferred.reject(data);
-                //}
+                deferred.reject(err);
 
             });
             return deferred.promise;
@@ -375,12 +335,12 @@ angular.module('cnedApp').factory('OneDriveProvider',
         var renameService = function (file, newName, type, access_token) {
             var deferred = $q.defer();
 
-            var url = "/me/drive/items/" + file.id;
+            var url = '/me/drive/items/' + file.id;
             $http({
                 method: 'PATCH',
                 url: apiUrl + url,
                 data: {
-                    name: newName
+                    name: newName + FileConstant.ONE_DRIVE.query[type]
                 },
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
@@ -430,7 +390,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
 
         var createFolderService = function (path, folderName, access_token) {
             var deferred = $q.defer();
-            var url = apiUrl + '/me/drive/root:/Accessidys:/children';
+            var url = apiUrl + '/drive/special/approot/children';
             $http({
                 method: 'POST',
                 url: url,
@@ -443,7 +403,6 @@ angular.module('cnedApp').factory('OneDriveProvider',
                     'Content-Type': 'application/json'
                 }
             }).then(function (res) {
-                console.log(res);
                 deferred.resolve(transformOneDriveFileToStorageFile(res.data));
             }, function () {
                 // Error
@@ -455,15 +414,20 @@ angular.module('cnedApp').factory('OneDriveProvider',
         var moveFilesService = function (file, newFolderId, access_token) {
             var deferred = $q.defer();
 
-            var url = "/me/drive/items/" + file.id;
+            var url = '/me/drive/items/' + file.id;
+
+            var parentRefrence = {};
+            if(newFolderId){
+                parentRefrence.id = newFolderId;
+            } else {
+                parentRefrence.path = '/drive/special/approot';
+            }
 
             $http({
                 method: 'PATCH',
                 url: apiUrl + url,
                 data: {
-                    parentReference: {
-                        id: newFolderId
-                    },
+                    parentReference: parentRefrence,
                     name: file.name
                 },
                 headers: {
@@ -483,7 +447,6 @@ angular.module('cnedApp').factory('OneDriveProvider',
             upload: uploadService,
             delete: deleteService,
             search: searchService,
-            searchAll: searchAllService,
             shareLink: shareLinkService,
             download: downloadService,
             rename: renameService,

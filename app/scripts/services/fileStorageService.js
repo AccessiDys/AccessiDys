@@ -79,7 +79,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
             } else if (provider === 'one-drive') {
 
-                return OneDriveProvider.searchAll(query, UserService.getData().token, type).then(function (files) {
+                return OneDriveProvider.search(FileConstant.ONE_DRIVE.query[type], UserService.getData().token, type).then(function (files) {
                     console.log(files);
                     return CacheProvider.saveAll(files, storageName);
                 }, function () {
@@ -101,6 +101,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
     this.listAll = function (forceCache) {
 
         var storageName = 'listDocument';
+        var type = 'document';
         var path = '';
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider && !forceCache) {
@@ -119,7 +120,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
                 query = "mimeType = '" + FileConstant.MIME_TYPE.document + "' or mimeType = '" + FileConstant.MIME_TYPE.folder + "'";
 
-                return GoogleDriveProvider.search(query, UserService.getData().token, 'document').then(function (files) {
+                return GoogleDriveProvider.search(query, UserService.getData().token, type).then(function (files) {
                     return CacheProvider.saveAll(files, storageName);
                 }, function () {
                     return CacheProvider.list(storageName);
@@ -127,12 +128,12 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
             } else if (provider === 'one-drive') {
 
-                query = '.html';
-                return OneDriveProvider.search(query, UserService.getData().token, 'document').then(function (files) {
-                    return CacheProvider.saveAll(files, storageName);
-                }, function () {
-                    return CacheProvider.list(storageName);
-                });
+                return OneDriveProvider.search(FileConstant.ONE_DRIVE.query.filesAndFolders, UserService.getData().token, type)
+                    .then(function (files) {
+                        return CacheProvider.saveAll(files, storageName);
+                    }, function () {
+                        return CacheProvider.list(storageName);
+                    });
 
             }
         } else {
@@ -210,13 +211,14 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                         return CacheProvider.get(filename, storageName);
                     });
             } else if (provider === 'one-drive') {
-                return OneDriveProvider.searchAll(".html", UserService.getData().token, type)
+                return OneDriveProvider.search(filename + FileConstant.ONE_DRIVE.query[type], UserService.getData().token, type)
                     .then(function (files) {
-                        console.log(files);
+                        console.log('downaload files', files);
+
                         if (files && files.length > 0) {
                             for (var i = 0; i < files.length; i++) {
                                 if (files[i].filename === filename) {
-                                    return OneDriveProvider.download(files[i].id, UserService.getData().token)
+                                    return OneDriveProvider.download(files[i], type, UserService.getData().token)
                                         .then(function (fileContent) {
                                             files[i].data = fileContent;
 
@@ -291,7 +293,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     });
             } else if (provider === 'one-drive') {
                 console.log(file);
-                return OneDriveProvider.download(file, UserService.getData().token)
+                return OneDriveProvider.download(file, type, UserService.getData().token)
                     .then(function (fileContent) {
                         file.data = fileContent;
 
@@ -322,7 +324,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             extension = '.html';
         } else if (type === 'profile') {
             storageName = 'listProfile';
-            extension = '-profile.json';
+            extension = '.json';
         }
 
 
@@ -339,7 +341,6 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                         file.filepath = file.folder.filepath + file.filepath;
                     }
                 }
-
 
                 return DropboxProvider.upload(file.filepath, file.data, UserService.getData().token)
                     .then(function (_file) {
@@ -361,9 +362,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     });
             } else if (provider === 'one-drive') {
 
-                //file = CacheProvider.get(file.filename, storageName);
-                console.log(file);
-                return OneDriveProvider.upload(file, extension, UserService.getData().token)
+
+                return OneDriveProvider.upload(file, FileConstant.ONE_DRIVE.query[type], UserService.getData().token)
                     .then(function (_file) {
                         _file.data = file.data;
                         return CacheProvider.save(_file, storageName);
@@ -445,7 +445,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                             });
                     });
             } else if (provider === 'one-drive') {
-                return OneDriveProvider.rename(file, newName, null, UserService.getData().token)
+                return OneDriveProvider.rename(file, newName, type, UserService.getData().token)
                     .then(function (data) {
                         return CacheProvider.delete(file, storageName).then(function () {
                             return CacheProvider.save(data, storageName);
@@ -731,18 +731,18 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
                 console.log('file', file);
                 console.log('folder', folder);
-/*
-                if (folder.filepath !== '/') {
-                    params.addParents = folder.id;
-                    if (file.parents && file.parents.length > 0) {
-                        params.removeParents = file.parents[0]
-                    }
-                } else {
-                    if (file.parents && file.parents.length > 0) {
-                        params.removeParents = file.parents[0]
-                    }
-                }
-*/
+                /*
+                 if (folder.filepath !== '/') {
+                 params.addParents = folder.id;
+                 if (file.parents && file.parents.length > 0) {
+                 params.removeParents = file.parents[0]
+                 }
+                 } else {
+                 if (file.parents && file.parents.length > 0) {
+                 params.removeParents = file.parents[0]
+                 }
+                 }
+                 */
                 return OneDriveProvider.move(file, folder.id, UserService.getData().token);
             }
         } else {
@@ -824,7 +824,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                 return OneDriveProvider.copy(originalFile, destinationFile.filename, UserService.getData().token)
                     .then(function () {
                         return CacheProvider.save(destinationFile, storageName);
-                    }, function(){
+                    }, function () {
                         console.log("ERROR");
                     });
             }
