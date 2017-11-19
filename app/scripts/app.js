@@ -52,7 +52,7 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
                          configuration) {
 
     // Log enable / disable
-    $logProvider.debugEnabled(true);
+    $logProvider.debugEnabled(false);
 
     // Google analytics account settings
     AnalyticsProvider.setAccount(configuration.GOOGLE_ANALYTICS_ID);
@@ -79,9 +79,16 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
                 tags: function (tagsService) {
                     return tagsService.getTags();
                 },
-                userData: function (UserService, $log) {
+                userData: function (UserService, $log, fileStorageService) {
                     $log.debug('Init user data');
-                    return UserService.init();
+                    return UserService.init().then(function (userData) {
+
+                        return fileStorageService.synchronizeFiles().then(function () {
+                            return userData;
+                        });
+
+
+                    });
                 }
             }
         })
@@ -231,10 +238,9 @@ angular.module('cnedApp').run(function (gettextCatalog, $rootScope) {
     }));
     gettextCatalog.debug = true;
 
-    window.onresize = function(){
+    window.onresize = function () {
         $rootScope.$emit('window-resize');
     };
-
 
 
 });

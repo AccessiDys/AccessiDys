@@ -31,6 +31,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     $log.debug('commonCtrl - userData', userData);
 
+
+
     $rootScope.profiles = [];
     $rootScope.tags = tags;
     $rootScope.tmpProfile = null;

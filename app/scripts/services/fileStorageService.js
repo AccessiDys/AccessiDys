@@ -946,6 +946,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     }
                 }
 
+                console.log('toSend', toSend);
+
                 // Synchronize profiles
                 if (profiles) {
 
