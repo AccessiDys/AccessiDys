@@ -222,7 +222,7 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
         });
 });
 
-angular.module('cnedApp').run(function (gettextCatalog) {
+angular.module('cnedApp').run(function (gettextCatalog, $rootScope) {
 
     gettextCatalog.currentLanguage = 'fr_FR';
     localStorage.setItem('langueDefault', JSON.stringify({
@@ -230,6 +230,13 @@ angular.module('cnedApp').run(function (gettextCatalog) {
         shade: 'fr_FR'
     }));
     gettextCatalog.debug = true;
+
+    window.onresize = function(){
+        $rootScope.$emit('window-resize');
+    };
+
+
+
 });
 
 //Secure the links

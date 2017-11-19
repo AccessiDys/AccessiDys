@@ -38,8 +38,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                 var htmlWatcher = null;
                 var windowScroll = 0;
-                var prevScroll = -1;
-                var windowWidth = window.innerWidth;
+                var windowHeight = window.innerHeight;
 
                 var tags = {};
 
@@ -90,7 +89,8 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                 var clone = child.cloneNode(true);
 
                                 // Adapt child which are displayed on the screen
-                                if (child.offsetTop > windowScroll && child.offsetTop < (windowScroll + windowWidth)) {
+                                windowScroll = window.pageYOffset;
+                                if (child.offsetTop > windowScroll && child.offsetTop < (windowScroll + windowHeight)) {
 
                                     if (child.tagName !== prevTag) {
                                         line = 0;
@@ -197,34 +197,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             parent.removeChild(child);
                                             parent.insertBefore(res.documentFragment, nextElement);
 
-                                        } /*else if (
-                                            coloration === 'Colorer les lignes RBVJ'
-                                            || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Surligner les lignes RBVJ'
-                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] RBVJ'
-                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ'
-                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ'
-                                            || (coloration === 'Colorer les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] RBVJ'
-                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] RBVJ'
-                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \',\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] RBVJ'
-                                            || (coloration === 'Surligner les groupes de souffle [Maj. - \';\' - \'.\'] Personnaliser' && profileTag.colorsList.length === 4)
-                                            coloration.indexOf('lignes') > 0 && profileTag.colorsList.length === 4) {
-
-                                            var res = UtilsService.colorLines(child, 4, prevTop, line);
-                                            line = res.line;
-                                            prevTop = res.prevTop;
-
-                                            var parent = child.parentNode;
-                                            var nextElement = child.nextSibling;
-                                            parent.removeChild(child);
-                                            parent.insertBefore(res.documentFragment, nextElement);
-                                        }*/
+                                        }
 
                                         if (prevTop > child.offsetTop) {
                                             prevTop = child.offsetTop;

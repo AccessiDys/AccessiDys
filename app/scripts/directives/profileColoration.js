@@ -30,7 +30,7 @@
  */
 angular.module('cnedApp').directive('profileColoration',
 
-    function (UtilsService, $timeout, _) {
+    function (UtilsService, $timeout, _, $rootScope) {
         return {
             restrict: 'A',
             scope: {
@@ -44,7 +44,7 @@ angular.module('cnedApp').directive('profileColoration',
                 var textWatcher = null;
                 var windowScroll = 0;
                 var prevScroll = -1;
-                var windowWidth = window.innerWidth;
+                var windowHeight = window.innerHeight;
                 var adaptIndex = 0;
 
                 if (!$scope.preview) {
@@ -58,11 +58,12 @@ angular.module('cnedApp').directive('profileColoration',
                     });
                 }
 
-                window.onresize = function(){
+                $rootScope.$on('window-resize', function () {
+                    windowHeight = window.innerHeight;
                     adaptIndex = 0;
                     $element[0].innerHTML = UtilsService.removeSpan(UtilsService.decodeHtmlEntities($scope.text));
                     generateColoration($element[0]);
-                };
+                });
 
                 var generateColoration = function (element) {
 
@@ -75,10 +76,13 @@ angular.module('cnedApp').directive('profileColoration',
                             var prevTop = -9999;
                             var prevTag = '';
 
+
                             for (adaptIndex; adaptIndex < element.children.length; adaptIndex++) {
                                 var child = element.children[adaptIndex];
                                 // Adapt child which are displayed on the screen
-                                if (child.offsetTop < ((windowScroll + windowWidth) * 2)) {
+                                windowScroll = window.pageYOffset;
+                                if (child.offsetTop < ((windowScroll + windowHeight) * 2)) {
+
                                     var profileTag = _.find(profile.profileTags, function (_profileTag) {
                                         return _profileTag.tagDetail.balise === child.tagName.toLowerCase();
                                     });
@@ -113,13 +117,13 @@ angular.module('cnedApp').directive('profileColoration',
                                         }
 
                                         // Split Text
-                                        if (coloration.indexOf('lignes') > 0){
+                                        if (coloration.indexOf('lignes') > 0) {
                                             textTransform = UtilsService.splitOnWordWithSpace(textTransform);
-                                        } else if (coloration.indexOf('mots') > 0){
+                                        } else if (coloration.indexOf('mots') > 0) {
                                             textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
-                                        } else if (coloration.indexOf('syllabes') > 0){
+                                        } else if (coloration.indexOf('syllabes') > 0) {
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
-                                        } else if(coloration.indexOf('[Maj. - \'.\']') > 0) {
+                                        } else if (coloration.indexOf('[Maj. - \'.\']') > 0) {
                                             textTransform = UtilsService.splitOnSentenceWithPoint(textTransform);
                                         } else if (coloration.indexOf('[Maj. - \',\' - \'.\']') > 0) {
                                             textTransform = UtilsService.splitOnSentenceWithComma(textTransform);
@@ -138,14 +142,9 @@ angular.module('cnedApp').directive('profileColoration',
 
                                         child.innerHTML = textTransform;
 
-                                       if (coloration === 'Colorer les lignes RBV'
-                                            || coloration === 'Colorer les lignes RVJ'
-                                            || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 3)
-                                            || coloration === 'Surligner les lignes RBV'
-                                            || coloration === 'Surligner les lignes RVJ'
-                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 3)) {
+                                        if ( coloration.indexOf('lignes') > 0) {
 
-                                            var res = UtilsService.colorLines(child, 3, prevTop, line);
+                                            var res = UtilsService.colorLines(child, profileTag.colorsList.length, prevTop, line);
                                             line = res.line;
                                             prevTop = res.prevTop;
 
@@ -153,24 +152,10 @@ angular.module('cnedApp').directive('profileColoration',
                                             var nextElement = child.nextSibling;
                                             parent.removeChild(child);
                                             parent.insertBefore(res.documentFragment, nextElement);
-                                        } else if (
-                                            coloration === 'Colorer les lignes RBVJ'
-                                            || (coloration === 'Colorer les lignes Personnaliser' && profileTag.colorsList.length === 4)
-                                            || coloration === 'Surligner les lignes RBVJ'
-                                            || (coloration === 'Surligner les lignes Personnaliser' && profileTag.colorsList.length === 4)) {
 
-                                            var res = UtilsService.colorLines(child, 4, prevTop, line);
-
-                                            line = res.line;
-                                            prevTop = res.prevTop;
-
-                                            var parent = child.parentNode;
-                                            var nextElement = child.nextSibling;
-                                            parent.removeChild(child);
-                                            parent.insertBefore(res.documentFragment, nextElement);
                                         }
 
-                                        if(prevTop > child.offsetTop){
+                                        if (prevTop > child.offsetTop) {
                                             prevTop = child.offsetTop;
                                         }
 
