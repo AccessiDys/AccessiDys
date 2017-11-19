@@ -48,6 +48,7 @@ module.exports = function (app, passport) {
     app.post('/generateSign', images.generateSign);
 
     app.get('/file/download', images.downloadFIle);
+    app.post('/one-drive/download-link', images.getOneDriveDownloadLink);
 
     //test for manipulating emailSend
     var helpers = require('../api/helpers/helpers');

@@ -161,22 +161,50 @@ function isUrl(s) {
 var util = require('util');
 var request = require('request');
 
+
+exports.getOneDriveDownloadLink = function (req, responce) {
+    var body = req.body;
+
+    if(body.url){
+        console.log('body.url', body.url);
+        request({url: body.url, followRedirect: false}, function (error, response, body) {
+            console.log('response.headers.location', response.headers.location);
+            if (!error) {
+                var redirect = response.headers.location;
+
+                if (redirect) {
+                    redirect = redirect.replace('redir', 'download');
+                    responce.send(200, redirect);
+                } else {
+                    responce.send(error, 500);
+                }
+
+            } else {
+                responce.send(error, 500);
+            }
+        });
+    } else {
+        responce.send(error, 400);
+    }
+
+
+};
+
+
 exports.htmlPage = function (req, responce) {
     var donneRecu = req.body;
     var url = donneRecu['lien']; // jshint ignore:line
-    var protocole;
-    if (url.indexOf('https') > -1) {
-        protocole = https;
-    } else {
-        protocole = http;
-    }
 
     request(url, function (error, response, body) {
+        console.log(response.headers.location);
         console.log('body:', body); // Print the HTML for the Google homepage.
 
-        if (!error) {
 
-            var charsetDetected = jschardet.detect(body);
+
+        if (!error) {
+            var data = decodeURIComponent(body);
+
+            var charsetDetected = jschardet.detect(data);
             var enc;
             if (charsetDetected && charsetDetected.encoding) {
                 enc = charsetDetected.encoding.toLowerCase();
@@ -185,10 +213,10 @@ exports.htmlPage = function (req, responce) {
             }
             var charset = response.headers['content-type'];
             if (charset.indexOf('UTF-8') <= -1 && charset.indexOf('utf-8') <= -1 && charset.indexOf('utf8') <= -1) {
-                var html = iconv.decode(body, enc);
+                var html = iconv.decode(data, enc);
                 responce.send(200, html);
             } else {
-                responce.send(200, body.toString('utf-8'));
+                responce.send(200, data.toString('utf-8'));
             }
 
         } else {
@@ -201,13 +229,12 @@ exports.htmlPage = function (req, responce) {
 exports.downloadFIle = function (req, res) {
     var query = req.query;
 
-    if(query.url){
+    if (query.url) {
         request(query.url, function (error, response, body) {
-            console.log('body:', body); // Print the HTML for the Google homepage.
 
             if (!error) {
 
-                res.send(200, body);
+                res.send(200, decodeURIComponent(body));
 
             } else {
                 res.send(error, 400);
@@ -216,7 +243,6 @@ exports.downloadFIle = function (req, res) {
     } else {
         res.send(error, 400);
     }
-
 
 
 };

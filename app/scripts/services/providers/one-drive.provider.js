@@ -295,9 +295,28 @@ angular.module('cnedApp').factory('OneDriveProvider',
                     'Content-Type': 'application/json'
                 }
             }).then(function (data) {
-                deferred.resolve({
-                    url: data.data && data.data.link ? data.data.link.webUrl: ''
+
+                $http({
+                    method: 'POST',
+                    url: '/one-drive/download-link',
+                    data: {
+                        url: data.data && data.data.link ? data.data.link.webUrl: ''
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token,
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function (res) {
+
+                    console.log('downloadLink', res.data);
+                    deferred.resolve({
+                        url: res.data
+                    });
+                }, function (err) {
+                    deferred.reject(err);
                 });
+
+
             }, function (err) {
                 deferred.reject(err);
             });
