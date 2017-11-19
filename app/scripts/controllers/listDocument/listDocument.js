@@ -341,6 +341,7 @@ angular.module('cnedApp')
                                 $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
                                 fileIndex = 0;
                                 calculateIndex($scope.listDocument);
+                                $scope.folderCount++;
 
 
                                 CacheProvider.setItem(true, 'initDefaultFolder');

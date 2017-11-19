@@ -173,7 +173,8 @@ exports.htmlPage = function (req, responce) {
 
     protocole.get(url, function (res) {
 
-        console.time('get html');
+        console.log('res', res);
+
 
         var chunks = [];
         res.on('data', function (chunk) {
@@ -181,7 +182,7 @@ exports.htmlPage = function (req, responce) {
         });
 
         res.on('end', function () {
-            console.timeEnd('get html');
+            console.log('chunks', chunks);
             var jsfile = new Buffer.concat(chunks);
             helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
             if (jsfile.length > 0) {

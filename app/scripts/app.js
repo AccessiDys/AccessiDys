@@ -166,10 +166,10 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
         })
 
         .state('app.my-backup', {
-            url: '/ma-sauvegarde.html?auth',
+            url: '/ma-sauvegarde.html?auth&logout',
             templateUrl: 'views/backup/my-backup.html',
             controller: 'MyBackupCtrl',
-            pageTrack: '/overview.html',  // angular-google-analytics extension,
+            pageTrack: '/ma-sauvegarde.html',  // angular-google-analytics extension,
             params: {
                 prevState: null,
                 file: null
@@ -263,6 +263,43 @@ angular.module('cnedApp').config(function ($provide) {
             });
             // add the button to the default toolbar definition
             taOptions.toolbar[1].push('pageBreak');
+
+
+            taRegisterTool('uploadImage', {
+                iconclass: 'fa fa-picture-o',
+                tooltiptext: 'Insérer une image',
+                onElementSelect: {
+                    element: 'img',
+                    action: taToolFunctions.imgOnSelectAction
+                },
+                action: function () {
+                    var $editor = this.$editor;
+
+                    // Create a virtual input element.
+                    var input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = "image/*";
+
+                    input.onchange = function () {
+                        var reader = new FileReader();
+
+                        console.log('this.files', this.files);
+
+                        if (this.files && this.files[0]) {
+                            reader.onload = function (e) {
+                                $editor().wrapSelection('insertHtml', '<img src=' + e.target.result + '>', true);
+                            };
+
+                            reader.readAsDataURL(this.files[0]);
+                        }
+                    };
+
+                    // Click on a virtual input element.
+                    input.click();
+                }
+            });
+
+            taOptions.toolbar[1].push('uploadImage');
 
             taTranslations.insertLink.dialogPrompt = 'Veuillez insérer votre url';
             taTranslations.insertLink.tooltip = 'Insérer / éditer un lien';

@@ -111,12 +111,12 @@ cnedApp.factory('serviceCheck',
                 var serviceName = '/htmlPage';
 
                 /*$http.get(htmlUrl).then(function(res){
-                    console.log('res.data');
-                }, function(error){
-                    console.log('error');
-                });*/
+                 console.log('res.data');
+                 }, function(error){
+                 console.log('error');
+                 });*/
 
-                $http.post(configuration.BASE_URL  + serviceName, data)
+                $http.post(configuration.BASE_URL + serviceName, data)
                     .success(function (data) {
                         if (data && data.length > 0) {
                             finalData.documentHtml = data;
@@ -139,7 +139,7 @@ cnedApp.factory('serviceCheck',
                 };
                 var localFilePreview = {};
 
-                $http.post(configuration.BASE_URL  + '/generateSign', loacalSign)
+                $http.post(configuration.BASE_URL + '/generateSign', loacalSign)
                     .success(function (loacalSign) {
                         console.log('loacalSign --> ', loacalSign);
                         if (loacalSign && loacalSign.sign) {
@@ -158,15 +158,15 @@ cnedApp.factory('serviceCheck',
                 return /[^a-zA-Z0-9 ]+/g.test(str); // jshint ignore:line
             },
             isOnline: function () {
-                return $http.head(configuration.BASE_URL  + '/?t=' + Date.now());
+                return $http.head(configuration.BASE_URL + '/?t=' + Date.now());
             }
         };
     }
 );
 
 // HTTP interceptor
-cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
-    function ($q, _, $rootScope) {
+cnedApp.factory('app.httpinterceptor',
+    function ($q, _) {
         return {
             // optional method
             'request': function (config) {
@@ -229,11 +229,7 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                 if (config.method == 'GET') { // jshint ignore:line
                     if (!_.contains(exeptionUrl, config.url)) {
                         var separator = config.url.indexOf('?') === -1 ? '?' : '&';
-                        if ($rootScope.testEnv) {
-                            config.url = config.url;
-                        } else {
-                            config.url = config.url + separator + 't=' + Date.now();
-                        }
+                        config.url = config.url + separator + 't=' + Date.now();
                     }
                 }
                 return config || $q.when(config);
@@ -243,10 +239,18 @@ cnedApp.factory('app.httpinterceptor', ['$q', '_', '$rootScope',
                 return $q.reject(rejection);
             },
             // optional method
+            'responseError': function (rejection) {
+                if (rejection.status === 401) {
+                    window.location = '/#/ma-sauvegarde.html?logout';
+                }
+
+                return $q.reject(rejection);
+            },
+            // optional method
             'response': function (response) {
                 return response || $q.when(response);
             }
         };
     }
-]);
+);
 

@@ -618,14 +618,15 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
      * @method shareFile
      */
     this.shareFile = function (file) {
-        console.log(file);
         var provider = UserService.getData().provider;
-        console.log(provider);
+
         if (provider === "dropbox") {
             return DropboxProvider.shareLink(file.filepath, UserService.getData().token);
         } else if (provider === "one-drive") {
             return OneDriveProvider.shareLink(file, UserService.getData().token);
-        } else {
+        } else if (provider === "google-drive") {
+            return GoogleDriveProvider.shareLink(file, UserService.getData().token);
+        }else {
             return null;
         }
     };

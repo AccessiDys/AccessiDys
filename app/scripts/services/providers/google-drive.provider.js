@@ -97,6 +97,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                 provider: 'google-drive',
                 parent: googleFile.parents && googleFile.parents.length > 0 ? googleFile.parents[0] : null,
                 parents: googleFile.parents,
+                url: googleFile.webContentLink,
                 content: []
             };
 
@@ -242,7 +243,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                 params: {
                     q: query,
                     pageSize: 1000,
-                    fields: 'files(id, name, modifiedTime, parents, mimeType)'
+                    fields: 'files(id, name, modifiedTime, parents, mimeType, webContentLink, webViewLink)'
                 },
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
@@ -262,72 +263,28 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
             return deferred.promise;
         };
 
-        var listShareLinkService = function (path, access_token) {
+
+        var shareLinkService = function (file, access_token) {
             var deferred = $q.defer();
             $http({
                 method: 'POST',
-                url: 'https://api.dropboxapi.com/2/sharing/list_shared_links',
+                url: baseUrl + 'files/' + file.id + '/permissions',
                 data: {
-                    path: path
+                    role: 'reader',
+                    type: 'anyone'
                 },
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
                     'Content-Type': 'application/json'
                 }
-            }).success(function (data, status) {
+            }).then(function (res) {
 
-                if (data && data.links) {
-                    var link = data.links[0];
-                    link.status = status;
-                    link.url = link.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
-                    deferred.resolve(link);
-                } else {
-                    deferred.resolve(null);
-                }
-
-            }).error(function (data) {
-                deferred.reject(data);
-            });
-
-            return deferred.promise;
-        };
-        var shareLinkService = function (path, access_token) {
-            var deferred = $q.defer();
-            $http({
-                method: 'POST',
-                url: 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
-                data: {
-                    path: path,
-                    settings: {
-                        requested_visibility: 'public'
-                    }
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    'Content-Type': 'application/json'
-                }
-            }).success(function (data, status) {
-                if (data) {
-                    data.url = data.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
-                    data.status = status;
-                }
-                deferred.resolve(data);
-            }).error(function (data) {
-                if (data.error && data.error['.tag'] === 'shared_link_already_exists') {
-
-                    listShareLinkService(path, access_token).then(function (data) {
-                        deferred.resolve(data);
-                    });
-
-                } else if (data.error && data.error['.tag'] === 'email_not_verified') {
-
-                    deferred.reject({
-                        error: 'email_not_verified'
-                    });
-
-                } else {
-                    deferred.reject(data);
-                }
+                console.log('res.data', res.data);
+                deferred.resolve({
+                    url: file.url
+                })
+            }, function (err) {
+                deferred.reject(err);
 
             });
             return deferred.promise;

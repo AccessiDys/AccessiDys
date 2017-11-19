@@ -25,7 +25,8 @@
 
 'use strict';
 
-angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams, CacheProvider, UtilsService, GoogleDriveProvider, OneDriveProvider) {
+angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScope, UserService, DropboxProvider, $stateParams,
+                                                               CacheProvider, UtilsService, GoogleDriveProvider, OneDriveProvider) {
     $scope.storages = [{
         provider: 'dropbox',
         icon: 'fa-dropbox',
@@ -47,6 +48,24 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
     $scope.file = $stateParams.file;
 
     $scope.selectedStorage = {};
+
+    var logout = function (cb) {
+        UserService.logout();
+        CacheProvider.setItem(null, 'listDocument').then(function(){
+            CacheProvider.setItem(null, 'listProfile').then(function(){
+                if(cb){
+                    cb();
+                }
+            });
+        });
+    };
+
+    if($stateParams.logout && UserService.getData().provider){
+        console.log('logout');
+        logout(function(){
+            window.location.reload();
+        });
+    }
 
     /**
      * Select a storage to login
@@ -70,17 +89,14 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
             }, 'myBackupRouteData');
         }
 
-        UserService.logout();
-        CacheProvider.setItem(null, 'listDocument').then(function(){
-            CacheProvider.setItem(null, 'listProfile').then(function(){
-                if ($scope.selectedStorage.provider === 'dropbox') {
-                    DropboxProvider.auth();
-                } else if ($scope.selectedStorage.provider === 'google-drive'){
-                    GoogleDriveProvider.auth();
-                } else if ($scope.selectedStorage.provider === 'one-drive'){
-                    OneDriveProvider.auth();
-                }
-            });
+        logout(function(){
+            if ($scope.selectedStorage.provider === 'dropbox') {
+                DropboxProvider.auth();
+            } else if ($scope.selectedStorage.provider === 'google-drive'){
+                GoogleDriveProvider.auth();
+            } else if ($scope.selectedStorage.provider === 'one-drive'){
+                OneDriveProvider.auth();
+            }
         });
 
 
@@ -97,16 +113,12 @@ angular.module('cnedApp').controller('MyBackupCtrl', function ($scope, $rootScop
     $scope.logout = function () {
         UtilsService.openConfirmModal('label.logout', 'label.logout.confirm', false)
             .then(function () {
-                UserService.logout();
-                CacheProvider.setItem(null, 'listDocument').then(function(){
-                    CacheProvider.setItem(null, 'listProfile').then(function(){
-                        window.location.reload();
-                    });
+                logout(function(){
+                    window.location.reload();
                 });
-
-
-
             });
-    }
+    };
+
+
 
 });

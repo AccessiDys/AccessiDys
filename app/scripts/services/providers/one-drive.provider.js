@@ -315,19 +315,19 @@ angular.module('cnedApp').factory('OneDriveProvider',
                 method: 'POST',
                 url: apiUrl + '/me/drive/items/' + file.id + '/createLink',
                 data: {
-                    type: 'edit'
+                    type: 'view',
+                    scope: 'anonymous'
                 },
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
                     'Content-Type': 'application/json'
                 }
             }).then(function (data) {
-                console.log(data.data.link.webUrl);
-                deferred.resolve(data.data.link.webUrl);
+                deferred.resolve({
+                    url: data.data && data.data.link ? data.data.link.webUrl: ''
+                });
             }, function (err) {
-
                 deferred.reject(err);
-
             });
             return deferred.promise;
         };

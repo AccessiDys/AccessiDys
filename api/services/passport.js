@@ -104,7 +104,6 @@ module.exports = function (passport) {
             scope: 'user.read files.readwrite offline_access'
         },
         function (accessToken, refreshToken, profile, done) {
-            console.log('refreshToken', refreshToken);
 
             return done(null, {
                 email: profile._json.userPrincipalName,
