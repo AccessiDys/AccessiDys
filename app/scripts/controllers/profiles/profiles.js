@@ -476,7 +476,7 @@ angular.module('cnedApp')
                             // Modal dismiss
                         });
                 } else {
-                    fileStorageService.shareFile(profile.filepath)
+                    fileStorageService.shareFile(profile)
                         .then(function (shareLink) {
                             itemToShare.linkToShare = 'https://' + window.location.host + '/#/detailProfil?url=' + encodeURIComponent(shareLink.url);
 
@@ -788,7 +788,11 @@ angular.module('cnedApp')
                 });
             } else if ($stateParams.url) {
 
-                $http.get($stateParams.url).then(function (res) {
+                $http.get('/file/download', {
+                    params: {
+                        url: $stateParams.url
+                    }
+                }).then(function (res) {
                     $scope.detailProfil = {
                         data: res.data
                     };

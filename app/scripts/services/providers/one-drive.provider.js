@@ -280,35 +280,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
         };
 
 
-        var listShareLinkService = function (path, access_token) {
-            var deferred = $q.defer();
-            $http({
-                method: 'POST',
-                url: 'https://api.dropboxapi.com/2/sharing/list_shared_links',
-                data: {
-                    path: path
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    'Content-Type': 'application/json'
-                }
-            }).success(function (data, status) {
 
-                if (data && data.links) {
-                    var link = data.links[0];
-                    link.status = status;
-                    link.url = link.url.replace('https://www.dropbox.com', 'https://dl.dropboxusercontent.com');
-                    deferred.resolve(link);
-                } else {
-                    deferred.resolve(null);
-                }
-
-            }).error(function (data) {
-                deferred.reject(data);
-            });
-
-            return deferred.promise;
-        };
         var shareLinkService = function (file, access_token) {
             var deferred = $q.defer();
             $http({

@@ -354,6 +354,7 @@ angular.module('cnedApp').run(function ($rootScope, configuration, $timeout, $in
             if (!$rootScope.isAppOnline) {
                 $rootScope.isAppOnline = true;
             }
+
         }, function () {
             $rootScope.isAppOnline = false;
         });

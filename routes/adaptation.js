@@ -47,6 +47,8 @@ module.exports = function (app, passport) {
     app.post('/externalEpub', images.externalEpub);
     app.post('/generateSign', images.generateSign);
 
+    app.get('/file/download', images.downloadFIle);
+
     //test for manipulating emailSend
     var helpers = require('../api/helpers/helpers');
     app.post('/sendMail', helpers.sendMail);

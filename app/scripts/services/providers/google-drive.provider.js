@@ -243,7 +243,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
                 params: {
                     q: query,
                     pageSize: 1000,
-                    fields: 'files(id, name, modifiedTime, parents, mimeType, webContentLink, webViewLink)'
+                    fields: 'files(id, name, modifiedTime, parents, mimeType, webContentLink)'
                 },
                 headers: {
                     'Authorization': 'Bearer ' + access_token,

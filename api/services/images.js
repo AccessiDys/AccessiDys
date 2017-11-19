@@ -159,6 +159,7 @@ function isUrl(s) {
 
 // To put in an external file and to include later
 var util = require('util');
+var request = require('request');
 
 exports.htmlPage = function (req, responce) {
     var donneRecu = req.body;
@@ -170,51 +171,54 @@ exports.htmlPage = function (req, responce) {
         protocole = http;
     }
 
+    request(url, function (error, response, body) {
+        console.log('body:', body); // Print the HTML for the Google homepage.
 
-    protocole.get(url, function (res) {
+        if (!error) {
 
-        console.log('res', res);
-
-
-        var chunks = [];
-        res.on('data', function (chunk) {
-            chunks.push(chunk);
-        });
-
-        res.on('end', function () {
-            console.log('chunks', chunks);
-            var jsfile = new Buffer.concat(chunks);
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-            if (jsfile.length > 0) {
-                var charsetDetected = jschardet.detect(jsfile.toString());
-                var enc;
-                if (charsetDetected && charsetDetected.encoding) {
-                    enc = charsetDetected.encoding.toLowerCase();
-                } else {
-                    enc = 'UTF-8';
-                }
-                var charset = res.headers['content-type'];
-                if (charset.indexOf('UTF-8') <= -1 && charset.indexOf('utf-8') <= -1 && charset.indexOf('utf8') <= -1) {
-                    var html = iconv.decode(jsfile, enc);
-                    responce.send(200, html);
-                } else {
-                    responce.send(200, jsfile.toString('utf-8'));
-                }
+            var charsetDetected = jschardet.detect(body);
+            var enc;
+            if (charsetDetected && charsetDetected.encoding) {
+                enc = charsetDetected.encoding.toLowerCase();
             } else {
-                console.log('***************');
-                console.log(jsfile);
-                console.log(jsfile.length);
-                responce.send(500);
+                enc = 'UTF-8';
+            }
+            var charset = response.headers['content-type'];
+            if (charset.indexOf('UTF-8') <= -1 && charset.indexOf('utf-8') <= -1 && charset.indexOf('utf8') <= -1) {
+                var html = iconv.decode(body, enc);
+                responce.send(200, html);
+            } else {
+                responce.send(200, body.toString('utf-8'));
             }
 
-            res.on('error', function (exception) {
-                responce.send(exception, 500);
-            });
-
-        });
-    }).on('error', function (err) {
-        responce.send(err.message, 500);
+        } else {
+            responce.send(error, 500);
+        }
     });
+
+};
+
+exports.downloadFIle = function (req, res) {
+    var query = req.query;
+
+    if(query.url){
+        request(query.url, function (error, response, body) {
+            console.log('body:', body); // Print the HTML for the Google homepage.
+
+            if (!error) {
+
+                res.send(200, body);
+
+            } else {
+                res.send(error, 400);
+            }
+        });
+    } else {
+        res.send(error, 400);
+    }
+
+
+
 };
 
 
@@ -599,7 +603,8 @@ exports.externalEpub = function (req, responce) {
                                                 console.log('too many html files > ' + generalParams.HTML_NUMBER_LIMIT);
                                             }
                                             if (tooManyHtml) {
-                                                exec('rm -rf ' + tmpFolder, function (error, deleteResponce, stderr) {});
+                                                exec('rm -rf ' + tmpFolder, function (error, deleteResponce, stderr) {
+                                                });
                                                 responce.send(200, {
                                                     'html': [],
                                                     'img': [],
@@ -654,7 +659,8 @@ exports.externalEpub = function (req, responce) {
                                                         if (imgFound.length > 1) {
                                                             imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0);
                                                         } else {
-                                                            exec('rm -rf ' + tmpFolder, function (error, deleteResponce, stderr) {});
+                                                            exec('rm -rf ' + tmpFolder, function (error, deleteResponce, stderr) {
+                                                            });
                                                             responce.send(200, {
                                                                 'html': htmlArray,
                                                                 'img': []
