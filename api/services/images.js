@@ -195,6 +195,14 @@ exports.htmlPage = function (req, responce) {
     var donneRecu = req.body;
     var url = donneRecu['lien']; // jshint ignore:line
 
+    console.log('lien', url);
+
+    try {
+        url = decodeURIComponent(url);
+    }catch(e){
+        console.log('lien', url);
+    }
+
     request(url, function (error, response, body) {
 
         if (!error) {
