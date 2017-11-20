@@ -410,7 +410,7 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
          * @returns {DocumentFragment}
          */
         colorLines: function (ref, maxLines, prevTop, line) {
-            var isLink = ref.tagName === 'A';
+            //var isLink = ref.tagName === 'A';
             var documentFragment = document.createDocumentFragment();
             documentFragment.appendChild(ref.cloneNode(true));
             documentFragment.childNodes[0].innerHTML = '';
@@ -440,9 +440,9 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                         clone.className = 'line' + line;
                         clone.setAttribute("prevtop", prevTop);
                         clone.setAttribute("currenttop", top);
-                        if(isLink){
+                        /*if(isLink){
                             clone.setAttribute("style","text-decoration:underline;cursor:pointer");
-                        }
+                        }*/
 
                     }
                 }
