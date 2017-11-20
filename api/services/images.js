@@ -165,7 +165,7 @@ var request = require('request');
 exports.getOneDriveDownloadLink = function (req, responce) {
     var body = req.body;
 
-    if(body.url){
+    if (body.url) {
         console.log('body.url', body.url);
         request({url: body.url, followRedirect: false}, function (error, response, body) {
             console.log('response.headers.location', response.headers.location);
@@ -196,13 +196,16 @@ exports.htmlPage = function (req, responce) {
     var url = donneRecu['lien']; // jshint ignore:line
 
     request(url, function (error, response, body) {
-        console.log(response.headers.location);
-        console.log('body:', body); // Print the HTML for the Google homepage.
-
-
 
         if (!error) {
-            var data = decodeURIComponent(body);
+            var data = null;
+
+            try {
+                data = decodeURIComponent(body);
+
+            } catch (e) {
+                data = body;
+            }
 
             var charsetDetected = jschardet.detect(data);
             var enc;
@@ -211,8 +214,11 @@ exports.htmlPage = function (req, responce) {
             } else {
                 enc = 'UTF-8';
             }
+            console.log('charset');
             var charset = response.headers['content-type'];
             if (charset.indexOf('UTF-8') <= -1 && charset.indexOf('utf-8') <= -1 && charset.indexOf('utf8') <= -1) {
+
+                console.log('decode');
                 var html = iconv.decode(data, enc);
                 responce.send(200, html);
             } else {
