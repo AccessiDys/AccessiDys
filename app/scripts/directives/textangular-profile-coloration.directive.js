@@ -57,6 +57,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                             return $element[0].innerHTML.length;
                         }, _.debounce(function (newValue, oldValue) {
                             if (newValue !== oldValue) {
+                                //console.log(' html watcher newValue = ' + newValue + ' - oldValue = ' + oldValue, $element[0].innerHTML);
                                 generateColoration($element[0]);
                             }
                         }, 200));
@@ -138,6 +139,32 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             }
                                         }
 
+
+
+
+                                        // Handle links
+
+                                        /*var linkPattern = /<a (href=".*?")/gi;
+                                        var linkResult = textTransform.match(linkPattern);
+                                        var linkList = [];
+
+                                        if (linkResult && linkResult.length > 0) {
+                                            for (var v = 0; v < linkResult.length; v++) {
+                                                var marker = '%%L' + v + '%%';
+
+                                                linkList.push({
+                                                    marker: marker,
+                                                    link: linkResult[v]
+                                                });
+
+                                                textTransform = textTransform.replace(linkResult[v], marker);
+                                            }
+                                        }*/
+
+                                        console.log('avant', textTransform);
+                                        //textTransform = textTransform.replace(/(target="")>/gi, '');
+                                        console.log('textTransform', textTransform);
+
                                         // Split Text
                                         if (coloration.indexOf('lignes') > 0) /* === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
@@ -173,6 +200,12 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                         for (var v = 0; v < imgList.length; v++) {
                                             textTransform = textTransform.replace(new RegExp(imgList[v].marker, 'gi'), imgList[v].img);
                                         }
+
+                                        // Restore links
+                                        /*for (var v = 0; v < linkList.length; v++) {
+                                            textTransform = textTransform.replace(new RegExp(linkList[v].marker, 'gi'), linkList[v].link);
+                                        }*/
+
 
                                         // Restore rangy cursor
                                         for (var v = 0; v < rangyCursors.length; v++) {
@@ -218,7 +251,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                         }, 110);
 
 
-                        console.timeEnd('coloration');
                     }, 200);
 
 

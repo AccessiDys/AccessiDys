@@ -67,7 +67,7 @@ cnedApp.directive('vocalSynthesis',
                  */
                 function speak(e) {
 
-                    unwrapSelectedText();
+                    //unwrapSelectedText();
 
                     if (!scope.isEnableNoteAdd) {
                         $log.debug('$scope.speak');
@@ -111,13 +111,13 @@ cnedApp.directive('vocalSynthesis',
                                         speed: vocalSettings.rate
                                     });
 
-                                    wrapSelectedText(text);
+                                    //wrapSelectedText(text);
 
                                     $compile(elm.contents())(scope);
 
                                     artyom.say(text, {
                                         onEnd: function () {
-                                            unwrapSelectedText();
+                                            //unwrapSelectedText();
                                         }
                                     });
 

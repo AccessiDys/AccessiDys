@@ -85,6 +85,10 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += 'color: #4BD906;';
                                     profileStyle += '}';
 
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
+                                    profileStyle += '}';
+
                                     break;
                                 case 'Colorer les lignes RVJ':
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
@@ -97,6 +101,10 @@ angular.module('cnedApp').directive('profileStyle',
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line3 {';
                                     profileStyle += 'color: #ECE20F;';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
                                     profileStyle += '}';
 
                                     break;
@@ -115,6 +123,10 @@ angular.module('cnedApp').directive('profileStyle',
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line4 {';
                                     profileStyle += 'color: #ECE20F;';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
                                     profileStyle += '}';
                                     break;
 
@@ -136,6 +148,10 @@ angular.module('cnedApp').directive('profileStyle',
                                         profileStyle += ('color: ' + profile.profileTags[i].colorsList[3] + ';');
                                         profileStyle += '}';
                                     }
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
+                                    profileStyle += '}';
                                     break;
 
 
@@ -153,6 +169,10 @@ angular.module('cnedApp').directive('profileStyle',
                                 profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(3n) {';
                                 profileStyle += 'color: #4BD906;';
                                 profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
+                                    profileStyle += '}';
                                 break;
 
                                 case 'Colorer les syllabes RBV':
@@ -194,6 +214,10 @@ angular.module('cnedApp').directive('profileStyle',
                                         profileStyle += '}';
                                     }
 
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
+                                    profileStyle += '}';
+
                                     break;
 
                                 case 'Colorer les syllabes':
@@ -208,6 +232,10 @@ angular.module('cnedApp').directive('profileStyle',
 
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(3n) {';
                                     profileStyle += 'color: #4BD906;';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
                                     profileStyle += '}';
 
 
@@ -228,6 +256,10 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' span:nth-child(3n) {';
                                     profileStyle += 'color: #000;';
                                     profileStyle += 'background-color: #04ffff;';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
                                     profileStyle += '}';
 
 
@@ -275,6 +307,10 @@ angular.module('cnedApp').directive('profileStyle',
                                         profileStyle += '}';
                                     }
 
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
+                                    profileStyle += '}';
+
                                     break;
 
                                 case 'Surligner les lignes RBV':
@@ -293,6 +329,10 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += 'background-color: #4BD906;';
                                     profileStyle += '}';
 
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
+                                    profileStyle += '}';
+
                                     break;
                                 case 'Surligner les lignes RVJ':
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line1 {';
@@ -308,6 +348,10 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line3 {';
                                     profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #ECE20F;';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
                                     profileStyle += '}';
 
                                     break;
@@ -330,6 +374,10 @@ angular.module('cnedApp').directive('profileStyle',
                                     profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' .line4 {';
                                     profileStyle += 'color: #000 !important;';
                                     profileStyle += 'background-color: #ECE20F;';
+                                    profileStyle += '}';
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
                                     profileStyle += '}';
 
                                     break;
@@ -356,6 +404,10 @@ angular.module('cnedApp').directive('profileStyle',
                                         profileStyle += 'background-color: ' + profile.profileTags[i].colorsList[3] + ';';
                                         profileStyle += '}';
                                     }
+
+                                    profileStyle += className + ' ' + profile.profileTags[i].tagDetail.balise + ' a span {';
+                                    profileStyle += 'text-decoration: underline;';
+                                    profileStyle += '}';
 
                                     break;
 
