@@ -239,6 +239,7 @@ angular.module('cnedApp')
 
                         if (tagEditParams.isApplyAll) {
 
+
                             for (var i = 0; i < tagEditParams.profile.data.profileTags.length; i++) {
                                 if (i !== params.index) {
                                     tagEditParams.profile.data.profileTags[i].police = tagEditParams.profile.data.profileTags[params.index].police;
@@ -250,9 +251,12 @@ angular.module('cnedApp')
                                     tagEditParams.profile.data.profileTags[i].coloration = tagEditParams.profile.data.profileTags[params.index].coloration;
                                     tagEditParams.profile.data.profileTags[i].colorationType = tagEditParams.profile.data.profileTags[params.index].colorationType;
                                     tagEditParams.profile.data.profileTags[i].colors = tagEditParams.profile.data.profileTags[params.index].colors;
+                                    tagEditParams.profile.data.profileTags[i].colorsList = tagEditParams.profile.data.profileTags[params.index].colorsList;
+                                    tagEditParams.profile.data.profileTags[i].souffleType = tagEditParams.profile.data.profileTags[params.index].souffleType;
                                 }
                             }
                         }
+
 
                         $scope.openProfileModal(params.template, tagEditParams.profile);
                     }, function () {
@@ -285,7 +289,8 @@ angular.module('cnedApp')
 
                     if (params.template === 'update') {
                         for (var i = 0; i < $rootScope.profiles.length; i++) {
-                            if ((params.profile.data._id && $rootScope.profiles[i].data._id === params.profile.data._id) || (params.oldProfile.filename && $rootScope.profiles[i].filename === params.oldProfile.filename)) {
+                            if ((params.profile.data._id && $rootScope.profiles[i].data._id === params.profile.data._id)
+                                || (params.oldProfile.filename && $rootScope.profiles[i].filename === params.oldProfile.filename)) {
                                 $rootScope.profiles[i] = params.profile;
 
                                 if ((params.profile.data._id && $rootScope.currentProfile.data._id === params.profile.data._id) || (params.oldProfile.filename && $rootScope.currentProfile.filename === params.oldProfile.filename)) {
@@ -297,6 +302,15 @@ angular.module('cnedApp')
                     } else {
                         $rootScope.profiles.push(params.profile);
                     }
+
+                    $timeout(function () {
+                        if ($scope.isProfileOverviewHide) {
+                            $scope.hideProfilesOverview();
+                        } else {
+                            $scope.showProfilesOverview();
+                        }
+                    }, 0);
+
 
                     ToasterService.showToaster('#profile-success-toaster', 'profile.message.save.ok');
 
@@ -396,10 +410,18 @@ angular.module('cnedApp')
                 .then(function () {
                     LoaderService.showLoader('profile.message.info.delete.inprogress', false);
 
+
                     profilsService.deleteProfil(profile)
                         .then(function () {
+
+
                             for (var i = 0; i < $rootScope.profiles.length; i++) {
-                                if ((profile.data._id && $rootScope.profiles[i].data._id === profile.data._id) || ( profile.filepath && $rootScope.profiles[i].filepath === profile.filepath )) {
+
+
+                                if ((profile.data._id && $rootScope.profiles[i].data._id === profile.data._id)
+                                    || ( profile.filepath && $rootScope.profiles[i].filepath === profile.filepath )
+                                    || ( profile.filename && $rootScope.profiles[i].filename === profile.filename )) {
+
                                     $rootScope.profiles.splice(i, 1);
                                     break;
                                 }
@@ -448,7 +470,7 @@ angular.module('cnedApp')
                             // Modal dismiss
                         });
                 } else {
-                    fileStorageService.shareFile(profile.filepath)
+                    fileStorageService.shareFile(profile)
                         .then(function (shareLink) {
                             itemToShare.linkToShare = 'https://' + window.location.host + '/#/detailProfil?url=' + encodeURIComponent(shareLink.url);
 
@@ -573,7 +595,7 @@ angular.module('cnedApp')
                 content: '<span> ' + fullName + ' vient d\'utiliser Accessidys pour dupliquer votre profil : ' + $scope.oldProfil.data.nom + '. </span>',
                 subject: fullName + ' a dupliqué votre profil'
             };
-            $http.post(configuration.BASE_URL  + '/sendEmail', sendVar)
+            $http.post(configuration.BASE_URL + '/sendEmail', sendVar)
                 .success(function () {
                 });
 
@@ -760,7 +782,11 @@ angular.module('cnedApp')
                 });
             } else if ($stateParams.url) {
 
-                $http.get($stateParams.url).then(function (res) {
+                $http.get('/file/download', {
+                    params: {
+                        url: $stateParams.url
+                    }
+                }).then(function (res) {
                     $scope.detailProfil = {
                         data: res.data
                     };
@@ -862,7 +888,7 @@ angular.module('cnedApp')
                 filename: null,
                 filepath: null,
                 data: null,
-                showOverview: true
+                showOverview: !$scope.isProfileOverviewHide
             };
 
             if (profile && profile.data) {
@@ -891,11 +917,9 @@ angular.module('cnedApp')
 
         $scope.showProfilesOverview = function () {
 
-            console.log('show');
-
-            for (var i = 0; i < $scope.profiles.length; i++) {
-                $scope.profiles[i].showOverview = true;
-            }
+            _.forEach($rootScope.profiles, function (profile) {
+                profile.showOverview = true;
+            });
 
             $scope.isProfileOverviewHide = false;
 
@@ -903,11 +927,10 @@ angular.module('cnedApp')
 
         $scope.hideProfilesOverview = function () {
 
-            console.log('hide');
+            _.forEach($rootScope.profiles, function (profile) {
+                profile.showOverview = false;
+            });
 
-            for (var i = 0; i < $scope.profiles.length; i++) {
-                $scope.profiles[i].showOverview = false;
-            }
 
             $scope.isProfileOverviewHide = true;
         };

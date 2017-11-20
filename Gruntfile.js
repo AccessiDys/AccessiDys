@@ -171,7 +171,7 @@ module.exports = function (grunt) {
             ], getBowerRessourcesList()),
             // verbose defaults to false, but for the purposes of this demo, log more.
             verbose: false,
-            stripPrefix: rootDir + '/',
+            stripPrefix: rootDir + '/'
         };
         swPrecache.write(path.join(rootDir, 'service-worker.js'), config, callback);
     }

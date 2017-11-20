@@ -355,6 +355,9 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
                         tmpText += formattedText[i] + ' </span>';
                     }
                 }
+                if(formattedText.length % 2 === 1){
+                    tmpText += '</span>';
+                }
             }
 
             return tmpText;
@@ -370,7 +373,6 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
 
             if (formattedText) {
                 formattedText = text.replace(/&nbsp;/gi, ' ');
-                //formattedText = formattedText.replace(methods.sentenceRegex, '<span>$1 </span>');
                 formattedText = formattedText.split(methods.sentencePointRegex);
                 for(var j = 0; j < formattedText.length; j++) {
                     formattedText[j] = formattedText[j].split(';');

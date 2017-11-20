@@ -79,9 +79,16 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
                 tags: function (tagsService) {
                     return tagsService.getTags();
                 },
-                userData: function (UserService, $log) {
+                userData: function (UserService, $log, fileStorageService) {
                     $log.debug('Init user data');
-                    return UserService.init();
+                    return UserService.init().then(function (userData) {
+
+                        return fileStorageService.synchronizeFiles().then(function () {
+                            return userData;
+                        });
+
+
+                    });
                 }
             }
         })
@@ -166,10 +173,10 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
         })
 
         .state('app.my-backup', {
-            url: '/ma-sauvegarde.html?auth',
+            url: '/ma-sauvegarde.html?auth&logout',
             templateUrl: 'views/backup/my-backup.html',
             controller: 'MyBackupCtrl',
-            pageTrack: '/overview.html',  // angular-google-analytics extension,
+            pageTrack: '/ma-sauvegarde.html',  // angular-google-analytics extension,
             params: {
                 prevState: null,
                 file: null
@@ -222,7 +229,7 @@ cnedApp.config(function ($stateProvider, $urlRouterProvider, $sceDelegateProvide
         });
 });
 
-angular.module('cnedApp').run(function (gettextCatalog) {
+angular.module('cnedApp').run(function (gettextCatalog, $rootScope) {
 
     gettextCatalog.currentLanguage = 'fr_FR';
     localStorage.setItem('langueDefault', JSON.stringify({
@@ -230,6 +237,12 @@ angular.module('cnedApp').run(function (gettextCatalog) {
         shade: 'fr_FR'
     }));
     gettextCatalog.debug = true;
+
+    window.onresize = function () {
+        $rootScope.$emit('window-resize');
+    };
+
+
 });
 
 //Secure the links
@@ -263,6 +276,43 @@ angular.module('cnedApp').config(function ($provide) {
             });
             // add the button to the default toolbar definition
             taOptions.toolbar[1].push('pageBreak');
+
+
+            taRegisterTool('uploadImage', {
+                iconclass: 'fa fa-picture-o',
+                tooltiptext: 'Insérer une image',
+                onElementSelect: {
+                    element: 'img',
+                    action: taToolFunctions.imgOnSelectAction
+                },
+                action: function () {
+                    var $editor = this.$editor;
+
+                    // Create a virtual input element.
+                    var input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = "image/*";
+
+                    input.onchange = function () {
+                        var reader = new FileReader();
+
+                        console.log('this.files', this.files);
+
+                        if (this.files && this.files[0]) {
+                            reader.onload = function (e) {
+                                $editor().wrapSelection('insertHtml', '<img src=' + e.target.result + '>', true);
+                            };
+
+                            reader.readAsDataURL(this.files[0]);
+                        }
+                    };
+
+                    // Click on a virtual input element.
+                    input.click();
+                }
+            });
+
+            taOptions.toolbar[1].push('uploadImage');
 
             taTranslations.insertLink.dialogPrompt = 'Veuillez insérer votre url';
             taTranslations.insertLink.tooltip = 'Insérer / éditer un lien';
@@ -317,6 +367,7 @@ angular.module('cnedApp').run(function ($rootScope, configuration, $timeout, $in
             if (!$rootScope.isAppOnline) {
                 $rootScope.isAppOnline = true;
             }
+
         }, function () {
             $rootScope.isAppOnline = false;
         });

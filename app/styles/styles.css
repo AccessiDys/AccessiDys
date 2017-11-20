@@ -151,11 +151,6 @@
     text-transform: uppercase;
 }
 
-.browsers li + li {
-    background-color: #ebebeb;
-    border: 1px solid #282828;
-    margin-left: 7px;
-}
 
 .content {
     max-width: 100% !important;

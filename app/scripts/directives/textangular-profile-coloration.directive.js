@@ -38,8 +38,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                 var htmlWatcher = null;
                 var windowScroll = 0;
-                var prevScroll = -1;
-                var windowWidth = window.innerWidth;
+                var windowHeight = window.innerHeight;
 
                 var tags = {};
 
@@ -58,7 +57,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                             return $element[0].innerHTML.length;
                         }, _.debounce(function (newValue, oldValue) {
                             if (newValue !== oldValue) {
-                                console.log(' html watcher newValue = ' + newValue + ' - oldValue = ' + oldValue, $element[0].innerHTML);
                                 generateColoration($element[0]);
                             }
                         }, 200));
@@ -73,7 +71,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                     $timeout(function () {
 
-                        console.time('coloration');
 
                         if ($rootScope.currentProfile) {
 
@@ -89,7 +86,8 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                 var clone = child.cloneNode(true);
 
                                 // Adapt child which are displayed on the screen
-                                if (child.offsetTop > windowScroll && child.offsetTop < (windowScroll + windowWidth)) {
+                                windowScroll = window.pageYOffset;
+                                if (child.offsetTop > windowScroll && child.offsetTop < (windowScroll + windowHeight)) {
 
                                     if (child.tagName !== prevTag) {
                                         line = 0;
@@ -141,29 +139,33 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                         }
 
                                         // Split Text
-                                        if (coloration === 'Colorer les lignes RBV'
+                                        if (coloration.indexOf('lignes') > 0) /* === 'Colorer les lignes RBV'
                                             || coloration === 'Colorer les lignes RVJ'
                                             || coloration === 'Surligner les lignes RVJ'
                                             || coloration === 'Surligner les lignes RBV'
                                             || coloration === 'Colorer les lignes RBVJ'
-                                            || coloration === 'Surligner les lignes RBVJ') {
-
+                                            || coloration === 'Surligner les lignes RBVJ') */{
                                             textTransform = UtilsService.splitOnWordWithSpace(textTransform);
                                             textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
-
-                                        } else if (coloration === 'Colorer les mots'
-                                            || coloration === 'Surligner les mots') {
-
+                                        } else if ( coloration.indexOf('mots') > 0) {
                                             textTransform = UtilsService.splitOnWordWithOutSpace(textTransform);
                                             textTransform = textTransform.replace(/\s\s<span>%%NB%%<\/span>\s\s/gi, '&nbsp;');
-
-                                        } else if (coloration === 'Colorer les syllabes') {
-
+                                        } else if (coloration.indexOf('syllabes') > 0) {
                                             textTransform = UtilsService.splitOnSyllable(textTransform);
+                                            textTransform = textTransform.replace(/\s<span>%%NB%%<\/span>\s/gi, '&nbsp;');
+                                        } else if(coloration.indexOf('[Maj. - \'.\']') > 0) {
+                                            textTransform = UtilsService.splitOnSentenceWithPoint(textTransform);
+                                            textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
+                                        } else if (coloration.indexOf('[Maj. - \',\' - \'.\']') > 0) {
+                                            textTransform = UtilsService.splitOnSentenceWithComma(textTransform);
+                                            textTransform = textTransform.replace(/\s<span>%%NB%%\s<\/span>\s/gi, '&nbsp;');
+                                        } else if (coloration.indexOf('[Maj. - \';\' - \'.\']') > 0) {
+                                            textTransform = UtilsService.splitOnSentenceWithSemicolon(textTransform);
                                             textTransform = textTransform.replace(/\s<span>%%NB%%<\/span>\s/gi, '&nbsp;');
                                         } else {
                                             textTransform = textTransform.replace(/\s%%NB%%\s/gi, '&nbsp;');
                                         }
+
 
                                         textTransform = textTransform.replace(/%%NB%%/gi, ' ');
 
@@ -181,12 +183,9 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                         child.innerHTML = textTransform;
 
 
-                                        if (coloration === 'Colorer les lignes RBV'
-                                            || coloration === 'Colorer les lignes RVJ'
-                                            || coloration === 'Surligner les lignes RBV'
-                                            || coloration === 'Surligner les lignes RVJ') {
+                                        if ( coloration.indexOf('lignes') > 0) {
 
-                                            var res = UtilsService.colorLines(child, 3, prevTop, line);
+                                            var res = UtilsService.colorLines(child, profileTag.colorsList.length, prevTop, line);
                                             line = res.line;
                                             prevTop = res.prevTop;
 
@@ -195,18 +194,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             parent.removeChild(child);
                                             parent.insertBefore(res.documentFragment, nextElement);
 
-                                        } else if (
-                                            coloration === 'Colorer les lignes RBVJ'
-                                            || coloration === 'Surligner les lignes RBVJ') {
-
-                                            var res = UtilsService.colorLines(child, 4, prevTop, line);
-                                            line = res.line;
-                                            prevTop = res.prevTop;
-
-                                            var parent = child.parentNode;
-                                            var nextElement = child.nextSibling;
-                                            parent.removeChild(child);
-                                            parent.insertBefore(res.documentFragment, nextElement);
                                         }
 
                                         if (prevTop > child.offsetTop) {
@@ -239,7 +226,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
 
                 $element.bind('keyup', function (e) {
 
-                    console.log(e.currentTarget);
+                    //console.log(e.currentTarget);
                     //generateColoration($element[0]);
                 });
 

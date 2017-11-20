@@ -26,7 +26,16 @@
 'use strict';
 
 angular.module('cnedApp').factory('DropboxProvider',
-    function ($http, $q, $log, configuration) {
+    function ($http, $q, $log, configuration, md5) {
+
+
+        var generateFilepath = function (fileName, extension) {
+            var now = new Date();
+            var tmpDate = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+            var hash = md5.createHash(fileName);
+
+            return '/' + tmpDate + '_' + encodeURIComponent(fileName) + '_' + hash + extension;
+        };
 
         /**
          * Converts the format of dropbox files  in an internal file format
@@ -36,7 +45,6 @@ angular.module('cnedApp').factory('DropboxProvider',
          * @method transformDropboxFilesToStorageFiles
          */
         var transformDropboxFilesToStorageFiles = function (dropboxFiles, type) {
-            console.log('type', type);
             var arbo = [];
             for (var i = 0; i < dropboxFiles.matches.length; i++) { //excludes profils json files.
                 if (type === 'document' ) {
@@ -75,9 +83,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                     }
                 }
             }
-            for (var a = 0; a < arbo.length; a++) {
-                arbo[a].show = true;
-            }
+
             return arbo;
         };
 
@@ -98,7 +104,7 @@ angular.module('cnedApp').factory('DropboxProvider',
                 filename = filepath.substring(filenameStartIndex, filenameEndIndex);
                 file = {
                     filepath: filepath,
-                    filename: filename,
+                    filename: decodeURIComponent(filename),
                     dateModification: dateModification || '',
                     type: 'file',
                     show: false,
@@ -128,9 +134,9 @@ angular.module('cnedApp').factory('DropboxProvider',
                 url: 'https://content.dropboxapi.com/2/files/download',
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
-                    'Dropbox-API-Arg': decodeURIComponent(JSON.stringify({
+                    'Dropbox-API-Arg': JSON.stringify({
                         'path': path
-                    }))
+                    })
                 }
             }).success(function (data) {
                 deferred.resolve(data);
@@ -149,10 +155,10 @@ angular.module('cnedApp').factory('DropboxProvider',
                 headers: {
                     'Authorization': 'Bearer ' + access_token,
                     'Content-Type': 'application/octet-stream',
-                    'Dropbox-API-Arg': decodeURIComponent(JSON.stringify({
+                    'Dropbox-API-Arg': JSON.stringify({
                         path: filePath,
                         mode: 'overwrite'
-                    }))
+                    })
                 }
             }).success(function (data) {
                 deferred.resolve(transformDropboxFileToStorageFile(data));
@@ -384,23 +390,28 @@ angular.module('cnedApp').factory('DropboxProvider',
         var moveFilesService = function (from_path, to_path, access_token) {
             var deferred = $q.defer();
 
-            $http({
-                method: 'POST',
-                url: 'https://api.dropboxapi.com/2/files/move_v2',
-                data: {
-                    from_path: from_path,
-                    to_path: to_path
-                },
-                headers: {
-                    'Authorization': 'Bearer ' + access_token,
-                    'Content-Type': 'application/json'
-                }
-            }).then(function () {
+            if(from_path !== to_path){
+                $http({
+                    method: 'POST',
+                    url: 'https://api.dropboxapi.com/2/files/move_v2',
+                    data: {
+                        from_path: from_path,
+                        to_path: to_path
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + access_token,
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function () {
+                    deferred.resolve();
+                }, function () {
+                    // Error
+                    deferred.reject();
+                });
+            } else {
                 deferred.resolve();
-            }, function () {
-                // Error
-                deferred.reject();
-            });
+            }
+
             return deferred.promise;
         };
 
@@ -416,7 +427,8 @@ angular.module('cnedApp').factory('DropboxProvider',
             copy: copyService,
             createFolder: createFolderService,
             moveFiles: moveFilesService,
-            auth: authService
+            auth: authService,
+            generateFilepath: generateFilepath
         };
     });
 

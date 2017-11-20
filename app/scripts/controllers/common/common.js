@@ -31,6 +31,8 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     $log.debug('commonCtrl - userData', userData);
 
+
+
     $rootScope.profiles = [];
     $rootScope.tags = tags;
     $rootScope.tmpProfile = null;
@@ -44,9 +46,6 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
 
     $rootScope.$watch('isAppOnline', function (newvalue) {
         if (newvalue) {
-
-            console.log('isAppOnline watcher');
-
             fileStorageService.synchronizeFiles().then(function(res){
                 if (res && res.profilesCount > 0) {
                     $rootScope.initCommon();
@@ -153,6 +152,19 @@ angular.module('cnedApp').controller('CommonCtrl', function ($scope, $rootScope,
         if (profileTag) {
             res = '<' + profileTag.tagDetail.balise + '>' + profileTag.tagDetail.libelle + ' : ' + $rootScope.displayTextSimple + '</' + profileTag.tagDetail.balise + '>';
         }
+
+        return res;
+    };
+
+    $rootScope.getDisplayedTextProfileTags = function (profileTags) {
+        var res = '';
+
+        _.forEach(profileTags, function(profileTag){
+
+            if (profileTag) {
+                res += '<' + profileTag.tagDetail.balise + '>' + profileTag.tagDetail.libelle + ' : ' + $rootScope.displayTextSimple + '</' + profileTag.tagDetail.balise + '> <br>';
+            }
+        });
 
         return res;
     };

@@ -154,25 +154,6 @@
                                 Dupliquer
                             </a>
                         </li>
-                        <!--
-                        <li class="delegate"
-                            data-ng-if="isOwner(profile) && profile.data.owner !== 'scripted' && !profile.data.preDelegated && userData.provider">
-                            <a href title="{{'Delegate' | translate}}" data-ng-click="delegateProfile(profile)">
-                                {{'Delegate' | translate}}
-                            </a>
-                        </li>
-                        <li class="withdraw_delegate" data-ng-show="canCancelDelegation(profile)">
-                            <a href title="{{'CancelDeleguation' | translate}}"
-                               data-ng-click="deniedProfileDelegation(profile)">
-                                Annuler la délégation
-                            </a>
-                        </li>
-                        <li class="withdraw_delegate" data-ng-show="isOwnerDelagate(profile)">
-                            <a href title="{{'RemoveDeleguation' | translate}}"
-                               data-ng-click="cancelProfileDelegation(profile)">
-                                Retirer la délégation
-                            </a>
-                        </li>-->
                         <li class="share_item" data-ng-if="userData.provider">
                             <a href
                                data-ng-click="shareProfile(profile)" title="{{'Partager' | translate}}">
@@ -207,14 +188,11 @@
                 </td>
             </tr>
             <tr ng-show="profile.showOverview">
-                <td colspan="6">
-                    <div class="resetAll {{profile.data.className}} preview" style="margin-bottom: 20px;"
-                         data-ng-repeat="profileTag in profile.data.profileTags"
-                         profile-coloration
-                         profile="profile"
-                         text="getDisplayedText(profileTag)"
-                         preview="true">
-                    </div>
+                <td colspan="6" class="resetAll {{profile.data.className}} preview" style="margin-bottom: 20px;"
+                    profile-coloration
+                    profile="profile"
+                    text="getDisplayedTextProfileTags(profile.data.profileTags)"
+                    preview="true">
                 </td>
             </tr>
             </tbody>

@@ -1347,7 +1347,7 @@ a.navbar-brand {
 }
 
 .my-backup-page .selected-storage img {
-    height: 100px;
+    display: block;
 }
 
 .mb-25 {
@@ -1395,17 +1395,26 @@ a.navbar-brand {
     color: #ff472a;
 }
 
-.my-backup-page .fa-dropbox {
+.my-backup-page .fa-dropbox,
+.my-backup-page .fa-cloud {
     font-size: 60px;
     color: rgb(49, 126, 222);
     margin-top: 10px;
 }
 
-.my-backup-page .fa-google,
-.my-backup-page .fa-cloud {
-    font-size: 50px;
-    margin-top: 5px;
+.my-backup-page .fa-google {
+    font-size: 55px;
+    margin-top: 9px;
     margin-bottom: 5px;
+}
+
+.my-backup-page .img-google {
+    position: relative;
+    left: 50%;
+    margin-left: -27px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    width: 55px;
 }
 
 .my-backup-page .storage-container.disabled > div,
@@ -1485,4 +1494,9 @@ blockquote {
 
 .mr-30 {
     margin-right: 30px;
+}
+
+.tooltip-inner {
+    color: #fff !important;
+    padding: 3px 8px !important;
 }

@@ -159,61 +159,92 @@ function isUrl(s) {
 
 // To put in an external file and to include later
 var util = require('util');
+var request = require('request');
+
+
+exports.getOneDriveDownloadLink = function (req, responce) {
+    var body = req.body;
+
+    if(body.url){
+        console.log('body.url', body.url);
+        request({url: body.url, followRedirect: false}, function (error, response, body) {
+            console.log('response.headers.location', response.headers.location);
+            if (!error) {
+                var redirect = response.headers.location;
+
+                if (redirect) {
+                    redirect = redirect.replace('redir', 'download');
+                    responce.send(200, redirect);
+                } else {
+                    responce.send(error, 500);
+                }
+
+            } else {
+                responce.send(error, 500);
+            }
+        });
+    } else {
+        responce.send(error, 400);
+    }
+
+
+};
+
 
 exports.htmlPage = function (req, responce) {
     var donneRecu = req.body;
     var url = donneRecu['lien']; // jshint ignore:line
-    var protocole;
-    if (url.indexOf('https') > -1) {
-        protocole = https;
+
+    request(url, function (error, response, body) {
+        console.log(response.headers.location);
+        console.log('body:', body); // Print the HTML for the Google homepage.
+
+
+
+        if (!error) {
+            var data = decodeURIComponent(body);
+
+            var charsetDetected = jschardet.detect(data);
+            var enc;
+            if (charsetDetected && charsetDetected.encoding) {
+                enc = charsetDetected.encoding.toLowerCase();
+            } else {
+                enc = 'UTF-8';
+            }
+            var charset = response.headers['content-type'];
+            if (charset.indexOf('UTF-8') <= -1 && charset.indexOf('utf-8') <= -1 && charset.indexOf('utf8') <= -1) {
+                var html = iconv.decode(data, enc);
+                responce.send(200, html);
+            } else {
+                responce.send(200, data.toString('utf-8'));
+            }
+
+        } else {
+            responce.send(error, 500);
+        }
+    });
+
+};
+
+exports.downloadFIle = function (req, res) {
+    var query = req.query;
+
+    if (query.url) {
+        request(query.url, function (error, response, body) {
+
+            if (!error) {
+
+                res.send(200, decodeURIComponent(body));
+
+            } else {
+                res.send(error, 400);
+            }
+        });
     } else {
-        protocole = http;
+        res.send(error, 400);
     }
 
 
-    protocole.get(url, function (res) {
-
-        console.time('get html');
-
-        var chunks = [];
-        res.on('data', function (chunk) {
-            chunks.push(chunk);
-        });
-
-        res.on('end', function () {
-            console.timeEnd('get html');
-            var jsfile = new Buffer.concat(chunks);
-            helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-            if (jsfile.length > 0) {
-                var charsetDetected = jschardet.detect(jsfile.toString());
-                var enc;
-                if (charsetDetected && charsetDetected.encoding) {
-                    enc = charsetDetected.encoding.toLowerCase();
-                } else {
-                    enc = 'UTF-8';
-                }
-                var charset = res.headers['content-type'];
-                if (charset.indexOf('UTF-8') <= -1 && charset.indexOf('utf-8') <= -1 && charset.indexOf('utf8') <= -1) {
-                    var html = iconv.decode(jsfile, enc);
-                    responce.send(200, html);
-                } else {
-                    responce.send(200, jsfile.toString('utf-8'));
-                }
-            } else {
-                console.log('***************');
-                console.log(jsfile);
-                console.log(jsfile.length);
-                responce.send(500);
-            }
-
-            res.on('error', function (exception) {
-                responce.send(exception, 500);
-            });
-
-        });
-    }).on('error', function (err) {
-        responce.send(err.message, 500);
-    });
 };
 
 
@@ -598,7 +629,8 @@ exports.externalEpub = function (req, responce) {
                                                 console.log('too many html files > ' + generalParams.HTML_NUMBER_LIMIT);
                                             }
                                             if (tooManyHtml) {
-                                                exec('rm -rf ' + tmpFolder, function (error, deleteResponce, stderr) {});
+                                                exec('rm -rf ' + tmpFolder, function (error, deleteResponce, stderr) {
+                                                });
                                                 responce.send(200, {
                                                     'html': [],
                                                     'img': [],
@@ -653,7 +685,8 @@ exports.externalEpub = function (req, responce) {
                                                         if (imgFound.length > 1) {
                                                             imageDownloader(imgFound, htmlArray, tmpFolder, imgArray, responce, 0);
                                                         } else {
-                                                            exec('rm -rf ' + tmpFolder, function (error, deleteResponce, stderr) {});
+                                                            exec('rm -rf ' + tmpFolder, function (error, deleteResponce, stderr) {
+                                                            });
                                                             responce.send(200, {
                                                                 'html': htmlArray,
                                                                 'img': []

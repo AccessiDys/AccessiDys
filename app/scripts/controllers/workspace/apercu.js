@@ -902,7 +902,7 @@ angular.module('cnedApp')
                     }
                 }
 
-                fileStorageService.shareFile($scope.document.filepath)
+                fileStorageService.shareFile($scope.document)
                     .then(function (shareLink) {
                         itemToShare.linkToShare = 'https://' + window.location.host + '/#/apercu?title=' + encodeURIComponent($scope.document.filename) + '&url=' + encodeURIComponent(shareLink.url);
 

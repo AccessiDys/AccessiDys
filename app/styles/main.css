@@ -1556,52 +1556,65 @@ a.navbar-brand {
     padding: 0 !important;
 }
 
-.my-backup-page .fa-dropbox {
+.my-backup-page .selected-storage img {
+    display: block;
+}
+
+.my-backup-page .fa-dropbox,
+.my-backup-page .fa-cloud {
     font-size: 60px;
     color: rgb(49, 126, 222);
     margin-top: 10px;
 }
 
-.my-backup-page .fa-google,
-.my-backup-page .fa-cloud {
-    font-size: 50px;
-    margin-top: 5px;
+.my-backup-page .fa-google {
+    font-size: 55px;
+    margin-top: 9px;
     margin-bottom: 5px;
 }
 
+.my-backup-page .img-google {
+    position: relative;
+    left: 50%;
+    margin-left: -27px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    width: 55px;
+}
+
 .my-backup-page .storage-container.disabled > div,
-.my-backup-page .storage-container.disabled > .fa{
+.my-backup-page .storage-container.disabled > .fa {
     color: black;
     opacity: 0.3;
 }
 
-.my-backup-page .storage-container.disabled{
+.my-backup-page .storage-container.disabled {
     cursor: default !important;
 }
 
-.my-backup-page .storage-container > p{
+.my-backup-page .storage-container > p {
     margin: 0;
 }
 
-.my-backup-page .storage-container{
+.my-backup-page .storage-container {
     cursor: pointer;
     text-align: center;
     padding: 5px;
     font-weight: bold;
 }
 
-.my-backup-page .selected-storage{
+.my-backup-page .selected-storage {
     min-height: 70px;
     text-align: center;
     padding: 5px;
 }
 
-.storage-container.active{
+.storage-container.active {
     background-color: #086e80;
     color: #fff;
 }
 
-.storage-container.active i{
+.storage-container.active i {
     color: #fff;
 }
 
@@ -1650,4 +1663,9 @@ blockquote {
     z-index: 200;
     left: 0;
     right: 0;
+}
+
+.tooltip-inner {
+    color: #fff !important;
+    padding: 3px 8px !important;
 }

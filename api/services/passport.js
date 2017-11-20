@@ -27,14 +27,21 @@
 'use strict';
 /*jshint unused: false, undef:false */
 
-// dropBox
 var DropboxOAuth2Strategy = require('passport-dropbox-oauth2').Strategy;
+var GoogleDriveStrategy = require('passport-google-drive').Strategy;
+var OneDriveStrategy = require('passport-microsoft').Strategy;
 
 var config = require('../../../env/config.json');
 var URL_REQUEST = process.env.URL_REQUEST || config.URL_REQUEST;
 
-var DROPBOX_CLIENT_ID = process.env.DROPBOX_CLIENT_ID || config.DROPBOX_CLIENT_ID; // 'ko5rdy0yozdjizw';
-var DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET || config.DROPBOX_CLIENT_SECRET; //'iqct32159hizifd';
+var DROPBOX_CLIENT_ID = process.env.DROPBOX_CLIENT_ID || config.DROPBOX_CLIENT_ID;
+var DROPBOX_CLIENT_SECRET = process.env.DROPBOX_CLIENT_SECRET || config.DROPBOX_CLIENT_SECRET;
+
+var GOOGLE_DRIVE_CLIENT_ID = process.env.GOOGLE_DRIVE_CLIENT_ID || config.GOOGLE_DRIVE_CLIENT_ID;
+var GOOGLE_DRIVE_CLIENT_SECRET = process.env.GOOGLE_DRIVE_CLIENT_SECRET || config.GOOGLE_DRIVE_CLIENT_SECRET;
+
+var ONE_DRIVE_CLIENT_ID = process.env.ONE_DRIVE_CLIENT_ID || config.ONE_DRIVE_CLIENT_ID;
+var ONE_DRIVE_CLIENT_SECRET = process.env.ONE_DRIVE_CLIENT_SECRET || config.ONE_DRIVE_CLIENT_SECRET;
 
 var helpers = require('../helpers/helpers');
 
@@ -66,11 +73,46 @@ module.exports = function (passport) {
 
                 return done(null, {
                     email: profile._json.email,
-                    firstName:profile._json.name.given_name,
-                    lastName:profile._json.name.surname,
+                    firstName: profile._json.name.given_name,
+                    lastName: profile._json.name.surname,
                     token: accessToken,
                     provider: 'dropbox'
                 });
             }
         }));
+
+    passport.use(new GoogleDriveStrategy({
+        clientID: GOOGLE_DRIVE_CLIENT_ID,
+        clientSecret: GOOGLE_DRIVE_CLIENT_SECRET,
+        callbackURL: URL_REQUEST + '/auth/google-drive/callback',
+        scope: 'https://www.googleapis.com/auth/drive.file'
+    }, function (accessToken, refreshToken, profile, done) {
+
+        return done(null, {
+            email: profile._json.user.emailAddress,
+            firstName: profile._json.user.displayName,
+            lastName: '',
+            token: accessToken,
+            provider: 'google-drive'
+        });
+    }));
+
+    passport.use(new OneDriveStrategy({
+            clientID: ONE_DRIVE_CLIENT_ID,
+            clientSecret: ONE_DRIVE_CLIENT_SECRET,
+            callbackURL: URL_REQUEST + '/auth/one-drive/callback',
+            scope: 'user.read files.readwrite offline_access'
+        },
+        function (accessToken, refreshToken, profile, done) {
+
+            return done(null, {
+                email: profile._json.userPrincipalName,
+                firstName: profile.displayName,
+                lastName: '',
+                token: accessToken,
+                provider: 'one-drive'
+            });
+        }
+    ));
 };
+

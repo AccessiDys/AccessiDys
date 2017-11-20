@@ -47,9 +47,9 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
             } else if (document.title.length > 201) {
                 errors.push('document.message.save.ko.title.size');
 
-            } else if (serviceCheck.checkName(document.title)) {
+            } /*else if (serviceCheck.checkName(document.title)) {
                 errors.push('document.message.save.ko.title.specialchar');
-            }
+            }*/
 
             $log.debug('Check fields result', errors);
 
@@ -134,7 +134,9 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     } else {
                         LoaderService.setLoaderProgress(40);
 
+
                         var file = {
+                            id: document.id,
                             filename: document.title,
                             filepath: document.filePath,
                             data: document.data,
@@ -230,12 +232,13 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
 
             $log.debug('Copy document', document);
 
-            var file = {
-                filename: document.filename + '-Copie',
-                data: document.data,
-                dateModification: new Date()
-            };
-
+            var file = angular.copy(document);
+            file.filename += '-Copie';
+            if(file.filename.indexOf(".html") > 0){
+                file.filename = file.filename.replace('.html', '');
+                file.filename += ".html";
+            }
+            file.dateModification = new Date().toISOString();
 
             UtilsService.openConfirmModal('document.message.copy.confirm.title', 'document.message.copy.confirm.message', false)
                 .then(function () {
@@ -300,7 +303,12 @@ cnedApp.service('documentService', function ($rootScope, $q, $log, serviceCheck,
                     LoaderService.showLoader('document.message.info.copy.inprogress', false);
                     LoaderService.hideLoader();
 
-                    fileStorageService.createFolder(path + params.title)
+                    var folder = {
+                        filename: params.title,
+                        filepath: path + params.title
+                    };
+
+                    fileStorageService.createFolder(folder)
                         .then(function (folder) {
                             LoaderService.hideLoader();
                             deferred.resolve(folder);

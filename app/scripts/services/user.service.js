@@ -95,6 +95,8 @@ cnedApp.service('UserService', function ($http, configuration, $localForage, $q)
                 isAdmin: false
             };
 
+            $localForage.setItem('initDefaultFolder', null);
+
             $localForage.setItem('userData', userData);
         }
 

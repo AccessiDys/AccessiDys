@@ -168,7 +168,7 @@ angular
              * @method $scope.save
              */
             $scope.save = function () {
-                if ($scope.document.filepath) {
+                if ($scope.document.filepath || $scope.document.id) {
                     editDocument();
                 } else {
                     createDocument();
@@ -177,7 +177,6 @@ angular
 
 
             function createDocument (){
-
                 var documentData = $scope.document.data;
                 if (documentData) {
                     documentData = documentData.replace(/&nbsp;/gi, ' ');
@@ -225,7 +224,6 @@ angular
             }
 
             function editDocument (){
-
                 var documentData = $scope.document.data;
                 if (documentData) {
                     documentData = documentData.replace(/&nbsp;/gi, ' ');
@@ -233,8 +231,10 @@ angular
                 }
 
                 documentService.save({
+                    id: $scope.document.id,
                     title: $scope.document.filename,
                     data: documentData,
+                    folder: $scope.document.folder,
                     filePath: $scope.document.filepath
                 }, 'edit')
                     .then(function (data) {

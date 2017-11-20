@@ -73,10 +73,8 @@ angular.module('cnedApp').controller('editDocumentTitleCtrl', function ($scope, 
 
     $uibModalInstance.opened.then(function () {
 
-        console.log('errors', $scope.errors);
 
         if ($scope.errors.length > 0) {
-            console.log('$scope.errors[0]', $scope.errors[0]);
             $timeout(function () {
                 ToasterService.showToaster('#edit-title-error-toaster', $scope.errors[0]);
             }, 200);
