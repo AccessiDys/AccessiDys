@@ -67,7 +67,7 @@ cnedApp.directive('vocalSynthesis',
                  */
                 function speak(e) {
 
-                    //unwrapSelectedText();
+                    unwrapSelectedText();
 
                     if (!scope.isEnableNoteAdd) {
                         $log.debug('$scope.speak');
@@ -102,6 +102,10 @@ cnedApp.directive('vocalSynthesis',
                                         language = 'de-DE';
                                     }
 
+                                    insertHtmlAfterSelection('<i class="fa fa-volume-down vocal-marker last">');
+                                    insertHtmlBeforeSelection('<i class="fa fa-volume-down vocal-marker">');
+
+
                                     artyom.initialize({
                                         lang: language,
                                         continuous: false,
@@ -111,13 +115,14 @@ cnedApp.directive('vocalSynthesis',
                                         speed: vocalSettings.rate
                                     });
 
-                                    //wrapSelectedText(text);
+
+                                    resetSelection();
 
                                     $compile(elm.contents())(scope);
 
                                     artyom.say(text, {
                                         onEnd: function () {
-                                            //unwrapSelectedText();
+                                            unwrapSelectedText();
                                         }
                                     });
 
@@ -151,39 +156,56 @@ cnedApp.directive('vocalSynthesis',
                     }
                 }
 
-                function wrapSelectedText(text) {
-                    var selection = window.getSelection().getRangeAt(0);
-                    var selectedText = selection.extractContents();
-                    var span = document.createElement('span');
-                    span.appendChild(selectedText);
-                    span.setAttribute('id', 'speak-tooltip');
-                    span.setAttribute('uib-tooltip', '' + text);
-                    span.setAttribute('tooltip-is-open', 'true');
-                    span.setAttribute('tooltip-placement', 'top');
-                    span.setAttribute('tooltip-popup-close-delay', '10000');
-
-                    selection.insertNode(span);
+                function unwrapSelectedText() {
+                    jQuery('.vocal-marker').remove();
                 }
 
-                function unwrapSelectedText() {
-                    var tooltip = document.getElementsByClassName('tooltip');
+                var insertHtmlBeforeSelection, insertHtmlAfterSelection;
 
-                    if (tooltip && tooltip.length > 0) {
+                (function () {
+                    function createInserter(isBefore) {
+                        return function (html) {
+                            var sel, range, node;
+                            if (window.getSelection) {
+                                // IE9 and non-IE
+                                sel = window.getSelection();
+                                if (sel.getRangeAt && sel.rangeCount) {
+                                    range = window.getSelection().getRangeAt(0);
+                                    range.collapse(isBefore);
 
-                        _.forEach(tooltip, function (value) {
-                            value.remove();
-                        });
-
-
+                                    // Range.createContextualFragment() would be useful here but is
+                                    // non-standard and not supported in all browsers (IE9, for one)
+                                    var el = document.createElement("div");
+                                    el.innerHTML = html;
+                                    var frag = document.createDocumentFragment(), node, lastNode;
+                                    while ((node = el.firstChild)) {
+                                        lastNode = frag.appendChild(node);
+                                    }
+                                    range.insertNode(frag);
+                                }
+                            } else if (document.selection && document.selection.createRange) {
+                                // IE < 9
+                                range = document.selection.createRange();
+                                range.collapse(isBefore);
+                                range.pasteHTML(html);
+                            }
+                        }
                     }
 
-                    var element = document.getElementById('speak-tooltip');
+                    insertHtmlBeforeSelection = createInserter(true);
+                    insertHtmlAfterSelection = createInserter(false);
+                })();
 
-                    if (element) {
-                        element.outerHTML = document.getElementById('speak-tooltip').innerHTML;
+                function resetSelection() {
+                    if (window.getSelection) {
+                        if (window.getSelection().empty) {  // Chrome
+                            window.getSelection().empty();
+                        } else if (window.getSelection().removeAllRanges) {  // Firefox
+                            window.getSelection().removeAllRanges();
+                        }
+                    } else if (document.selection) {  // IE?
+                        document.selection.empty();
                     }
-
-                    $compile(elm.contents())(scope);
                 }
 
                 elm.bind('mouseup', speak);

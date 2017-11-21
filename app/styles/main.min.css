@@ -1500,3 +1500,15 @@ blockquote {
     color: #fff !important;
     padding: 3px 8px !important;
 }
+
+.vocal-marker{
+    font-size: 22px;
+    margin: 0 5px;
+    color: #000 !important;
+}
+
+.vocal-marker.last{
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+    transform: rotate(180deg);
+}
