@@ -171,6 +171,7 @@ cnedApp.directive('vocalSynthesis',
                                 sel = window.getSelection();
                                 if (sel.getRangeAt && sel.rangeCount) {
                                     range = window.getSelection().getRangeAt(0);
+                                    range = range.cloneRange();
                                     range.collapse(isBefore);
 
                                     // Range.createContextualFragment() would be useful here but is
