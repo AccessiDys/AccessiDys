@@ -50,10 +50,10 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         var storageName = '';
 
         if (type === 'document') {
-            query = '.html';
+            query = FileConstant.DROPBOX.query.document;
             storageName = 'listDocument';
         } else if (type === 'profile') {
-            query = '-profile.json';
+            query = FileConstant.DROPBOX.query.profile;
             storageName = 'listProfile';
         }
 
@@ -164,7 +164,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
             if (provider === 'dropbox') {
 
-                return DropboxProvider.search('_' + encodeURIComponent(filename) + '_', UserService.getData().token).then(function (files) {
+                return DropboxProvider.search('_' + filename + '_', UserService.getData().token, type).then(function (files) {
 
 
                     if (files && files.length > 0) {
