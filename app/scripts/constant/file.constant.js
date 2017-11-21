@@ -44,5 +44,11 @@ angular.module('cnedApp').constant('FileConstant', {
             document: '.html',
             filesAndFolders: 'filesAndFolders'
         }
+    },
+    DROPBOX: {
+        query: {
+            profile: '.json',
+            document: '.html'
+        }
     }
 });
