@@ -103,7 +103,7 @@ cnedApp.directive('vocalSynthesis',
                                     }
 
                                     insertHtmlAfterSelection('<i class="fa fa-volume-down vocal-marker last">');
-                                    insertHtmlBeforeSelection('<i class="fa fa-volume-down vocal-marker">');
+                                    insertHtmlBeforeSelection('<i class="fa fa-volume-up vocal-marker">');
 
 
                                     artyom.initialize({
