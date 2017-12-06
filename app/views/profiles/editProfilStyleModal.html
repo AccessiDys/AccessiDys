@@ -185,13 +185,27 @@
                                         </span>
                                     </p>
 
-                                    <p class="controls_zone" data-ng-if="style.colors === 'Personnaliser'">
+                                    <p class="" data-ng-if="style.colors === 'Personnaliser'">
                                         <label for="add_color" class="">
                                         </label>
 
-                                        Color: <button class="jscolor" value="FF00FF">
+                                        <span id="colors"
+                                              style="display: inline-block; width: 255px; position: relative">
 
-                                        <span id="colors" style="display: inline-block; width: 255px;">
+                                            <color-picker data-ng-model="style.colorsList[0]"
+                                                          style="display: inline-block;"
+                                                          title="{{ 'Cliquer pour modifier la couleur' | translate}}"></color-picker>
+                                            <color-picker data-ng-model="style.colorsList[1]"
+                                                          style="display: inline-block;"
+                                                          title="{{ 'Cliquer pour modifier la couleur' | translate}}"></color-picker>
+                                            <color-picker data-ng-model="style.colorsList[2]"
+                                                          style="display: inline-block;"
+                                                          title="{{ 'Cliquer pour modifier la couleur' | translate}}"></color-picker>
+
+                                            <color-picker data-ng-if="style.colorsList.length > 3"
+                                                          data-ng-model="style.colorsList[3]"
+                                                          style="display: inline-block;"
+                                                          title="{{ 'Cliquer pour modifier la couleur' | translate}}"></color-picker>
                                             <!--
                                             <input data-ng-model="style.colorsList[0]" type="color" style="width:45px; height:25px" title="{{ 'Cliquer pour modifier la couleur' | translate}}"/>
                                             <input data-ng-model="style.colorsList[1]" type="color" style="width:45px; height:25px" title="{{ 'Cliquer pour modifier la couleur' | translate}}"/>
@@ -201,10 +215,12 @@
                                                    -->
 
                                             <button type="text" data-ng-if="style.colorsList.length === 3"
-                                                    data-ng-click="style.colorsList.push('#000000')" style=" width: 45px; height: 25px; position: relative; top: -8px">+1</button>
+                                                    data-ng-click="style.colorsList.push('#000000')"
+                                                    style=" width: 40px; height: 34px; position: relative; top: -11px">+1</button>
                                             <button type="text"
                                                     data-ng-if="style.colorsList.length === 4"
-                                                    data-ng-click="style.colorsList.pop()" style=" width: 45px; height: 25px; position: relative; top: -8px">-1</button>
+                                                    data-ng-click="style.colorsList.pop()"
+                                                    style=" width: 40px; height: 34px; position: relative; top: -11px">-1</button>
 
                                         </span>
                                     </p>
