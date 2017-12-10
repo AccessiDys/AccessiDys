@@ -67,7 +67,7 @@
                     <div class="storage-container"
                          data-ng-class="{'active': selectedStorage.provider === storage.provider, 'disabled': !storage.isActive}">
                         
-                        <img src="/styles/images/google-icon.png"
+                        <img src="styles/images/google-icon.png"
                              class="img-google"
                              data-ng-click="selectStorage(storage)"
                              ng-if="storage.provider === 'google-drive' && selectedStorage.provider !== storage.provider">
@@ -95,7 +95,7 @@
                    ng-if="selectedStorage.provider !== 'google-drive'"
                    aria-hidden="true"></i>
 
-                <img src="/styles/images/google-icon.png"
+                <img src="styles/images/google-icon.png"
                      class="img-google"
                      ng-if="selectedStorage.provider === 'google-drive'">
 
