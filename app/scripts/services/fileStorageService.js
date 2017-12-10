@@ -306,6 +306,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
         } else {
             return CacheProvider.get(file.filename, storageName).then(function (fileFound) {
+
+                $log.debug('FileStorageService - GetData file found', fileFound);
                 return fileFound;
             });
         }
@@ -371,6 +373,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             }
 
         } else {
+            file.id = -1;
+
             self.addFileToSynchronize(file, type, 'save');
             return CacheProvider.save(file, storageName);
         }
@@ -464,13 +468,42 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             $log.debug('Rename - addFileToSynchronize', file);
 
             return CacheProvider.delete(file, storageName).then(function () {
-                file.filename = newName;
-                file.filepath = newFilePath;
 
-                $log.debug('Rename - addFileToSynchronize', file);
-                self.addFileToSynchronize(file, type, 'save');
-                return CacheProvider.save(file, storageName);
+                var parent = null;
+
+                if (file.parent && file.parent.filename) {
+                    return CacheProvider.get(file.parent.filename, storageName)
+                        .then(function (folder) {
+                            parent = folder;
+
+                            if (!parent.content) {
+                                parent.content = [];
+                            }
+
+                            file.filename = newName;
+                            file.filepath = newFilePath;
+
+                            parent.content.push(file);
+
+                            $log.debug('Rename - addFileToSynchronize', file);
+                            self.addFileToSynchronize(file, type, 'save');
+                            return CacheProvider.save(parent, storageName);
+
+                        });
+                } else {
+
+                    file.filename = newName;
+                    file.filepath = newFilePath;
+
+                    $log.debug('Rename - addFileToSynchronize', file);
+                    self.addFileToSynchronize(file, type, 'save');
+                    return CacheProvider.save(file, storageName);
+
+                }
+
             });
+
+
         }
     };
 
@@ -730,7 +763,43 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                 return OneDriveProvider.move(file, folder.id, UserService.getData().token);
             }
         } else {
-            return null;
+            self.addFileToSynchronize(file, 'document', 'delete');
+
+            $log.debug('Move file - addFileToSynchronize', file);
+
+            return CacheProvider.delete(file, 'listDocument').then(function () {
+
+                var parent = null;
+
+                $log.debug('Move file - folder', folder);
+
+                if (folder && folder.filepath !== '/') {
+                    return CacheProvider.get(folder.filename, 'listDocument')
+                        .then(function (parent) {
+
+                            file.parent = {
+                                filename: parent.filename
+                            };
+
+                            if (!parent.content) {
+                                parent.content = [];
+                            }
+
+                            parent.content.push(file);
+
+                            $log.debug('Move file - addFileToSynchronize', file);
+                            self.addFileToSynchronize(file, 'document', 'save');
+                            return CacheProvider.save(parent, 'listDocument');
+
+                        });
+                } else {
+                    delete file.parent;
+                    delete file.folder;
+                    self.addFileToSynchronize(file, 'document', 'save');
+                    return CacheProvider.save(file, 'listDocument');
+                }
+
+            });
         }
     };
 
@@ -911,54 +980,61 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
     this.synchronizeFiles = function () {
         var deferred = $q.defer();
 
-        CacheProvider.getItem('documentsToSynchronize').then(function (documents) {
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
 
-            CacheProvider.getItem('profilesToSynchronize').then(function (profiles) {
 
-                var toSend = [];
+            CacheProvider.getItem('documentsToSynchronize').then(function (documents) {
 
-                // Synchronize doc
-                if (documents) {
-                    for (var i = 0; i < documents.length; i++) {
-                        if (documents[i].action === 'save') {
-                            toSend.push(self.save(documents[i].file, 'document'));
-                        } else if (documents[i].action === 'delete') {
-                            toSend.push(self.delete(documents[i].file, 'document'));
+                CacheProvider.getItem('profilesToSynchronize').then(function (profiles) {
+
+                    var toSend = [];
+
+                    // Synchronize doc
+                    if (documents) {
+                        for (var i = 0; i < documents.length; i++) {
+                            if (documents[i].action === 'save') {
+                                toSend.push(self.save(documents[i].file, 'document'));
+                            } else if (documents[i].action === 'delete') {
+                                toSend.push(self.delete(documents[i].file, 'document'));
+                            }
                         }
                     }
-                }
 
 
-                // Synchronize profiles
-                if (profiles) {
+                    // Synchronize profiles
+                    if (profiles) {
 
-                    for (var i = 0; i < profiles.length; i++) {
-                        profiles[i].file.data.owner = UserService.getData().email;
-                        if (profiles[i].action === 'save') {
-                            toSend.push(self.save(profiles[i].file, 'profile'));
-                        } else if (profiles[i].action === 'delete') {
-                            toSend.push(self.delete(profiles[i].file, 'profile'));
+                        for (var i = 0; i < profiles.length; i++) {
+                            profiles[i].file.data.owner = UserService.getData().email;
+                            if (profiles[i].action === 'save') {
+                                toSend.push(self.save(profiles[i].file, 'profile'));
+                            } else if (profiles[i].action === 'delete') {
+                                toSend.push(self.delete(profiles[i].file, 'profile'));
+                            }
                         }
                     }
-                }
 
-                if (toSend.length > 0) {
-                    $q.all(toSend).then(function (res) {
-                        $log.debug('res from documentsToSynchronize', res);
-                        CacheProvider.setItem(null, 'documentsToSynchronize');
-                        CacheProvider.setItem(null, 'profilesToSynchronize');
+                    if (toSend.length > 0) {
+                        $q.all(toSend).then(function (res) {
+                            $log.debug('res from documentsToSynchronize', res);
+                            CacheProvider.setItem(null, 'documentsToSynchronize');
+                            CacheProvider.setItem(null, 'profilesToSynchronize');
 
-                        deferred.resolve({
-                            documentCount: documents ? documents.length : 0,
-                            profilesCount: profiles ? profiles.length : 0
+                            deferred.resolve({
+                                documentCount: documents ? documents.length : 0,
+                                profilesCount: profiles ? profiles.length : 0
+                            });
                         });
-                    });
-                } else {
-                    deferred.resolve();
-                }
+                    } else {
+                        deferred.resolve();
+                    }
 
+                });
             });
-        });
+
+        } else {
+            deferred.resolve();
+        }
 
 
         return deferred.promise;

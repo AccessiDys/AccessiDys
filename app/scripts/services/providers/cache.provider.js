@@ -28,7 +28,96 @@
 angular.module('cnedApp').factory('CacheProvider',
     function ($q, $localForage, _, $log) {
 
+
+        /**
+         * Search file
+         * @param list The file list
+         * @param filename The filename
+         * @returns {*} The file found
+         */
+        function searchFile(list, filename) {
+            var res = null;
+
+            $log.debug('CacheProvider - searchFile list=', list);
+            $log.debug('CacheProvider - searchFile filename=', filename);
+
+            if (list && list.length > 0 && filename) {
+                _.each(list, function (value) {
+
+                    if (res === null) {
+
+                        if (value.filename && value.filename.toLowerCase() === filename.toLowerCase()) {
+
+                            $log.debug('CacheProvider - searchFile fileFound=', value);
+
+                            res = value;
+
+                        } else if (value.content && value.content.length > 0) {
+                            res = searchFile(value.content, filename);
+                        }
+
+                    }
+
+                });
+            }
+
+            return res;
+        }
+
+        /**
+         * Edit a file
+         * @param list The file list
+         * @param file The file
+         * @param action The action {update | delete}
+         * @returns {*} The status of action {true | false}
+         */
+        function editFile(list, file, action) {
+            var res = {
+                status: false,
+                list: list
+            };
+
+            $log.debug('CacheProvider - editFile list=', list);
+            $log.debug('CacheProvider - editFile filename=', file);
+
+            if (list && list.length > 0 && file && file.filename && action) {
+                _.each(list, function (value, index) {
+
+                    if (!res.status) {
+
+                        if (value.filename && value.filename.toLowerCase() === file.filename.toLowerCase()) {
+
+                            if (action === 'update') {
+                                res.list[index] = file;
+                                res.status = true;
+                            } else if (action === 'delete') {
+                                res.list.splice(index, 1);
+                                res.status = true;
+                            } else {
+                                res.status = false;
+                            }
+
+                        } else if (value.content && value.content.length > 0) {
+
+                            var result = editFile(value.content, file, action);
+                            res.status = result.status;
+                            res.list[index].content = result.list;
+                        }
+
+                    }
+
+                });
+            }
+
+            return res;
+        }
+
         return {
+            /**
+             * List all from storage
+             * @param storageName The storage name
+             * @returns {*}
+             */
             list: function (storageName) {
                 return $localForage.getItem(storageName);
             },
@@ -36,15 +125,7 @@ angular.module('cnedApp').factory('CacheProvider',
 
                 var deferred = $q.defer();
                 $localForage.getItem(storageName).then(function (items) {
-                    if (items) {
-                        _.each(items, function (item) {
-                            if (item && item.filename === filename) {
-                                deferred.resolve(item);
-                            }
-                        });
-                    } else {
-                        deferred.resolve();
-                    }
+                    deferred.resolve(searchFile(items, filename));
                 });
 
                 return deferred.promise;
@@ -53,17 +134,16 @@ angular.module('cnedApp').factory('CacheProvider',
 
                 var deferred = $q.defer();
 
-                return $localForage.getItem(storageName).then(function (items) {
+                $localForage.getItem(storageName).then(function (items) {
                     if (items) {
-                        for (var i = 0; i < items.length; i++) {
-                            if (items[i] && items[i].filename === file.filename) {
 
-                                items.splice(i, 1);
-                                break;
-                            }
-                        }
+                        $log.debug('CacheProvider - Delete before', items);
 
-                        $localForage.setItem(storageName, items).then(function () {
+                        var res = editFile(items, file, 'delete');
+
+                        $log.debug('CacheProvider - Delete after', items);
+
+                        $localForage.setItem(storageName, res.list).then(function () {
                             deferred.resolve(items);
                         });
 
@@ -93,32 +173,54 @@ angular.module('cnedApp').factory('CacheProvider',
             save: function (file, storageName) {
                 var deferred = $q.defer();
 
+
                 $localForage.getItem(storageName).then(function (items) {
                     if (items) {
-                        var isFound = false;
-                        var index = 0;
 
-                        for (var i = 0; i < items.length; i++) {
-                            if (items[i] && file && items[i].filename === file.filename) {
-                                isFound = true;
-                                break;
+                        $log.debug('CacheProvider - Save before', items);
+
+                        var res = editFile(items, file, 'update');
+
+                        $log.debug('CacheProvider - Save isFound', res.status);
+
+                        if (!res.status && file.folder && file.folder.filename) {
+
+                            var folder = file.folder;
+
+                            $log.debug('CacheProvider - Save folder', folder);
+
+                            if (!folder.content) {
+                                folder.content = [];
                             }
-                            index++;
+
+                            delete file.folder;
+
+                            file.parent = {
+                                filename: folder.filename
+                            };
+
+                            folder.content.push(file);
+
+                            res = editFile(items, folder, 'update');
+
+                            $log.debug('CacheProvider - Save folder isFound', res.status);
+
                         }
 
-                        if (isFound) {
-                            items[index] = file;
-                            $localForage.setItem(storageName, items).then(function () {
-                                deferred.resolve(file);
-                            });
-                        } else {
-                            items.push(file);
-                            $localForage.setItem(storageName, items).then(function () {
-                                deferred.resolve(file);
-                            }, function(data){
-                                deferred.reject(data);
-                            });
+                        if (!res.status) {
+                            res.list.push(file);
                         }
+
+                        $log.debug('CacheProvider - Save after', res.list);
+
+                        $localForage.setItem(storageName, res.list)
+                            .then(function () {
+                                deferred.resolve(file);
+                            }, function (err) {
+                                $log.error('CacheProvider - Save err', err);
+                                deferred.reject(err);
+                            });
+
                     } else {
                         $localForage.setItem(storageName, [file]).then(function () {
                             deferred.resolve(file);

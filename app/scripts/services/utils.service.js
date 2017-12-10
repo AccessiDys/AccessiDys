@@ -261,6 +261,8 @@ angular.module('cnedApp').service('UtilsService', function ($uibModal) {
         splitOnSyllable: function (text) {
             var formattedText = text;
 
+            console.log('split on syllabe', text);
+
             if (formattedText) {
                 formattedText = Hyphenator.hyphenate(formattedText, 'fr');
 

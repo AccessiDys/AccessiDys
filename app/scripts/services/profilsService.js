@@ -298,6 +298,8 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
                 'AccessiDys-user': UserService.getData().email
             }
         }), fileStorageService.list('profile').then(function (files) {
+
+            console.log('list profiles', files);
             var userProfiles = [];
 
             if (files) {
@@ -311,6 +313,9 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
             return $q.all(userProfiles);
 
         })]).then(function (res) {
+
+            console.log('q sucess', res);
+
             var defaultProfiles = res[0].data;
 
             var result = res[1];

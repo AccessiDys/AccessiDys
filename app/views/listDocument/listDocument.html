@@ -92,7 +92,7 @@
 
             <div ui-tree="treeOptions" class="tree-node-body" ng-init="level = 0;">
                 <ol ui-tree-nodes="" ng-model="listDocument" id="tree-root">
-                    <li ng-repeat="node in listDocument" ui-tree-node ng-include="'tree.html'"
+                    <li ng-repeat="node in listDocument track by $index" ui-tree-node ng-include="'tree.html'"
                         data-ng-show="(node.type === 'file' && node.showed) || (node.type === 'folder' && (node.showed || hasChildShowed(node.content)))"></li>
                 </ol>
             </div>
@@ -193,7 +193,7 @@
             </div>
             <ol ui-tree-nodes="" ng-model="node.content" ng-class="{hidden: !node.contentShowed}"
                 ng-if="node.type === 'folder'">
-                <li ng-repeat="node in node.content" ui-tree-node ng-include="'tree.html'" ng-init="level = level + 1;"
+                <li ng-repeat="node in node.content track by $index" ui-tree-node ng-include="'tree.html'" ng-init="level = level + 1;"
                     data-ng-show="(node.type === 'file' && node.showed) || (node.type === 'folder' && (node.showed || hasChildShowed(node.content)))">
                 </li>
             </ol>
