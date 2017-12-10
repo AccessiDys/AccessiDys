@@ -413,7 +413,14 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
             if (provider === 'dropbox') {
 
-                var newFilePath = DropboxProvider.generateFilepath(newName, extension);
+                $log.debug('Rename dropbox file', file);
+
+
+                var basePath = file.filepath.substring(0, file.filepath.lastIndexOf('/'));
+
+                $log.debug('Rename dropbox basePath', basePath);
+
+                var newFilePath = basePath + DropboxProvider.generateFilepath(newName, extension);
 
                 return DropboxProvider.rename(file.filepath, newFilePath, UserService.getData().token).then(function (data) {
                     return CacheProvider.delete(file, storageName).then(function () {
@@ -528,19 +535,11 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             var provider = UserService.getData().provider;
 
             if (provider === 'dropbox') {
+                var newPath = folder.filepath.substring(0, folder.filepath.lastIndexOf('/')) + '/' + newName;
 
-                var previousPath = folder.filepath;
-                var pathArray = folder.filepath.split('/');
-                pathArray.pop();
-                var newPath = null;
-                if (pathArray.length > 1) {
-                    newPath = pathArray.join('/');
-                    newPath += newName;
-                } else {
-                    newPath = '/' + newName;
-                }
+                $log.debug('RenameFolder newpath', newPath);
 
-                return DropboxProvider.moveFiles(previousPath, newPath, UserService.getData().token);
+                return DropboxProvider.moveFiles(folder.filepath, newPath, UserService.getData().token);
 
             } else if (provider === 'google-drive') {
 
