@@ -623,7 +623,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
             return OneDriveProvider.shareLink(file, UserService.getData().token);
         } else if (provider === "google-drive") {
             return GoogleDriveProvider.shareLink(file, UserService.getData().token);
-        }else {
+        } else {
             return null;
         }
     };
@@ -637,6 +637,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
         folder.type = 'folder';
         folder.dateModification = new Date().toISOString();
+        folder.content = [];
 
         if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
 

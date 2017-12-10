@@ -333,6 +333,9 @@ angular.module('cnedApp')
                             .then(function (folder) {
 
                                 folder.showed = true;
+                                if (!$scope.listDocument) {
+                                    $scope.listDocument = [];
+                                }
                                 $scope.listDocument.push(folder);
 
                                 $scope.listDocument = sortList($scope.listDocument, $scope.sortType, $scope.sortReverse);
