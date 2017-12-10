@@ -107,3 +107,10 @@ h2.information  {
     width: 20px;
     height: 20px;
 }
+
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important; /*Chrome, Safari */
+        color-adjust: exact !important;  /*Firefox*/
+    }
+}
