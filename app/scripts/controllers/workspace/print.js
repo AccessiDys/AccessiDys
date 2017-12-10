@@ -181,11 +181,6 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
             }
 
             $scope.currentStyle = $scope.notes.length > 0 ? floatLeftStyle : centeredStyle;
-
-            $timeout(function () {
-                $window.print();
-            }, 1000);
-
         });
     };
 

@@ -30,46 +30,13 @@
         <div data-ng-class="{'col-xs-8': notes.length > 0, 'col-xs-12': notes.length < 1 }"
              style="margin-top: 15px; outline: none !important;">
 
-            <div id="canvas-container-{{$index}}" class="canvas-container" style="z-index: 0;"></div>
-
-            <div regle-style="innerContent" tags="listTagsByProfil" class="resetAll doc-apercu {{currentProfile.data.className}}" id="{{'adapt-content-' + $index }}"
-                 ng-init="index = $index" ng-style="currentStyle"
+            <div class="resetAll doc-apercu {{currentProfile.data.className}}" id="{{'adapt-content-' + $index }}"
+                 ng-init="index = $index"
                  profile-coloration
                  profile="currentProfile"
-                 text="innerContent">
+                 text="innerContent"
+                 print="true">
 
-            </div>
-
-            <!-- Note link -->
-            <div data-ng-repeat="note in notes" data-ng-if="notes.length > 0">
-
-                <!-- the note on the right side -->
-                <table class="zoneID" id="zone-id-{{note.idNote}}" draggable-note
-                       container="{{'adapt-content-' + currentPage }}" type="content" style="z-index: 9"
-                       ng-if="index == note.idPage">
-                    <tr>
-                        <td width="23" class="delete_note">&nbsp;</td>
-                        <td id="editTexteID" class="annotation_area closed locked">
-                            <div id="draggable-note-content" contenteditable="true"
-                                 data-ng-paste="setPasteNote($event)"
-                                 data-ng-focus="prepareNote(note, $event)"
-                                 data-ng-blur="autoSaveNote(note, $event)" regle-style="note.styleNote"
-                                 ng-bind-html="note.texte"></div>
-                        </td>
-                        <td class="collapse_btn">
-                            <button class="collapse_note"
-                                    title="Réduire/Agrandir"></button>
-                        </td>
-                        <td id="note-id-{{note.idNote}}" class="drag_note">&nbsp;</td>
-                    </tr>
-                </table>
-
-                <!-- little bubble on the left side -->
-                <div class="has_note" id="link-id-{{note.idNote}}"
-                     draggable-note
-                     type="link"
-                     container="{{'adapt-content-' + currentPage }}"
-                     data-ng-if="index == note.idPage"></div>
             </div>
         </div>
     </div>

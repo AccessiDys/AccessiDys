@@ -30,13 +30,14 @@
  */
 angular.module('cnedApp').directive('profileColoration',
 
-    function (UtilsService, $timeout, _, $rootScope) {
+    function (UtilsService, $timeout, _, $rootScope, LoaderService) {
         return {
             restrict: 'A',
             scope: {
                 profile: '=',
                 text: '=',
-                preview: '@'
+                preview: '@',
+                print: '@'
             },
             link: function ($scope, $element) {
 
@@ -67,6 +68,12 @@ angular.module('cnedApp').directive('profileColoration',
 
                 var generateColoration = function (element) {
 
+                    if($scope.print){
+                        adaptIndex = 0;
+
+                        LoaderService.showLoader('loading', false);
+                    }
+
                     $timeout(function () {
                         if ($scope.profile && $scope.profile.data && $scope.text) {
 
@@ -81,7 +88,7 @@ angular.module('cnedApp').directive('profileColoration',
                                 var child = element.children[adaptIndex];
                                 // Adapt child which are displayed on the screen
                                 windowScroll = window.pageYOffset;
-                                if (child.offsetTop < ((windowScroll + windowHeight) * 2)) {
+                                if (child.offsetTop < ((windowScroll + windowHeight) * 2) || $scope.print) {
 
                                     var profileTag = _.find(profile.profileTags, function (_profileTag) {
                                         return _profileTag.tagDetail.balise === child.tagName.toLowerCase();
@@ -166,6 +173,10 @@ angular.module('cnedApp').directive('profileColoration',
                                     }
                                 } else {
                                     break;
+                                }
+
+                                if($scope.print){
+                                    LoaderService.hideLoader();
                                 }
                             }
 
