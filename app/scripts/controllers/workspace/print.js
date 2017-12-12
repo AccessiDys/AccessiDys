@@ -184,6 +184,10 @@ angular.module('cnedApp').controller('PrintCtrl', function ($scope, $rootScope, 
         });
     };
 
+    $scope.launchPrint = function(){
+        $window.print();
+    }
+
 
 
 });

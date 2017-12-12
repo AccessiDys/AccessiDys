@@ -37,7 +37,8 @@ angular.module('cnedApp').directive('profileColoration',
                 profile: '=',
                 text: '=',
                 preview: '@',
-                print: '@'
+                print: '@',
+                printCb: '&'
             },
             link: function ($scope, $element) {
 
@@ -47,8 +48,9 @@ angular.module('cnedApp').directive('profileColoration',
                 var prevScroll = -1;
                 var windowHeight = window.innerHeight;
                 var adaptIndex = 0;
+                var isPrintLaunched = false;
 
-                if (!$scope.preview) {
+                if (!$scope.preview && !$scope.print) {
                     window.addEventListener('scroll', function () {
                         windowScroll = window.pageYOffset;
 
@@ -59,16 +61,19 @@ angular.module('cnedApp').directive('profileColoration',
                     });
                 }
 
-                $rootScope.$on('window-resize', function () {
-                    windowHeight = window.innerHeight;
-                    adaptIndex = 0;
-                    $element[0].innerHTML = UtilsService.removeSpan(UtilsService.decodeHtmlEntities($scope.text));
-                    generateColoration($element[0]);
-                });
+                if (!$scope.print) {
+                    $rootScope.$on('window-resize', function () {
+                        windowHeight = window.innerHeight;
+                        adaptIndex = 0;
+                        $element[0].innerHTML = UtilsService.removeSpan(UtilsService.decodeHtmlEntities($scope.text));
+                        generateColoration($element[0]);
+                    });
+                }
+
 
                 var generateColoration = function (element) {
 
-                    if($scope.print){
+                    if ($scope.print) {
                         adaptIndex = 0;
 
                         LoaderService.showLoader('loading', false);
@@ -149,7 +154,7 @@ angular.module('cnedApp').directive('profileColoration',
 
                                         child.innerHTML = textTransform;
 
-                                        if ( coloration.indexOf('lignes') > 0) {
+                                        if (coloration.indexOf('lignes') > 0) {
 
                                             var res = UtilsService.colorLines(child, profileTag.colorsList.length, prevTop, line);
                                             line = res.line;
@@ -175,8 +180,15 @@ angular.module('cnedApp').directive('profileColoration',
                                     break;
                                 }
 
-                                if($scope.print){
+                                if ($scope.print) {
                                     LoaderService.hideLoader();
+                                    if ($scope.printCb && !isPrintLaunched) {
+                                        isPrintLaunched = true;
+                                        $timeout(function () {
+                                            $scope.printCb();
+
+                                        }, 10);
+                                    }
                                 }
                             }
 
