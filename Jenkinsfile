@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('Checkout') {
+            retry(3) {
+                checkout scm
+            }
+        }
         stage('Install') {
              agent {
                 docker {
