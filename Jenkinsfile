@@ -26,6 +26,7 @@ pipeline {
                 }
             }
             steps {
+              sh 'node -v'
               sh 'electron-zip-packager app/ "Accessidys" --asar=true --out=..\\dist\\win --platform=win32 --arch=ia32 --icon="styles/images/favicon.ico" --ignore=builder.json --ignore=README.md --overwrite'
             }
         }
