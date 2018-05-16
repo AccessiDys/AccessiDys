@@ -42,7 +42,6 @@
     "grunt-contrib-uglify": "~2.2.1",
     "grunt-contrib-watch": "~1.0.0",
     "grunt-env": "~0.4.1",
-    "grunt-express": "~1.4.1",
     "grunt-express-server": "~0.5.3",
     "grunt-html2js": "^0.3.5",
     "grunt-karma": "~2.0.0",
