@@ -15,7 +15,6 @@
     "log4js": "~1.1.1",
     "mongoose": "~3.8.1",
     "nodemailer": "^3.1.8",
-    "nue": "0.7.0dev",
     "passport": "^0.3.2",
     "passport-dropbox-oauth2": "^1.1.0",
     "passport-google-drive": "0.0.6",
