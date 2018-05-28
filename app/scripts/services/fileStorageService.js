@@ -973,13 +973,17 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
         });
     };
 
+    this.isSynchronizing =  false;
+
     /**
      * Synchronize files in cache
      */
     this.synchronizeFiles = function () {
         var deferred = $q.defer();
 
-        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider) {
+        if ($rootScope.isAppOnline && UserService.getData() && UserService.getData().provider && !self.isSynchronizing) {
+
+            self.isSynchronizing = true;
 
 
             CacheProvider.getItem('documentsToSynchronize').then(function (documents) {
@@ -991,6 +995,8 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     console.log('profilesToSynchronize', profiles);
 
                     var toSend = [];
+
+
 
                     // Synchronize doc
                     if (documents) {
@@ -1018,6 +1024,7 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                     }
 
                     if (toSend.length > 0) {
+
                         $q.all(toSend).then(function (res) {
                             $log.debug('res from documentsToSynchronize', res);
                             CacheProvider.setItem(null, 'documentsToSynchronize');
@@ -1027,6 +1034,11 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
                                 documentCount: documents ? documents.length : 0,
                                 profilesCount: profiles ? profiles.length : 0
                             });
+
+                            self.isSynchronizing = false;
+
+                        }, function(){
+                            self.isSynchronizing = false;
                         });
                     } else {
                         deferred.resolve();
