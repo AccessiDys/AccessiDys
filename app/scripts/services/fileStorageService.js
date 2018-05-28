@@ -984,7 +984,11 @@ cnedApp.service('fileStorageService', function ($localForage, configuration, $q,
 
             CacheProvider.getItem('documentsToSynchronize').then(function (documents) {
 
+                console.log('documentsToSynchronize', documents);
+
                 CacheProvider.getItem('profilesToSynchronize').then(function (profiles) {
+
+                    console.log('profilesToSynchronize', profiles);
 
                     var toSend = [];
 
