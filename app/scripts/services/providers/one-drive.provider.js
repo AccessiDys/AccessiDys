@@ -142,7 +142,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
             if (file.folder) {
                 url += file.folder.filepath + '/' + fileName + ':/createUploadSession';
             } else {
-                if (file.id) {
+                if (file.id && file.id !== -1) {
                     url += file.filepath + ':/content';
                 } else {
                     url += '/drive/special/approot:/' + fileName + ':/createUploadSession';
@@ -157,7 +157,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
             }
             data = encodeURIComponent(data);
 
-            if (file.id) {
+            if (file.id && file.id !== -1) {
 
                 $http({
                     method: 'PUT',
@@ -278,7 +278,6 @@ angular.module('cnedApp').factory('OneDriveProvider',
         };
 
 
-
         var shareLinkService = function (file, access_token) {
             var deferred = $q.defer();
             $http({
@@ -298,7 +297,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
                     method: 'POST',
                     url: '/one-drive/download-link',
                     data: {
-                        url: data.data && data.data.link ? data.data.link.webUrl: ''
+                        url: data.data && data.data.link ? data.data.link.webUrl : ''
                     },
                     headers: {
                         'Authorization': 'Bearer ' + access_token,
@@ -400,7 +399,7 @@ angular.module('cnedApp').factory('OneDriveProvider',
             var url = '/me/drive/items/' + file.id;
 
             var parentRefrence = {};
-            if(newFolderId){
+            if (newFolderId) {
                 parentRefrence.id = newFolderId;
             } else {
                 parentRefrence.path = '/drive/special/approot';

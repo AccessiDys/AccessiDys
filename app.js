@@ -26,8 +26,13 @@
 
 'use strict';
 
-var express = require('express'), mongoose = require('mongoose'), domain = require('domain'), fs = require('fs'), https = require('https');
-
+var express = require('express');
+var mongoose = require('mongoose'); 
+var fs = require('fs');
+var https = require('https');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var session = require('express-session');
 var app = express();
 
 var passport = require('passport');
@@ -64,54 +69,32 @@ if (env !== 'test') {
     logger.setLevel('ERROR');
 }
 
+app.use(cookieParser()); // read cookies (needed for auth)
 
-app.configure(function () {
-    app.use(express.cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.use(express.bodyParser({
-        limit: '50mb'
-    }));
-
-    app.use(function (req, res, next) {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-        res.header('Access-Control-Allow-Headers', 'Content-Type');
-        next();
-    });
-
-    app.use(express.session({
-        secret: 'ilovescotchscotchyscotchscotch'
-    })); // session secret
-    app.use(passport.initialize());
-    app.use(passport.session()); // persistent login sessions
-
-    /*if (env !== 'test') {
-     app.use(log4js.connectLogger(logger, {
-     level : log4js.levels.ERROR
-     }));
-     }*/
-
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
 });
 
+app.use(session({ resave: true,
+                  saveUninitialized: true,
+                  secret: 'ilovescotchscotchyscotchscotch' }))
+
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+/*if (env !== 'test') {
+ app.use(log4js.connectLogger(logger, {
+ level : log4js.levels.ERROR
+ }));
+ }*/
 
 app.use(express.static('./app'));
-
-/* Catch et Log des erreurs dans tous le projet */
-app.use(function (req, res, next) {
-    var d = domain.create();
-    d.on('error', function (er) {
-        console.log('Une erreure s\'est produite, Detail : ', er.message);
-        res.send(500);
-    });
-
-    // explicitly add req and res
-    d.add(req);
-    d.add(res);
-
-    d.run(function () {
-        app.router(req, res, next);
-    });
-});
 
 // Bootstrap models
 require('./models/Tag');

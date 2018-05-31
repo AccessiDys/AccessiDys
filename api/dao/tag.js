@@ -52,7 +52,7 @@ exports.create = function(req, res) {
       });
     } else {
       helpers.journalisation(1, req.user, req._parsedUrl.pathname, '');
-      res.jsonp(200, tag);
+      res.status(200).jsonp(tag);
     }
   });
 };
@@ -75,7 +75,7 @@ exports.remove = function(req, res) {
           });
         } else {
           helpers.journalisation(1, req.user, req._parsedUrl.pathname, {});
-          res.jsonp(200);
+          res.status(200);
         }
       });
     }
@@ -115,7 +115,7 @@ exports.update = function(req, res) {
           });
         } else {
           helpers.journalisation(1, req.user, req._parsedUrl.pathname, {});
-          res.jsonp(200, item);
+          res.status(200).jsonp(item);
         }
       });
     }
@@ -136,7 +136,7 @@ exports.all = function(req, res) {
       });
     } else {
       helpers.journalisation(1, req.user, req._parsedUrl.pathname, 'liste des tags');
-      res.jsonp(200, tags);
+      res.status(200).jsonp(tags);
     }
   });
 };
@@ -155,7 +155,7 @@ exports.findTagById = function(req, res) {
                 libelle: item.libelle,
                 position: req.body.position
             };
-            res.jsonp(200, tagWithPosition);
+            res.status(200).jsonp(tagWithPosition);
         }
     });
 };

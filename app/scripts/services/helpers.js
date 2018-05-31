@@ -110,12 +110,6 @@ cnedApp.factory('serviceCheck',
                 var finalData = {};
                 var serviceName = '/htmlPage';
 
-                /*$http.get(htmlUrl).then(function(res){
-                 console.log('res.data');
-                 }, function(error){
-                 console.log('error');
-                 });*/
-
                 $http.post(configuration.BASE_URL + serviceName, data)
                     .success(function (data) {
                         if (data && data.length > 0) {

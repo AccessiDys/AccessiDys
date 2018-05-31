@@ -27,69 +27,70 @@
 var config = require('../../env/config.json');
 var helpers = require('../api/helpers/helpers.js');
 
-module.exports = function (app, passport) {
+
+module.exports = function (app , passport) {
 
     // Routes for tag manipulating
     var tags = require('../api/dao/tag');
-    app.post('/addTag', tags.create);
-    app.get('/readTags', tags.all);
-    app.post('/updateTag', tags.update);
-    app.post('/deleteTag', tags.remove);
-    app.post('/getTagById', tags.findTagById);
+    app.route('/addTag').post(tags.create);
+    app.route('/readTags').get(tags.all);
+    app.route('/updateTag').post( tags.update);
+    app.route('/deleteTag').post( tags.remove);
+    app.route('/getTagById').post( tags.findTagById);
 
     //test for manipulating image
     var images = require('../api/services/images');
-    app.post('/fileupload', images.uploadFiles);
-    app.post('/sendPdf', images.sendPdf);
-    app.post('/sendPdfHTTPS', images.sendPdfHTTPS);
-    app.post('/htmlPage', images.htmlPage);
-    app.post('/epubUpload', images.epubUpload);
-    app.post('/externalEpub', images.externalEpub);
-    app.post('/generateSign', images.generateSign);
+    app.route('/fileupload').post( images.uploadFiles);
+    app.route('/sendPdf').post( images.sendPdf);
+    app.route('/sendPdfHTTPS').post( images.sendPdfHTTPS);
+    app.route('/htmlPage').post( images.htmlPage);
+    app.route('/epubUpload').post( images.epubUpload);
+    app.route('/externalEpub').post( images.externalEpub);
+    app.route('/generateSign').post( images.generateSign);
 
-    app.get('/file/download', images.downloadFIle);
-    app.post('/one-drive/download-link', images.getOneDriveDownloadLink);
+    app.route('/file/download').get(images.downloadFIle);
+    app.route('/one-drive/download-link').post( images.getOneDriveDownloadLink);
 
     //test for manipulating emailSend
     var helpers = require('../api/helpers/helpers');
-    app.post('/sendMail', helpers.sendMail);
-    app.post('/sendEmail', helpers.sendEmail);
+    app.route('/sendMail').post( helpers.sendMail);
+    app.route('/sendEmail').post( helpers.sendEmail);
 
     //route for profile manipulations
     var profils = require('../api/dao/profils');
 
-    app.get('/profiles', profils.getProfiles);
-    app.get('/profile/:profileId', profils.getProfile);
-    app.post('/profile', profils.createProfile);
-    app.put('/profile', profils.updateProfile);
-    app.delete('/profile/:profileId', profils.deleteProfile);
+    app.route('/profiles').get(profils.getProfiles);
+    app.route('/profile/:profileId').get(profils.getProfile);
+    app.route('/profile').post( profils.createProfile);
+    app.route('/profile').put(profils.updateProfile);
+    app.route('/profile/:profileId').delete(profils.deleteProfile);
 
-    app.get('/auth/dropbox', passport.authenticate('dropbox-oauth2'));
+    app.route('/auth/dropbox').get(passport.authenticate('dropbox-oauth2'));
 
-    app.get('/auth/dropbox/callback', passport.authenticate('dropbox-oauth2', {
+    app.route('/auth/dropbox/callback').get(passport.authenticate('dropbox-oauth2', {
         failureRedirect: '/'
     }), function (req, res) {
         req.session.user = req.user;
         res.redirect('/#/ma-sauvegarde.html?auth=true');
     });
 
-    app.get('/auth/google-drive', passport.authenticate('google-drive'));
-    app.get('/auth/google-drive/callback', passport.authenticate('google-drive', {
+    app.route('/auth/google-drive').get(passport.authenticate('google-drive'));
+    app.route('/auth/google-drive/callback').get(passport.authenticate('google-drive', {
         failureRedirect: '/'
     }), function (req, res) {
         req.session.user = req.user;
         res.redirect('/#/ma-sauvegarde.html?auth=true');
     });
 
-    app.get('/auth/one-drive', passport.authenticate('microsoft'));
-    app.get('/auth/one-drive/callback', passport.authenticate('microsoft', {
+    app.route('/auth/one-drive').get(passport.authenticate('microsoft'));
+    app.route('/auth/one-drive/callback').get(passport.authenticate('microsoft', {
         failureRedirect: '/'
     }), function (req, res) {
         req.session.user = req.user;
         res.redirect('/#/ma-sauvegarde.html?auth=true');
     });
 
-    app.get('/auth/token', function (req, res) {
+    app.route('/auth/token').get(function (req, res) {
 
         if (req.session.user) {
             res.send(req.session.user);
@@ -98,7 +99,7 @@ module.exports = function (app, passport) {
         }
     });
 
-    app.post('/user/isAdmin', function (req, res) {
+    app.route('/user/isAdmin').post( function (req, res) {
 
         var email = req.body.email;
         var provider = req.body.provider;
@@ -110,7 +111,7 @@ module.exports = function (app, passport) {
             });
 
         } else {
-            res.send(400);
+            res.sendStatus(400);
         }
 
     });

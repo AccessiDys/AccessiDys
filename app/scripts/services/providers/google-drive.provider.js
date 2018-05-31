@@ -132,7 +132,7 @@ angular.module('cnedApp').factory('GoogleDriveProvider',
 
             var contentType = FileConstant.MIME_TYPE[type] || 'application/octet-stream';
 
-            if (file.id) {
+            if (file.id && file.id !== -1) {
 
                 $http({
                     method: 'PATCH',

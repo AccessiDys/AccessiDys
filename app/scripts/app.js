@@ -297,7 +297,6 @@ angular.module('cnedApp').config(function ($provide) {
                     input.onchange = function () {
                         var reader = new FileReader();
 
-                        console.log('this.files', this.files);
 
                         if (this.files && this.files[0]) {
                             reader.onload = function (e) {

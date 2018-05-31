@@ -57,7 +57,6 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                             return $element[0].innerHTML.length;
                         }, _.debounce(function (newValue, oldValue) {
                             if (newValue !== oldValue) {
-                                //console.log(' html watcher newValue = ' + newValue + ' - oldValue = ' + oldValue, $element[0].innerHTML);
                                 generateColoration($element[0]);
                             }
                         }, 200));
@@ -161,9 +160,7 @@ angular.module('cnedApp').directive('textAngularProfileColoration',
                                             }
                                         }*/
 
-                                        console.log('avant', textTransform);
                                         //textTransform = textTransform.replace(/(target="")>/gi, '');
-                                        console.log('textTransform', textTransform);
 
                                         // Split Text
                                         if (coloration.indexOf('lignes') > 0) /* === 'Colorer les lignes RBV'

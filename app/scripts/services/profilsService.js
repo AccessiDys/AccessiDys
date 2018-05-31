@@ -299,7 +299,6 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
             }
         }), fileStorageService.list('profile').then(function (files) {
 
-            console.log('list profiles', files);
             var userProfiles = [];
 
             if (files) {
@@ -314,7 +313,6 @@ angular.module('cnedApp').service('profilsService', function ($http, configurati
 
         })]).then(function (res) {
 
-            console.log('q sucess', res);
 
             var defaultProfiles = res[0].data;
 
